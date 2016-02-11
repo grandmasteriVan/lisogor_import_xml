@@ -21,7 +21,7 @@ $data=array();
  * @param $kat9 - цена за девятую категорию
  * @param $kat10 - цена за десятую категорию
  */
-function add_price($name, $kat1, $kat2, $kat3, $kat4, $kat5, $kat6, $kat7, $kat8, $kat9, $kat10)
+function add_price($name, $kat1=0, $kat2=0, $kat3=0, $kat4=0, $kat5=0, $kat6=0, $kat7=0, $kat8=0, $kat9=0, $kat10=0)
 {
     global $data;
 
@@ -41,7 +41,114 @@ function add_price($name, $kat1, $kat2, $kat3, $kat4, $kat5, $kat6, $kat7, $kat8
 }
 
 /**
- *вынимает нужную информацию из XML
+ *вынимает нужную информацию из XML в прайсе БРВ
+ */
+function parse_price_brw()
+{
+    if ($_FILES['file']['tmp_name'])
+    {
+        $dom=DOMDocument::load($_FILES['file']['tmp_name']);
+        //print_r($dom);
+        $rows=$dom->getElementsByTagName('Row');
+        //print_r($rows);
+        $row_num=1;
+        //полезная инфа начинается с 5 строки!
+        //если первая ячейка в строке - не цыфра, значит это название системы (goods.goods_article_link)
+        //и ее цена находиться в в 6 ячейке строки
+        //
+        //если первая ячейка строки - цифра, то это элемент системы
+        //3 ячейка в строке - это ее goods.goods_article_link (id товара в парйсе)
+        //6 ячейка - цена
+        foreach($rows as $row)
+        {
+            if ($row_num>=5)
+            {
+                $cells=$row->getElementsByTagName('Cell');
+                $cell_num=1;
+                foreach ($cells as $cell)
+                {
+                    $elem=$cell->nodeValue;
+                    $isModule=false;
+                    if (($cell_num==1)&&(is_string($elem)))
+                    {
+                        $name=$elem;
+                        $isModule=true;
+                    }
+                    if ((!$isModule)&&($cell_num==3))
+                    {
+                        $name=$elem;
+                    }
+                    if ($cell_num=6)
+                    {
+                        $price=$elem;
+                    }
+                    $cell_num++;
+                }
+                add_price($name,$price);
+            }
+            $row_num++;
+        }
+
+    }
+}
+
+/**
+ *вынимает нужную информацию из XML в прайсе Гербор
+ */
+function parse_price_gerbor()
+{
+    if ($_FILES['file']['tmp_name'])
+    {
+        $dom=DOMDocument::load($_FILES['file']['tmp_name']);
+        //print_r($dom);
+        $rows=$dom->getElementsByTagName('Row');
+        //print_r($rows);
+        $row_num=1;
+        //полезная инфа начинается с 10 строки!
+        //если вторая ячейка в строке - пустая, значит это название системы (goods.goods_article_link)
+        //и ее цена находиться в 8 ячейке строки
+        //
+        //если первая ячейка строки - цифра, то это элемент системы
+        //6 ячейка в строке - это ее goods.goods_article_link (id товара в парйсе)
+        //8 ячейка - цена
+        foreach($rows as $row)
+        {
+            if ($row_num>=10)
+            {
+                $cells=$row->getElementsByTagName('Cell');
+                $cell_num=1;
+                foreach ($cells as $cell)
+                {
+                    $elem=$cell->nodeValue;
+                    $isModule=false;
+                    if (($cell_num==2)&&(empty($elem)))
+                    {
+                        $isModule=true;
+                    }
+                    if (($isModule)&&($cell_num==3))
+                    {
+                        $name=$elem;
+                    }
+                    if ((!$isModule)&&($cell_num==6))
+                    {
+                        $name=$elem;
+                    }
+                    if($cell_num==8)
+                    {
+                        $price=$elem;
+                    }
+                    $cell_num++;
+                }
+                add_price($name,$price);
+            }
+            $row_num++;
+        }
+
+    }
+}
+
+/**
+ *вынимает нужную информацию из XML в прайсе Лисогор
  */
 function parse_price_lisogor()
 {
