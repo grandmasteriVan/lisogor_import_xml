@@ -65,22 +65,27 @@ function parse_price_brw()
             {
                 $cells=$row->getElementsByTagName('Cell');
                 $cell_num=1;
+				$isModule=false;
                 foreach ($cells as $cell)
                 {
                     $elem=$cell->nodeValue;
-                    $isModule=false;
-                    if (($cell_num==1)&&(is_string($elem)))
+					//echo $cell_num." $elem<br>";
+                    
+                    if (($cell_num==1)&&(!(intval($elem))))
                     {
                         $name=$elem;
                         $isModule=true;
+						//echo "enter NAME cel num:".$cell_num." $row_num <br>";
                     }
-                    if ((!$isModule)&&($cell_num==3))
+                    
+					if (($isModule==false)and($cell_num==3))
                     {
                         $name=$elem;
+						//echo "enter ID cel num:".$cell_num."<br>";
                     }
-                    if ($cell_num=6)
+                    if ($cell_num==6)
                     {
-                        $price=$elem;
+                        $price=$elem;						
                     }
                     $cell_num++;
                 }
@@ -105,35 +110,38 @@ function parse_price_gerbor()
         //print_r($rows);
         $row_num=1;
         //полезная инфа начинается с 10 строки!
-        //если вторая ячейка в строке - пустая, значит это название системы (goods.goods_article_link)
-        //и ее цена находиться в 8 ячейке строки
+        //если вторая ячейка в строке - пустая, значит 3 ячейка это название системы (goods.goods_article_link)
+        //и ее цена находиться в 6 ячейке строки
         //
         //если первая ячейка строки - цифра, то это элемент системы
-        //6 ячейка в строке - это ее goods.goods_article_link (id товара в парйсе)
-        //8 ячейка - цена
+        //4 ячейка в строке - это ее goods.goods_article_link (id товара в парйсе)
+        //6 ячейка - цена
         foreach($rows as $row)
         {
             if ($row_num>=10)
             {
                 $cells=$row->getElementsByTagName('Cell');
                 $cell_num=1;
+				$isModule=false;
                 foreach ($cells as $cell)
                 {
                     $elem=$cell->nodeValue;
-                    $isModule=false;
-                    if (($cell_num==2)&&(empty($elem)))
+                    
+                    if (($cell_num==2)and(empty($elem)))
                     {
                         $isModule=true;
+						echo "enter NAME $row_num $cell_num $elem<br>";
                     }
-                    if (($isModule)&&($cell_num==3))
+                    if (($isModule==true)and($cell_num==3))
                     {
                         $name=$elem;
                     }
-                    if ((!$isModule)&&($cell_num==6))
+                    if (($isModule==false)and($cell_num==4))
                     {
                         $name=$elem;
+						echo "enter ID $row_num $cell_num $elem<br>";
                     }
-                    if($cell_num==8)
+                    if($cell_num==6)
                     {
                         $price=$elem;
                     }
@@ -214,8 +222,12 @@ function parse_price_lisogor()
 }
 //print_r($_FILES['file']['tmp_name']);
 
-parse_price_lisogor();
-add_db_lisogor($data);
+//parse_price_lisogor();
+//add_db_lisogor($data);
+
+//parse_price_brw();
+parse_price_gerbor();
+
 
 /**
  * записывает информацию из ассоциативного массива с ценами в базу данных сайта
