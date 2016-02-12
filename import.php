@@ -9,8 +9,8 @@ $data=array();
 
 /**
  * записывает полученные из XML значения в ассоциативный массив
- * @param $name - название дивана в прайсе поставщика
- * @param $kat1 - цена за первую категорию
+ * @param $name - название или id позиции в прайсе поставщика
+ * @param $kat1 - цена за первую категорию или цена за товар
  * @param $kat2 - цена за втрую категорию
  * @param $kat3 - цена за третью категорию
  * @param $kat4 - цена за четвертую категорию
@@ -228,6 +228,56 @@ function parse_price_lisogor()
 //parse_price_brw();
 parse_price_gerbor();
 
+/**
+ * записывает информацию из ассоциативного массива с ценами в базу данных сайта
+ * (id фабрики=56)
+ * первым прогодом по массиву записываем цены составных компонентов
+ * вторым проходом - считаем цену систем
+ * @param $data1 - ассоциативный массив с данными, получеными из XML
+ */
+function add_db_brw_gerbor($data1)
+{
+    $db_connect=mysqli_connect('localhost','root','','mebli');
+    foreach ($data1 as $d)
+    {
+        if (intval($d['name']))
+        {
+            $name=$d['name'];
+            echo $name."<br>";
+            $price=$d['kat1'];
+
+            $strSQL="UPDATE goods ".
+                "SET goods_price=$price ".
+                "WHERE goods.goods_article_link= $name";
+            //echo $strSQL."<br>";
+            //break;
+            mysqli_query($db_connect, $strSQL);
+        }
+
+        //break;
+    }
+    foreach ($data1 as $d)
+    {
+        if (!intval($d['name']))
+        {
+            //считаем цену позиции суммируя цены ее составляющих
+            $name=$d['name'];
+            echo $name."<br>";
+            $strSQL="SELECT SUM(goods_price) FROM goods WHERE goods_id IN(".
+                "SELECT component_child FROM component WHERE goods_is_component AND goods_id=(".
+                "SELECT goods_id FROM goods WHERE goods_article_link=$name AND factory_id=56))";
+            $res=mysqli_query($db_connect,$strSQL);
+            $price=mysqli_fetch_assoc($res);
+            //проставляем цену позиции
+            $strSQL="UPDATE goods ".
+                "SET goods_price=$price ".
+                "WHERE goods.goods_article_link= $name";
+            //echo $strSQL."<br>";
+            //break;
+            mysqli_query($db_connect, $strSQL);
+        }
+    }
+}
 
 /**
  * записывает информацию из ассоциативного массива с ценами в базу данных сайта
