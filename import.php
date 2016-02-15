@@ -220,13 +220,79 @@ function parse_price_lisogor()
 
     }
 }
+
+/**
+ *вынимает нужную информацию из XML в прайсе Вика
+ */
+function parse_price_vika()
+{
+    if ($_FILES['file']['tmp_name'])
+    {
+        $dom=DOMDocument::load($_FILES['file']['tmp_name']);
+        //print_r($dom);
+        $worksheets=$dom->getElementsByTagName('Worksheet');
+        foreach ($worksheets as $worksheet)
+        {
+            $ws_name=$worksheet->nodeValue;
+            if ($ws_name=="Розница грн.")
+            {
+                $rows=$dom->getElementsByTagName('Row');
+                //print_r($rows);
+                $row_num=1;
+                //полезная инфа начинается с 4 строки!
+                //если первая ячейка не пустая, то название дивана находится во второй ячейке
+                //цены идус с 6 ячейки через одну ячейку (6, 8, 10 и т.д.)
+                foreach($rows as $row)
+                {
+                    //print_r($row);
+                    if ($row_num>=4)
+                    {
+                        $cells=$row->getElementsByTagName('Cell');
+                        $cell_num=1;
+                        $kat_num=1;
+                        $pass=false;
+                        foreach ($cells as $cell)
+                        {
+                            $elem=$cell->nodeValue;
+                            if (($cell_num==1)&&($elem=""))
+                            {
+                                $pass=true;
+                            }
+                            if((!$pass)&&($cell_num=2))
+                            {
+                                $name=$elem;
+                            }
+                            if ((!$pass)&&($cell_num>=6))
+                            {
+                                if ($cell_num%2==0)
+                                {
+                                    $kat[$kat_num]=round($cell->nodeValue);
+                                    $kat_num++;
+                                }
+
+                            }
+
+                            $cell_num++;
+                        }
+                        add_price($name,$kat[1],$kat[2],$kat[3],$kat[4],$kat[5],$kat[6],$kat[7],$kat[8],$kat[9],$kat[10]);
+                    }
+                    $row_num++;
+                }
+                /*echo '<pre>';
+             print_r($data);
+             echo '</pre>';*/
+            }
+        }
+    }
+}
+
 //print_r($_FILES['file']['tmp_name']);
 
 //parse_price_lisogor();
 //add_db_lisogor($data);
 
 //parse_price_brw();
-parse_price_gerbor();
+//parse_price_gerbor();
 
 /**
  * записывает информацию из ассоциативного массива с ценами в базу данных сайта
@@ -265,7 +331,7 @@ function add_db_brw_gerbor($data1)
             echo $name."<br>";
             $strSQL="SELECT SUM(goods_price) FROM goods WHERE goods_id IN(".
                 "SELECT component_child FROM component WHERE goods_is_component AND goods_id=(".
-                "SELECT goods_id FROM goods WHERE goods_article_link=$name AND factory_id=56))";
+                    "SELECT goods_id FROM goods WHERE goods_article_link=$name AND factory_id=56))";
             $res=mysqli_query($db_connect,$strSQL);
             $price=mysqli_fetch_assoc($res);
             //проставляем цену позиции
@@ -289,7 +355,7 @@ function add_db_lisogor($data1)
 	$db_connect=mysqli_connect('localhost','root','','mebli');
 	foreach ($data1 as $d)
 	{
-		
+
 		$d_name=$d['name'];
 		echo $d_name."<br>";
 		for ($i=1;$i<=10;$i++)
@@ -299,7 +365,7 @@ function add_db_lisogor($data1)
 			echo $kat_name."<br>";
 			$d_cat=$d[$kat_name];
 			$cat_id=627+$i;
-			
+
 			$strSQL="UPDATE goodshascategory ".
 					"SET goodshascategory_price=$d_cat ".
 					"WHERE goodshascategory.goods_id= ".
@@ -311,6 +377,40 @@ function add_db_lisogor($data1)
 		}
 		//break;
 	}
+}
+
+/**
+ * записывает информацию из ассоциативного массива с ценами в базу данных сайта
+ * (id фабрики=33, id категорий начинаются с 119)
+ * @param $data1 - ассоциативный массив с данными, получеными из XML
+ */
+function add_db_vika($data1)
+{
+    $db_connect=mysqli_connect('localhost','root','','mebli');
+    foreach ($data1 as $d)
+    {
+
+        $d_name=$d['name'];
+        echo $d_name."<br>";
+        for ($i=1;$i<=10;$i++)
+        {
+            //echo "inner";
+            $kat_name="kat".strval($i);
+            echo $kat_name."<br>";
+            $d_cat=$d[$kat_name];
+            $cat_id=627+$i;
+
+            $strSQL="UPDATE goodshascategory ".
+                "SET goodshascategory_price=$d_cat ".
+                "WHERE goodshascategory.goods_id= ".
+                "(SELECT goods_id FROM goods WHERE (goods.goods_article_link='$d_name') AND (goods.factory_id=33)) ".
+                "AND (goodshascategory.category_id=$cat_id)";
+            //echo $strSQL."<br>";
+            //break;
+            mysqli_query($db_connect, $strSQL);
+        }
+        //break;
+    }
 }
 
 
