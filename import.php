@@ -6,7 +6,6 @@
  * Time: 10:18
  */
 $data=array();
-
 /**
  * записывает полученные из XML значения в ассоциативный массив
  * @param $name - название или id позиции в прайсе поставщика
@@ -24,7 +23,6 @@ $data=array();
 function add_price($name, $kat1=0, $kat2=0, $kat3=0, $kat4=0, $kat5=0, $kat6=0, $kat7=0, $kat8=0, $kat9=0, $kat10=0)
 {
     global $data;
-
     $data[]=array(
         'name'=>$name,
         'kat1'=>$kat1,
@@ -39,7 +37,6 @@ function add_price($name, $kat1=0, $kat2=0, $kat3=0, $kat4=0, $kat5=0, $kat6=0, 
         'kat10'=>$kat10
     );
 }
-
 /**
  *вынимает нужную информацию из XML в прайсе БРВ
  */
@@ -93,10 +90,8 @@ function parse_price_brw()
             }
             $row_num++;
         }
-
     }
 }
-
 /**
  *вынимает нужную информацию из XML в прайсе Гербор
  */
@@ -151,10 +146,8 @@ function parse_price_gerbor()
             }
             $row_num++;
         }
-
     }
 }
-
 /**
  *вынимает нужную информацию из XML в прайсе Лисогор
  */
@@ -201,7 +194,6 @@ function parse_price_lisogor()
                         if ($cell_num>=3)
                         {
                             if (!($cell_num%2==0))
-
                             {
                                 $kat[$kat_num]=round($cell->nodeValue);
                                 $kat_num++;
@@ -217,10 +209,8 @@ function parse_price_lisogor()
         /*echo '<pre>';
      print_r($data);
      echo '</pre>';*/
-
     }
 }
-
 /**
  *вынимает нужную информацию из XML в прайсе Вика
  */
@@ -233,9 +223,12 @@ function parse_price_vika()
         $worksheets=$dom->getElementsByTagName('Worksheet');
         foreach ($worksheets as $worksheet)
         {
-            $ws_name=$worksheet->nodeValue;
+            $ws_name=$worksheet->getAttribute('ss:Name');
+			//echo "$ws_name vkladka <br>";
+			
             if ($ws_name=="Розница грн.")
             {
+				//echo "need vkladka <br>";
                 $rows=$dom->getElementsByTagName('Row');
                 //print_r($rows);
                 $row_num=1;
@@ -254,27 +247,27 @@ function parse_price_vika()
                         foreach ($cells as $cell)
                         {
                             $elem=$cell->nodeValue;
-                            if (($cell_num==1)&&($elem=""))
+							//echo "$elem $cell_num <br>";
+                            if (($cell_num==1)&&(empty($elem)))
                             {
                                 $pass=true;
                             }
-                            if((!$pass)&&($cell_num=2))
+                            if(($pass==false)&&($cell_num==2))
                             {
                                 $name=$elem;
                             }
-                            if ((!$pass)&&($cell_num>=6))
+                            if (($pass==false)&&($cell_num>=6))
                             {
                                 if ($cell_num%2==0)
                                 {
-                                    $kat[$kat_num]=round($cell->nodeValue);
+                                    $kat[$kat_num]=$cell->nodeValue;
                                     $kat_num++;
                                 }
-
                             }
-
                             $cell_num++;
                         }
-                        add_price($name,$kat[1],$kat[2],$kat[3],$kat[4],$kat[5],$kat[6],$kat[7],$kat[8],$kat[9],$kat[10]);
+                        if (($name!="Назва виробу")&&(!empty($name))&&(!empty($kat[1]))&&(!empty($kat[2]))&&(!empty($kat[3]))&&(!empty($kat[4]))&&(!empty($kat[5]))&&(!empty($kat[6]))&&(!empty($kat[7]))&&(!empty($kat[8]))&&(!empty($kat[9]))&&(!empty($kat[10])))
+							add_price($name,$kat[1],$kat[2],$kat[3],$kat[4],$kat[5],$kat[6],$kat[7],$kat[8],$kat[9],$kat[10]);
                     }
                     $row_num++;
                 }
@@ -285,15 +278,12 @@ function parse_price_vika()
         }
     }
 }
-
 //print_r($_FILES['file']['tmp_name']);
-
 //parse_price_lisogor();
 //add_db_lisogor($data);
-
 //parse_price_brw();
 //parse_price_gerbor();
-
+parse_price_vika();
 /**
  * записывает информацию из ассоциативного массива с ценами в базу данных сайта
  * (id фабрики=56)
@@ -311,7 +301,6 @@ function add_db_brw_gerbor($data1)
             $name=$d['name'];
             echo $name."<br>";
             $price=$d['kat1'];
-
             $strSQL="UPDATE goods ".
                 "SET goods_price=$price ".
                 "WHERE goods.goods_article_link= $name";
@@ -319,7 +308,6 @@ function add_db_brw_gerbor($data1)
             //break;
             mysqli_query($db_connect, $strSQL);
         }
-
         //break;
     }
     foreach ($data1 as $d)
@@ -344,7 +332,6 @@ function add_db_brw_gerbor($data1)
         }
     }
 }
-
 /**
  * записывает информацию из ассоциативного массива с ценами в базу данных сайта
  * (id фабрики=66, id категорий начинаются с 628)
@@ -355,7 +342,6 @@ function add_db_lisogor($data1)
 	$db_connect=mysqli_connect('localhost','root','','mebli');
 	foreach ($data1 as $d)
 	{
-
 		$d_name=$d['name'];
 		echo $d_name."<br>";
 		for ($i=1;$i<=10;$i++)
@@ -365,7 +351,6 @@ function add_db_lisogor($data1)
 			echo $kat_name."<br>";
 			$d_cat=$d[$kat_name];
 			$cat_id=627+$i;
-
 			$strSQL="UPDATE goodshascategory ".
 					"SET goodshascategory_price=$d_cat ".
 					"WHERE goodshascategory.goods_id= ".
@@ -378,7 +363,6 @@ function add_db_lisogor($data1)
 		//break;
 	}
 }
-
 /**
  * записывает информацию из ассоциативного массива с ценами в базу данных сайта
  * (id фабрики=33, id категорий начинаются с 119)
@@ -389,7 +373,6 @@ function add_db_vika($data1)
     $db_connect=mysqli_connect('localhost','root','','mebli');
     foreach ($data1 as $d)
     {
-
         $d_name=$d['name'];
         echo $d_name."<br>";
         for ($i=1;$i<=10;$i++)
@@ -399,7 +382,6 @@ function add_db_vika($data1)
             echo $kat_name."<br>";
             $d_cat=$d[$kat_name];
             $cat_id=627+$i;
-
             $strSQL="UPDATE goodshascategory ".
                 "SET goodshascategory_price=$d_cat ".
                 "WHERE goodshascategory.goods_id= ".
@@ -412,8 +394,6 @@ function add_db_vika($data1)
         //break;
     }
 }
-
-
 ?>
 
 <html>
