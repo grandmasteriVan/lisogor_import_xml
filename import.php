@@ -75,12 +75,12 @@ class AMF
             $d_price=$d['price'];
             $factory_id=34;
             $strSQL="UPDATE goods ".
-                "SET goods_price=$price ".
+                "SET goods_price=$d_price ".
                 "WHERE goods.goods_article_link= $d_name AND factory_id=$factory_id";
                 //echo $strSQL."<br>";
                 //break;
             mysqli_query($db_connect, $strSQL);
-            
+
             //break;
         }
     }
