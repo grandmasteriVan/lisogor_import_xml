@@ -5,7 +5,6 @@
  * Date: 01.02.16
  * Time: 10:18
  */
-
 /**
  * Class AMF
  */
@@ -15,7 +14,6 @@ class AMF
      * @var - ассоциативный массив, содержащий название позиции и цены, прочитаные из прайса
      */
     private $data;
-
     /**
      * записывает артикул и цену позиции в ассоциативный массив $data
      * @param $name - артикул позиции
@@ -32,39 +30,41 @@ class AMF
      */
     public function parse_price_amf()
     {
-        $dom = DOMDocument::load($_FILES['file']['tmp_name']);
-        $rows=$dom->getElementsByTagName('Row');
-        //print_r($rows);
-        $row_num=1;
-        //полезная инфа начинается с 12 строки!
-        //артикул позиции находится в 3 ячейке
-        //цена - 7 ячейка умноженная на 1.3 (+30% к оптовой цене в прайсе)
-        foreach ($rows as $row)
-        {
-            if ($row_num>=12)
-            {
-                $cells=$row->getElementsByTagName('Cell');
-                $cell_num=1;
-                foreach ($cells as $cell)
-                {
-                    if ($cell_num==3)
-                    {
-                        $name=$cell->nodeValue;
-                    }
-                    if ($cell_num==7)
-                    {
-                        $price=round($cell->nodeValue*1.3);
-
-                    }
-                    $cell_num++;
-                }
-                if ((!empty($name))&&(!empty($price)))
-                    add_price($name,$price);
-            }
-            $row_num++;
-        }
+        if ($_FILES['file']['tmp_name'])
+		{
+			$dom = DOMDocument::load($_FILES['file']['tmp_name']);
+			$rows=$dom->getElementsByTagName('Row');
+			//print_r($rows);
+			$row_num=1;
+			//полезная инфа начинается с 12 строки!
+			//артикул позиции находится в 3 ячейке
+			//цена - 7 ячейка умноженная на 1.3 (+30% к оптовой цене в прайсе)
+			foreach ($rows as $row)
+			{
+				if ($row_num>=12)
+				{
+					$cells=$row->getElementsByTagName('Cell');
+					$cell_num=1;
+					foreach ($cells as $cell)
+					{
+						if ($cell_num==3)
+						{
+							$name=$cell->nodeValue;
+						}
+						if ($cell_num==7)
+						{
+							$price=round($cell->nodeValue*1.3);
+						}
+						$cell_num++;
+					}
+					if ((!empty($name))&&(!empty($price)))
+						add_price($name,$price);
+				}
+				$row_num++;
+			}
+		}
+		
     }
-
     public function add_db_afm()
     {
         $db_connect=mysqli_connect('localhost','root','','mebli');
@@ -80,11 +80,9 @@ class AMF
                 //echo $strSQL."<br>";
                 //break;
             mysqli_query($db_connect, $strSQL);
-
             //break;
         }
     }
-
     /**
      *Для тесоитрования, генерит HTML код для вывода $data в виде таблицы
      */
@@ -111,9 +109,7 @@ class AMF
         <!-- </body>
         </html> --> <?php
     }
-
 }
-
 /**
  * Class Poparada
  */
@@ -192,12 +188,8 @@ class Poparada
                 }
                 $row_num++;
             }
-
         }
-
-
     }
-
     /**
      * записывает информацию из ассоциативного массива с ценами в базу данных сайта
      * (id фабрики=17)
@@ -230,7 +222,6 @@ class Poparada
             //break;
         }
     }
-
     /**
      *Для тесоитрования, генерит HTML код для вывода $data в виде таблицы
      */
@@ -275,9 +266,7 @@ class Poparada
         <!-- </body>
         </html> --> <?php
     }
-
 }
-
 $data=array();
 /**
  * записывает полученные из XML значения в ассоциативный массив
@@ -551,21 +540,15 @@ function parse_price_vika()
         }
     }
 }
-
-
-
 //print_r($_FILES['file']['tmp_name']);
 //parse_price_lisogor();
 //add_db_lisogor($data);
-parse_price_brw();
+//parse_price_brw();
+$s = new AMF();
+$s->parse_price_amf();
+$s->test_data();
 //parse_price_gerbor();
 //parse_price_vika();
-
-
-
-
-
-
 /**
  * записывает информацию из ассоциативного массива с ценами в базу данных сайта
  * (id фабрики=56)
