@@ -6,7 +6,117 @@
  * Time: 10:18
  */
 
+/**
+ * Class AMF
+ */
+class AMF
+{
+    /**
+     * @var - ассоциативный массив, содержащий название позиции и цены, прочитаные из прайса
+     */
+    private $data;
 
+    /**
+     * записывает артикул и цену позиции в ассоциативный массив $data
+     * @param $name - артикул позиции
+     * @param $price - цена
+     */
+    private function add_price ($name, $price)
+    {
+        $this->data[]=array(
+            'name'=>$name,
+            'price'=>$price);
+    }
+    /**
+     *вынимает нужную информацию из XML в прайсе АМФ
+     */
+    public function parse_price_amf()
+    {
+        $dom = DOMDocument::load($_FILES['file']['tmp_name']);
+        $rows=$dom->getElementsByTagName('Row');
+        //print_r($rows);
+        $row_num=1;
+        //полезная инфа начинается с 12 строки!
+        //артикул позиции находится в 3 ячейке
+        //цена - 7 ячейка умноженная на 1.3 (+30% к оптовой цене в прайсе)
+        foreach ($rows as $row)
+        {
+            if ($row_num>=12)
+            {
+                $cells=$row->getElementsByTagName('Cell');
+                $cell_num=1;
+                foreach ($cells as $cell)
+                {
+                    if ($cell_num==3)
+                    {
+                        $name=$cell->nodeValue;
+                    }
+                    if ($cell_num==7)
+                    {
+                        $price=round($cell->nodeValue*1.3);
+
+                    }
+                    $cell_num++;
+                }
+                if ((!empty($name))&&(!empty($price)))
+                    add_price($name,$price);
+            }
+            $row_num++;
+        }
+    }
+
+    public function add_db_afm()
+    {
+        $db_connect=mysqli_connect('localhost','root','','mebli');
+        foreach ($this->data as $d)
+        {
+            $d_name=$d['name'];
+            //echo $d_name."<br>";
+            $d_price=$d['price'];
+            $factory_id=34;
+            $strSQL="UPDATE goods ".
+                "SET goods_price=$price ".
+                "WHERE goods.goods_article_link= $d_name AND factory_id=$factory_id";
+                //echo $strSQL."<br>";
+                //break;
+            mysqli_query($db_connect, $strSQL);
+            
+            //break;
+        }
+    }
+
+    /**
+     *Для тесоитрования, генерит HTML код для вывода $data в виде таблицы
+     */
+    public function test_data()
+    {
+        ?>
+        <!--<html>
+        <body> -->
+        <table>
+            <tr>
+                <th>Артикул</th>
+                <th>цена</th>
+            </tr>
+            <?php foreach($this->data as $row)
+            {?>
+                <tr>
+                    <td><?php echo ($row['name']); ?></td>
+                    <td><?php echo ($row['price']); ?></td>
+                </tr>
+
+            <?php } ?>
+
+        </table>
+        <!-- </body>
+        </html> --> <?php
+    }
+
+}
+
+/**
+ * Class Poparada
+ */
 class Poparada
 {
     /**
@@ -27,7 +137,7 @@ class Poparada
      * @param $kat9 - цена за девятую категорию
      * @param $kat10 - цена за десятую категорию
      */
-    function add_price($name, $kat1=0, $kat2=0, $kat3=0, $kat4=0, $kat5=0, $kat6=0, $kat7=0, $kat8=0, $kat9=0, $kat10=0)
+    private function add_price($name, $kat1=0, $kat2=0, $kat3=0, $kat4=0, $kat5=0, $kat6=0, $kat7=0, $kat8=0, $kat9=0, $kat10=0)
     {
         $this->data[]=array(
             'name'=>$name,
@@ -99,12 +209,12 @@ class Poparada
         foreach ($this->data as $d)
         {
             $d_name=$d['name'];
-            echo $d_name."<br>";
+            //echo $d_name."<br>";
             for ($i=1;$i<=4;$i++)
             {
                 //echo "inner";
                 $kat_name="kat".strval($i);
-                echo $kat_name."<br>";
+                //echo $kat_name."<br>";
                 $d_cat=$d[$kat_name];
                 $cat_id=499+$i;
                 $factory_id=17;
@@ -208,7 +318,7 @@ function parse_price_brw()
     if ($_FILES['file']['tmp_name'])
     {
         $dom=DOMDocument::load($_FILES['file']['tmp_name']);
-        //print_r($dom);
+        print_r($dom);
         $rows=$dom->getElementsByTagName('Row');
         //print_r($rows);
         $row_num=1;
@@ -288,7 +398,7 @@ function parse_price_gerbor()
                     if (($cell_num==2)and(empty($elem)))
                     {
                         $isModule=true;
-						echo "enter NAME $row_num $cell_num $elem<br>";
+						//echo "enter NAME $row_num $cell_num $elem<br>";
                     }
                     if (($isModule==true)and($cell_num==3))
                     {
@@ -297,7 +407,7 @@ function parse_price_gerbor()
                     if (($isModule==false)and($cell_num==4))
                     {
                         $name=$elem;
-						echo "enter ID $row_num $cell_num $elem<br>";
+						//echo "enter ID $row_num $cell_num $elem<br>";
                     }
                     if($cell_num==6)
                     {
@@ -447,9 +557,9 @@ function parse_price_vika()
 //print_r($_FILES['file']['tmp_name']);
 //parse_price_lisogor();
 //add_db_lisogor($data);
-//parse_price_brw();
+parse_price_brw();
 //parse_price_gerbor();
-parse_price_vika();
+//parse_price_vika();
 
 
 
@@ -471,11 +581,11 @@ function add_db_brw_gerbor($data1)
         if (intval($d['name']))
         {
             $name=$d['name'];
-            echo $name."<br>";
+            //echo $name."<br>";
             $price=$d['kat1'];
             $strSQL="UPDATE goods ".
                 "SET goods_price=$price ".
-                "WHERE goods.goods_article_link= $name";
+                "WHERE goods.goods_article_link= $name AND factory_id=56";
             //echo $strSQL."<br>";
             //break;
             mysqli_query($db_connect, $strSQL);
@@ -488,7 +598,7 @@ function add_db_brw_gerbor($data1)
         {
             //считаем цену позиции суммируя цены ее составляющих
             $name=$d['name'];
-            echo $name."<br>";
+            //echo $name."<br>";
             $strSQL="SELECT SUM(goods_price) FROM goods WHERE goods_id IN(".
                 "SELECT component_child FROM component WHERE component_in_complect=1 AND goods_id=(".
                     "SELECT goods_id FROM goods WHERE goods_article_link=$name AND factory_id=56))";
@@ -515,12 +625,12 @@ function add_db_lisogor($data1)
 	foreach ($data1 as $d)
 	{
 		$d_name=$d['name'];
-		echo $d_name."<br>";
+		//echo $d_name."<br>";
 		for ($i=1;$i<=10;$i++)
 		{
 			//echo "inner";
 			$kat_name="kat".strval($i);
-			echo $kat_name."<br>";
+			//echo $kat_name."<br>";
 			$d_cat=$d[$kat_name];
 			$cat_id=627+$i;
 			$strSQL="UPDATE goodshascategory ".
@@ -546,12 +656,12 @@ function add_db_vika($data1)
     foreach ($data1 as $d)
     {
         $d_name=$d['name'];
-        echo $d_name."<br>";
+        //echo $d_name."<br>";
         for ($i=1;$i<=10;$i++)
         {
             //echo "inner";
             $kat_name="kat".strval($i);
-            echo $kat_name."<br>";
+            //echo $kat_name."<br>";
             $d_cat=$d[$kat_name];
             $cat_id=627+$i;
             $strSQL="UPDATE goodshascategory ".
