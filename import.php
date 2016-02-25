@@ -10,7 +10,14 @@
  */
 class AMF
 {
-    /**
+    function __construct()
+	{
+		//print_r($_FILES);
+		if ($_FILES['file']['tmp_name'])
+			$file=$_FILES['file']['tmp_name'];
+	}
+	private $file;
+	/**
      * @var - ассоциативный массив, содержащий название позиции и цены, прочитаные из прайса
      */
     private $data;
@@ -30,9 +37,9 @@ class AMF
      */
     public function parse_price_amf()
     {
-        if ($_FILES['file']['tmp_name'])
+        if ($file)
 		{
-			$dom = DOMDocument::load($_FILES['file']['tmp_name']);
+			$dom = DOMDocument::load($file);
 			$rows=$dom->getElementsByTagName('Row');
 			//print_r($rows);
 			$row_num=1;
@@ -544,9 +551,9 @@ function parse_price_vika()
 //parse_price_lisogor();
 //add_db_lisogor($data);
 //parse_price_brw();
-$s = new AMF();
-$s->parse_price_amf();
-$s->test_data();
+$test = new AMF();
+$test->parse_price_amf();
+$test->test_data();
 //parse_price_gerbor();
 //parse_price_vika();
 /**
