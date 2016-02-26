@@ -1,7 +1,7 @@
 <html>
     <body>
         <form enctype="multipart/form-data" action="import.php" method="post">
-            <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
+            <input type="hidden" name="MAX_FILE_SIZE" value="200000000" />
             <table width="600">
                 <tr>
                     <td>File:</td>
