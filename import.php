@@ -20,7 +20,7 @@ class AMF
 	/**
      * @var - ассоциативный массив, содержащий название позиции и цены, прочитаные из прайса
      */
-    private $data=array();
+    /*private*/ protected $data;
     /**
      * записывает артикул и цену позиции в ассоциативный массив $data
      * @param $name - артикул позиции
@@ -31,6 +31,8 @@ class AMF
         $this->data[]=array(
             'name'=>$name,
             'price'=>$price);
+			//var_dump($this->data);
+		//echo "test!";
     }
     /**
      *вынимает нужную информацию из XML в прайсе АМФ
@@ -67,7 +69,11 @@ class AMF
 						$cell_num++;
 					}
 					if ((!empty($name))AND(!empty($price)))
-						add_price($name,$price);
+					{
+						$this->add_price($name,$price);
+						//echo "Yay!";
+					}
+						
 				}
 				$row_num++;
 			}
@@ -561,7 +567,7 @@ set_time_limit(100);
 $test = new AMF($_FILES['file']['tmp_name']);
 //print_r ($_FILES['file']['tmp_name']);
 $test->parse_price_amf();
-//$test->test_data();
+$test->test_data();
 //parse_price_gerbor();
 //parse_price_vika();
 /**
