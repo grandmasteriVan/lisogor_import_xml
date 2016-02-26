@@ -10,17 +10,17 @@
  */
 class AMF
 {
-    function __construct()
+    function __construct($f)
 	{
-		//print_r($_FILES);
-		if ($_FILES['file']['tmp_name'])
-			$file=$_FILES['file']['tmp_name'];
+		//echo $f;
+		if ($f)
+			$this->file1=$f;
 	}
-	private $file;
+	private $file1;
 	/**
      * @var - ассоциативный массив, содержащий название позиции и цены, прочитаные из прайса
      */
-    private $data;
+    private $data=array();
     /**
      * записывает артикул и цену позиции в ассоциативный массив $data
      * @param $name - артикул позиции
@@ -37,9 +37,9 @@ class AMF
      */
     public function parse_price_amf()
     {
-        if ($file)
+        if ($this->file1)
 		{
-			$dom = DOMDocument::load($file);
+			$dom = DOMDocument::load($this->file1);
 			$rows=$dom->getElementsByTagName('Row');
 			//print_r($rows);
 			$row_num=1;
@@ -57,20 +57,22 @@ class AMF
 						if ($cell_num==3)
 						{
 							$name=$cell->nodeValue;
+							//echo "name: ".$name."<br>";
 						}
 						if ($cell_num==7)
 						{
 							$price=round($cell->nodeValue*1.3);
+							//echo "price: ".$price."<br>";
 						}
 						$cell_num++;
 					}
-					if ((!empty($name))&&(!empty($price)))
+					if ((!empty($name))AND(!empty($price)))
 						add_price($name,$price);
 				}
 				$row_num++;
 			}
 		}
-		
+		//print_r($this->data);
     }
     public function add_db_afm()
     {
@@ -551,9 +553,15 @@ function parse_price_vika()
 //parse_price_lisogor();
 //add_db_lisogor($data);
 //parse_price_brw();
-$test = new AMF();
+//print_r ($_FILES['file']['tmp_name']);
+echo "<pre>";
+print_r ($_FILES);
+echo "</pre>";
+set_time_limit(100);
+$test = new AMF($_FILES['file']['tmp_name']);
+//print_r ($_FILES['file']['tmp_name']);
 $test->parse_price_amf();
-$test->test_data();
+//$test->test_data();
 //parse_price_gerbor();
 //parse_price_vika();
 /**
@@ -667,7 +675,7 @@ function add_db_vika($data1)
     }
 }
 ?>
-
+<!--
 <html>
     <body>
         <table>
@@ -705,3 +713,5 @@ function add_db_vika($data1)
         </table>
     </body>
 </html>
+
+-->
