@@ -51,17 +51,17 @@ function db_correction ()
                 $query="UPDATE news ".
                     "SET news_content=$text2 ".
                     "WHERE news_id=$id";
-                mysqli_query($query,$db_connect);
+                mysqli_query($db_connect,$query);
             }
         }
     }
 }
 
-$text='ddd <a href="f.com">link</a> fff <a href="c.com">link2</a> hjhg <a href="divani.kiev.ua/links.html">divani</a> some text';
+//$text='ddd <a href="f.com">link</a> fff <a href="c.com">link2</a> hjhg <a href="divani.kiev.ua/links.html">divani</a> some text';
 //echo $text;
-$newText= add_tags($text);
+//$newText= add_tags($text);
 //echo " new text: ";
 //echo $newText;
-
+db_correction ();
 
 ?>
