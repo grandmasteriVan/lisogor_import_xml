@@ -49,7 +49,7 @@ function db_correction ()
             if ($text1!=$text2)
             {
                 $query="UPDATE news ".
-                    "SET news_content=$text2".
+                    "SET news_content=$text2 ".
                     "WHERE news_id=$id";
                 mysqli_query($query,$db_connect);
             }
