@@ -20,7 +20,7 @@ function get_text()
         for ($i=0;$i<$len;$i++)
         {
             $arr[$i]['goods_content']=strip_tags($arr[$i]['goods_content']);
-            $str=$arr[$i]['goods_article']."".$arr[$i]['goods_content']."";
+            $str=$arr[$i]['goods_article'].PHP_EOL.$arr[$i]['goods_content'].PHP_EOL.PHP_EOL;
             file_put_contents('texts.txt',$str,FILE_APPEND);
         }
     }
