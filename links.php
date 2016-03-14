@@ -9,7 +9,8 @@
 
 function add_tags($text)
 {
-	preg_match_all("/<a(.*?)<\/a>/",$text,$links);
+    $change=false;
+    preg_match_all("/<a(.*?)<\/a>/",$text,$links);
 	//print_r ($links);
     foreach ($links[0] as $link)
     {
@@ -22,13 +23,16 @@ function add_tags($text)
             $newLink=substr_replace($link,' rel="nofolow"',$tegpos,0);
             $newLink="<noindex>".$newLink."</noindex>";
 			//echo " ".$link." to ".$newLink ;
+            $change=true;
 			
 			
 			$text=str_replace ($link,$newLink,$text);
+            //$ret[]=array('change'=>$change,'text'=>$text);
         }
     }
 	//echo "<br/>";
-	return $text;
+    $ret[]=array('change'=>$change,'text'=>$text);
+	return $ret;
 }
 
 function db_correction ()
@@ -46,10 +50,11 @@ function db_correction ()
             $text1=$row['news_content'];
             $id=$row['news_id'];
             $text2=add_tags($text1);
-            if ($text1!=$text2)
+            if ($text2['change'])
             {
+                $text=$text2['text'];
                 $query="UPDATE news ".
-                    "SET news_content=$text2 ".
+                    "SET news_content=$text ".
                     "WHERE news_id=$id";
                 mysqli_query($db_connect,$query);
             }
