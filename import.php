@@ -5,22 +5,272 @@
  * Date: 01.02.16
  * Time: 10:18
  */
+
+/**
+ * database host
+ */
+define ("host","localhost");
+/**
+ * database username
+ */
+define ("user", "root");
+/**
+ * database password
+ */
+define ("pass", "");
+/**
+ * database name
+ */
+define ("db", "mebli");
+
+/** @var array $data */
+$data= [];
+
+
+$selectedFactory=$_POST["factory"];
+switch ($selectedFactory)
+{
+    case "AMF":
+        set_time_limit(200);
+        $test = new AMF($_FILES['file']['tmp_name']);
+        $test->parse_price_amf();
+        $test->test_data();
+        break;
+
+    case "Poparada":
+
+        break;
+
+    case "BRW":
+        parse_price_brw();
+        test_data_arr();
+        add_db_brw_gerbor($data);
+        break;
+
+    case "Gerbor":
+        parse_price_gerbor();
+        test_data_arr();
+        add_db_brw_gerbor($data);
+        break;
+
+    case "Lisogor":
+        parse_price_lisogor();
+        test_data_arr();
+        add_db_lisogor($data);
+        break;
+
+    case "Vika":
+        parse_price_vika();
+        test_data_arr();
+        add_db_vika($data);
+        break;
+
+    case "Domini":
+        echo "In progress";
+
+        break;
+
+    default:
+        echo "Выберите фабрику и повторите";
+        break;
+}
+
+/**
+ * записывает полученные из XML значения в ассоциативный массив
+ * @param $name - название или id позиции в прайсе поставщика
+ * @param $kat1 - цена за первую категорию или цена за товар
+ * @param $kat2 - цена за втрую категорию
+ * @param $kat3 - цена за третью категорию
+ * @param $kat4 - цена за четвертую категорию
+ * @param $kat5 - цена за пятую категорию
+ * @param $kat6 - цена за шестую категорию
+ * @param $kat7 - цена за седьмую категорию
+ * @param $kat8 - цена за восьмую категорию
+ * @param $kat9 - цена за девятую категорию
+ * @param $kat10 - цена за десятую категорию
+ */
+function add_price($name, $kat1=0, $kat2=0, $kat3=0, $kat4=0, $kat5=0, $kat6=0, $kat7=0, $kat8=0, $kat9=0, $kat10=0)
+{
+    global $data;
+    $data[]=array(
+        'name'=>$name,
+        'kat1'=>$kat1,
+        'kat2'=>$kat2,
+        'kat3'=>$kat3,
+        'kat4'=>$kat4,
+        'kat5'=>$kat5,
+        'kat6'=>$kat6,
+        'kat7'=>$kat7,
+        'kat8'=>$kat8,
+        'kat9'=>$kat9,
+        'kat10'=>$kat10
+    );
+}
+
+
+/**
+ * Class Domini
+ */
+class Domini
+{
+    /**
+     * @var $file1 xml файл с прайсом
+     */
+    private $file1;
+    /**
+     * @var $data ассоциативный массив, в котором хранится информация о названии товара из прайса и его цене
+     */
+    protected $data;
+
+    /**
+     * Domini constructor.
+     * @param $f передаем файл с прайсом в конструктор
+     */
+    function __construct($f)
+    {
+        if ($f)
+            $this->file1=$f;
+    }
+
+    /**
+     * @param $name
+     * @param $price
+     */
+    private function add_price ($name, $price)
+    {
+        $this->data[]=array(
+            'name'=>$name,
+            'price'=>$price);
+        //var_dump($this->data);
+        //echo "test!";
+    }
+
+    /**
+     *
+     */
+    public function parce_price_domini()
+    {
+        if ($this->file1)
+        {
+            $dom = DOMDocument::load($this->file1);
+            $rows=$dom->getElementsByTagName('Row');
+            //print_r($rows);
+            $row_num=1;
+            //полезная инфа начинается с 4 строки!
+            //артикул позиции находится в 1 ячейке
+            //цена - 9 ячейка
+            foreach ($rows as $row)
+            {
+                if ($row_num>=4)
+                {
+                    $cells=$row->getElementsByTagName('Cell');
+                    $cell_num=1;
+                    foreach ($cells as $cell)
+                    {
+                        if ($cell_num==1)
+                        {
+                            $name=$cell->nodeValue;
+                        }
+                        if ($cell_num==9)
+                        {
+                            $price=$cell->nodeValue;
+                        }
+                        $cell_num++;
+                    }
+                    if ((!empty($name))AND(!empty($price)))
+                    {
+                        $this->add_price($name,$price);
+                        //echo "Yay!";
+                    }
+                }
+                $row_num++;
+            }
+        }
+        else
+        {
+            echo "No file!";
+        }
+    }
+
+    /**
+     *
+     */
+    public function add_db_domini()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        foreach ($this->data as $d)
+        {
+            $d_name=$d['name'];
+            //echo $d_name."<br>";
+            $d_price=$d['price'];
+            $factory_id=78;
+            $strSQL="UPDATE goods ".
+                "SET goods_price=$d_price ".
+                "WHERE goods.goods_article_link=$d_name AND factory_id=$factory_id";
+            //echo $strSQL."<br>";
+            //break;
+            mysqli_query($db_connect, $strSQL);
+            //break;
+        }
+    }
+
+    /**
+     *
+     */
+    public function test_data()
+    {
+        ?>
+        <!--<html>
+        <body> -->
+        <table>
+            <tr>
+                <th>Артикул</th>
+                <th>цена</th>
+            </tr>
+            <?php foreach($this->data as $row)
+            {?>
+                <tr>
+                    <td><?php echo ($row['name']); ?></td>
+                    <td><?php echo ($row['price']); ?></td>
+                </tr>
+
+            <?php } ?>
+
+        </table>
+        <!-- </body>
+        </html> --> <?php
+    }
+
+}
+
 /**
  * Class AMF
  */
 class AMF
 {
+    /**
+     * AMF constructor.
+     * @param $f
+     */
     function __construct($f)
 	{
 		//echo $f;
 		if ($f)
 			$this->file1=$f;
 	}
-	private $file1;
+
+    /**
+     * @var
+     */
+    private $file1;
 	/**
      * @var - ассоциативный массив, содержащий название позиции и цены, прочитаные из прайса
      */
-    /*private*/ protected $data;
+    /*private*/
+    /**
+     * @var
+     */
+    protected $data;
     /**
      * записывает артикул и цену позиции в ассоциативный массив $data
      * @param $name - артикул позиции
@@ -78,11 +328,20 @@ class AMF
 				$row_num++;
 			}
 		}
+        else
+        {
+            echo "No file!";
+        }
+
 		//print_r($this->data);
     }
+
+    /**
+     *
+     */
     public function add_db_afm()
     {
-        $db_connect=mysqli_connect('localhost','root','','mebli');
+        $db_connect=mysqli_connect(host,user,pass,db);
         foreach ($this->data as $d)
         {
             $d_name=$d['name'];
@@ -212,7 +471,7 @@ class Poparada
      */
     public function add_db_poparada()
     {
-        $db_connect=mysqli_connect('localhost','root','','mebli');
+        $db_connect=mysqli_connect(host,user,pass,db);
         foreach ($this->data as $d)
         {
             $d_name=$d['name'];
@@ -282,38 +541,7 @@ class Poparada
         </html> --> <?php
     }
 }
-$data=array();
-/**
- * записывает полученные из XML значения в ассоциативный массив
- * @param $name - название или id позиции в прайсе поставщика
- * @param $kat1 - цена за первую категорию или цена за товар
- * @param $kat2 - цена за втрую категорию
- * @param $kat3 - цена за третью категорию
- * @param $kat4 - цена за четвертую категорию
- * @param $kat5 - цена за пятую категорию
- * @param $kat6 - цена за шестую категорию
- * @param $kat7 - цена за седьмую категорию
- * @param $kat8 - цена за восьмую категорию
- * @param $kat9 - цена за девятую категорию
- * @param $kat10 - цена за десятую категорию
- */
-function add_price($name, $kat1=0, $kat2=0, $kat3=0, $kat4=0, $kat5=0, $kat6=0, $kat7=0, $kat8=0, $kat9=0, $kat10=0)
-{
-    global $data;
-    $data[]=array(
-        'name'=>$name,
-        'kat1'=>$kat1,
-        'kat2'=>$kat2,
-        'kat3'=>$kat3,
-        'kat4'=>$kat4,
-        'kat5'=>$kat5,
-        'kat6'=>$kat6,
-        'kat7'=>$kat7,
-        'kat8'=>$kat8,
-        'kat9'=>$kat9,
-        'kat10'=>$kat10
-    );
-}
+
 /**
  *вынимает нужную информацию из XML в прайсе БРВ
  */
@@ -555,21 +783,7 @@ function parse_price_vika()
         }
     }
 }
-//print_r($_FILES['file']['tmp_name']);
-//parse_price_lisogor();
-//add_db_lisogor($data);
-//parse_price_brw();
-//print_r ($_FILES['file']['tmp_name']);
-echo "<pre>";
-print_r ($_FILES);
-echo "</pre>";
-set_time_limit(100);
-$test = new AMF($_FILES['file']['tmp_name']);
-//print_r ($_FILES['file']['tmp_name']);
-$test->parse_price_amf();
-$test->test_data();
-//parse_price_gerbor();
-//parse_price_vika();
+
 /**
  * записывает информацию из ассоциативного массива с ценами в базу данных сайта
  * (id фабрики=56)
@@ -579,7 +793,7 @@ $test->test_data();
  */
 function add_db_brw_gerbor($data1)
 {
-    $db_connect=mysqli_connect('localhost','root','','mebli');
+    $db_connect=mysqli_connect(host,user,pass,db);
     foreach ($data1 as $d)
     {
         if (intval($d['name']))
@@ -625,7 +839,7 @@ function add_db_brw_gerbor($data1)
  */
 function add_db_lisogor($data1)
 {
-	$db_connect=mysqli_connect('localhost','root','','mebli');
+	$db_connect=mysqli_connect(host,user,pass,db);
 	foreach ($data1 as $d)
 	{
 		$d_name=$d['name'];
@@ -656,7 +870,7 @@ function add_db_lisogor($data1)
  */
 function add_db_vika($data1)
 {
-    $db_connect=mysqli_connect('localhost','root','','mebli');
+    $db_connect=mysqli_connect(host,user,pass,db);
     foreach ($data1 as $d)
     {
         $d_name=$d['name'];
@@ -681,43 +895,50 @@ function add_db_vika($data1)
     }
 }
 ?>
-<!--
-<html>
+<?php
+/**
+ *
+ */
+function test_data_arr()
+{
+    ?>
+    <html>
     <body>
-        <table>
+    <table>
+        <tr>
+            <th>Диван</th>
+            <th>kat 1</th>
+            <th>kat 2</th>
+            <th>kat 3</th>
+            <th>kat 4</th>
+            <th>kat 5</th>
+            <th>kat 6</th>
+            <th>kat 7</th>
+            <th>kat 8</th>
+            <th>kat 9</th>
+            <th>kat 10</th>
+        </tr>
+        <?php foreach ($data as $row) {
+            ?>
             <tr>
-                <th>Диван</th>
-                <th>kat 1</th>
-                <th>kat 2</th>
-                <th>kat 3</th>
-                <th>kat 4</th>
-                <th>kat 5</th>
-                <th>kat 6</th>
-                <th>kat 7</th>
-                <th>kat 8</th>
-                <th>kat 9</th>
-                <th>kat 10</th>
-            </tr>
-            <?php foreach($data as $row)
-                {?>
-            <tr>
-                <td><?php echo ($row['name']); ?></td>
-                <td><?php echo ($row['kat1']); ?></td>
-                <td><?php echo ($row['kat2']); ?></td>
-                <td><?php echo ($row['kat3']); ?></td>
-                <td><?php echo ($row['kat4']); ?></td>
-                <td><?php echo ($row['kat5']); ?></td>
-                <td><?php echo ($row['kat6']); ?></td>
-                <td><?php echo ($row['kat7']); ?></td>
-                <td><?php echo ($row['kat8']); ?></td>
-                <td><?php echo ($row['kat9']); ?></td>
-                <td><?php echo ($row['kat10']); ?></td>
+                <td><?php echo($row['name']); ?></td>
+                <td><?php echo($row['kat1']); ?></td>
+                <td><?php echo($row['kat2']); ?></td>
+                <td><?php echo($row['kat3']); ?></td>
+                <td><?php echo($row['kat4']); ?></td>
+                <td><?php echo($row['kat5']); ?></td>
+                <td><?php echo($row['kat6']); ?></td>
+                <td><?php echo($row['kat7']); ?></td>
+                <td><?php echo($row['kat8']); ?></td>
+                <td><?php echo($row['kat9']); ?></td>
+                <td><?php echo($row['kat10']); ?></td>
             </tr>
 
-                <?php } ?>
+        <?php } ?>
 
-        </table>
+    </table>
     </body>
-</html>
-
--->
+    </html>
+    <?php
+}
+?>
