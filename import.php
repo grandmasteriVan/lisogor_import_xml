@@ -114,17 +114,17 @@ function add_price($name, $kat1=0, $kat2=0, $kat3=0, $kat4=0, $kat5=0, $kat6=0, 
 class Domini
 {
     /**
-     * @var $file1 xml файл с прайсом
+     * @var \$file1 xml файл с прайсом
      */
     private $file1;
     /**
-     * @var $data ассоциативный массив, в котором хранится информация о названии товара из прайса и его цене
+     * @var \$data ассоциативный массив, в котором хранится информация о названии товара из прайса и его цене
      */
     protected $data;
 
     /**
      * Domini constructor.
-     * @param $f передаем файл с прайсом в конструктор
+     * @param \$f передаем файл с прайсом в конструктор
      */
     function __construct($f)
     {
@@ -133,8 +133,9 @@ class Domini
     }
 
     /**
-     * @param $name
-     * @param $price
+     * @param $name string[] название (код) товара
+     * @param $price int цена товара
+     * записывает в поле $data наименование товара и его цену
      */
     private function add_price ($name, $price)
     {
@@ -146,7 +147,8 @@ class Domini
     }
 
     /**
-     *
+     *вынимаем из прайса наименование товара и его цену
+     * и записываем их в поле $data
      */
     public function parce_price_domini()
     {
@@ -193,7 +195,7 @@ class Domini
     }
 
     /**
-     *
+     *сохраняет информацию из поля $data в базу данных сайта
      */
     public function add_db_domini()
     {
@@ -215,7 +217,8 @@ class Domini
     }
 
     /**
-     *
+     * для тестов
+     * красиво выводим поле $data в котором лежат наименование товара и его цена
      */
     public function test_data()
     {
@@ -225,7 +228,7 @@ class Domini
         <table>
             <tr>
                 <th>Артикул</th>
-                <th>цена</th>
+                <th>Цена</th>
             </tr>
             <?php foreach($this->data as $row)
             {?>
