@@ -5,31 +5,28 @@
  * Date: 01.02.16
  * Time: 10:18
  */
-
 /**
  * database host
  */
-define ("host","localhost");
 //define ("host","localhost");
+define ("host","10.0.0.2");
 /**
  * database username
  */
-define ("user", "root");
 //define ("user", "root");
+define ("user", "uh333660_mebli");
 /**
  * database password
  */
-define ("pass", "");
 //define ("pass", "");
+define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
-define ("db", "mebli");
 //define ("db", "mebli");
-
+define ("db", "uh333660_mebli");
 /** @var array $data */
-$data= [];
-
+$data= array();
 
 $selectedFactory=$_POST["factory"];
 switch ($selectedFactory)
@@ -41,35 +38,29 @@ switch ($selectedFactory)
         $test->test_data();
         $test->add_db_afm();
         break;
-
     case "Poparada":
-
         break;
-
     case "BRW":
         parse_price_brw();
         test_data_arr();
+		//print_r($data);
         add_db_brw_gerbor($data);
         break;
-
     case "Gerbor":
         parse_price_gerbor();
         test_data_arr();
         add_db_brw_gerbor($data);
         break;
-
     case "Lisogor":
         parse_price_lisogor();
         test_data_arr();
         add_db_lisogor($data);
         break;
-
     case "Vika":
         parse_price_vika();
         test_data_arr();
         add_db_vika($data);
         break;
-
     case "Domini":
         //echo "In progress";
         $test = new Domini($_FILES['file']['tmp_name']);
@@ -77,16 +68,13 @@ switch ($selectedFactory)
         $test->test_data();
         $test->add_db_domini();
         break;
-
     case "SidiM":
         echo "In progress";
         break;
-
     default:
         echo "Выберите фабрику и повторите";
         break;
 }
-
 /**
  * записывает полученные из XML значения в ассоциативный массив
  * @param $name - название или id позиции в прайсе поставщика
@@ -104,7 +92,8 @@ switch ($selectedFactory)
 function add_price($name, $kat1=0, $kat2=0, $kat3=0, $kat4=0, $kat5=0, $kat6=0, $kat7=0, $kat8=0, $kat9=0, $kat10=0)
 {
     global $data;
-    $data[]=array(
+    //echo "test!<br>";
+	$data[]=array(
         'name'=>$name,
         'kat1'=>$kat1,
         'kat2'=>$kat2,
@@ -117,9 +106,8 @@ function add_price($name, $kat1=0, $kat2=0, $kat3=0, $kat4=0, $kat5=0, $kat6=0, 
         'kat9'=>$kat9,
         'kat10'=>$kat10
     );
+	//print_r($data);
 }
-
-
 /**
  * Class Sidim
  */
@@ -133,7 +121,6 @@ class Sidim
      * @var \$data ассоциативный массив, в котором хранится информация о названии товара из прайса и его цене
      */
     protected $data;
-
     /**
      * Sidim constructor.
      * @param \$f передаем файл с прайсом в конструктор
@@ -143,7 +130,6 @@ class Sidim
         if ($f)
             $this->file1=$f;
     }
-
     /**
      * @param $name string[] название (код) товара
      * @param $kat1 integer цена в первой категории ткани
@@ -171,7 +157,6 @@ class Sidim
         //var_dump($this->data);
         //echo "test!";
     }
-
     public function parce_price_sidim()
     {
         if ($this->file1)
@@ -183,7 +168,6 @@ class Sidim
             {
                 $ws_name=$worksheet->getAttribute('ss:Name');
                 //echo "$ws_name vkladka <br>";
-
                 if ($ws_name=="Розница грн.")
                 {
                     //echo "need vkladka <br>";
@@ -209,7 +193,6 @@ class Sidim
                                 {
                                     $name=$elem;
                                 }
-
                                 if (($cell_num>=4)&&(!empty($elem)))
                                 {
                                     if ($cell_num%2==0)
@@ -232,7 +215,6 @@ class Sidim
             }
         }
     }
-
     /**
      * для тестов
      * красиво выводим поле $data в котором лежат наименование товара и его цены
@@ -275,9 +257,7 @@ class Sidim
         <!-- </body>
         </html> --> <?php
     }
-
 }
-
 /**
  * Class Domini
  */
@@ -291,7 +271,6 @@ class Domini
      * @var \$data ассоциативный массив, в котором хранится информация о названии товара из прайса и его цене
      */
     protected $data;
-
     /**
      * Domini constructor.
      * @param \$f передаем файл с прайсом в конструктор
@@ -301,7 +280,6 @@ class Domini
         if ($f)
             $this->file1=$f;
     }
-
     /**
      * @param $name string[] название (код) товара
      * @param $price int цена товара
@@ -315,7 +293,6 @@ class Domini
         //var_dump($this->data);
         //echo "test!";
     }
-
     /**
      *вынимаем из прайса наименование товара и его цену
      * и записываем их в поле $data
@@ -341,17 +318,14 @@ class Domini
                     foreach ($cells as $cell)
                     {
                         $elem=$cell->nodeValue;
-
                         if (($cell_num==1)&&(intval($elem)))
                         {
                             $name=$elem;
                         }
-
                         if (($cell_num==2)&&(!intval($elem)))
                         {
                             $name=$elem;
                         }
-
                         if ($cell_num==9)
                         {
                             $price=$elem;
@@ -372,7 +346,6 @@ class Domini
             echo "No file!";
         }
     }
-
     /**
      *сохраняет информацию из поля $data в базу данных сайта
      */
@@ -396,7 +369,6 @@ class Domini
                 mysqli_query($db_connect, $strSQL);
                 //break;
             }
-
         }
         //потом проставляем цены модулей
         foreach ($this->data as $d)
@@ -421,7 +393,6 @@ class Domini
             }
         }
     }
-
     /**
      * для тестов
      * красиво выводим поле $data в котором лежат наименование товара и его цена
@@ -449,9 +420,7 @@ class Domini
         <!-- </body>
         </html> --> <?php
     }
-
 }
-
 /**
  * Class AMF
  */
@@ -467,7 +436,6 @@ class AMF
 		if ($f)
 			$this->file1=$f;
 	}
-
     /**
      * @var
      */
@@ -541,10 +509,8 @@ class AMF
         {
             echo "No file!";
         }
-
 		//print_r($this->data);
     }
-
     /**
      *
      */
@@ -750,7 +716,6 @@ class Poparada
         </html> --> <?php
     }
 }
-
 /**
  *вынимает нужную информацию из XML в прайсе БРВ
  */
@@ -759,7 +724,7 @@ function parse_price_brw()
     if ($_FILES['file']['tmp_name'])
     {
         $dom=DOMDocument::load($_FILES['file']['tmp_name']);
-        print_r($dom);
+        //print_r($dom);
         $rows=$dom->getElementsByTagName('Row');
         //print_r($rows);
         $row_num=1;
@@ -796,12 +761,14 @@ function parse_price_brw()
                     }
                     if ($cell_num==6)
                     {
-                        $price=$elem;						
+                        $price=$elem;
+						//echo "price=".$price."<br>";
                     }
                     $cell_num++;
                 }
+				//echo "name=".$name." price=".$price."<br>";
                 add_price($name,$price);
-            }
+			}
             $row_num++;
         }
     }
@@ -992,7 +959,6 @@ function parse_price_vika()
         }
     }
 }
-
 /**
  * записывает информацию из ассоциативного массива с ценами в базу данных сайта
  * (id фабрики=56)
@@ -1003,7 +969,8 @@ function parse_price_vika()
 function add_db_brw_gerbor($data1)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    foreach ($data1 as $d)
+    //print_r($data1);
+	foreach ($data1 as $d)
     {
         if (intval($d['name']))
         {
@@ -1040,6 +1007,7 @@ function add_db_brw_gerbor($data1)
             mysqli_query($db_connect, $strSQL);
         }
     }
+	echo"End!";
 }
 /**
  * записывает информацию из ассоциативного массива с ценами в базу данных сайта
@@ -1110,7 +1078,8 @@ function add_db_vika($data1)
  */
 function test_data_arr()
 {
-    ?>
+    global $data
+	?>
     <html>
     <body>
     <table>
