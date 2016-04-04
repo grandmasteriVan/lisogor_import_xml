@@ -8,23 +8,23 @@
 /**
  * database host
  */
-//define ("host","localhost");
-define ("host","10.0.0.2");
+define ("host","localhost");
+//define ("host","10.0.0.2");
 /**
  * database username
  */
-//define ("user", "root");
-define ("user", "uh333660_mebli");
+define ("user", "root");
+//define ("user", "uh333660_mebli");
 /**
  * database password
  */
-//define ("pass", "");
-define ("pass", "Z7A8JqUh");
+define ("pass", "");
+//define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
-//define ("db", "mebli");
-define ("db", "uh333660_mebli");
+define ("db", "mebli");
+//define ("db", "uh333660_mebli");
 
 
 $selectedFactory=$_POST["factory"];
@@ -39,17 +39,19 @@ switch ($selectedFactory)
         $test->add_db_afm();
         break;
     case "Poparada":
-        include_once "/factory/amf.php";
+        include_once "/factory/poparada.php";
         break;
     case "BRW":
-        include_once "/factory/amf.php";
+        set_time_limit(200);
+		include_once "/factory/brw-gerbor.php";
         parse_price_brw();
-        test_data_arr();
+        //test_data_arr();
         //print_r($data);
         add_db_brw_gerbor($data);
         break;
     case "Gerbor":
-        include_once "/factory/amf.php";
+        set_time_limit(200);
+		include_once "/factory/brw-gerbor.php";
         parse_price_gerbor();
         test_data_arr();
         add_db_brw_gerbor($data);
