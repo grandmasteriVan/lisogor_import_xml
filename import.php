@@ -39,17 +39,17 @@ switch ($selectedFactory)
         $test->add_db_afm();
         break;
     case "Poparada":
-        include_once "/factory/amf.php";
+        include_once "/factory/poparada.php";
         break;
     case "BRW":
-        include_once "/factory/amf.php";
+        include_once "/factory/brw-gerbor.php";
         parse_price_brw();
         test_data_arr();
         //print_r($data);
         add_db_brw_gerbor($data);
         break;
     case "Gerbor":
-        include_once "/factory/amf.php";
+        include_once "/factory/brw-gerbor.php";
         parse_price_gerbor();
         test_data_arr();
         add_db_brw_gerbor($data);

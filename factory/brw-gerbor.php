@@ -177,7 +177,7 @@ function add_db_brw_gerbor($data1)
             $price=$d['kat1'];
             $strSQL="UPDATE goods ".
                 "SET goods_price=$price ".
-                "WHERE goods.goods_article_link= $name AND factory_id=56";
+                "WHERE goods.goods_article_link=$name AND factory_id=56";
             //echo $strSQL."<br>";
             //break;
             mysqli_query($db_connect, $strSQL);
@@ -208,5 +208,29 @@ function add_db_brw_gerbor($data1)
     echo"End!";
 }
 
+function test_data()
+{
+    global $data;
+    ?>
+    <!--<html>
+    <body> -->
+    <table>
+        <tr>
+            <th>Артикул</th>
+            <th>цена</th>
+        </tr>
+        <?php foreach($data as $row)
+        {?>
+            <tr>
+                <td><?php echo ($row['name']); ?></td>
+                <td><?php echo ($row['kat1']); ?></td>
+            </tr>
+
+        <?php } ?>
+
+    </table>
+    <!-- </body>
+    </html> --> <?php
+}
 
 ?>
