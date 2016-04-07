@@ -53,7 +53,7 @@ switch ($selectedFactory)
         set_time_limit(200);
 		include_once "/factory/brw-gerbor.php";
         parse_price_gerbor();
-        test_data_arr();
+        //test_data_arr();
         add_db_brw_gerbor($data);
         break;
     case "Lisogor":
@@ -65,7 +65,7 @@ switch ($selectedFactory)
     case "Vika":
         include_once "/factory/vika.php";
         parse_price_vika();
-        test_data_arr();
+        //test_data_arr();
         add_db_vika($data);
         break;
     case "Domini":
