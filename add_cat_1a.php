@@ -24,6 +24,12 @@ define ("pass", "");
 define ("db", "mebli");
 //define ("db", "uh333660_mebli");
 
+/**
+ * @param $cat1 integer id первой категории цен
+ * @param $cat1a integer id категории 1а
+ * @param $percent integer процент, на который отличается категория 1а от 1
+ * функция проставляет цены в категрии 1а
+ */
 function add_cat($cat1, $cat1a, $percent)
 {
     $percent=(100-$percent)/100;
@@ -35,6 +41,9 @@ function add_cat($cat1, $cat1a, $percent)
         {
             $price_1cat[]=$row;
         }
+        echo "<pre>";
+        print_r($price_1cat);
+        echo "</pre>";
         foreach($price_1cat as $div)
         {
             $id=$div['goods_id'];
@@ -45,6 +54,7 @@ function add_cat($cat1, $cat1a, $percent)
             if ($price!=0)
             {
                 mysqli_query($db_connect,$query);
+                //echo $query."<br>";
             }
 
         }
