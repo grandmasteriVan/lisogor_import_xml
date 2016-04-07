@@ -28,7 +28,7 @@ function add_cat($cat1, $cat1a, $percent)
 {
     $percent=(100-$percent)/100;
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id, category_price FROM goodshascategory WHERE category_id=$cat1";
+    $query="SELECT goods_id, goodshascategory_price FROM goodshascategory WHERE category_id=$cat1";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row=mysqli_fetch_assoc($res))
@@ -37,12 +37,16 @@ function add_cat($cat1, $cat1a, $percent)
         }
         foreach($price_1cat as $div)
         {
-            $id=$price_1cat['goods_id'];
-            $price=round($price_1cat['category_price']*$percent);
+            $id=$div['goods_id'];
+            $price=round($div['goodshascategory_price']*$percent);
             $query="UPDATE goodshascategory SET goodshascategory_active=1 ".
-                "category_price=$price ".
+                "goodshascategory_price=$price ".
                 "WHERE goods_id=$id AND category_id=$cat1a";
-            mysqli_query($db_connect,$query);
+            if ($price!=0)
+            {
+                mysqli_query($db_connect,$query);
+            }
+
         }
     }
 
