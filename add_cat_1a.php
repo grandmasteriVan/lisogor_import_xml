@@ -30,44 +30,79 @@ define ("db", "mebli");
  * @param $percent integer процент, на который отличается категория 1а от 1
  * функция проставляет цены в категрии 1а
  */
-function add_cat($cat1, $cat1a, $percent)
+function add_cat($cat1, $cat1a, $percent, $currency=false)
 {
     $percent=(100-$percent)/100;
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id, goodshascategory_price FROM goodshascategory WHERE category_id=$cat1";
-    if ($res=mysqli_query($db_connect,$query))
-    {
-        while ($row=mysqli_fetch_assoc($res))
-        {
-            $price_1cat[]=$row;
-        }
-        echo "<pre>";
-        print_r($price_1cat);
-        echo "</pre>";
-        foreach($price_1cat as $div)
-        {
-            $id=$div['goods_id'];
-            $price=round($div['goodshascategory_price']*$percent);
-            $query="UPDATE goodshascategory SET goodshascategory_active=1 ".
-                "goodshascategory_price=$price ".
-                "WHERE goods_id=$id AND category_id=$cat1a";
-            if ($price!=0)
-            {
-                mysqli_query($db_connect,$query);
-                //echo $query."<br>";
-            }
 
+    if ($currency)
+    {
+        $query="SELECT goods_id, goodshascategory_pricecur FROM goodshascategory WHERE category_id=$cat1";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row=mysqli_fetch_assoc($res))
+            {
+                $price_1cat[]=$row;
+            }
+            echo "<pre>";
+            print_r($price_1cat);
+            echo "</pre>";
+            foreach($price_1cat as $div)
+            {
+                $id=$div['goods_id'];
+                $price=round($div['goodshascategory_pricecur']*$percent);
+                $query="UPDATE goodshascategory SET goodshascategory_active=1 ".
+                    "goodshascategory_pricecur=$price ".
+                    "WHERE goods_id=$id AND category_id=$cat1a";
+                if ($price!=0)
+                {
+                    mysqli_query($db_connect,$query);
+                    echo $query."<br>";
+                }
+
+            }
         }
     }
+    //цены не в валюте
+    else
+    {
+        $query="SELECT goods_id, goodshascategory_price FROM goodshascategory WHERE category_id=$cat1";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row=mysqli_fetch_assoc($res))
+            {
+                $price_1cat[]=$row;
+            }
+            echo "<pre>";
+            print_r($price_1cat);
+            echo "</pre>";
+            foreach($price_1cat as $div)
+            {
+                $id=$div['goods_id'];
+                $price=round($div['goodshascategory_price']*$percent);
+                $query="UPDATE goodshascategory SET goodshascategory_active=1 ".
+                    "goodshascategory_price=$price ".
+                    "WHERE goods_id=$id AND category_id=$cat1a";
+                if ($price!=0)
+                {
+                    mysqli_query($db_connect,$query);
+                    echo $query."<br>";
+                }
+
+            }
+        }
+    }
+
+
 
 
 }
 
 //vika
-add_cat(119,129,4);
+add_cat(119,129,4,true);
 //katun
-add_cat(17,542,5);
+add_cat(17,542,5,true);
 //uyut
-add_cat(33,620,4);
+add_cat(33,620,4,true);
 
 ?>
