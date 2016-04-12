@@ -28,13 +28,13 @@ define ("db", "mebli");
  * @param $cat1 integer id первой категории цен
  * @param $cat1a integer id категории 1а
  * @param $percent integer процент, на который отличается категория 1а от 1
+ * @param $currency boolean ценны в валюте. истинна - если да, ложь - если нет.
  * функция проставляет цены в категрии 1а
  */
 function add_cat($cat1, $cat1a, $percent, $currency=false)
 {
     $percent=(100-$percent)/100;
     $db_connect=mysqli_connect(host,user,pass,db);
-
     if ($currency)
     {
         $query="SELECT goods_id, goodshascategory_pricecur FROM goodshascategory WHERE category_id=$cat1";
@@ -51,7 +51,7 @@ function add_cat($cat1, $cat1a, $percent, $currency=false)
             {
                 $id=$div['goods_id'];
                 $price=round($div['goodshascategory_pricecur']*$percent);
-                $query="UPDATE goodshascategory SET goodshascategory_active=1 ".
+                $query="UPDATE goodshascategory SET goodshascategory_active=1, ".
                     "goodshascategory_pricecur=$price ".
                     "WHERE goods_id=$id AND category_id=$cat1a";
                 if ($price!=0)
@@ -80,7 +80,7 @@ function add_cat($cat1, $cat1a, $percent, $currency=false)
             {
                 $id=$div['goods_id'];
                 $price=round($div['goodshascategory_price']*$percent);
-                $query="UPDATE goodshascategory SET goodshascategory_active=1 ".
+                $query="UPDATE goodshascategory SET goodshascategory_active=1, ".
                     "goodshascategory_price=$price ".
                     "WHERE goods_id=$id AND category_id=$cat1a";
                 if ($price!=0)
