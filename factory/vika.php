@@ -129,9 +129,9 @@ function add_db_vika($data1)
             $kat_name="kat".strval($i);
             //echo $kat_name."<br>";
             $d_cat=$d[$kat_name];
-            $cat_id=627+$i;
+            $cat_id=118+$i;
             $strSQL="UPDATE goodshascategory ".
-                "SET goodshascategory_price=$d_cat ".
+                "SET goodshascategory_pricecur=$d_cat ".
                 "WHERE goodshascategory.goods_id= ".
                 "(SELECT goods_id FROM goods WHERE (goods.goods_article_link='$d_name') AND (goods.factory_id=33)) ".
                 "AND (goodshascategory.category_id=$cat_id)";
@@ -139,6 +139,17 @@ function add_db_vika($data1)
             //break;
             mysqli_query($db_connect, $strSQL);
         }
+        //category 1a
+        $d_cat=round($d['kat1']*0.96);
+        $strSQL="UPDATE goodshascategory ".
+            "SET goodshascategory_pricecur=$d_cat ".
+            "WHERE goodshascategory.goods_id= ".
+            "(SELECT goods_id FROM goods WHERE (goods.goods_article_link='$d_name') AND (goods.factory_id=33)) ".
+            "AND (goodshascategory.category_id=129)";
+        //echo $strSQL."<br>";
+        //break;
+        mysqli_query($db_connect, $strSQL);
+
         //break;
     }
 }
