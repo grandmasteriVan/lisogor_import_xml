@@ -38,13 +38,13 @@ function getPrice($factoryId)
         foreach ($arr as $tov)
         {
             $tmp=$tov['goods_id'].",".$tov['goods_price'].",".PHP_EOL;
-            file_put_contents('price.csv',$str,FILE_APPEND);
+            file_put_contents('price.csv',$tmp,FILE_APPEND);
         }
     }
 }
 
 
-
+getPrice(76);
 
 
 
