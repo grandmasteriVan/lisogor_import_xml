@@ -30,7 +30,7 @@ define ("db", "mebli");
 function get_product_list()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id, goods_name FROM goods WHERE factory_id=34";
+    $query="SELECT goods_article, goods_name FROM goods WHERE factory_id=34";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row=mysqli_fetch_assoc($res))
@@ -41,11 +41,11 @@ function get_product_list()
         for ($i=0;$i<$len;$i++)
         {
 
-            $str=$arr[$i]['goods_article']." ".$arr[$i]['goods_name'].PHP_EOL;
+            $str=$arr[$i]['goods_article'].", ".$arr[$i]['goods_name'].PHP_EOL;
             file_put_contents('amf_list.txt',$str,FILE_APPEND);
         }
     }
 }
-
+get_product_list()
 
 ?>
