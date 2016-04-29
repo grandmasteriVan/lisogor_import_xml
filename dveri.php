@@ -23,6 +23,10 @@ define ("pass", "Z7A8JqUh");
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
 
+/**
+ * @param $factoryId int - id фабрики
+ * выбираем цены по фабрике и записываем их в файл price.csv
+ */
 function getPrice($factoryId)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -49,5 +53,20 @@ function getPrice($factoryId)
         }
     }
 }
-getPrice(79);
+
+function setPrice()
+{
+    $db_connect=mysqli_connect(host,user,pass,db);
+    $arr=fgetcsv("price.csv");
+    echo "<pre>";
+    print_r($arr);
+    echo "</pre>";
+
+}
+
+
+
+//getPrice(79);
+setPrice();
+
 ?>
