@@ -62,6 +62,12 @@ function setPrice()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
     $arr=fgetcsv("price.csv");
+    $handle=fopen("price.csv", "r");
+    while ($data=fgetcsv($handle,0,";"))
+    {
+        $arr[]=$data;
+    }
+
     echo "<pre>";
     print_r($arr);
     echo "</pre>";
