@@ -5,24 +5,23 @@
  * Date: 29.04.16
  * Time: 09:36
  */
-
-define ("host","localhost");
-//define ("host","10.0.0.2");
+//define ("host","localhost");
+define ("host","10.0.0.2");
 /**
  * database username
  */
-define ("user", "root");
-//define ("user", "uh333660_mebli");
+//define ("user", "root");
+define ("user", "uh333660_mebli");
 /**
  * database password
  */
-define ("pass", "");
-//define ("pass", "Z7A8JqUh");
+//define ("pass", "");
+define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
-define ("db", "mebli");
-//define ("db", "uh333660_mebli");
+//define ("db", "mebli");
+define ("db", "uh333660_mebli");
 
 function getPrice($factoryId)
 {
@@ -30,25 +29,25 @@ function getPrice($factoryId)
     $query="SELECT goods_id, goods_price FROM goods WHERE factory_id=$factoryId";
     if ($res=mysqli_query($db_connect,$query))
     {
-        while ($row=mysqli_fetch_assoc($res))
+        print_r ($res);
+		echo "Hi!";
+		while ($row=mysqli_fetch_assoc($res))
         {
             $arr[]=$row;
+			echo "ni!";
         }
-
-        foreach ($arr as $tov)
+        echo "<pre>";
+		print_r($arr);
+		echo "</pre>";
+		$len=count($arr);
+		for ($i=0; $i<$len; $i++)
         {
-            $tmp=$tov['goods_id'].",".$tov['goods_price'].",".PHP_EOL;
-            file_put_contents('price.csv',$tmp,FILE_APPEND);
+            //echo $i;
+			$tmp=$arr[$i]['goods_id'].";".$arr[$i]['goods_price'].PHP_EOL;
+            echo $tmp.PHP_EOL;
+			file_put_contents('price.csv',$tmp,FILE_APPEND);
         }
     }
 }
-
-
-getPrice(76);
-
-
-
-
-
-
+getPrice(79);
 ?>
