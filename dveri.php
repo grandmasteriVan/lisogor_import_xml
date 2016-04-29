@@ -26,6 +26,7 @@ define ("db", "uh333660_mebli");
 /**
  * @param $factoryId int - id фабрики
  * выбираем цены по фабрике и записываем их в файл price.csv
+ * в формате id товара, цена товара
  */
 function getPrice($factoryId)
 {
@@ -54,6 +55,9 @@ function getPrice($factoryId)
     }
 }
 
+/**
+ * записываем данные из сгенеренного ранее файла
+ */
 function setPrice()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -61,6 +65,16 @@ function setPrice()
     echo "<pre>";
     print_r($arr);
     echo "</pre>";
+    foreach ($arr as $data)
+    {
+        $id=$data[0];
+        $price=$data[1];
+        $query="UPDATE goods SET goods_price=$price WHERE goods_id=$id";
+        echo $query."<br>";
+        mysqli_query($db_connect,$query);
+    }
+
+
 
 }
 
