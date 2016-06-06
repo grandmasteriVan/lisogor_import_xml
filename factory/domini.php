@@ -35,7 +35,11 @@ class Domini
      */
     private function add_price ($name, $price)
     {
-        $this->data[]=array(
+        if (intval($name)&&$price==0)
+		{
+			return;
+		}
+		$this->data[]=array(
             'name'=>$name,
             'price'=>$price);
         //var_dump($this->data);
@@ -62,29 +66,30 @@ class Domini
                 {
                     $cells=$row->getElementsByTagName('Cell');
                     $cell_num=1;
-                    $isModuleTov=false;
+                    $isModuleTov=true;
                     foreach ($cells as $cell)
                     {
-                        $price=null;
+                        //$price=null;
                         $elem=$cell->nodeValue;
                         //обычная позиция
                         if (($cell_num==1)&&(intval($elem)))
                         {
                             $name=$elem;
+							$isModuleTov=false;
                         }
                         //составная позиция или название раздела
-                        if (($cell_num==2)&&(!intval($elem)))
+                        if (($isModuleTov)&&($cell_num==2)&&(!intval($elem)))
                         {
                             $name=$elem;
                         }
-                        if ($cell_num==9)
+                        if ($cell_num==10)
                         {
-                            $price=$elem;
+                            $price=round($elem);
                         }
                         $cell_num++;
                     }
                     //проверяем писать ли позицию в массив или нет (имеет ли она имя)
-                    if (!empty($name))
+                    if ((!empty($name))&&(strlen($name)<30))
                     {
                         $this->add_price($name,$price);
                         //echo "Yay!";
@@ -116,32 +121,45 @@ class Domini
                 $strSQL="UPDATE goods ".
                     "SET goods_pricecur=$d_price ".
                     "WHERE goods.goods_article_link=$d_name AND factory_id=$factory_id";
-                //echo $strSQL."<br>";
+                echo $strSQL."<br>";
                 //break;
-                mysqli_query($db_connect, $strSQL);
+                //mysqli_query($db_connect, $strSQL);
                 //break;
             }
         }
         //потом проставляем цены модулей
-        foreach ($this->data as $d)
+        echo "<br><b>Просчет модулей</b><br>";
+		foreach ($this->data as $d)
         {
             if ($d['price']==0)
             {
                 //считаем цену позиции суммируя цены ее составляющих
                 $name=$d['name'];
                 //echo $name."<br>";
-                $strSQL="SELECT SUM(goods_price) FROM goods WHERE goods_id IN(".
+                $strSQL="SELECT SUM(goods_pricecur) FROM goods WHERE goods_id IN(".
                     "SELECT component_child FROM component WHERE component_in_complect=1 AND goods_id=(".
-                    "SELECT goods_id FROM goods WHERE goods_article_link=$name AND factory_id=78))";
+                    "SELECT goods_id FROM goods WHERE goods_article_link='$name' AND factory_id=78))";
                 $res=mysqli_query($db_connect,$strSQL);
-                $price=mysqli_fetch_assoc($res);
+				//echo gettype($res);
+				var_dump($res);
+				echo "<br>";
+                //$price=mysqli_fetch_assoc($res);
+				while($row = mysqli_fetch_assoc($res)) 
+				{
+					print_r($row);
+					$price=$row['SUM(goods_pricecur)'] ;
+				}
                 //проставляем цену позиции
-                $strSQL="UPDATE goods ".
-                    "SET goods_price=$price ".
-                    "WHERE goods.goods_article_link= $name";
-                //echo $strSQL."<br>";
-                //break;
-                mysqli_query($db_connect, $strSQL);
+                if ($price)
+				{
+					$strSQL="UPDATE goods ".
+						"SET goods_pricecur=$price ".
+						"WHERE goods.goods_article_link='$name' AND factory_id=78";
+					echo "<br><b>".$strSQL."</b><br>";
+					//break;
+					//mysqli_query($db_connect, $strSQL);
+				}
+				
             }
         }
     }
