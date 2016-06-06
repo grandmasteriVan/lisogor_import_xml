@@ -74,7 +74,7 @@ switch ($selectedFactory)
         $test = new Domini($_FILES['file']['tmp_name']);
         $test->parce_price_domini();
         $test->test_data();
-        $test->add_db_domini();
+        //$test->add_db_domini();
         break;
     case "SidiM":
         echo "In progress";

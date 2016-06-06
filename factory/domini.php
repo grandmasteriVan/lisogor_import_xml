@@ -65,11 +65,14 @@ class Domini
                     $isModuleTov=false;
                     foreach ($cells as $cell)
                     {
+                        $price=null;
                         $elem=$cell->nodeValue;
+                        //обычная позиция
                         if (($cell_num==1)&&(intval($elem)))
                         {
                             $name=$elem;
                         }
+                        //составная позиция или название раздела
                         if (($cell_num==2)&&(!intval($elem)))
                         {
                             $name=$elem;
@@ -80,6 +83,7 @@ class Domini
                         }
                         $cell_num++;
                     }
+                    //проверяем писать ли позицию в массив или нет (имеет ли она имя)
                     if (!empty($name))
                     {
                         $this->add_price($name,$price);
