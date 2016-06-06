@@ -2,88 +2,194 @@
 /**
  * Created by PhpStorm.
  * User: ivan
- * Date: 01.02.16
- * Time: 10:18
+ * Date: 04.04.16
+ * Time: 09:46
  */
-/**
- * database host
- */
-define ("host","localhost");
-//define ("host","10.0.0.2");
-/**
- * database username
- */
-define ("user", "root");
-//define ("user", "uh333660_mebli");
-/**
- * database password
- */
-define ("pass", "");
-//define ("pass", "Z7A8JqUh");
-/**
- * database name
- */
-define ("db", "mebli");
-//define ("db", "uh333660_mebli");
 
-
-$selectedFactory=$_POST["factory"];
-switch ($selectedFactory)
+/**
+ * Class Domini
+ */
+class Domini
 {
-    case "AMF":
-        set_time_limit(200);
-        include_once "/factory/amf.php";
-        $test = new AMF($_FILES['file']['tmp_name']);
-        $test->parse_price_amf();
-        $test->test_data();
-        $test->add_db_afm();
-        break;
-    case "Poparada":
-        include_once "/factory/poparada.php";
-        break;
-    case "BRW":
-        set_time_limit(200);
-		include_once "/factory/brw-gerbor.php";
-        parse_price_brw();
-        //test_data_arr();
-        //print_r($data);
-        add_db_brw_gerbor($data);
-        break;
-    case "Gerbor":
-        set_time_limit(200);
-		include_once "/factory/brw-gerbor.php";
-        parse_price_gerbor();
-        //test_data_arr();
-        add_db_brw_gerbor($data);
-        break;
-    case "Lisogor":
-        include_once "/factory/lisogor.php";
-        parse_price_lisogor();
-        test_data_arr();
-        add_db_lisogor($data);
-        break;
-    case "Vika":
-        include_once "/factory/vika.php";
-        parse_price_vika();
-        //test_data_arr();
-        add_db_vika($data);
-        break;
-    case "Domini":
-        //echo "In progress";
-        include_once "/factory/domini.php";
-        $test = new Domini($_FILES['file']['tmp_name']);
-        $test->parce_price_domini();
-        $test->test_data();
-        //$test->add_db_domini();
-        break;
-    case "SidiM":
-        echo "In progress";
-        include_once "/factory/sidim.php";
-        break;
+    /**
+     * @var \$file1 xml файл с прайсом
+     */
+    private $file1;
+    /**
+     * @var \$data ассоциативный массив, в котором хранится информация о названии товара из прайса и его цене
+     */
+    protected $data;
+    /**
+     * Domini constructor.
+     * @param \$f передаем файл с прайсом в конструктор
+     */
+    function __construct($f)
+    {
+        if ($f)
+            $this->file1=$f;
+    }
+    /**
+     * @param $name string[] название (код) товара
+     * @param $price int цена товара
+     * записывает в поле $data наименование товара и его цену
+     */
+    private function add_price ($name, $price)
+    {
+        if (intval($name)&&$price==0)
+		{
+			return;
+		}
+		$this->data[]=array(
+            'name'=>$name,
+            'price'=>$price);
+        //var_dump($this->data);
+        //echo "test!";
+    }
+    /**
+     *вынимаем из прайса наименование товара и его цену
+     * и записываем их в поле $data
+     */
+    public function parce_price_domini()
+    {
+        if ($this->file1)
+        {
+            $dom = DOMDocument::load($this->file1);
+            $rows=$dom->getElementsByTagName('Row');
+            //print_r($rows);
+            $row_num=1;
+            //полезная инфа начинается с 4 строки!
+            //артикул позиции находится в 1 ячейке
+            //цена - 9 ячейка
+            foreach ($rows as $row)
+            {
+                if ($row_num>=4)
+                {
+                    $cells=$row->getElementsByTagName('Cell');
+                    $cell_num=1;
+                    $isModuleTov=true;
+                    foreach ($cells as $cell)
+                    {
+                        //$price=null;
+                        $elem=$cell->nodeValue;
+                        //обычная позиция
+                        if (($cell_num==1)&&(intval($elem)))
+                        {
+                            $name=$elem;
+							$isModuleTov=false;
+                        }
+                        //составная позиция или название раздела
+                        if (($isModuleTov)&&($cell_num==2)&&(!intval($elem)))
+                        {
+                            $name=$elem;
+                        }
+                        if ($cell_num==10)
+                        {
+                            $price=round($elem);
+                        }
+                        $cell_num++;
+                    }
+                    //проверяем писать ли позицию в массив или нет (имеет ли она имя)
+                    if ((!empty($name))&&(strlen($name)<30))
+                    {
+                        $this->add_price($name,$price);
+                        //echo "Yay!";
+                    }
+                }
+                $row_num++;
+            }
+        }
+        else
+        {
+            echo "No file!";
+        }
+    }
+    /**
+     *сохраняет информацию из поля $data в базу данных сайта
+     */
+    public function add_db_domini()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        //сначала проставляем цены элементов
+        foreach ($this->data as $d)
+        {
+            if ($d['price']!=0)
+            {
+                $d_name=$d['name'];
+                //echo $d_name."<br>";
+                $d_price=$d['price'];
+                $factory_id=78;
+                $strSQL="UPDATE goods ".
+                    "SET goods_pricecur=$d_price ".
+                    "WHERE goods.goods_article_link=$d_name AND factory_id=$factory_id";
+                echo $strSQL."<br>";
+                //break;
+                //mysqli_query($db_connect, $strSQL);
+                //break;
+            }
+        }
+        //потом проставляем цены модулей
+        echo "<br><b>Просчет модулей</b><br>";
+		foreach ($this->data as $d)
+        {
+            if ($d['price']==0)
+            {
+                //считаем цену позиции суммируя цены ее составляющих
+                $name=$d['name'];
+                //echo $name."<br>";
+                $strSQL="SELECT SUM(goods_pricecur) FROM goods WHERE goods_id IN(".
+                    "SELECT component_child FROM component WHERE component_in_complect=1 AND goods_id=(".
+                    "SELECT goods_id FROM goods WHERE goods_article_link='$name' AND factory_id=78))";
+                $res=mysqli_query($db_connect,$strSQL);
+				//echo gettype($res);
+				var_dump($res);
+				echo "<br>";
+                //$price=mysqli_fetch_assoc($res);
+				while($row = mysqli_fetch_assoc($res)) 
+				{
+					print_r($row);
+					$price=$row['SUM(goods_pricecur)'] ;
+				}
+                //проставляем цену позиции
+                if ($price)
+				{
+					$strSQL="UPDATE goods ".
+						"SET goods_pricecur=$price ".
+						"WHERE goods.goods_article_link='$name' AND factory_id=78";
+					echo "<br><b>".$strSQL."</b><br>";
+					//break;
+					//mysqli_query($db_connect, $strSQL);
+				}
+				
+            }
+        }
+    }
+    /**
+     * для тестов
+     * красиво выводим поле $data в котором лежат наименование товара и его цена
+     */
+    public function test_data()
+    {
+        ?>
+        <!--<html>
+        <body> -->
+        <table>
+            <tr>
+                <th>Артикул</th>
+                <th>Цена</th>
+            </tr>
+            <?php foreach($this->data as $row)
+            {?>
+                <tr>
+                    <td><?php echo ($row['name']); ?></td>
+                    <td><?php echo ($row['price']); ?></td>
+                </tr>
 
-    default:
-        echo "Выберите фабрику и повторите";
-        break;
+            <?php } ?>
+
+        </table>
+        <!-- </body>
+        </html> --> <?php
+    }
 }
 
 
