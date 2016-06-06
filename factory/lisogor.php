@@ -6,6 +6,8 @@
  * Time: 09:41
  */
 
+//TODO: set peice to goods table
+
 /** @var array $data */
 $data= array();
 

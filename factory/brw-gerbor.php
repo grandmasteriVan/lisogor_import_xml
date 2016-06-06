@@ -184,6 +184,7 @@ function add_db_brw_gerbor($data1)
         }
         //break;
     }
+
     foreach ($data1 as $d)
     {
         if (!intval($d['name']))
@@ -191,7 +192,7 @@ function add_db_brw_gerbor($data1)
             //считаем цену позиции суммируя цены ее составляющих
             $name=$d['name'];
             //echo $name."<br>";
-            $strSQL="SELECT SUM(goods_price) FROM goods WHERE goods_id IN(".
+            $strSQL="SELECT SUM(goods_price) FROM goods WHERE goods_id IN (".
                 "SELECT component_child FROM component WHERE component_in_complect=1 AND goods_id=(".
                 "SELECT goods_id FROM goods WHERE goods_article_link='$name' AND factory_id=56))";
             echo $strSQL."<br>";

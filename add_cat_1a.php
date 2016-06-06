@@ -28,13 +28,14 @@ define ("db", "mebli");
  * @param $cat1 integer id первой категории цен
  * @param $cat1a integer id категории 1а
  * @param $percent integer процент, на который отличается категория 1а от 1
- * @param $currency boolean ценны в валюте. истинна - если да, ложь - если нет.
+ * @param $currency boolean ценны в валюте. истинна - если да, ложь - если нет. По умолчанию цены в гривнах.
  * функция проставляет цены в категрии 1а
  */
 function add_cat($cat1, $cat1a, $percent, $currency=false)
 {
     $percent=(100-$percent)/100;
     $db_connect=mysqli_connect(host,user,pass,db);
+    //prices in foreign currency
     if ($currency)
     {
         $query="SELECT goods_id, goodshascategory_pricecur FROM goodshascategory WHERE category_id=$cat1";
@@ -49,6 +50,7 @@ function add_cat($cat1, $cat1a, $percent, $currency=false)
             echo "</pre>";
             foreach($price_1cat as $div)
             {
+                //set price in catrgories
                 $id=$div['goods_id'];
                 $price=round($div['goodshascategory_pricecur']*$percent);
                 $query="UPDATE goodshascategory SET goodshascategory_active=1, ".
@@ -59,6 +61,14 @@ function add_cat($cat1, $cat1a, $percent, $currency=false)
                     mysqli_query($db_connect,$query);
                     echo $query."<br>";
                 }
+                //set price in goods
+                $query="UPDATE goods SET goods_pricecur=$price WHERE goods_id=$id";
+                if ($price!=0)
+                {
+                    mysqli_query($db_connect,$query);
+                    echo $query."<br>";
+                }
+
 
             }
         }
@@ -83,6 +93,12 @@ function add_cat($cat1, $cat1a, $percent, $currency=false)
                 $query="UPDATE goodshascategory SET goodshascategory_active=1, ".
                     "goodshascategory_price=$price ".
                     "WHERE goods_id=$id AND category_id=$cat1a";
+                if ($price!=0)
+                {
+                    mysqli_query($db_connect,$query);
+                    echo $query."<br>";
+                }
+                $query="UPDATE goods SET goods_price=$price WHERE goods_id=$id";
                 if ($price!=0)
                 {
                     mysqli_query($db_connect,$query);

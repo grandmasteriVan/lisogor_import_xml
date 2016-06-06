@@ -150,6 +150,17 @@ function add_db_vika($data1)
         //break;
         mysqli_query($db_connect, $strSQL);
 
+
+        //set price
+        $d_cat=round($d['kat1']*0.96);
+        $strSQL="UPDATE goods ".
+            "SET goods_pricecur=$d_cat ".
+            "WHERE goods_article_link='$d_name' AND factory_id=33";
+        //echo $strSQL."<br>";
+        //break;
+        mysqli_query($db_connect, $strSQL);
+
+
         //break;
     }
 }

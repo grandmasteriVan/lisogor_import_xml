@@ -5,6 +5,7 @@
  * Date: 04.04.16
  * Time: 09:48
  */
+//TODO: set peice to goods table
 
 /**
  * Class Sidim

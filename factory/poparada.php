@@ -6,6 +6,8 @@
  * Time: 09:35
  */
 
+//TODO: set peice to goods table
+
 /**
  * Class Poparada
  */
