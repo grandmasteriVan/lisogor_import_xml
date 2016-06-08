@@ -82,7 +82,7 @@ Class Livs
                     $cells=$row->getElementsByTagName('Cell');
                     $cell_num=1;
                     $kat_num=0;
-                    if ($row_num>=4)
+                    foreach ($cells as $cell)
                     {
                         $elem=$cell->nodeValue;
                         if ($cell_num==1)
