@@ -101,7 +101,7 @@ class Domini
         }
         else
         {
-            echo "No file!";
+            echo "No file, no life!";
         }
     }
     /**

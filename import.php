@@ -88,6 +88,14 @@ switch ($selectedFactory)
         $test->test_data();
         $test->add_db_comefor();
         break;
+    case "Livs":
+        //new untested!!!
+        include_once "/factory/livs_divani.php";
+        $test= new Livs($_FILES['file']['tmp_name']);
+        $test->parce_price_comefor();
+        $test->test_data();
+        $test->add_db_comefor();
+        break;
 
 
     default:
