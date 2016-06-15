@@ -26,10 +26,10 @@ define ("db", "mebli");
  * возвращает список всех матрасов, которые не являются модификацией (т.е. они - родительский товар)
  * @return array
  */
-function parrent_matr()
+function parrent_matr($factory_id)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id, goods_parent, goods_width FROM goods WHERE goodskind_id=40 and goods_parent=0 AND factory_id=35";
+    $query="SELECT goods_id, goods_parent, goods_width FROM goods WHERE goodskind_id=40 and goods_parent=0 AND factory_id=$factory_id";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
@@ -47,10 +47,10 @@ function parrent_matr()
  * возврвщает список всех матрасов, и родителей и модификаций
  * @return array
  */
-function all_matr()
+function all_matr($factory_id)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id, goods_parent, goods_width FROM goods WHERE goodskinfd_id=40 AND factory_id=35";
+    $query="SELECT goods_id, goods_parent, goods_width FROM goods WHERE goodskinfd_id=40 AND factory_id=$factory_id";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
@@ -65,10 +65,10 @@ function all_matr()
  * возвращает список в котором есть только модификации матрасов
  * @return array
  */
-function mod_matr()
+function mod_matr($factory_id)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id, goods_parent, goods_width FROM goods WHERE goodskind_id=40 AND goods_parent<>0 AND factory_id=35";
+    $query="SELECT goods_id, goods_parent, goods_width FROM goods WHERE goodskind_id=40 AND goods_parent<>0 AND factory_id=$factory_id";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
@@ -82,28 +82,28 @@ function mod_matr()
 /**
  *
  */
-function copy_filters()
+function copy_filters($f_id)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $parent_list=parrent_matr();
-    $mod_list=mod_matr();
+    $parent_list=parrent_matr($f_id);
+    $mod_list=mod_matr($f_id);
     foreach ($parent_list as $parent)
     {
         //выбираем список фич для родительского матраса
         $parrent_id=$parent['goods_id'];
         $query="SELECT * FROM goodshasfeature WHERE goods_id=$parrent_id";
+		//echo $query."<br>";
         if ($res=mysqli_query($db_connect,$query))
         {
-            while ($row=mysqli_fetch_assoc($res))
+            //не забываем обнулять список перед заполнением!
+			$features=null;
+			while ($row=mysqli_fetch_assoc($res))
             {
                 $features[]=$row;
             }
 			print_r($features);
 			/*print_r($features);
-			$features=array_unique($features,SORT_REGULAR);
-			echo "<br><b>uniq</b><br><b>";
-			print_r($features);
-			echo "</b>";*/
+			*/
         }
         foreach($mod_list as $mod)
         {
@@ -114,7 +114,7 @@ function copy_filters()
 				echo "<br><b>$mod_size</b><br>";
                 //дропаем старые записи
                 $query="DELETE FROM goodshasfeature WHERE goods_id=$mod_id";
-                //mysqli_query($db_connect,$query);
+                mysqli_query($db_connect,$query);
 				echo $query."<br>";
                 //для каждой фичи записываем ее в БД
                 foreach ($features as $feat)
@@ -123,7 +123,7 @@ function copy_filters()
                     $goodshasfeature_valuefloat=$feat['goodshasfeature_valuefloat'];
                     $goodshasfeature_valuetext=$feat['goodshasfeature_valuetext'];
                     $feature_id=$feat['feature_id'];
-					//пишем размерность (одно/полтора/двуспальные)
+					//нишем размерность (одно/полтора/двуспальные)
 					if ($feature_id==131)
 					{
 						if ($mod_size<=900)
@@ -139,6 +139,14 @@ function copy_filters()
 							$goodshasfeature_valueint=3;
 						}
 					}
+					//есть только одна особенность
+					if ($feature_id==56)
+					{
+						if ($goodshasfeature_valueint!=14)
+						{
+							continue;
+						}
+					}
 					//не пишем ненужные значния
 					if ($feature_id==131||$feature_id==127||$feature_id==128||$feature_id==33||$feature_id==52||$feature_id==53||$feature_id==54||$feature_id==55||$feature_id==56||$feature_id==130)
 					{
@@ -146,7 +154,7 @@ function copy_filters()
 							"goodshasfeature_valuetext, goods_id, feature_id) ".
 							"VALUES ($goodshasfeature_valueint, $goodshasfeature_valuefloat, ".
 							"$goodshasfeature_valuetext, $mod_id, $feature_id)";
-						//mysqli_query($db_connect,$query);
+						mysqli_query($db_connect,$query);
 						echo $query."<br>";
 					}
                     
@@ -156,6 +164,8 @@ function copy_filters()
     }
 }
 
-copy_filters();
+set_time_limit(300);
+//35 - come-for
+copy_filters(35);
 
 ?>
