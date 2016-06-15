@@ -26,10 +26,10 @@ define ("db", "mebli");
  * возвращает список всех матрасов, которые не являются модификацией (т.е. они - родительский товар)
  * @return array
  */
-function parrent_matr($factory_id)
+function parrent_matr($factory_id, $goodskind)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id, goods_parent, goods_width FROM goods WHERE goodskind_id=40 and goods_parent=0 AND factory_id=$factory_id";
+    $query="SELECT goods_id, goods_parent, goods_width FROM goods WHERE goodskind_id=$goodskind and goods_parent=0 AND factory_id=$factory_id";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
@@ -47,10 +47,10 @@ function parrent_matr($factory_id)
  * возврвщает список всех матрасов, и родителей и модификаций
  * @return array
  */
-function all_matr($factory_id)
+function all_matr($factory_id, $goodskind)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id, goods_parent, goods_width FROM goods WHERE goodskinfd_id=40 AND factory_id=$factory_id";
+    $query="SELECT goods_id, goods_parent, goods_width FROM goods WHERE goodskinfd_id=$goodskind AND factory_id=$factory_id";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
@@ -65,10 +65,10 @@ function all_matr($factory_id)
  * возвращает список в котором есть только модификации матрасов
  * @return array
  */
-function mod_matr($factory_id)
+function mod_matr($factory_id, $goodskind)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id, goods_parent, goods_width FROM goods WHERE goodskind_id=40 AND goods_parent<>0 AND factory_id=$factory_id";
+    $query="SELECT goods_id, goods_parent, goods_width FROM goods WHERE goodskind_id=$goodskind AND goods_parent<>0 AND factory_id=$factory_id";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
@@ -82,11 +82,11 @@ function mod_matr($factory_id)
 /**
  *
  */
-function copy_filters($f_id)
+function copy_filters($f_id, $goodskind)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $parent_list=parrent_matr($f_id);
-    $mod_list=mod_matr($f_id);
+    $parent_list=parrent_matr($f_id, $goodskind);
+    $mod_list=mod_matr($f_id, $goodskind);
     foreach ($parent_list as $parent)
     {
         //выбираем список фич для родительского матраса
@@ -139,7 +139,7 @@ function copy_filters($f_id)
 							$goodshasfeature_valueint=3;
 						}
 					}
-					//есть только одна особенность
+					//есть только одна особенность!
 					if ($feature_id==56)
 					{
 						if ($goodshasfeature_valueint!=14)
@@ -165,7 +165,7 @@ function copy_filters($f_id)
 }
 
 set_time_limit(300);
-//35 - come-for
-copy_filters(35);
+//35 - come-for 40 - матрасы
+copy_filters(35, 40);
 
 ?>
