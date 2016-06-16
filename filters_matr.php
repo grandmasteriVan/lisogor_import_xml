@@ -22,9 +22,17 @@ define ("pass", "");
  */
 define ("db", "mebli");
 //define ("db", "uh333660_mebli");
+
+
+//TODO: сделать универсальный скрипт, для этого в зависимости от типа товара надо копировать нужнные фильтры
+//Использовать абстрактный класс!!!
+
+
 /**
- * возвращает список всех матрасов, которые не являются модификацией (т.е. они - родительский товар)
- * @return array
+ * @param $factory_id integer - айди фабрики
+ * @param $goodskind integer - вид товара
+ * @return array - массив, содержащий список всех родительских позиций
+ * возвращает список всех родительских товаров, которые принадлежат к оной фабрике и типу товара
  */
 function parrent_matr($factory_id, $goodskind)
 {
@@ -43,9 +51,13 @@ function parrent_matr($factory_id, $goodskind)
 	echo "</pre>";*/
 	return $arr;
 }
+
 /**
- * возврвщает список всех матрасов, и родителей и модификаций
- * @return array
+ * @param $factory_id integer - айди фабрики
+ * @param $goodskind integer - вид товара
+ * @return array - массив, содержащий список всех позиций
+ * возвращает список всех товаров, которые принадлежат к оной фабрике и типу товара
+ * НЕ ИСПОЛЬЗУЕТСЯ!!!
  */
 function all_matr($factory_id, $goodskind)
 {
@@ -61,9 +73,12 @@ function all_matr($factory_id, $goodskind)
     mysqli_close($db_connect);
     return $arr;
 }
+
 /**
- * возвращает список в котором есть только модификации матрасов
- * @return array
+ * @param $factory_id integer - айди фабрики
+ * @param $goodskind integer - вид товара
+ * @return array - массив, содержащий список дочерних позиций
+ * возвращает список всех дочерних товаров, которые принадлежат к оной фабрике и типу товара
  */
 function mod_matr($factory_id, $goodskind)
 {
@@ -79,8 +94,11 @@ function mod_matr($factory_id, $goodskind)
     mysqli_close($db_connect);
     return $arr;
 }
+
 /**
- *
+ * @param $f_id integer - айди фабрики
+ * @param $goodskind integer - вид товара
+ * перезаписывает фильтры дочерних товаров беря за основу фильтры родителя
  */
 function copy_filters($f_id, $goodskind)
 {
@@ -147,6 +165,11 @@ function copy_filters($f_id, $goodskind)
 							continue;
 						}
 					}
+                    //меняем кодировку текстового занчения фильтра
+                    if ($feature_id==127)
+                    {
+                        $goodshasfeature_valuetext=UTF8toCP1251($goodshasfeature_valuetext);
+                    }
 					//не пишем ненужные значния
 					if ($feature_id==131||$feature_id==127||$feature_id==128||$feature_id==33||$feature_id==52||$feature_id==53||$feature_id==54||$feature_id==55||$feature_id==56||$feature_id==130)
 					{
@@ -167,5 +190,47 @@ function copy_filters($f_id, $goodskind)
 set_time_limit(300);
 //35 - come-for 40 - матрасы
 copy_filters(35, 40);
+
+
+
+/**
+ * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
+ * @param $str string входящяя строка в кодировке UTF-8
+ * @return string строка перобразованная в кодировку CP1251
+ */
+function UTF8toCP1251($str)
+{ // by SiMM, $table from http://ru.wikipedia.org/wiki/CP1251
+    static $table = array("\xD0\x81" => "\xA8", // Ё
+        "\xD1\x91" => "\xB8", // ё
+        // украинские символы
+        "\xD0\x8E" => "\xA1", // Ў (У)
+        "\xD1\x9E" => "\xA2", // ў (у)
+        "\xD0\x84" => "\xAA", // Є (Э)
+        "\xD0\x87" => "\xAF", // Ї (I..)
+        "\xD0\x86" => "\xB2", // I (I)
+        "\xD1\x96" => "\xB3", // i (i)
+        "\xD1\x94" => "\xBA", // є (э)
+        "\xD1\x97" => "\xBF", // ї (i..)
+        // чувашские символы
+        "\xD3\x90" => "\x8C", // &#1232; (А)
+        "\xD3\x96" => "\x8D", // &#1238; (Е)
+        "\xD2\xAA" => "\x8E", // &#1194; (С)
+        "\xD3\xB2" => "\x8F", // &#1266; (У)
+        "\xD3\x91" => "\x9C", // &#1233; (а)
+        "\xD3\x97" => "\x9D", // &#1239; (е)
+        "\xD2\xAB" => "\x9E", // &#1195; (с)
+        "\xD3\xB3" => "\x9F", // &#1267; (у)
+    );
+    //цифровая магия
+    $str = preg_replace('#([\xD0-\xD1])([\x80-\xBF])#se',
+        'isset($table["$0"]) ? $table["$0"] :
+                         chr(ord("$2")+("$1" == "\xD0" ? 0x30 : 0x70))
+                        ',
+        $str
+    );
+    $str = str_replace("i", "і", $str);
+    $str = str_replace("I", "І", $str);
+    return $str;
+}
 
 ?>
