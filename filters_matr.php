@@ -158,12 +158,9 @@ function copy_filters($f_id, $goodskind)
 						}
 					}
 					//есть только одна особенность!
-					if ($feature_id==56)
+					if (($feature_id==56)&&($goodshasfeature_valueint!=14))
 					{
-						if ($goodshasfeature_valueint!=14)
-						{
-							continue;
-						}
+                        continue;
 					}
                     //меняем кодировку текстового занчения фильтра
                     if ($feature_id==127)
@@ -185,7 +182,45 @@ function copy_filters($f_id, $goodskind)
             }
         }
     }
+    mysqli_close($db_connect);
 }
+
+function dell_old_filters($factory, $goods_kind)
+{
+    $db_connect=mysqli_connect(host,user,pass,db);
+    $matrases=parrent_matr($factory, $goods_kind);
+    foreach ($matrases as $matr)
+    {
+        $id=$matr['goods_id'];
+        $query="SELECT * FROM goodshasfeature WHERE goods_id=$id";
+        //echo $query."<br>";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            //не забываем обнулять список перед заполнением!
+            $features=null;
+            while ($row=mysqli_fetch_assoc($res))
+            {
+                $features[]=$row;
+            }
+            print_r($features);
+            /*print_r($features);
+            */
+            foreach($features as $feat)
+            {
+                $feature_id=$feat['feature_id'];
+                if ($feature_id!=131||$feature_id!=127||$feature_id!=128||$feature_id!=33||$feature_id!=52||$feature_id!=53||$feature_id!=54||$feature_id!=55||$feature_id!=56||$feature_id!=130)
+                {
+                    $query="DELETE FROM goodshasfeature WHERE feature_id=$feature_id AND goods_id=$id";
+                    mysqli_query($db_connect,$query);
+                    echo $query."<br>";
+                }
+            }
+
+        }
+    }
+    mysqli_close($db_connect);
+}
+
 
 set_time_limit(300);
 //35 - come-for 40 - матрасы
