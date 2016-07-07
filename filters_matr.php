@@ -5,29 +5,26 @@
  * Date: 01.06.16
  * Time: 10:22
  */
-define ("host","localhost");
-//define ("host","10.0.0.2");
+//define ("host","localhost");
+define ("host","10.0.0.2");
 /**
  * database username
  */
-define ("user", "root");
-//define ("user", "uh333660_mebli");
+//define ("user", "root");
+define ("user", "uh333660_mebli");
 /**
  * database password
  */
-define ("pass", "");
-//define ("pass", "Z7A8JqUh");
+//define ("pass", "");
+define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
-define ("db", "mebli");
-//define ("db", "uh333660_mebli");
-
+//define ("db", "mebli");
+define ("db", "uh333660_mebli");
 
 //TODO: сделать универсальный скрипт, для этого в зависимости от типа товара надо копировать нужнные фильтры
 //Использовать абстрактный класс!!!
-
-
 /**
  * @param $factory_id integer - айди фабрики
  * @param $goodskind integer - вид товара
@@ -37,7 +34,7 @@ define ("db", "mebli");
 function parrent_matr($factory_id, $goodskind)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id, goods_parent, goods_width FROM goods WHERE goodskind_id=$goodskind and goods_parent=0 AND factory_id=$factory_id";
+    $query="SELECT goods_id, goods_parent, goods_width, goods_height FROM goods WHERE goodskind_id=$goodskind and goods_parent=0 AND factory_id=$factory_id";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
@@ -51,7 +48,6 @@ function parrent_matr($factory_id, $goodskind)
 	echo "</pre>";*/
 	return $arr;
 }
-
 /**
  * @param $factory_id integer - айди фабрики
  * @param $goodskind integer - вид товара
@@ -62,7 +58,7 @@ function parrent_matr($factory_id, $goodskind)
 function all_matr($factory_id, $goodskind)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id, goods_parent, goods_width FROM goods WHERE goodskinfd_id=$goodskind AND factory_id=$factory_id";
+    $query="SELECT goods_id, goods_parent, goods_width, goods_height FROM goods WHERE goodskinfd_id=$goodskind AND factory_id=$factory_id";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
@@ -73,7 +69,6 @@ function all_matr($factory_id, $goodskind)
     mysqli_close($db_connect);
     return $arr;
 }
-
 /**
  * @param $factory_id integer - айди фабрики
  * @param $goodskind integer - вид товара
@@ -83,7 +78,7 @@ function all_matr($factory_id, $goodskind)
 function mod_matr($factory_id, $goodskind)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id, goods_parent, goods_width FROM goods WHERE goodskind_id=$goodskind AND goods_parent<>0 AND factory_id=$factory_id";
+    $query="SELECT goods_id, goods_parent, goods_width, goods_height FROM goods WHERE goodskind_id=$goodskind AND goods_parent<>0 AND factory_id=$factory_id";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
@@ -94,7 +89,6 @@ function mod_matr($factory_id, $goodskind)
     mysqli_close($db_connect);
     return $arr;
 }
-
 /**
  * @param $f_id integer - айди фабрики
  * @param $goodskind integer - вид товара
@@ -173,7 +167,7 @@ function copy_filters($f_id, $goodskind)
 						$query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
 							"goodshasfeature_valuetext, goods_id, feature_id) ".
 							"VALUES ($goodshasfeature_valueint, $goodshasfeature_valuefloat, ".
-							"$goodshasfeature_valuetext, $mod_id, $feature_id)";
+							"'$goodshasfeature_valuetext', $mod_id, $feature_id)";
 						mysqli_query($db_connect,$query);
 						echo $query."<br>";
 					}
@@ -208,24 +202,74 @@ function dell_old_filters($factory, $goods_kind)
             foreach($features as $feat)
             {
                 $feature_id=$feat['feature_id'];
-                if ($feature_id!=131||$feature_id!=127||$feature_id!=128||$feature_id!=33||$feature_id!=52||$feature_id!=53||$feature_id!=54||$feature_id!=55||$feature_id!=56||$feature_id!=130)
+                if ($feature_id!=131&&$feature_id!=127&&$feature_id!=128&&$feature_id!=33&&$feature_id!=52&&$feature_id!=53&&$feature_id!=54&&$feature_id!=55&&$feature_id!=56&&$feature_id!=130)
                 {
                     $query="DELETE FROM goodshasfeature WHERE feature_id=$feature_id AND goods_id=$id";
                     mysqli_query($db_connect,$query);
                     echo $query."<br>";
                 }
+				//есть только одна особенность, остальные удаляем!
+				if ($feature_id==56)
+				{
+                       $query="DELETE FROM goodshasfeature WHERE feature_id=$feature_id AND goods_id=$id AND goodshasfeature_valueint<>14";
+					   mysqli_query($db_connect,$query);
+					   echo $query."<br>";
+					   //continue;
+				}
             }
-
         }
     }
     mysqli_close($db_connect);
 }
 
+function copy_sizes($f_id)
+{
+	$db_connect=mysqli_connect(host,user,pass,db);
+    $parent_list=parrent_matr($f_id, 40);
+    $mod_list=mod_matr($f_id, 40);
+	foreach ($parent_list as $parent)
+    {
+        //выбираем список фич для родительского матраса
+		$parent_size=$parent['goods_height'];
+        foreach($mod_list as $mod)
+        {
+            if ($parent['goods_id']==$mod['goods_parent'])
+            {
+                $mod_id=$mod['goods_id'];
+				echo "<br><b>$mod_size</b><br>";
+                //дропаем старые записи
+                $query="UPDATE goods SET goods_height=$parent_size WHERE goods_id=$mod_id";
+                mysqli_query($db_connect,$query);
+				echo $query."<br>";
+                
+            }
+        }
+    }
+    mysqli_close($db_connect);
+}
 
-set_time_limit(300);
+copy_sizes(35);
+echo "<br><b>Begin</b><br>";
+set_time_limit(500);
 //35 - come-for 40 - матрасы
-copy_filters(35, 40);
+dell_old_filters(35,40);
+dell_old_filters(46,40);
+dell_old_filters(124,40);
+dell_old_filters(74,40);
+dell_old_filters(15,40);
+dell_old_filters(63,40);
+dell_old_filters(33,40);
 
+
+copy_filters(35, 40);
+copy_filters(46, 40);
+copy_filters(124, 40);
+copy_filters(74, 40);
+copy_filters(15, 40);
+copy_filters(63, 40);
+copy_filters(33, 40);
+
+echo "<br><b>END</b><br>";
 
 
 /**
@@ -267,5 +311,4 @@ function UTF8toCP1251($str)
     $str = str_replace("I", "І", $str);
     return $str;
 }
-
 ?>
