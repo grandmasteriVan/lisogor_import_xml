@@ -5,24 +5,23 @@
  * Date: 01.06.16
  * Time: 10:22
  */
-//define ("host","localhost");
-define ("host","10.0.0.2");
+define ("host","localhost");
+//define ("host","10.0.0.2");
 /**
  * database username
  */
-//define ("user", "root");
-define ("user", "uh333660_mebli");
+define ("user", "root");
+//define ("user", "uh333660_mebli");
 /**
  * database password
  */
-//define ("pass", "");
-define ("pass", "Z7A8JqUh");
+define ("pass", "");
+//define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
-//define ("db", "mebli");
-define ("db", "uh333660_mebli");
-
+define ("db", "mebli");
+//define ("db", "uh333660_mebli");
 //TODO: сделать универсальный скрипт, для этого в зависимости от типа товара надо копировать нужнные фильтры
 //Использовать абстрактный класс!!!
 /**
@@ -53,19 +52,24 @@ function parrent_matr($factory_id, $goodskind=40)
  * @param $goodskind integer - вид товара
  * @return array - массив, содержащий список всех позиций
  * возвращает список всех товаров, которые принадлежат к оной фабрике и типу товара
- * НЕ ИСПОЛЬЗУЕТСЯ!!!
  */
 function all_matr($factory_id, $goodskind=40)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id, goods_parent, goods_width, goods_height, goods_name, goods_article FROM goods WHERE goodskinfd_id=$goodskind AND factory_id=$factory_id";
+    $query="SELECT * FROM goods WHERE goodskind_id=$goodskind AND factory_id=$factory_id AND goods_active=1, goods_noactual=0";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
         {
             $arr[] = $row;
-        }
-    }
+			//print_r($arr);
+		}
+	}
+	else
+	{
+		echo "ERROR!";
+		return false;
+	}
     mysqli_close($db_connect);
     return $arr;
 }
@@ -85,7 +89,7 @@ function mod_matr($factory_id, $goodskind=40)
         {
             $arr[] = $row;
         }
-    }
+	}
     mysqli_close($db_connect);
     return $arr;
 }
@@ -178,7 +182,6 @@ function copy_filters($f_id, $goodskind=40)
     }
     mysqli_close($db_connect);
 }
-
 /**
  * @param $factory integer - id фабрики
  * @param $goods_kind integer - тип товара
@@ -226,7 +229,6 @@ function dell_old_filters($factory, $goods_kind=40)
     }
     mysqli_close($db_connect);
 }
-
 /**
  * @param $f_id
  * копирует высоту родительского матраса во все дочерние
@@ -256,22 +258,22 @@ function copy_sizes($f_id)
     }
     mysqli_close($db_connect);
 }
-
 /**
  * @param $factory
  * @param int $goods_kind
  */
 function print_filters($factory, $goods_kind=40)
 {
-    echo "<table>";
+    echo "<table border='1'>";
     $db_connect=mysqli_connect(host,user,pass,db);
-    $matrases=all_matr($factory);
+    //$matrases[];
+	$matrases=all_matr($factory,40);
     foreach ($matrases as $matr)
     {
         $id=$matr['goods_id'];
         $name=$matr['goods_name'];
-        $article=$matr['goodt_article'];
-        echo "<tr><td>$name"." ".$article."</td>";
+        $article=$matr['goods_article'];
+        echo "<tr><td>$name"." <b>".$article."</b></td>";
         $query="SELECT * FROM goodshasfeature WHERE goods_id=$id";
         //echo $query."<br>";
         if ($res=mysqli_query($db_connect,$query))
@@ -282,7 +284,6 @@ function print_filters($factory, $goods_kind=40)
             {
                 $features[]=$row;
             }
-            print_r($features);
             /*print_r($features);
             */
             foreach($features as $feat)
@@ -296,17 +297,20 @@ function print_filters($factory, $goods_kind=40)
                     {
                         $feat_name=$row;
                     }
-                    echo "<tr><td>$feat_name</td>";
+                    $feat_name=$feat_name['feature_name'];
+					echo "<tr><td>$feat_name</td>";
                 }
-
             }
         }
+		echo "<tr><td>&nbsp;</td></tr>";
     }
     mysqli_close($db_connect);
     echo "</table>";
 }
 
-copy_sizes(35);
+print_filters(35,40);
+
+/*copy_sizes(35);
 echo "<br><b>Begin</b><br>";
 set_time_limit(500);
 //35 - come-for 40 - матрасы
@@ -317,8 +321,6 @@ dell_old_filters(74,40);
 dell_old_filters(15,40);
 dell_old_filters(63,40);
 dell_old_filters(33,40);
-
-
 copy_filters(35, 40);
 copy_filters(46, 40);
 copy_filters(124, 40);
@@ -326,9 +328,7 @@ copy_filters(74, 40);
 copy_filters(15, 40);
 copy_filters(63, 40);
 copy_filters(33, 40);
-
-echo "<br><b>END</b><br>";
-
+echo "<br><b>END</b><br>";*/
 
 /**
  * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
