@@ -31,7 +31,7 @@ define ("db", "uh333660_mebli");
  * @return array - массив, содержащий список всех родительских позиций
  * возвращает список всех родительских товаров, которые принадлежат к оной фабрике и типу товара
  */
-function parrent_matr($factory_id, $goodskind)
+function parrent_matr($factory_id, $goodskind=40)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
     $query="SELECT goods_id, goods_parent, goods_width, goods_height FROM goods WHERE goodskind_id=$goodskind and goods_parent=0 AND factory_id=$factory_id";
@@ -55,10 +55,10 @@ function parrent_matr($factory_id, $goodskind)
  * возвращает список всех товаров, которые принадлежат к оной фабрике и типу товара
  * НЕ ИСПОЛЬЗУЕТСЯ!!!
  */
-function all_matr($factory_id, $goodskind)
+function all_matr($factory_id, $goodskind=40)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id, goods_parent, goods_width, goods_height FROM goods WHERE goodskinfd_id=$goodskind AND factory_id=$factory_id";
+    $query="SELECT goods_id, goods_parent, goods_width, goods_height, goods_name, goods_article FROM goods WHERE goodskinfd_id=$goodskind AND factory_id=$factory_id";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
@@ -75,7 +75,7 @@ function all_matr($factory_id, $goodskind)
  * @return array - массив, содержащий список дочерних позиций
  * возвращает список всех дочерних товаров, которые принадлежат к оной фабрике и типу товара
  */
-function mod_matr($factory_id, $goodskind)
+function mod_matr($factory_id, $goodskind=40)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
     $query="SELECT goods_id, goods_parent, goods_width, goods_height FROM goods WHERE goodskind_id=$goodskind AND goods_parent<>0 AND factory_id=$factory_id";
@@ -94,7 +94,7 @@ function mod_matr($factory_id, $goodskind)
  * @param $goodskind integer - вид товара
  * перезаписывает фильтры дочерних товаров беря за основу фильтры родителя
  */
-function copy_filters($f_id, $goodskind)
+function copy_filters($f_id, $goodskind=40)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
     $parent_list=parrent_matr($f_id, $goodskind);
@@ -179,7 +179,12 @@ function copy_filters($f_id, $goodskind)
     mysqli_close($db_connect);
 }
 
-function dell_old_filters($factory, $goods_kind)
+/**
+ * @param $factory integer - id фабрики
+ * @param $goods_kind integer - тип товара
+ * удаляет ненужные фильтры из родительских товаров
+ */
+function dell_old_filters($factory, $goods_kind=40)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
     $matrases=parrent_matr($factory, $goods_kind);
@@ -222,6 +227,10 @@ function dell_old_filters($factory, $goods_kind)
     mysqli_close($db_connect);
 }
 
+/**
+ * @param $f_id
+ * копирует высоту родительского матраса во все дочерние
+ */
 function copy_sizes($f_id)
 {
 	$db_connect=mysqli_connect(host,user,pass,db);
@@ -229,7 +238,7 @@ function copy_sizes($f_id)
     $mod_list=mod_matr($f_id, 40);
 	foreach ($parent_list as $parent)
     {
-        //выбираем список фич для родительского матраса
+        //
 		$parent_size=$parent['goods_height'];
         foreach($mod_list as $mod)
         {
@@ -237,7 +246,7 @@ function copy_sizes($f_id)
             {
                 $mod_id=$mod['goods_id'];
 				echo "<br><b>$mod_size</b><br>";
-                //дропаем старые записи
+                //записываем значение высоты родительского матраса в дочерние
                 $query="UPDATE goods SET goods_height=$parent_size WHERE goods_id=$mod_id";
                 mysqli_query($db_connect,$query);
 				echo $query."<br>";
@@ -246,6 +255,55 @@ function copy_sizes($f_id)
         }
     }
     mysqli_close($db_connect);
+}
+
+/**
+ * @param $factory
+ * @param int $goods_kind
+ */
+function print_filters($factory, $goods_kind=40)
+{
+    echo "<table>";
+    $db_connect=mysqli_connect(host,user,pass,db);
+    $matrases=all_matr($factory);
+    foreach ($matrases as $matr)
+    {
+        $id=$matr['goods_id'];
+        $name=$matr['goods_name'];
+        $article=$matr['goodt_article'];
+        echo "<tr><td>$name"." ".$article."</td>";
+        $query="SELECT * FROM goodshasfeature WHERE goods_id=$id";
+        //echo $query."<br>";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            //не забываем обнулять список перед заполнением!
+            $features=null;
+            while ($row=mysqli_fetch_assoc($res))
+            {
+                $features[]=$row;
+            }
+            print_r($features);
+            /*print_r($features);
+            */
+            foreach($features as $feat)
+            {
+                $feature_id=$feat['feature_id'];
+                //для каждой фичи достаем ее имя
+                $query="SELECT feature_name FROM feature WHERE feature_id=$feature_id";
+                if ($res=mysqli_query($db_connect,$query))
+                {
+                    while ($row=mysqli_fetch_assoc($res))
+                    {
+                        $feat_name=$row;
+                    }
+                    echo "<tr><td>$feat_name</td>";
+                }
+
+            }
+        }
+    }
+    mysqli_close($db_connect);
+    echo "</table>";
 }
 
 copy_sizes(35);
