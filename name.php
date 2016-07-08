@@ -5,7 +5,6 @@
  * Date: 07.07.16
  * Time: 15:44
  */
-
 //define ("host","localhost");
 define ("host","10.0.0.2");
 /**
@@ -24,10 +23,12 @@ define ("pass", "Z7A8JqUh");
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
 
-function rename ($goods_kind)
+
+function rename_tov ($goods_kind)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
     $query="SELECT goods_id, goods_name FROM goods WHERE goodskind_id=$goods_kind";
+	$i=1;
     if ($res=mysqli_query($db_connect,$query))
     {
         //формируем список имен позиций
@@ -41,18 +42,36 @@ function rename ($goods_kind)
             $name=$tovar['goods_name'];
             $id=$tovar['goods_id'];
             //проверяем есть ли такая подстрока
-            $name=str_replace("Кровать","",$name);
-            $name=str_replace("кровать","",$name);
-            $name="Кровать ".$name;
-            $query="UPDATE goods SET goods_name=$name WHERE goods_id=$id";
-            mysqli_query($db_connect,$query);
-            echo $query."<br>";
+            if ($goods_kind==39||$goods_kind==74)
+			{
+				$name=str_replace(UTF8toCP1251("Кровать"),"",$name);
+				$name=str_replace(UTF8toCP1251("кровать"),"",$name);
+				$name="Кровать ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+				//return;
+			}
+			if ($goods_kind==50)
+			{
+				$name=str_replace(UTF8toCP1251("Кровать"),"",$name);
+				$name=str_replace(UTF8toCP1251("кровать"),"",$name);
+				$name=str_replace(UTF8toCP1251("детская"),"",$name);
+				$name=str_replace(UTF8toCP1251("Детская"),"",$name);
+				$name="Детская кровать ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+				//return;
+			}
+			
+			$i++;
         }
-
     }
     mysqli_close($db_connect);
 }
-
 function print_names ($goods_kind)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -67,6 +86,10 @@ function print_names ($goods_kind)
     }
     mysqli_close($db_connect);
 }
+
+rename_tov(39);//кровати
+rename_tov(50);//детские кровати
+rename_tov(74);//еще кровати
 
 
 
@@ -105,6 +128,4 @@ function UTF8toCP1251($str)
     $str = str_replace("I", "І", $str);
     return $str;
 }
-
-
 ?>
