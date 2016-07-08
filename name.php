@@ -64,20 +64,6 @@ function print_names ($goods_kind)
         {
             echo $row['goods_name']."<br>";
         }
-        //проверяем есть ли название типа мебели в названии товара
-        foreach ($tovars as $tovar)
-        {
-            $name=$tovar['goods_name'];
-            $id=$tovar['goods_id'];
-            //проверяем есть ли такая подстрока
-            $name=str_replace("Кровать","",$name);
-            $name=str_replace("кровать","",$name);
-            $name="Кровать ".$name;
-            $query="UPDATE goods SET goods_name=$name WHERE goods_id=$id";
-            mysqli_query($db_connect,$query);
-            echo $query."<br>";
-        }
-
     }
     mysqli_close($db_connect);
 }
