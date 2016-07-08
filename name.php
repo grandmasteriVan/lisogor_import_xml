@@ -41,7 +41,6 @@ function rename_tov ($goods_kind)
         {
             $name=$tovar['goods_name'];
             $id=$tovar['goods_id'];
-            //проверяем есть ли такая подстрока
             //кровати
 			if ($goods_kind==39||$goods_kind==74)
 			{
@@ -93,6 +92,32 @@ function rename_tov ($goods_kind)
 				echo $i.". ".$query."<br>";
 				//return;
 			}
+			if ($goods_kind==108)
+			{
+				$name=str_replace(UTF8toCP1251("Дверь"),"",$name);
+				$name=str_replace(UTF8toCP1251("дверь"),"",$name);
+				$name=str_replace(UTF8toCP1251("Входная"),"",$name);
+				$name=str_replace(UTF8toCP1251("входная"),"",$name);
+				$name="Входная дверь ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+				//return;
+			}
+			if ($goods_kind==81)
+			{
+				$name=str_replace(UTF8toCP1251("Дверь"),"",$name);
+				$name=str_replace(UTF8toCP1251("дверь"),"",$name);
+				$name=str_replace(UTF8toCP1251("Межкомнатная"),"",$name);
+				$name=str_replace(UTF8toCP1251("межкомнатная"),"",$name);
+				$name="Дверь межкомнатная ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+				//return;
+			}
 			$i++;
         }
     }
@@ -113,10 +138,11 @@ function print_names ($goods_kind)
     mysqli_close($db_connect);
 }
 
-rename_tov(39);//кровати
-rename_tov(50);//детские кровати
-rename_tov(74);//еще кровати
-
+//rename_tov(39);//кровати
+//rename_tov(50);//детские кровати
+//rename_tov(74);//еще кровати
+rename_tov(108);
+rename_tov(81);
 
 
 
