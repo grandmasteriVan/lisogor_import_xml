@@ -136,6 +136,18 @@ function rename_tov ($goods_kind)
 				echo $i.". ".$query."<br>";
 				//return;
 			}
+			//комоды
+			if ($goods_kind==40)
+			{
+				$name=str_replace(UTF8toCP1251("Комод"),"",$name);
+				$name=str_replace(UTF8toCP1251("комод"),"",$name);
+				$name="Комод ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+				//return;
+			}
 			$i++;
         }
     }
@@ -168,7 +180,8 @@ function print_names ($goods_kind)
 //rename_tov(81);//межклмнатная дверь
 //rename_tov(40);//матрас
 //rename_tov(30);//прихожая
-rename_tov(29);//спальня
+//rename_tov(29);//спальня
+rename_tov(38);//комоды
 
 /**
  * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
