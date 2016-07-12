@@ -24,6 +24,10 @@ define ("pass", "Z7A8JqUh");
 define ("db", "uh333660_mebli");
 
 
+/**
+ * @param $goods_kind integer айди типа товара
+ * в зависимоти от типа товара меняет имена товаров по необходимой маске
+ */
 function rename_tov ($goods_kind)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -92,6 +96,7 @@ function rename_tov ($goods_kind)
 				echo $i.". ".$query."<br>";
 				//return;
 			}
+			//дверь входная
 			if ($goods_kind==108)
 			{
 				$name=str_replace(UTF8toCP1251("Дверь"),"",$name);
@@ -105,6 +110,7 @@ function rename_tov ($goods_kind)
 				echo $i.". ".$query."<br>";
 				//return;
 			}
+			//дверь межкомнатная
 			if ($goods_kind==81)
 			{
 				$name=str_replace(UTF8toCP1251("Дверь"),"",$name);
@@ -118,6 +124,7 @@ function rename_tov ($goods_kind)
 				echo $i.". ".$query."<br>";
 				//return;
 			}
+			//матрас
 			if ($goods_kind==40)
 			{
 				$name=str_replace(UTF8toCP1251("Матрас"),"",$name);
@@ -134,6 +141,11 @@ function rename_tov ($goods_kind)
     }
     mysqli_close($db_connect);
 }
+
+/**
+ * @param $goods_kind integer айди товара
+ * печатает список всех товаров, которые имеют определенный тип
+ */
 function print_names ($goods_kind)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -158,6 +170,11 @@ function print_names ($goods_kind)
 //rename_tov(30);//прихожая
 rename_tov(29);//спальня
 
+/**
+ * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
+ * @param $str string входящяя строка в кодировке UTF-8
+ * @return string строка перобразованная в кодировку CP1251
+ */
 function UTF8toCP1251($str)
 { // by SiMM, $table from http://ru.wikipedia.org/wiki/CP1251
     static $table = array("\xD0\x81" => "\xA8", // Ё
