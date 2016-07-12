@@ -118,6 +118,17 @@ function rename_tov ($goods_kind)
 				echo $i.". ".$query."<br>";
 				//return;
 			}
+			if ($goods_kind==40)
+			{
+				$name=str_replace(UTF8toCP1251("Матрас"),"",$name);
+				$name=str_replace(UTF8toCP1251("матрас"),"",$name);
+				$name="Матрас ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+				//return;
+			}
 			$i++;
         }
     }
@@ -141,10 +152,11 @@ function print_names ($goods_kind)
 //rename_tov(39);//кровати
 //rename_tov(50);//детские кровати
 //rename_tov(74);//еще кровати
-rename_tov(108);
-rename_tov(81);
-
-
+//rename_tov(108);//входная дверь
+//rename_tov(81);//межклмнатная дверь
+//rename_tov(40);//матрас
+//rename_tov(30);//прихожая
+rename_tov(29);//спальня
 
 function UTF8toCP1251($str)
 { // by SiMM, $table from http://ru.wikipedia.org/wiki/CP1251
