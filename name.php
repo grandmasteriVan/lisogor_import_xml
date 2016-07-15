@@ -137,7 +137,7 @@ function rename_tov ($goods_kind)
 				//return;
 			}
 			//комоды
-			if ($goods_kind==40)
+			if ($goods_kind==38)
 			{
 				$name=str_replace(UTF8toCP1251("Комод"),"",$name);
 				$name=str_replace(UTF8toCP1251("комод"),"",$name);
