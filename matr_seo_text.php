@@ -44,11 +44,11 @@ function change_seo($goods_kind=40)
             $desc=$good['goods_desc'];
 
             //делаем тайтл
-            $title_new=substr($title,strpos(". Купить")+1);
+            $title_new=substr($title,strpos($title,". Купить")+1);
             $title_new=$header." ".$title_new;
 
             //делаем дескрипшн
-            $desc_new=substr($desc,strpos("в интернете")+1);
+            $desc_new=substr($desc,strpos($desc, "в интернете")+1);
             $desc_new="Купить ".$header." ".$desc;
 
             //пишем изменения в бд
