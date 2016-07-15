@@ -61,5 +61,5 @@ function change_seo($goods_kind=40)
     mysqli_close($db_connect);
 }
 
-
+change_seo();
 ?>
