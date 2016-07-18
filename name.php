@@ -22,8 +22,6 @@ define ("pass", "Z7A8JqUh");
  */
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
-
-
 /**
  * @param $goods_kind integer айди типа товара
  * в зависимоти от типа товара меняет имена товаров по необходимой маске
@@ -139,9 +137,110 @@ function rename_tov ($goods_kind)
 			//комоды
 			if ($goods_kind==38)
 			{
-				$name=str_replace(UTF8toCP1251("Комод"),"",$name);
-				$name=str_replace(UTF8toCP1251("комод"),"",$name);
+				$name=str_replace(UTF8toCP1251("Комод "),"",$name);
+				$name=str_replace(UTF8toCP1251("комод "),"",$name);
 				$name="Комод ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+				//return;
+			}
+			//столы компьюторные
+			if ($goods_kind==32)
+			{
+				$name=str_replace(UTF8toCP1251("Стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("стол "),"",$name);
+				$name="Стол ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+				//return;
+			}
+			//столы журнальные
+			if ($goods_kind==33||$goods_kind==71)
+			{
+				$name=str_replace(UTF8toCP1251("Стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("Столик "),"",$name);
+				$name=str_replace(UTF8toCP1251("столик "),"",$name);
+				$name=str_replace(UTF8toCP1251("Журнальный "),"",$name);
+				$name=str_replace(UTF8toCP1251("журнальный "),"",$name);
+				$name="Журнальный столик ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+				//return;
+			}
+			//столы письменные
+			if ($goods_kind==34)
+			{
+				$name=str_replace(UTF8toCP1251("Стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("Письменный "),"",$name);
+				$name=str_replace(UTF8toCP1251("письменный  "),"",$name);
+				$name="Стол ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+				//return;
+			}
+			//столы обеденные
+			if ($goods_kind==109)
+			{
+				$name=str_replace(UTF8toCP1251("Стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("Обеденный "),"",$name);
+				$name=str_replace(UTF8toCP1251("обеденный  "),"",$name);
+				$name="Стол ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+				//return;
+			}
+			//тумбы для обуви
+			if ($goods_kind==43)
+			{
+				$name=str_replace(UTF8toCP1251("Тумба "),"",$name);
+				$name=str_replace(UTF8toCP1251("тумба "),"",$name);
+				$name=str_replace(UTF8toCP1251("для обуви "),"",$name);
+				$name=str_replace(UTF8toCP1251("обувная  "),"",$name);
+				$name=str_replace(UTF8toCP1251("Обувная  "),"",$name);
+				$name="Тумба ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+				//return;
+			}
+			//тумбы прикроватные
+			if ($goods_kind==64)
+			{
+				$name=str_replace(UTF8toCP1251("Тумба "),"",$name);
+				$name=str_replace(UTF8toCP1251("тумба "),"",$name);
+				$name=str_replace(UTF8toCP1251("прикроватная "),"",$name);
+				$name=str_replace(UTF8toCP1251("Прикроватная  "),"",$name);
+				$name="Тумба ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+				//return;
+			}
+			//тумбы под тв
+			if ($goods_kind==41)
+			{
+				$name=str_replace(UTF8toCP1251("Тумба "),"",$name);
+				$name=str_replace(UTF8toCP1251("тумба "),"",$name);
+				$name=str_replace(UTF8toCP1251("ТВ "),"",$name);
+				$name=str_replace(UTF8toCP1251("тв  "),"",$name);
+				$name=str_replace(UTF8toCP1251("Телевизор "),"",$name);
+				$name=str_replace(UTF8toCP1251("телевизор  "),"",$name);
+				$name="Тумба ".$name;
 				$name=UTF8toCP1251($name);
 				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
 				mysqli_query($db_connect,$query);
@@ -153,7 +252,6 @@ function rename_tov ($goods_kind)
     }
     mysqli_close($db_connect);
 }
-
 /**
  * @param $goods_kind integer айди товара
  * печатает список всех товаров, которые имеют определенный тип
@@ -172,7 +270,6 @@ function print_names ($goods_kind)
     }
     mysqli_close($db_connect);
 }
-
 //rename_tov(39);//кровати
 //rename_tov(50);//детские кровати
 //rename_tov(74);//еще кровати
@@ -181,7 +278,17 @@ function print_names ($goods_kind)
 //rename_tov(40);//матрас
 //rename_tov(30);//прихожая
 //rename_tov(29);//спальня
-rename_tov(38);//комоды
+//rename_tov(38);//комоды
+rename_tov(32);//столы компьюторные
+rename_tov(33);//столы журнальные
+rename_tov(71);//столы журнальные
+rename_tov(41);//тумбы под ТВ
+
+rename_tov(34);//столы письменные
+rename_tov(109);//столы обеденные
+rename_tov(43);//тумбы для обуви
+rename_tov(64);//тумбы для обуви
+
 
 /**
  * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
