@@ -247,6 +247,22 @@ function rename_tov ($goods_kind)
 				echo $i.". ".$query."<br>";
 				//return;
 			}
+			//туалетные столики
+			if ($goods_kind==80)
+			{
+				$name=str_replace(UTF8toCP1251("Стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("Столик "),"",$name);
+				$name=str_replace(UTF8toCP1251("столик  "),"",$name);
+				$name=str_replace(UTF8toCP1251("Туалетный "),"",$name);
+				$name=str_replace(UTF8toCP1251("туалетный  "),"",$name);
+				$name="Стол ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+				//return;
+			}
 			$i++;
         }
     }
@@ -279,15 +295,16 @@ function print_names ($goods_kind)
 //rename_tov(30);//прихожая
 //rename_tov(29);//спальня
 //rename_tov(38);//комоды
-rename_tov(32);//столы компьюторные
-rename_tov(33);//столы журнальные
-rename_tov(71);//столы журнальные
-rename_tov(41);//тумбы под ТВ
+//rename_tov(32);//столы компьюторные
+//rename_tov(33);//столы журнальные
+//rename_tov(71);//столы журнальные
+//rename_tov(41);//тумбы под ТВ
+//rename_tov(34);//столы письменные
+//rename_tov(109);//столы обеденные
+//rename_tov(43);//тумбы для обуви
+//rename_tov(64);//тумбы для обуви
+rename_tov(80);//туалетные столики
 
-rename_tov(34);//столы письменные
-rename_tov(109);//столы обеденные
-rename_tov(43);//тумбы для обуви
-rename_tov(64);//тумбы для обуви
 
 
 /**
