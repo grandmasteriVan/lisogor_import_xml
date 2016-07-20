@@ -41,6 +41,7 @@ function seo_kupe()
 
             //$header=$good['goods_header'];
             $header=$good['goods_name'];
+            
             $title=$good['goods_title'];
             $keywords=$good['goods_keyw'];
             $key_h=$good['goods_hkeyw'];
