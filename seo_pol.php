@@ -5,7 +5,6 @@
  * Date: 20.07.16
  * Time: 10:10
  */
-
 //define ("host","localhost");
 define ("host","10.0.0.2");
 /**
@@ -23,7 +22,6 @@ define ("pass", "Z7A8JqUh");
  */
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
-
 function seo_kupe()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -38,23 +36,28 @@ function seo_kupe()
         {
             $id=$good['doods_id'];
             $name=$good['goods_name'];
-
-            //$header=$good['goods_header'];
-            $header=$good['goods_name'];
             
-            $title=$good['goods_title'];
+            $header=$good['goods_name'];
+            $name_trunc=str_replace(UTF8toCP1251("Шкаф-купе "),"",$name);
+			$title=$name_trunc.UTF8toCP1251("шкаф-купе. Купить шкафы-купе со склада в Киеве");
+			$keywords=UTF8toCP1251("шкафы-купе, ").$name.UTF8toCP1251(", склад мебели, купить шкаф-купе, интернет магазин мебели, недорогие шкафы-купе, цены, фото, отзывы.");
+			$key_h=UTF8toCP1251("Фабрика ДОМ. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+			$key_f=UTF8toCP1251("Фабрика ДОМ. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+			$desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \«Файні-меблі\», Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+            
+			$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+			//mysqli_query($db_connect,$query);
+			echo $query."<br>";
+			//$header=$good['goods_header'];
+			/*$title=$good['goods_title'];
             $keywords=$good['goods_keyw'];
             $key_h=$good['goods_hkeyw'];
             $key_f=&$good['goods_fkeyw'];
-            $desc=$good['goods_desc'];
-
-
+            $desc=$good['goods_desc'];*/
         }
     }
     mysqli_close($db_connect);
 }
-
-
 /**
  * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
  * @param $str string входящяя строка в кодировке UTF-8
@@ -94,5 +97,4 @@ function UTF8toCP1251($str)
     $str = str_replace("I", "І", $str);
     return $str;
 }
-
 ?>
