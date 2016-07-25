@@ -256,7 +256,7 @@ function rename_tov ($goods_kind)
 				$name=str_replace(UTF8toCP1251("столик  "),"",$name);
 				$name=str_replace(UTF8toCP1251("Туалетный "),"",$name);
 				$name=str_replace(UTF8toCP1251("туалетный  "),"",$name);
-				$name="Стол ".$name;
+				$name="Стол "a.$name;
 				$name=UTF8toCP1251($name);
 				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
 				mysqli_query($db_connect,$query);
