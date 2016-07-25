@@ -26,7 +26,7 @@ define ("db", "uh333660_mebli");
  * @param $goods_kind integer айди типа товара
  * в зависимоти от типа товара меняет имена товаров по необходимой маске
  */
-function rename_tov ($goods_kind)
+function repair_tov ($goods_kind)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
     $query="SELECT goods_id, goods_maintcharter FROM goods WHERE goodskind_id=$goods_kind";
@@ -193,23 +193,23 @@ function print_names ($goods_kind)
     }
     mysqli_close($db_connect);
 }
-//rename_tov(39);//кровати
-//rename_tov(50);//детские кровати
-//rename_tov(74);//еще кровати
-//rename_tov(108);//входная дверь
-//rename_tov(81);//межклмнатная дверь
-//rename_tov(40);//матрас
-//rename_tov(30);//прихожая
-//rename_tov(29);//спальня
-//rename_tov(38);//комоды
-//rename_tov(32);//столы компьюторные
-//rename_tov(33);//столы журнальные
-//rename_tov(71);//столы журнальные
-//rename_tov(41);//тумбы под ТВ
-//rename_tov(34);//столы письменные
-//rename_tov(109);//столы обеденные
-//rename_tov(43);//тумбы для обуви
-//rename_tov(64);//тумбы для обуви
+//repair_tov(39);//кровати
+//repair_tov(50);//детские кровати
+//repair_tov(74);//еще кровати
+//repair_tov(108);//входная дверь
+//repair_tov(81);//межклмнатная дверь
+//repair_tov(40);//матрас
+//repair_tov(30);//прихожая
+//repair_tov(29);//спальня
+//repair_tov(38);//комоды
+//repair_tov(32);//столы компьюторные
+//repair_tov(33);//столы журнальные
+//repair_tov(71);//столы журнальные
+//repair_tov(41);//тумбы под ТВ
+//repair_tov(34);//столы письменные
+//repair_tov(109);//столы обеденные
+//repair_tov(43);//тумбы для обуви
+//repair_tov(64);//тумбы для обуви
 rename_tov(80);//туалетные столики
 
 
