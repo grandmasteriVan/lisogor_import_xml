@@ -22,11 +22,10 @@ define ("pass", "");
  */
 define ("db", "divani_new");
 //define ("db", "uh333660_mebli");
-
 /**
  * парсит фильтры со старого сайта и записывает их в соответствующие места на новом
  */
-function export()
+function export_filters()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
     $query="SELECT goods_id, goods_exfeature FROM goods";
@@ -44,415 +43,495 @@ function export()
 			//$feat="fff ggg";
             $arr=explode("\n",$feat);
 			//echo gettype ($arr);
-            echo $feat."<br>";
+            //echo $feat."<br>";
 			echo "<pre>";
             print_r($arr);
             echo  "</pre>";
-
-
-            //ниша в подлокотнике
+            
+			//разбор параметров
+			//ниша в подлокотнике
             $armrest=$arr[11];
             $armrest=strip_tags($armrest);
-            $armrest=str_replace("Ниша в подлокотнике: ","",$armrest);
-            if (strpos($bar,"Есть"))
+            $armrest=str_replace("Ниша в подлокотнике: "," ",$armrest);
+			
+            if (mb_strpos ($armrest,"Есть"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (53,$id,5)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (53,$id,5)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-
-
+			
             //бар
             $bar=$arr[10];
             $bar=strip_tags($bar);
-            $bar=str_replace("Бар: ","",$bar);
-            if (strpos($bar,"Есть"))
+            $bar=str_replace("Бар: "," ",$bar);
+			
+            if (mb_strpos ($bar,"Есть"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (52,$id,5)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (52,$id,5)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-
-
             //на кухню
             $kitchen=$arr[9];
             $kitchen=strip_tags($kitchen);
-            $kitchen=str_replace("Подушки: ","",$kitchen);
-            if (strpos($kitchen,"Есть"))
+            $kitchen=str_replace("Подушки: "," ",$kitchen);
+			
+            if (mb_strpos ($kitchen,"Есть"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (65,$id,9)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (65,$id,9)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-
-
             //ниша для белья
             $niche=$arr[8];
             $niche=strip_tags($niche);
-            $niche=str_replace("Подушки: ","",$niche);
-            if (strpos($niche,"Есть"))
+            $niche=str_replace("Подушки: "," ",$niche);
+            if (mb_strpos ($niche,"Есть"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (50,$id,5)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (50,$id,5)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-
             //подушки
             $pillow=$arr[7];
             $pillow=strip_tags($pillow);
-            $pillow=str_replace("Подушки: ","",$pillow);
-            if (strpos($pillow,"Есть"))
+            $pillow=str_replace("Подушки: "," ",$pillow);
+            if (mb_strpos ($pillow,"Есть"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (51,$id,5)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (51,$id,5)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-
-
             //транформация
             $trans=$arr[2];
             $trans=strip_tags($trans);
-            $trans=str_replace("Разложение: ","",$trans);
-            if (strpos($trans,"Аккордеон"))
+            $trans=str_replace("Разложение: "," ",$trans);
+            if (mb_strpos ($trans,"Аккордеон"))
             {
                 //механизм
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (7,$id,1)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (7,$id,1)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
                 //трансвормация
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($trans,"Алеко"))
+            if (mb_strpos ($trans,"Алеко"))
             {
                 //механизм
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (8,$id,1)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (8,$id,1)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
                 //трансвормация
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($trans,"Верона"))
+            if (mb_strpos ($trans,"Верона"))
             {
                 //механизм
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (11,$id,1)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (11,$id,1)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
                 //трансвормация
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($trans,"Выкатной"))
+            if (mb_strpos ($trans,"Выкатной"))
             {
                 //механизм
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (3,$id,1)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (3,$id,1)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
                 //трансвормация
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($trans,"Дельфин"))
+            if (mb_strpos ($trans,"Дельфин"))
             {
                 //механизм
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (5,$id,1)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (5,$id,1)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
                 //трансвормация
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($trans,"Еврокнижка"))
+            if (mb_strpos ($trans,"Еврокнижка"))
             {
                 //механизм
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (4,$id,1)";
+                $query="INSERT INTO goodshasfeature goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (4,$id,1)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
                 //трансвормация
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($trans,"клик-кляк"))
+            if (mb_strpos ($trans,"клик-кляк"))
             {
                 //механизм
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (6,$id,1)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (6,$id,1)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
                 //трансвормация
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($trans,"Мералат"))
+            if (mb_strpos ($trans,"Мералат"))
             {
                 //механизм
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (12,$id,1)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (12,$id,1)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
                 //трансвормация
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($trans,"Поворотный"))
+            if (mb_strpos ($trans,"Поворотный"))
             {
                 //механизм
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (107,$id,1)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (107,$id,1)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
                 //трансвормация
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($trans,"Пума"))
+            if (mb_strpos ($trans,"Пума"))
             {
                 //механизм
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (13,$id,1)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (13,$id,1)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
                 //трансвормация
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($trans,"Сабля"))
+            if (mb_strpos ($trans,"Сабля"))
             {
                 //механизм
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (20,$id,1)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (20,$id,1)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
                 //трансвормация
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($trans,"Седафлекс"))
+            if (mb_strpos ($trans,"Седафлекс"))
             {
                 //механизм
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (10,$id,1)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (10,$id,1)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
                 //трансвормация
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($trans,"Софа"))
+            if (mb_strpos ($trans,"Софа"))
             {
                 //механизм
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (127,$id,1)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (127,$id,1)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
                 //трансвормация
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($trans,"Телескоп"))
+            if (mb_strpos ($trans,"Телескоп"))
             {
                 //механизм
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (18,$id,1)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (18,$id,1)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
                 //трансвормация
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($trans,"Французская"))
+            if (mb_strpos ($trans,"Французская"))
             {
                 //механизм
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (14,$id,1)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (14,$id,1)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
                 //трансвормация
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($trans,"Шагающая"))
+            if (mb_strpos ($trans,"Шагающая"))
             {
                 //механизм
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (9,$id,1)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (9,$id,1)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
                 //трансвормация
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (58,$id,7)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($trans,"Не раскладывается"))
+            if (mb_strpos ($trans,"Не раскладывается"))
             {
                 //трансвормация
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (59,$id,7)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (59,$id,7)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-
-
             //тип дивана
             $type=$arr[1];
             $type=strip_tags($type);
-            $type=str_replace("Тип дивана: ","",$type);
-            if (strpos($type,"Диван"))
+            $type=str_replace("Тип дивана: "," ",$type);
+            if (mb_strpos ($type,"Диван"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (120,$id,15)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (120,$id,15)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($type,"Кресло"))
+            if (mb_strpos ($type,"Кресло"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (120,$id,15)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (120,$id,15)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($type,"Кровать"))
+            if (mb_strpos ($type,"Кровать"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (100,$id,15)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (100,$id,15)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($type,"Мини диван"))
+            if (mb_strpos ($type,"Мини диван"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (101,$id,15)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (101,$id,15)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($type,"Пуфы"))
+            if (mb_strpos ($type,"Пуфы"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (102,$id,15)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (102,$id,15)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($type,"Софа"))
+            if (mb_strpos ($type,"Софа"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (120,$id,15)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (120,$id,15)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-
             //наполнение
             $lining=$arr[5];
             $lining=strip_tags($lining);
-            $lining=str_replace("Наполнение ","",$lining);
-            if (strpos($lining,"без наполнителя"))
+            $lining=str_replace("Наполнение "," ",$lining);
+            if (mb_strpos ($lining,"без наполнителя"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (33,$id,3)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (33,$id,3)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($lining,"гранулы"))
+            if (mb_strpos ($lining,"гранулы"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (34,$id,3)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (34,$id,3)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($lining,"змейка+прожинный блок"))
+            if (mb_strpos ($lining,"змейка+прожинный блок"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (35,$id,3)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (35,$id,3)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($lining,"ламелевый блок"))
+            if (mb_strpos ($lining,"ламелевый блок"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (36,$id,3)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (36,$id,3)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($lining,"ламели+пенополиуретан"))
+            if (mb_strpos ($lining,"ламели+пенополиуретан"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (37,$id,3)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (37,$id,3)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($lining,"независимый пружинный блок"))
+            if (mb_strpos ($lining,"независимый пружинный блок"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (39,$id,3)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (39,$id,3)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($lining,"понополистерольные гранулы"))
+            if (mb_strpos ($lining,"понополистерольные гранулы"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (40,$id,3)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (40,$id,3)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($lining,"пенополиуритан"))
+            if (mb_strpos ($lining,"пенополиуретан"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (41,$id,3)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (41,$id,3)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($lining,"пружинная змейка"))
+            if (mb_strpos ($lining,"пружинная змейка"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (42,$id,3)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (42,$id,3)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($lining,"пружинный блок"))
+            if (mb_strpos ($lining,"пружинный блок"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (43,$id,3)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (43,$id,3)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($lining,"пружинная блок \"Bonelle\" "))
+            if (mb_strpos ($lining,"пружинная блок \"Bonelle\" "))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (44,$id,3)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (44,$id,3)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($lining,"синтепон"))
+            if (mb_strpos ($lining,"синтепон"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (45,$id,3)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (45,$id,3)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($lining,"фанера"))
+            if (mb_strpos ($lining,"фанера"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (46,$id,3)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (46,$id,3)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-
+			
 			//вид дивана 
 			$kindof=$arr[0];
 			$kindof=strip_tags($kindof);
-			$kindof=str_replace("Виды дивана: ","",$kindof);
-			if (strpos($kindof,"Прямые диваны"))
+			$kindof=str_replace("Виды дивана: "," ",$kindof);
+			//echo "kindof =".$kindof."<br>";
+			//echo "Тест прямые ".mb_strpos ($kindof,"Прямые диваны")."<br>";
+			/*if (mb_strpos($kindof,"Прямые диваны"))
 			{
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (53,$id,6)";
-                mysqli_query($db_connect,$query);
+				echo "!!!!!<br>";
 			}
-            if (strpos($kindof,"Угловые диваны"))
-            {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (56,$id,6)";
+			else
+			{
+				echo "?????";
+				echo gettype(mb_strpos ($kindof,"Прямые диваны"));
+				echo "<br>";
+			}*/
+			
+			
+			if (mb_strpos ($kindof,"Прямые диваны")!=false)
+			{
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (53,$id,6)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
+			}
+            if (false!=mb_strpos ($kindof,"Угловые диваны"))
+            {
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (56,$id,6)";
+                mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($kindof,"Модульные диваны"))
+            if (mb_strpos ($kindof,"Модульные диваны"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (57,$id,6)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (57,$id,6)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($kindof,"Детские диваны"))
+            if (mb_strpos ($kindof,"Детские диваны"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (63,$id,8)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (63,$id,8)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($kindof,"Диваны для молодежи"))
+            if (mb_strpos ($kindof,"Диваны для молодежи"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (62,$id,6)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (62,$id,8)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($kindof,"Для ежедневного сна"))
+            if (mb_strpos ($kindof,"Для ежедневного сна"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (60,$id,6)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (60,$id,8)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($kindof,"Ортопедические диваны"))
+            if (mb_strpos ($kindof,"Ортопедические диваны"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (61,$id,6)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (61,$id,6)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($kindof,"Диваны для гостинной"))
+            if (mb_strpos ($kindof,"Диваны для гостинной"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (67,$id,9)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (67,$id,9)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($kindof,"Диваны для прихожей"))
+            if (mb_strpos ($kindof,"Диваны для прихожей"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (69,$id,9)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (69,$id,9)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($kindof,"Диваны для кафе"))
+            if (mb_strpos ($kindof,"Диваны для кафе"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (66,$id,9)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (66,$id,9)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($kindof,"Диваны для офиса"))
+            if (mb_strpos ($kindof,"Диваны для офиса"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (64,$id,9)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (64,$id,9)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($kindof,"Диваны для дачи"))
+            if (mb_strpos ($kindof,"Диваны для дачи"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (70,$id,9)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (70,$id,9)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($kindof,"Диваны на кухню"))
+            if (mb_strpos ($kindof,"Диваны на кухню"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (65,$id,9)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (65,$id,9)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($kindof,"Малогабаритные диваны"))
+            if (mb_strpos ($kindof,"Малогабаритные диваны"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (74,$id,11)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (74,$id,11)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($kindof,"Бескаркасные диваны"))
+            if (mb_strpos ($kindof,"Бескаркасные диваны"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (77,$id,12)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (77,$id,12)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($kindof,"Диваны на металокаркасе"))
+            if (mb_strpos ($kindof,"Диваны на металокаркасе"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (76,$id,12)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (76,$id,12)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
-            if (strpos($kindof,"Кожаные диваны"))
+            if (mb_strpos ($kindof,"Кожаные диваны"))
             {
-                $query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (79,$id,13)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (79,$id,13)";
                 mysqli_query($db_connect,$query);
+				echo $query."<br>";
             }
 			
 			//фабрика feature_id=14
@@ -460,133 +539,134 @@ function export()
 			echo $factory."<br>";
 			$factory=strip_tags($factory);
 			echo $factory."<br>";
-			$factory=str_replace("Фабрика: ","",$factory);
+			$factory=str_replace("Фабрика: "," ",$factory);
 			echo $factory."<br>";
 			switch ($factory)
 			{
 				case "Фабрика Рата":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (90,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (90,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Фабрика Ливс":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (82,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (82,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Фабрика СидиМ":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (83,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (83,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Фабрика Лисогор":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (84,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (84,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Мебель Софиевки":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (85,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (85,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "УкрИзраМебель":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (86,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (86,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Фабрика Daniro":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (87,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (87,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Фабрика Уют":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (88,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (88,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Фабрика Катунь":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (89,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (89,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Фабрика Бис-М":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (91,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (91,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Фабрика AFCI":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (92,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (92,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Фабрика Софа":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (93,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (93,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Фабрика Старски":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (94,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (94,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Фабрика КМ":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (95,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (95,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Фабрика Вика":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (96,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (96,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Фабрика Сокме":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (97,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (97,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Фабрика Агат-М":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (98,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (98,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Распродажа":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (122,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (122,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Арман мебель":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (123,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (123,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Фабрика Алекс-Мебель":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (124,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (124,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Мебель Сервис":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (125,$id,14)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (125,$id,14)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 				case "Фабрика Маген":
-					$query="INSERT INTO (goodshasfeature_valueid, goods_id, feature_id) VALUES (123,$id,26)";
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (123,$id,26)";
 					mysqli_query($db_connect,$query);
 					echo $query."<br>";
 					break;
 			}
-			break;
+			//break;
         }
     }
     mysqli_close($db_connect);
 }
-
 function del_filters()
 {
-    
+    $db_connect=mysqli_connect(host,user,pass,db);
+    $query="DELETE FROM goodshasfeature WHERE feature_id<>2 AND feature_id<>10";
+	mysqli_query($db_connect,$query);
+	mysqli_close($db_connect);
 }
 //////////////////////////////////////////
 del_filters();
-export();
-
+export_filters();
 ?>
