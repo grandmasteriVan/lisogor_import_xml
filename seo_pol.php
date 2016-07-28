@@ -22,6 +22,7 @@ define ("pass", "Z7A8JqUh");
  */
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
+
 function seo_kupe()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -34,19 +35,19 @@ function seo_kupe()
         }
         foreach ($goods as $good)
         {
-            $id=$good['doods_id'];
+            $id=$good['goods_id'];
             $name=$good['goods_name'];
             
             $header=$good['goods_name'];
             $name_trunc=str_replace(UTF8toCP1251("Шкаф-купе "),"",$name);
-			$title=$name_trunc.UTF8toCP1251("шкаф-купе. Купить шкафы-купе со склада в Киеве");
+			$title=$name_trunc.UTF8toCP1251(" шкаф-купе. Купить шкафы-купе со склада в Киеве");
 			$keywords=UTF8toCP1251("шкафы-купе, ").$name.UTF8toCP1251(", склад мебели, купить шкаф-купе, интернет магазин мебели, недорогие шкафы-купе, цены, фото, отзывы.");
 			$key_h=UTF8toCP1251("Фабрика ДОМ. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
 			$key_f=UTF8toCP1251("Фабрика ДОМ. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-			$desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \«Файні-меблі\», Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+			$desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине «Файні-меблі», Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
             
 			$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
-			//mysqli_query($db_connect,$query);
+			mysqli_query($db_connect,$query);
 			echo $query."<br>";
 			//$header=$good['goods_header'];
 			/*$title=$good['goods_title'];
@@ -54,6 +55,7 @@ function seo_kupe()
             $key_h=$good['goods_hkeyw'];
             $key_f=&$good['goods_fkeyw'];
             $desc=$good['goods_desc'];*/
+			//break;
         }
     }
     mysqli_close($db_connect);
@@ -70,19 +72,17 @@ function seo_mks()
         }
         foreach ($goods as $good)
         {
-            $id=$good['doods_id'];
+            $id=$good['goods_id'];
             $name=$good['goods_name'];
-
             $header=$good['goods_name'];
             $name_trunc=str_replace(UTF8toCP1251("Диван "),"",$name);
-            $title=$name_trunc.UTF8toCP1251("диван. Купить диван со склада в Киеве");
+            $title=$name_trunc.UTF8toCP1251(" диван. Купить диван со склада в Киеве");
             $keywords=UTF8toCP1251("диваны, ").$name.UTF8toCP1251(", склад мебели, купить диван, интернет магазин мебели, недорогие диваны, цены, фото, отзывы.");
             $key_h=UTF8toCP1251("Фабрика МКС. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
             $key_f=UTF8toCP1251("Фабрика МКС. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-            $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \«Файні-меблі\», Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
-
+            $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине «Файні-меблі», Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
             $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
-            //mysqli_query($db_connect,$query);
+            mysqli_query($db_connect,$query);
             echo $query."<br>";
             //$header=$good['goods_header'];
             /*$title=$good['goods_title'];
@@ -90,14 +90,13 @@ function seo_mks()
             $key_h=$good['goods_hkeyw'];
             $key_f=&$good['goods_fkeyw'];
             $desc=$good['goods_desc'];*/
+			//break;
         }
     }
     mysqli_close($db_connect);
 }
-
 seo_kupe();
 seo_mks();
-
 /**
  * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
  * @param $str string входящяя строка в кодировке UTF-8
