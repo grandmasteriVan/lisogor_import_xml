@@ -93,8 +93,11 @@ function seo_mks()
         }
     }
     mysqli_close($db_connect);
-
 }
+
+seo_kupe();
+seo_mks();
+
 /**
  * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
  * @param $str string входящяя строка в кодировке UTF-8
