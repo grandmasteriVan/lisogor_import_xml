@@ -58,6 +58,43 @@ function seo_kupe()
     }
     mysqli_close($db_connect);
 }
+function seo_mks()
+{
+    $db_connect=mysqli_connect(host,user,pass,db);
+    $query="SELECT * FROM goods WHERE factory_id=134";
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            $goods[]=$row;
+        }
+        foreach ($goods as $good)
+        {
+            $id=$good['doods_id'];
+            $name=$good['goods_name'];
+
+            $header=$good['goods_name'];
+            $name_trunc=str_replace(UTF8toCP1251("Диван "),"",$name);
+            $title=$name_trunc.UTF8toCP1251("диван. Купить диван со склада в Киеве");
+            $keywords=UTF8toCP1251("диваны, ").$name.UTF8toCP1251(", склад мебели, купить диван, интернет магазин мебели, недорогие диваны, цены, фото, отзывы.");
+            $key_h=UTF8toCP1251("Фабрика МКС. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+            $key_f=UTF8toCP1251("Фабрика МКС. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+            $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \«Файні-меблі\», Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+
+            $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+            //mysqli_query($db_connect,$query);
+            echo $query."<br>";
+            //$header=$good['goods_header'];
+            /*$title=$good['goods_title'];
+            $keywords=$good['goods_keyw'];
+            $key_h=$good['goods_hkeyw'];
+            $key_f=&$good['goods_fkeyw'];
+            $desc=$good['goods_desc'];*/
+        }
+    }
+    mysqli_close($db_connect);
+
+}
 /**
  * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
  * @param $str string входящяя строка в кодировке UTF-8
