@@ -5,23 +5,23 @@
  * Date: 25.07.16
  * Time: 14:39
  */
-//define ("host","localhost");
-define ("host","10.0.0.2");
+define ("host","localhost");
+//define ("host","10.0.0.2");
 /**
  * database username
  */
-//define ("user", "root");
-define ("user", "uh333660_mebli");
+define ("user", "root");
+//define ("user", "uh333660_mebli");
 /**
  * database password
  */
-//define ("pass", "");
-define ("pass", "Z7A8JqUh");
+define ("pass", "");
+//define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
-//define ("db", "mebli");
-define ("db", "uh333660_mebli");
+define ("db", "mebli_new");
+//define ("db", "uh333660_mebli");
 /**
  * @param $goods_kind integer айди типа товара
  * в зависимоти от типа товара меняет его категорию
@@ -47,8 +47,10 @@ function repair_tov ($goods_kind)
             {
                 $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,13)";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
 
                 $query="UPDATE goods SET goods_maintcharter=13 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -60,8 +62,10 @@ function repair_tov ($goods_kind)
             {
                 $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,16)";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
 
                 $query="UPDATE goods SET goods_maintcharter=16 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -73,8 +77,10 @@ function repair_tov ($goods_kind)
             {
                 $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,4)";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
 
                 $query="UPDATE goods SET goods_maintcharter=4 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -86,8 +92,10 @@ function repair_tov ($goods_kind)
             {
                 $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,3)";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
 
                 $query="UPDATE goods SET goods_maintcharter=3 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -99,8 +107,10 @@ function repair_tov ($goods_kind)
             {
                 $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,77)";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
 
                 $query="UPDATE goods SET goods_maintcharter=77 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -112,8 +122,10 @@ function repair_tov ($goods_kind)
             {
                 $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,76)";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
 
                 $query="UPDATE goods SET goods_maintcharter=76 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -125,8 +137,10 @@ function repair_tov ($goods_kind)
             {
                 $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,14)";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
 
                 $query="UPDATE goods SET goods_maintcharter=14 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -138,8 +152,10 @@ function repair_tov ($goods_kind)
             {
                 $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,12)";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
 
                 $query="UPDATE goods SET goods_maintcharter=12 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -151,8 +167,10 @@ function repair_tov ($goods_kind)
             {
                 $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,125)";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
 
                 $query="UPDATE goods SET goods_maintcharter=125 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -164,8 +182,10 @@ function repair_tov ($goods_kind)
             {
                 $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,125)";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
 
                 $query="UPDATE goods SET goods_maintcharter=125 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -177,8 +197,10 @@ function repair_tov ($goods_kind)
             {
                 $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,125)";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
 
                 $query="UPDATE goods SET goods_maintcharter=125 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -190,8 +212,10 @@ function repair_tov ($goods_kind)
             {
                 $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,19)";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
 
                 $query="UPDATE goods SET goods_maintcharter=19 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -203,8 +227,10 @@ function repair_tov ($goods_kind)
             {
                 $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,124)";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
 
                 $query="UPDATE goods SET goods_maintcharter=124 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -216,8 +242,10 @@ function repair_tov ($goods_kind)
             {
                 $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,124)";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
 
                 $query="UPDATE goods SET goods_maintcharter=124 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -229,8 +257,10 @@ function repair_tov ($goods_kind)
             {
                 $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,124)";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
 
                 $query="UPDATE goods SET goods_maintcharter=124 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -242,8 +272,10 @@ function repair_tov ($goods_kind)
             {
                 $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,125)";
                 mysqli_query($db_connect,$query);
+                echo $query."<br>";
 
                 $query="UPDATE goods SET goods_maintcharter=125 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
