@@ -5,23 +5,23 @@
  * Date: 25.07.16
  * Time: 14:39
  */
-define ("host","localhost");
-//define ("host","10.0.0.2");
+//define ("host","localhost");
+define ("host","10.0.0.2");
 /**
  * database username
  */
-define ("user", "root");
-//define ("user", "uh333660_mebli");
+//define ("user", "root");
+define ("user", "uh333660_mebli");
 /**
  * database password
  */
-define ("pass", "");
-//define ("pass", "Z7A8JqUh");
+//define ("pass", "");
+define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
-define ("db", "mebli_new");
-//define ("db", "uh333660_mebli");
+//define ("db", "mebli_new");
+define ("db", "uh333660_mebli");
 /**
  * @param $goods_kind integer айди типа товара
  * в зависимоти от типа товара меняет его категорию
@@ -29,7 +29,7 @@ define ("db", "mebli_new");
 function repair_tov ($goods_kind)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id, goods_maintcharter FROM goods WHERE goodskind_id=$goods_kind";
+    $query="SELECT goods_id, goods_maintcharter, goods_name, goods_url FROM goods WHERE goodskind_id=$goods_kind";
     $i=1;
     if ($res=mysqli_query($db_connect,$query))
     {
@@ -41,7 +41,9 @@ function repair_tov ($goods_kind)
         //проверяем есть ли название типа мебели в названии товара
         foreach ($tovars as $tovar)
         {
+			$name=$tovar['goods_name'];
             $id=$tovar['goods_id'];
+			$url=$tovar['goods_url'];
             //кровати
             if ($goods_kind==39||$goods_kind==74)
             {
@@ -51,7 +53,6 @@ function repair_tov ($goods_kind)
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,13)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-
                 $query="UPDATE goods SET goods_maintcharter=13 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
@@ -66,7 +67,6 @@ function repair_tov ($goods_kind)
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,16)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-
                 $query="UPDATE goods SET goods_maintcharter=16 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
@@ -81,7 +81,6 @@ function repair_tov ($goods_kind)
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,4)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-
                 $query="UPDATE goods SET goods_maintcharter=4 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
@@ -96,7 +95,6 @@ function repair_tov ($goods_kind)
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,3)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-
                 $query="UPDATE goods SET goods_maintcharter=3 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
@@ -111,7 +109,6 @@ function repair_tov ($goods_kind)
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,77)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-
                 $query="UPDATE goods SET goods_maintcharter=77 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
@@ -126,7 +123,6 @@ function repair_tov ($goods_kind)
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,76)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-
                 $query="UPDATE goods SET goods_maintcharter=76 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
@@ -141,7 +137,20 @@ function repair_tov ($goods_kind)
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,14)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-
+                $query="UPDATE goods SET goods_maintcharter=14 WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $i.". ".$query."<br>";
+                //return;
+            }
+			//матрасы для диванов
+            if ($goods_kind==45)
+            {
+                $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+                $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,14)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="UPDATE goods SET goods_maintcharter=14 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
@@ -156,7 +165,6 @@ function repair_tov ($goods_kind)
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,12)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-
                 $query="UPDATE goods SET goods_maintcharter=12 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
@@ -171,7 +179,6 @@ function repair_tov ($goods_kind)
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,125)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-
                 $query="UPDATE goods SET goods_maintcharter=125 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
@@ -186,7 +193,6 @@ function repair_tov ($goods_kind)
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,125)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-
                 $query="UPDATE goods SET goods_maintcharter=125 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
@@ -201,7 +207,6 @@ function repair_tov ($goods_kind)
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,125)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-
                 $query="UPDATE goods SET goods_maintcharter=125 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
@@ -216,7 +221,6 @@ function repair_tov ($goods_kind)
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,19)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-
                 $query="UPDATE goods SET goods_maintcharter=19 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
@@ -231,7 +235,6 @@ function repair_tov ($goods_kind)
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,124)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-
                 $query="UPDATE goods SET goods_maintcharter=124 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
@@ -246,7 +249,6 @@ function repair_tov ($goods_kind)
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,124)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-
                 $query="UPDATE goods SET goods_maintcharter=124 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
@@ -261,7 +263,32 @@ function repair_tov ($goods_kind)
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,124)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-
+                $query="UPDATE goods SET goods_maintcharter=124 WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $i.". ".$query."<br>";
+				
+				$name=str_replace(UTF8toCP1251("Тумба "),"",$name);
+				$name=str_replace(UTF8toCP1251("тумба "),"",$name);
+				$name=str_replace(UTF8toCP1251("ТВ "),"",$name);
+				$name=str_replace(UTF8toCP1251("тв  "),"",$name);
+				$name=str_replace(UTF8toCP1251("Телевизор "),"",$name);
+				$name=str_replace(UTF8toCP1251("телевизор  "),"",$name);
+				$name="Тумба ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+                //return;
+            }
+			//тумбы под тв
+            if ($goods_kind==49)
+            {
+                $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+                $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,124)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
                 $query="UPDATE goods SET goods_maintcharter=124 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
@@ -276,11 +303,211 @@ function repair_tov ($goods_kind)
                 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,125)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-
                 $query="UPDATE goods SET goods_maintcharter=125 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
 				//return;
+			}
+			//столы руководителя
+            if ($goods_kind==60)
+            {
+                $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+                $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,3)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+                $query="UPDATE goods SET goods_maintcharter=3 WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $i.". ".$query."<br>";
+				//return;
+				
+				//
+				$name=str_replace(UTF8toCP1251("Стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("Руководителя "),"",$name);
+				$name=str_replace(UTF8toCP1251("руководителя  "),"",$name);
+				$name="Стол ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+			}
+			//столы для совещаний
+            if ($goods_kind==59)
+            {
+                $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+                $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,3)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+                $query="UPDATE goods SET goods_maintcharter=3 WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $i.". ".$query."<br>";
+				//return;
+				
+				//
+				$name=str_replace(UTF8toCP1251("Стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("для "),"",$name);
+				$name=str_replace(UTF8toCP1251("совещаний  "),"",$name);
+				$name="Стол ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+			}
+			//столы компьютерные
+            if ($goods_kind==61)
+            {
+                $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+                $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,3)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+                $query="UPDATE goods SET goods_maintcharter=3 WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $i.". ".$query."<br>";
+				//return;
+				
+				//
+				$name=str_replace(UTF8toCP1251("Стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("компьюторный "),"",$name);
+				$name=str_replace(UTF8toCP1251("Компьюторный  "),"",$name);
+				$name="Стол ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+			}
+			//столы рабочие
+            if ($goods_kind==65)
+            {
+                $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+                $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,3)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+                $query="UPDATE goods SET goods_maintcharter=3 WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $i.". ".$query."<br>";
+				//return;
+				
+				//
+				$name=str_replace(UTF8toCP1251("Стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("Рабочий "),"",$name);
+				$name=str_replace(UTF8toCP1251("рабочий  "),"",$name);
+				$name="Стол ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+			}
+			//столы книжки
+            if ($goods_kind==42)
+            {
+                $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+                $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,3)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+                $query="UPDATE goods SET goods_maintcharter=3 WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $i.". ".$query."<br>";
+				//return;
+				
+				//
+				$name=str_replace(UTF8toCP1251("Стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("Книжка "),"",$name);
+				$name=str_replace(UTF8toCP1251("книжка  "),"",$name);
+				$name="Стол ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+			}
+			//обеденные столы и стулья
+            if ($goods_kind==70)
+            {
+				$unknown=true;
+				//смотрим что ща товар, и помещаем в соответствующий раздел
+                //стол
+				if (mb_strpos($name,"Стол")||mb_strpos($name,"стол")||mb_strpos($link,"стол"))
+				{
+					$query="DELETE FROM goodshastcharter WHERE goods_id=$id";
+					mysqli_query($db_connect,$query);
+					echo $query."<br>";
+					$query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,19)";
+					mysqli_query($db_connect,$query);
+					echo $query."<br>";
+					$query="UPDATE goods SET goods_maintcharter=19 WHERE goods_id=$id";
+					mysqli_query($db_connect,$query);
+					echo $i.". ".$query."<br>";
+					//return;
+					
+					//
+					$name=str_replace(UTF8toCP1251("Стол "),"",$name);
+					$name=str_replace(UTF8toCP1251("стол "),"",$name);
+					$name=str_replace(UTF8toCP1251("обеденный "),"",$name);
+					$name=str_replace(UTF8toCP1251("Обеденный  "),"",$name);
+					$name=str_replace(UTF8toCP1251("Кухонный  "),"",$name);
+					$name=str_replace(UTF8toCP1251("кухонный  "),"",$name);
+					$name="Кухонный стол ".$name;
+					$name=UTF8toCP1251($name);
+					$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+					mysqli_query($db_connect,$query);
+					echo $i.". ".$query."<br>";
+					$unknown=false;
+				}
+				//стул
+				if (mb_strpos($name,"Стул")||mb_strpos($name,"стул")||mb_strpos($link,"стул"))
+				{
+					$query="DELETE FROM goodshastcharter WHERE goods_id=$id";
+					mysqli_query($db_connect,$query);
+					echo $query."<br>";
+					$query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,22)";
+					mysqli_query($db_connect,$query);
+					echo $query."<br>";
+					$query="UPDATE goods SET goods_maintcharter=22 WHERE goods_id=$id";
+					mysqli_query($db_connect,$query);
+					echo $i.". ".$query."<br>";
+					//return;
+					
+					//
+					$name=str_replace(UTF8toCP1251("Стул "),"",$name);
+					$name=str_replace(UTF8toCP1251("стул "),"",$name);
+					$name=str_replace(UTF8toCP1251("обеденный "),"",$name);
+					$name=str_replace(UTF8toCP1251("Обеденный  "),"",$name);
+					$name=str_replace(UTF8toCP1251("Кухонный  "),"",$name);
+					$name=str_replace(UTF8toCP1251("кухонный  "),"",$name);
+					$name="Стул ".$name;
+					$name=UTF8toCP1251($name);
+					$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+					mysqli_query($db_connect,$query);
+					echo $i.". ".$query."<br>";
+					$unknown=false;
+				}
+				//хзчто - двинаем в стулья
+				if ($unknown)
+				{
+					$query="DELETE FROM goodshastcharter WHERE goods_id=$id";
+					mysqli_query($db_connect,$query);
+					echo $query."<br>";
+					$query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,22)";
+					mysqli_query($db_connect,$query);
+					echo $query."<br>";
+					$query="UPDATE goods SET goods_maintcharter=22 WHERE goods_id=$id";
+					mysqli_query($db_connect,$query);
+					echo $i.". ".$query."<br>";
+				}
+				
 			}
             $i++;
         }
@@ -305,6 +532,8 @@ function print_names ($goods_kind)
     }
     mysqli_close($db_connect);
 }
+
+set_time_limit(400);
 repair_tov(39);//кровати
 repair_tov(50);//детские кровати
 repair_tov(74);//еще кровати
@@ -318,12 +547,19 @@ repair_tov(32);//столы компьюторные
 repair_tov(33);//столы журнальные
 repair_tov(71);//столы журнальные
 repair_tov(41);//тумбы под ТВ
+repair_tov(49);//тумбы под ТВ
 repair_tov(34);//столы письменные
 repair_tov(109);//столы обеденные
 repair_tov(43);//тумбы для обуви
 repair_tov(64);//тумбы для обуви
 repair_tov(80);//туалетные столики
-
+repair_tov(60);//столы руководителя
+repair_tov(59);//столы дл совещаний
+repair_tov(65);//столы рабочие
+repair_tov(42);//столы книжки
+repair_tov(61);//столы компьюторные
+repair_tov(70);//обеденные столы и стулья
+repair_tov(45);//матрасы для диванов
 
 
 /**
