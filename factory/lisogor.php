@@ -6,8 +6,6 @@
  * Time: 09:41
  */
 
-//TODO: set peice to goods table
-
 /** @var array $data */
 $data= array();
 
@@ -137,7 +135,12 @@ function add_db_lisogor($data1)
             //echo $strSQL."<br>";
             //break;
             mysqli_query($db_connect, $strSQL);
+
         }
+        //записываем цену первой категории в таблицу goods
+        $price=$d['kat1'];
+        $strSQL="UPDATE goods SET goods_price=$price WHERE goods_article_link='$d_name' AND factory_id=66";
+        mysqli_query($db_connect, $strSQL);
         //break;
     }
 }
