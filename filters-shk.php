@@ -39,6 +39,65 @@ function set_filters()
         {
             $id=$tov['goods_id'];
             $name=$tov['goods_name'];
+            $factory=$tov['factory_id'];
+            //лакобель
+            if ($factory==115)
+            {
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
+                    "goodshasfeature_valuetext, goods_id, feature_id) ".
+                    "VALUES (7,0,'',$id,125)";
+                mysqli_query($db_connect,$query);
+                echo "Лакобель: $query <br>";
+            }
+            if ($factory==20)
+            {
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
+                    "goodshasfeature_valuetext, goods_id, feature_id) ".
+                    "VALUES (7,0,'',$id,125)";
+                mysqli_query($db_connect,$query);
+                echo "Лакобель: $query <br>";
+            }
+            if ($factory==106)
+            {
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
+                    "goodshasfeature_valuetext, goods_id, feature_id) ".
+                    "VALUES (7,0,'',$id,125)";
+                mysqli_query($db_connect,$query);
+                echo "Лакобель: $query <br>";
+            }
+            if ($factory==118)
+            {
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
+                    "goodshasfeature_valuetext, goods_id, feature_id) ".
+                    "VALUES (7,0,'',$id,125)";
+                mysqli_query($db_connect,$query);
+                echo "Лакобель: $query <br>";
+            }
+            //стиль
+            //18 - id стиль
+            //сначала удаляем записи о стилях
+            $query="DELETE FROM goodshasfuture WHERE fearure_id=18 AND goods_id=$id";
+            mysqli_query($db_connect,$query);
+            echo "$query <br>";
+            //потом записываем всем шкафам все стили
+            //классика
+            $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
+                "goodshasfeature_valuetext, goods_id, feature_id) ".
+                "VALUES (1,0,'',$id,18)";
+            mysqli_query($db_connect,$query);
+            echo "$query <br>";
+            //современный-модный
+            $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
+                "goodshasfeature_valuetext, goods_id, feature_id) ".
+                "VALUES (10,0,'',$id,18)";
+            mysqli_query($db_connect,$query);
+            echo "$query <br>";
+            //стильный-красивый
+            $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
+                "goodshasfeature_valuetext, goods_id, feature_id) ".
+                "VALUES (11,0,'',$id,18)";
+            mysqli_query($db_connect,$query);
+            echo "$query <br>";
 
             //переименовываем позицию
             $name=str_replace(UTF8toCP1251("Шкаф-купе "),"",$name);
@@ -50,6 +109,8 @@ function set_filters()
             $name=UTF8toCP1251($name);
             $query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
             mysqli_query($db_connect,$query);
+
+            //начинаем добавлять нужные фильтры основываясь на старых
             $query="SELECT * FROM goodshasfeature WHERE goods_id=$id";
             if ($res=mysqli_query($db_connect,$query))
             {
@@ -61,34 +122,6 @@ function set_filters()
                 {
                     $feature_id=$feature['feature_id'];
                     $value=$feature['goodshasfeature_valueint'];
-
-
-                    //стиль
-                    //18 - id стиль
-                    //сначала удаляем записи о стилях
-                    $query="DELETE FROM goodshasfuture WHERE fearure_id=18 AND goods_id=$id";
-                    mysqli_query($db_connect,$query);
-                    echo "$query <br>";
-                    //потом записываем всем шкафам все стили
-                    //классика
-                    $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
-                        "goodshasfeature_valuetext, goods_id, feature_id) ".
-                        "VALUES (1,0,'',$id,18)";
-                    mysqli_query($db_connect,$query);
-                    echo "$query <br>";
-                    //современный-модный
-                    $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
-                        "goodshasfeature_valuetext, goods_id, feature_id) ".
-                        "VALUES (10,0,'',$id,18)";
-                    mysqli_query($db_connect,$query);
-                    echo "$query <br>";
-                    //стильный-красивый
-                    $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
-                        "goodshasfeature_valuetext, goods_id, feature_id) ".
-                        "VALUES (11,0,'',$id,18)";
-                    mysqli_query($db_connect,$query);
-                    echo "$query <br>";
-
 
                     //32 - id количество дверей
                     //количество дверей
