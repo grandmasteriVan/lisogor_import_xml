@@ -64,10 +64,12 @@ function repair_tov ($goods_kind)
                 $query="DELETE FROM goodshastcharter WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-                $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,16)";
+                $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,33)";
+                mysqli_query($db_connect,$query);
+				 $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,33)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
-                $query="UPDATE goods SET goods_maintcharter=16 WHERE goods_id=$id";
+                $query="UPDATE goods SET goods_maintcharter=33 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
                 //return;
@@ -534,32 +536,32 @@ function print_names ($goods_kind)
 }
 
 set_time_limit(400);
-repair_tov(39);//кровати
-repair_tov(50);//детские кровати
-repair_tov(74);//еще кровати
-repair_tov(108);//входная дверь
-repair_tov(81);//межклмнатная дверь
-repair_tov(40);//матрас
-repair_tov(30);//прихожая
-repair_tov(29);//спальня
-repair_tov(38);//комоды
-repair_tov(32);//столы компьюторные
-repair_tov(33);//столы журнальные
-repair_tov(71);//столы журнальные
-repair_tov(41);//тумбы под ТВ
-repair_tov(49);//тумбы под ТВ
-repair_tov(34);//столы письменные
-repair_tov(109);//столы обеденные
-repair_tov(43);//тумбы для обуви
-repair_tov(64);//тумбы для обуви
-repair_tov(80);//туалетные столики
-repair_tov(60);//столы руководителя
-repair_tov(59);//столы дл совещаний
-repair_tov(65);//столы рабочие
-repair_tov(42);//столы книжки
-repair_tov(61);//столы компьюторные
-repair_tov(70);//обеденные столы и стулья
-repair_tov(45);//матрасы для диванов
+//repair_tov(39);//кровати
+//repair_tov(50);//детские кровати
+//repair_tov(74);//еще кровати
+//repair_tov(108);//входная дверь
+//repair_tov(81);//межклмнатная дверь
+//repair_tov(40);//матрас
+//repair_tov(30);//прихожая
+//repair_tov(29);//спальня
+//repair_tov(38);//комоды
+//repair_tov(32);//столы компьюторные
+//repair_tov(33);//столы журнальные
+//repair_tov(71);//столы журнальные
+//repair_tov(41);//тумбы под ТВ
+//repair_tov(49);//тумбы под ТВ
+//repair_tov(34);//столы письменные
+//repair_tov(109);//столы обеденные
+//repair_tov(43);//тумбы для обуви
+//repair_tov(64);//тумбы для обуви
+//repair_tov(80);//туалетные столики
+//repair_tov(60);//столы руководителя
+//repair_tov(59);//столы дл совещаний
+//repair_tov(65);//столы рабочие
+//repair_tov(42);//столы книжки
+//repair_tov(61);//столы компьюторные
+//repair_tov(70);//обеденные столы и стулья
+//repair_tov(45);//матрасы для диванов
 
 
 /**
