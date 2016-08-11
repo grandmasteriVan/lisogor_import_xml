@@ -23,6 +23,10 @@ define ("pass", "Z7A8JqUh");
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
 
+/**
+ * @param $kat_id integer айди главнй категории товара
+ * в зависимоти от главной категории товара меняет имена товаров по необходимой маске
+ */
 function ren_tov_cat($kat_id)
 {
 	$db_connect=mysqli_connect(host,user,pass,db);

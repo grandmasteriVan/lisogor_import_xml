@@ -6,22 +6,37 @@
  * Time: 12:10
  */
 //define ("host","localhost");
+/**
+ *
+ */
 define ("host","10.0.0.2");
 /**
  * database username
  */
 //define ("user", "root");
+/**
+ *
+ */
 define ("user", "uh333660_mebli");
 /**
  * database password
  */
 //define ("pass", "");
+/**
+ *
+ */
 define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
 //define ("db", "mebli");
+/**
+ *
+ */
 define ("db", "uh333660_mebli");
+/**
+ *устанавлиает нужные фильтры в разделе шкафы-купе
+ */
 function set_filters()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -225,6 +240,10 @@ function set_filters()
 set_time_limit(4000);
 set_filters();
 
+/**
+ * @param $str
+ * @return mixed
+ */
 function UTF8toCP1251($str)
 { // by SiMM, $table from http://ru.wikipedia.org/wiki/CP1251
     static $table = array("\xD0\x81" => "\xA8", // Ё
