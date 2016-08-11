@@ -22,6 +22,61 @@ define ("pass", "Z7A8JqUh");
  */
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
+
+function ren_tov_cat($kat_id)
+{
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="SELECT goods_id, goods_name FROM goods WHERE goods_maintcharter=$kat_id";
+	$i=1;
+	if ($res=mysqli_query($db_connect,$query))
+	{
+		while ($row = mysqli_fetch_assoc($res))
+        {
+            $tovars[] = $row;
+        }
+		foreach ($tovars as $tovar)
+		{
+			$name=$tovar['goods_name'];
+            $id=$tovar['goods_id'];
+			//кресла
+			if ($kat_id==2)
+			{
+				$name=str_replace(UTF8toCP1251("Кресло"),"",$name);
+				$name=str_replace(UTF8toCP1251("кресло"),"",$name);
+				$name="Кресло ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+			}
+			//шкафы
+			if ($kat_id==10)
+			{
+				$name=str_replace(UTF8toCP1251("Шкаф"),"",$name);
+				$name=str_replace(UTF8toCP1251("шкаф"),"",$name);
+				$name="Шкаф ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+			}
+			//полки
+			if ($kat_id==11)
+			{
+				$name=str_replace(UTF8toCP1251("Полка"),"",$name);
+				$name=str_replace(UTF8toCP1251("полка"),"",$name);
+				$name="Полка ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+			}
+			$i++;
+		}
+	}
+	mysqli_close($db_connect);
+}
+
 /**
  * @param $goods_kind integer айди типа товара
  * в зависимоти от типа товара меняет имена товаров по необходимой маске
@@ -256,7 +311,21 @@ function rename_tov ($goods_kind)
 				$name=str_replace(UTF8toCP1251("столик  "),"",$name);
 				$name=str_replace(UTF8toCP1251("Туалетный "),"",$name);
 				$name=str_replace(UTF8toCP1251("туалетный  "),"",$name);
-				$name="Стол "a.$name;
+				$name="Стол ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+				//return;
+			}
+			//столы рабочие
+			if ($goods_kind==65)
+			{
+				$name=str_replace(UTF8toCP1251("Стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("стол "),"",$name);
+				$name=str_replace(UTF8toCP1251("Столик "),"",$name);
+				$name=str_replace(UTF8toCP1251("столик  "),"",$name);
+				$name="Стол ".$name;
 				$name=UTF8toCP1251($name);
 				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
 				mysqli_query($db_connect,$query);
@@ -286,6 +355,7 @@ function print_names ($goods_kind)
     }
     mysqli_close($db_connect);
 }
+//переименования по типу товара
 //rename_tov(39);//кровати
 //rename_tov(50);//детские кровати
 //rename_tov(74);//еще кровати
@@ -303,7 +373,13 @@ function print_names ($goods_kind)
 //rename_tov(109);//столы обеденные
 //rename_tov(43);//тумбы для обуви
 //rename_tov(64);//тумбы для обуви
-rename_tov(80);//туалетные столики
+//rename_tov(80);//туалетные столики
+//rename_tov(65);//столы рабочие
+
+//переименование по разделу каталога
+//ren_tov_cat(2);//кресла 
+//ren_tov_cat(10);//шкафы
+ren_tov_cat(11);//полки
 
 
 
