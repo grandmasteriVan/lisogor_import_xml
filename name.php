@@ -22,7 +22,6 @@ define ("pass", "Z7A8JqUh");
  */
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
-
 /**
  * @param $kat_id integer айди главнй категории товара
  * в зависимоти от главной категории товара меняет имена товаров по необходимой маске
@@ -75,12 +74,22 @@ function ren_tov_cat($kat_id)
 				mysqli_query($db_connect,$query);
 				echo $i.". ".$query."<br>";
 			}
+			//бескаркасная мебель
+			if ($kat_id==36)
+			{
+				$name=str_replace(UTF8toCP1251("Кресло"),"",$name);
+				$name=str_replace(UTF8toCP1251("кресло"),"",$name);
+				$name="Бескаркасное кресло ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+			}
 			$i++;
 		}
 	}
 	mysqli_close($db_connect);
 }
-
 /**
  * @param $goods_kind integer айди типа товара
  * в зависимоти от типа товара меняет имена товаров по необходимой маске
@@ -379,14 +388,11 @@ function print_names ($goods_kind)
 //rename_tov(64);//тумбы для обуви
 //rename_tov(80);//туалетные столики
 //rename_tov(65);//столы рабочие
-
 //переименование по разделу каталога
 //ren_tov_cat(2);//кресла 
 //ren_tov_cat(10);//шкафы
-ren_tov_cat(11);//полки
-
-
-
+//ren_tov_cat(11);//полки
+ren_tov_cat(36);//бескаркасная мебель
 /**
  * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
  * @param $str string входящяя строка в кодировке UTF-8
