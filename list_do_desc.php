@@ -25,6 +25,9 @@ define ("pass", "Z7A8JqUh");
  */
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
+/**
+ * выводит (на страничку и в файл) список активных включеных товаров у которых нет описания
+ */
 function get_product_list()
 {
     $db_connect=mysqli_connect(host,user,pass,db);

@@ -145,5 +145,50 @@ function add_db_lisogor($data1)
     }
 }
 
+/**
+ *Для теситрования, генерит HTML код для вывода $data в виде таблицы
+ * @param $data1  array - ассоциативный массив с ценами
+ */
+public function test_data($data1)
+{
+    ?>
+    <!--<html>
+    <body> -->
+    <table>
+        <tr>
+            <th>Диван</th>
+            <th>kat 1</th>
+            <th>kat 2</th>
+            <th>kat 3</th>
+            <th>kat 4</th>
+            <th>kat 5</th>
+            <th>kat 6</th>
+            <th>kat 7</th>
+            <th>kat 8</th>
+            <th>kat 9</th>
+            <th>kat 10</th>
+        </tr>
+        <?php foreach($data1 as $row)
+        {?>
+            <tr>
+                <td><?php echo ($row['name']); ?></td>
+                <td><?php echo ($row['kat1']); ?></td>
+                <td><?php echo ($row['kat2']); ?></td>
+                <td><?php echo ($row['kat3']); ?></td>
+                <td><?php echo ($row['kat4']); ?></td>
+                <td><?php echo ($row['kat5']); ?></td>
+                <td><?php echo ($row['kat6']); ?></td>
+                <td><?php echo ($row['kat7']); ?></td>
+                <td><?php echo ($row['kat8']); ?></td>
+                <td><?php echo ($row['kat9']); ?></td>
+                <td><?php echo ($row['kat10']); ?></td>
+            </tr>
+
+        <?php } ?>
+
+    </table>
+    <!-- </body>
+    </html> --> <?php
+}
 
 ?>

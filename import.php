@@ -59,7 +59,7 @@ switch ($selectedFactory)
     case "Lisogor":
         include_once "/factory/lisogor.php";
         parse_price_lisogor();
-        test_data_arr();
+        test_data_arr($data);
         add_db_lisogor($data);
         break;
     case "Vika":
