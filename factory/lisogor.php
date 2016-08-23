@@ -5,10 +5,8 @@
  * Date: 04.04.16
  * Time: 09:41
  */
-
 /** @var array $data */
 $data= array();
-
 /**
  * записывает полученные из XML значения в ассоциативный массив
  * @param $name string - название или id позиции в прайсе поставщика
@@ -42,7 +40,6 @@ function add_price($name, $kat1=0, $kat2=0, $kat3=0, $kat4=0, $kat5=0, $kat6=0, 
     );
     //print_r($data);
 }
-
 /**
  *вынимает нужную информацию из XML в прайсе Лисогор
  */
@@ -107,8 +104,6 @@ function parse_price_lisogor()
     }
     trunc_arr();
 }
-
-
 /**
  * записывает информацию из ассоциативного массива с ценами в базу данных сайта
  * (id фабрики=66, id категорий начинаются с 628)
@@ -136,7 +131,6 @@ function add_db_lisogor($data1)
             //echo $strSQL."<br>";
             //break;
             mysqli_query($db_connect, $strSQL);
-
         }
         //записываем цену первой категории в таблицу goods
         $price=$d['kat1'];
@@ -145,7 +139,6 @@ function add_db_lisogor($data1)
         //break;
     }
 }
-
 /**
  *Для теситрования, генерит HTML код для вывода $data в виде таблицы
  * @param $data1  array - ассоциативный массив с ценами
@@ -191,7 +184,6 @@ function test_data($data1)
     <!-- </body>
     </html> --> <?php
 }
-
 function trunc_arr()
 {
     global $data;
@@ -204,10 +196,34 @@ function trunc_arr()
             $num[] = $row;
         }
         //$num=$num[0];
-        vardamp($num);
-
+		//$data1=$data;
+        //echo "<pre>";
+		var_dump($data1);
+		//echo "</pre>";
+		$num=$num[0]['COUNT(goods_id)'];
+		echo $num."<br>";
+		$num=intval($num);
+		$len=count ($data);
+		$len=intval($len);
+		echo $len."<br>";
+		echo $len-$num."<br>";
+		$tmp=$len-$num;
+		//for ($i=0;$i<$len;$i++)
+		//{
+		//	//echo $i;
+		//	if ($i>$tmp)
+		//	{
+		//		echo "Yay! $i ";
+		//		$new_data[]=$data1[i];
+		//		var_dump($data1[i]);
+		//	}
+		//}
+		$new_data=array_slice($data, -$tmp);
+		echo "<pre>";
+		var_dump($new_data);
+		echo "</pre>";
+		$data=$new_data;
     }
     mysqli_close($db_connect);
 }
-
 ?>
