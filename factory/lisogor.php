@@ -105,6 +105,7 @@ function parse_price_lisogor()
      print_r($data);
      echo '</pre>';*/
     }
+    trunc_arr();
 }
 
 
@@ -149,7 +150,7 @@ function add_db_lisogor($data1)
  *Для теситрования, генерит HTML код для вывода $data в виде таблицы
  * @param $data1  array - ассоциативный массив с ценами
  */
-public function test_data($data1)
+function test_data($data1)
 {
     ?>
     <!--<html>
@@ -189,6 +190,24 @@ public function test_data($data1)
     </table>
     <!-- </body>
     </html> --> <?php
+}
+
+function trunc_arr()
+{
+    global $data;
+    $db_connect=mysqli_connect(host,user,pass,db);
+    $query="SELECT COUNT(goods_id) FROM goods WHERE factory_id=66";
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            $num[] = $row;
+        }
+        //$num=$num[0];
+        vardamp($num);
+
+    }
+    mysqli_close($db_connect);
 }
 
 ?>
