@@ -58,9 +58,13 @@ switch ($selectedFactory)
         break;
     case "Lisogor":
         include_once "/factory/lisogor.php";
-        parse_price_lisogor();
-        test_data($data);
-        add_db_lisogor($data);
+        $test = new Lisogor($_FILES['file']['tmp_name']);
+        $test->parce_price_lisogor();
+        $test->test_data();
+        $test->add_db_lisogor();
+        //parse_price_lisogor();
+        //test_data($data);
+        //add_db_lisogor($data);
         break;
     case "Vika":
         include_once "/factory/vika.php";
