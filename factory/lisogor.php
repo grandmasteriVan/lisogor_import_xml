@@ -18,6 +18,10 @@ Class Lisogor
      */
     private $file1;
 
+    /**
+     * Lisogor constructor.
+     * @param $f file XML файл с прайсом
+     */
     function __construct($f)
     {
         if ($f)

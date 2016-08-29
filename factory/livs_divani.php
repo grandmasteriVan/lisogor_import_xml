@@ -170,13 +170,37 @@ Class Livs
         <table>
             <tr>
                 <th>Артикул</th>
-                <th>Цена</th>
+                <th>Цена 1 кат</th>
+                <th>Цена 2 кат</th>
+                <th>Цена 3 кат</th>
+                <th>Цена 4 кат</th>
+                <th>Цена 5 кат</th>
+                <th>Цена 6 кат</th>
+                <th>Цена 7 кат</th>
+                <th>Цена 8 кат</th>
+                <th>Цена 9 кат</th>
+                <th>Цена 10 кат</th>
+                <th>Цена 11 кат</th>
+                <th>Цена 12 кат</th>
+                <th>Цена 13 кат</th>
             </tr>
             <?php foreach($this->data as $row)
             {?>
                 <tr>
                     <td><?php echo ($row['name']); ?></td>
-                    <td><?php echo ($row['price']); ?></td>
+                    <td><?php echo ($row['kat0']); ?></td>
+                    <td><?php echo ($row['kat1']); ?></td>
+                    <td><?php echo ($row['kat2']); ?></td>
+                    <td><?php echo ($row['kat3']); ?></td>
+                    <td><?php echo ($row['kat4']); ?></td>
+                    <td><?php echo ($row['kat5']); ?></td>
+                    <td><?php echo ($row['kat6']); ?></td>
+                    <td><?php echo ($row['kat7']); ?></td>
+                    <td><?php echo ($row['kat8']); ?></td>
+                    <td><?php echo ($row['kat9']); ?></td>
+                    <td><?php echo ($row['kat10']); ?></td>
+                    <td><?php echo ($row['kat11']); ?></td>
+                    <td><?php echo ($row['kat12']); ?></td>
                 </tr>
 
             <?php } ?>
