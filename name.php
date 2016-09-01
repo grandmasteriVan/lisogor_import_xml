@@ -85,6 +85,71 @@ function ren_tov_cat($kat_id)
 				mysqli_query($db_connect,$query);
 				echo $i.". ".$query."<br>";
 			}
+            //кухонные уголки
+            if ($kat_id==18)
+            {
+                $name=str_replace(UTF8toCP1251("Кухонный"),"",$name);
+                $name=str_replace(UTF8toCP1251("кухонный"),"",$name);
+                $name=str_replace(UTF8toCP1251("Уголок"),"",$name);
+                $name=str_replace(UTF8toCP1251("уголок"),"",$name);
+                $name=str_replace(UTF8toCP1251("угол"),"",$name);
+                $name=str_replace(UTF8toCP1251("Угол"),"",$name);
+                $name="Кухонный уголок ".$name;
+                $name=UTF8toCP1251($name);
+                $query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $i.". ".$query."<br>";
+            }
+            //модульные кухни
+            if ($kat_id==57)
+            {
+                $name=str_replace(UTF8toCP1251("Кухня"),"",$name);
+                $name=str_replace(UTF8toCP1251("кухня"),"",$name);
+                $name="Кухня ".$name;
+                $name=UTF8toCP1251($name);
+                $query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $i.". ".$query."<br>";
+            }
+            //парты
+            if ($kat_id==63)
+            {
+                $name=str_replace(UTF8toCP1251("Парта"),"",$name);
+                $name=str_replace(UTF8toCP1251("парта"),"",$name);
+                $name=str_replace(UTF8toCP1251("детская"),"",$name);
+                $name=str_replace(UTF8toCP1251("Детская"),"",$name);
+                $name="Детская парта ".$name;
+                $name=UTF8toCP1251($name);
+                $query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $i.". ".$query."<br>";
+            }
+            //парты
+            if ($kat_id==17)
+            {
+                $name=str_replace(UTF8toCP1251("Диван"),"",$name);
+                $name=str_replace(UTF8toCP1251("диван"),"",$name);
+                $name=str_replace(UTF8toCP1251("детский"),"",$name);
+                $name=str_replace(UTF8toCP1251("Детский"),"",$name);
+                $name="Детский диван ".$name;
+                $name=UTF8toCP1251($name);
+                $query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $i.". ".$query."<br>";
+            }
+            //парты
+            if ($kat_id==74)
+            {
+                $name=str_replace(UTF8toCP1251("Шкаф"),"",$name);
+                $name=str_replace(UTF8toCP1251("шкаф"),"",$name);
+                $name=str_replace(UTF8toCP1251("детский"),"",$name);
+                $name=str_replace(UTF8toCP1251("Детский"),"",$name);
+                $name="Детский шкаф ".$name;
+                $name=UTF8toCP1251($name);
+                $query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $i.". ".$query."<br>";
+            }
 			$i++;
 		}
 	}
@@ -392,7 +457,13 @@ function print_names ($goods_kind)
 //ren_tov_cat(2);//кресла 
 //ren_tov_cat(10);//шкафы
 //ren_tov_cat(11);//полки
-ren_tov_cat(36);//бескаркасная мебель
+//ren_tov_cat(36);//бескаркасная мебель
+ren_tov_cat(18);//Кухонные уголки
+ren_tov_cat(57);//кухни модульные
+ren_tov_cat(63);//парты
+ren_tov_cat(17);//детский диван
+ren_tov_cat(74);//детский шкаф
+
 /**
  * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
  * @param $str string входящяя строка в кодировке UTF-8

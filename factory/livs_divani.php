@@ -60,7 +60,7 @@ Class Livs
             'kat9'=>$kat9,
             'kat10'=>$kat10,
             'kat11'=>$kat11,
-            'kat12'=>$kat12,
+            'kat12'=>$kat12
         ];
     }
 
