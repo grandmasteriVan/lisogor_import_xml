@@ -86,7 +86,7 @@ function ren_tov_cat($kat_id)
 				echo $i.". ".$query."<br>";
 			}
             //кухонные уголки
-            if ($kat_id==18)
+            if ($kat_id==18||$kat_id==68)
             {
                 $name=str_replace(UTF8toCP1251("Кухонный"),"",$name);
                 $name=str_replace(UTF8toCP1251("кухонный"),"",$name);
@@ -459,8 +459,9 @@ function print_names ($goods_kind)
 //ren_tov_cat(11);//полки
 //ren_tov_cat(36);//бескаркасная мебель
 ren_tov_cat(18);//Кухонные уголки
-ren_tov_cat(57);//кухни модульные
-ren_tov_cat(63);//парты
+ren_tov_cat(68);//Кухонные уголки
+//ren_tov_cat(57);//кухни модульные
+//ren_tov_cat(63);//парты
 ren_tov_cat(17);//детский диван
 ren_tov_cat(74);//детский шкаф
 
