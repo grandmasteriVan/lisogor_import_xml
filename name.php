@@ -28,6 +28,7 @@ define ("db", "uh333660_mebli");
  */
 function ren_tov_cat($kat_id)
 {
+    $time_start = microtime(true);
 	$db_connect=mysqli_connect(host,user,pass,db);
 	$query="SELECT goods_id, goods_name FROM goods WHERE goods_maintcharter=$kat_id";
 	$i=1;
@@ -154,6 +155,10 @@ function ren_tov_cat($kat_id)
 		}
 	}
 	mysqli_close($db_connect);
+    $time_end = microtime(true);
+    $time = $time_end - $time_start;
+
+    echo "Runtime: $time секунд\n";
 }
 /**
  * @param $goods_kind integer айди типа товара
