@@ -125,7 +125,7 @@ function ren_tov_cat($kat_id)
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
             }
-            //парты
+            //детский диван
             if ($kat_id==17)
             {
                 $name=str_replace(UTF8toCP1251("Диван"),"",$name);
@@ -138,7 +138,7 @@ function ren_tov_cat($kat_id)
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
             }
-            //парты
+            //детский шкаф
             if ($kat_id==74)
             {
                 $name=str_replace(UTF8toCP1251("Шкаф"),"",$name);
@@ -159,6 +159,19 @@ function ren_tov_cat($kat_id)
                 $name=str_replace(UTF8toCP1251("детская"),"",$name);
                 $name=str_replace(UTF8toCP1251("Детская"),"",$name);
                 $name="Детская комната ".$name;
+                $name=UTF8toCP1251($name);
+                $query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $i.". ".$query."<br>";
+            }
+            //детские комоды
+            if ($kat_id==32)
+            {
+                $name=str_replace(UTF8toCP1251("Комод"),"",$name);
+                $name=str_replace(UTF8toCP1251("комод"),"",$name);
+                $name=str_replace(UTF8toCP1251("детский"),"",$name);
+                $name=str_replace(UTF8toCP1251("Детский"),"",$name);
+                $name="Детский комод ".$name;
                 $name=UTF8toCP1251($name);
                 $query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -482,7 +495,8 @@ function print_names ($goods_kind)
 //ren_tov_cat(63);//парты
 ren_tov_cat(17);//детский диван
 //ren_tov_cat(74);//детский шкаф
-ren_tov_cat(16);//детская комната
+//ren_tov_cat(16);//детская комната
+ren_tov_cat(32);//детский комод
 
 /**
  * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
