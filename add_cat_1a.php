@@ -5,25 +5,23 @@
  * Date: 07.04.16
  * Time: 10:33
  */
-
-define ("host","localhost");
-//define ("host","10.0.0.2");
+//define ("host","localhost");
+define ("host","10.0.0.2");
 /**
  * database username
  */
-define ("user", "root");
-//define ("user", "uh333660_mebli");
+//define ("user", "root");
+define ("user", "uh333660_mebli");
 /**
  * database password
  */
-define ("pass", "");
-//define ("pass", "Z7A8JqUh");
+//define ("pass", "");
+define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
-define ("db", "mebli");
-//define ("db", "uh333660_mebli");
-
+//define ("db", "mebli");
+define ("db", "uh333660_mebli");
 /**
  * @param $cat1 integer id первой категории цен
  * @param $cat1a integer id категории 1а
@@ -33,7 +31,8 @@ define ("db", "mebli");
  */
 function add_cat($cat1, $cat1a, $percent, $currency=false)
 {
-    $percent=(100-$percent)/100;
+    $time_start = microtime(true);
+	$percent=(100-$percent)/100;
     $db_connect=mysqli_connect(host,user,pass,db);
     //prices in foreign currency
     if ($currency)
@@ -68,8 +67,6 @@ function add_cat($cat1, $cat1a, $percent, $currency=false)
                     mysqli_query($db_connect,$query);
                     echo $query."<br>";
                 }
-
-
             }
         }
     }
@@ -104,21 +101,18 @@ function add_cat($cat1, $cat1a, $percent, $currency=false)
                     mysqli_query($db_connect,$query);
                     echo $query."<br>";
                 }
-
             }
         }
     }
+	$time_end = microtime(true);
+	$time = $time_end - $time_start;
 
-
-
-
+	echo "Время выполнения скрипта: $time секунд\n";
 }
-
 //vika
 add_cat(119,129,4,true);
 //katun
-add_cat(17,542,5,true);
+//add_cat(17,542,5,true);
 //uyut
-add_cat(33,620,4,true);
-
+//add_cat(33,620,4,true);
 ?>
