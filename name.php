@@ -151,6 +151,19 @@ function ren_tov_cat($kat_id)
                 mysqli_query($db_connect,$query);
                 echo $i.". ".$query."<br>";
             }
+            //детские комнаты
+            if ($kat_id==16)
+            {
+                $name=str_replace(UTF8toCP1251("Комната"),"",$name);
+                $name=str_replace(UTF8toCP1251("комната"),"",$name);
+                $name=str_replace(UTF8toCP1251("детская"),"",$name);
+                $name=str_replace(UTF8toCP1251("Детская"),"",$name);
+                $name="Детская комната ".$name;
+                $name=UTF8toCP1251($name);
+                $query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $i.". ".$query."<br>";
+            }
 			$i++;
 		}
 	}
@@ -463,12 +476,13 @@ function print_names ($goods_kind)
 //ren_tov_cat(10);//шкафы
 //ren_tov_cat(11);//полки
 //ren_tov_cat(36);//бескаркасная мебель
-ren_tov_cat(18);//Кухонные уголки
-ren_tov_cat(68);//Кухонные уголки
+//ren_tov_cat(18);//Кухонные уголки
+//ren_tov_cat(68);//Кухонные уголки
 //ren_tov_cat(57);//кухни модульные
 //ren_tov_cat(63);//парты
 ren_tov_cat(17);//детский диван
-ren_tov_cat(74);//детский шкаф
+//ren_tov_cat(74);//детский шкаф
+ren_tov_cat(16);//детская комната
 
 /**
  * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
