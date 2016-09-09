@@ -198,29 +198,20 @@ function add_db_brw_gerbor($data1)
             echo $strSQL."<br>";
 			if($res=mysqli_query($db_connect,$strSQL))
 			{
-				if (mysqli_num_rows($res) > 0)
-				{
-					echo "enter! <br>";
-					$price = mysqli_fetch_assoc($res);
-					foreach($price as $p)
-					{
-						$p1=$p;
-					}
 						
-					echo "price=".$p1."<br>";
-					//проставляем цену позиции
-					$strSQL="UPDATE goods ".
-					"SET goods_price=$p1 ".
+
+			    echo "price=".$p1."<br>";
+                //проставляем цену позиции
+                $strSQL="UPDATE goods ".
+                    "SET goods_price=$p1 ".
 					"WHERE goods.goods_article_link=$name AND factory_id=56";
-					//echo $strSQL."<br>";
-					//break;
-					if (!is_null($p1))
-					{
-						mysqli_query($db_connect, $strSQL);
-						echo "Yay! <br>";
-					}
-					
-				}
+                //echo $strSQL."<br>";
+                //break;
+                if (!is_null($p1))
+                {
+                    mysqli_query($db_connect, $strSQL);
+                    echo "Yay! <br>";
+                }
 			}
             //$price=mysqli_fetch_assoc($res);
 			

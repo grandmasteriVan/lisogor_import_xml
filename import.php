@@ -28,6 +28,8 @@ define ("db", "mebli");
 
 
 $selectedFactory=$_POST["factory"];
+$runtime = new Timer();
+$runtime->setStartTime();
 switch ($selectedFactory)
 {
     case "AMF":
@@ -96,17 +98,68 @@ switch ($selectedFactory)
         //new untested!!!
         include_once "/factory/livs_divani.php";
         $test= new Livs($_FILES['file']['tmp_name']);
-        $test->parce_price_comefor();
+        $test->parce_price_livs();
         $test->test_data();
-        $test->add_db_comefor();
+        $test->add_db_livs();
+        break;
+    case "Nova":
+        //new untested!!!
+        include_once "/factory/nova.php";
+        $test= new Nova($_FILES['file']['tmp_name']);
+        $test->parce_price_nova();
+        $test->test_data();
+        $test->add_db_nova();
         break;
 
 
     default:
         echo "Выберите фабрику и повторите";
         break;
-}
 
+}
+$runtime->setEndTime();
+echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
+
+/**
+ * Class Timer
+ * замеряем время выполнения скрипта
+ */
+class Timer
+{
+    /**
+     * @var время начала выпонения
+     */
+    private $start_time;
+    /**
+     * @var время конца выполнения
+     */
+    private $end_time;
+
+    /**
+     * встанавливаем время начала выполнения скрипта
+     */
+    public function setStartTime()
+    {
+        $this->start_time = microtime(true);
+    }
+
+    /**
+     * устанавливаем время конца выполнения скрипта
+     */
+    public function setEndTime()
+    {
+        $this->end_time = microtime(true);
+    }
+
+    /**
+     * @return mixed время выполения
+     * возвращаем время выполнения скрипта в секундах
+     */
+    public function getRunTime()
+     {
+         return $this->start_time-$this->end_time;
+     }
+}
 /**
  * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
  * @param $str string входящяя строка в кодировке UTF-8
