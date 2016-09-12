@@ -22,7 +22,6 @@ define ("pass", "Z7A8JqUh");
  */
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
-
 /**
  *заполняет СЕО поля по фабрике ДОМ
  */
@@ -63,7 +62,6 @@ function seo_kupe_dom()
     }
     mysqli_close($db_connect);
 }
-
 /**
  * Заполняет СЕО поля по фабрике Софиевка (Киев)
  */
@@ -77,17 +75,23 @@ function seo_kiev_sofievka()
         {
             $goods[]=$row;
         }
-
         foreach ($goods as $good)
         {
             $goods_kind=$good['goodskind_id'];
             $id=$good['goods_id'];
-            $name=$good['goods_name'];
-            $header=$good['goods_name'];
+            //$name=$good['goods_name'];
+			echo "Goods name: $name<br>";
+			
+			$name=UTF8toCP1251("Диван ").$header;
             //переименовываем диваны
             if ($goods_kind==23||$goods_kind==26)
             {
-                $name_trunc=str_replace(UTF8toCP1251("Диван "),"",$name);
+                $name=str_replace(UTF8toCP1251("Диван "),"",$good['goods_name']);
+				$name=UTF8toCP1251("Диван ").$name;
+				echo "name changed :$name <br>";
+				$header=$name;
+				
+				$name_trunc=str_replace(UTF8toCP1251("Диван "),"",$name);
                 $title=$name_trunc.UTF8toCP1251(" диван. Купить диван со склада в Киеве");
                 $keywords=UTF8toCP1251("диваны, ").$name.UTF8toCP1251(", склад мебели, купить диван, интернет магазин мебели, недорогие диваны, цены, фото, отзывы.");
                 $key_h=UTF8toCP1251("Фабрика Киев. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
@@ -107,6 +111,10 @@ function seo_kiev_sofievka()
             //переименовываем кресла
             if ($goods_kind==24)
             {
+				$name=str_replace(UTF8toCP1251("Кресло "),"",$good['goods_name']);
+				$name=UTF8toCP1251("Кресло ").$name;
+				echo "name changed :$name <br>";
+				$header=$name;
                 $name_trunc=str_replace(UTF8toCP1251("Кресло "),"",$name);
                 $title=$name_trunc.UTF8toCP1251(" кресло. Купить кресло со склада в Киеве");
                 $keywords=UTF8toCP1251("кресла, ").$name.UTF8toCP1251(", склад мебели, купить кресла, интернет магазин мебели, недорогие кресла, цены, фото, отзывы.");
@@ -117,12 +125,10 @@ function seo_kiev_sofievka()
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
             }
-
         }
     }
     mysqli_close($db_connect);
 }
-
 /**
  * заполняет СЕО поля по фабрике МКС
  */
@@ -167,7 +173,6 @@ $time_start = microtime(true);
 seo_kiev_sofievka();
 $time_end = microtime(true);
 $time = $time_end - $time_start;
-
 echo "Runtime: $time sec\n";
 /**
  * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
