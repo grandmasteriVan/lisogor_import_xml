@@ -23,7 +23,10 @@ define ("pass", "Z7A8JqUh");
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
 
-function seo_kupe()
+/**
+ *заполняет СЕО поля по фабрике ДОМ
+ */
+function seo_kupe_dom()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
     $query="SELECT * FROM goods WHERE goodskind_id=35 AND factory_id=47";
@@ -60,6 +63,69 @@ function seo_kupe()
     }
     mysqli_close($db_connect);
 }
+
+/**
+ * Заполняет СЕО поля по фабрике Софиевка (Киев)
+ */
+function seo_kiev_sofievka()
+{
+    $db_connect=mysqli_connect(host,user,pass,db);
+    $query="SELECT * FROM goods WHERE factory_id=136";
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            $goods[]=$row;
+        }
+
+        foreach ($goods as $good)
+        {
+            $goods_kind=$good['goodskind_id'];
+            $id=$good['goods_id'];
+            $name=$good['goods_name'];
+            $header=$good['goods_name'];
+            //переименовываем диваны
+            if ($goods_kind==23||$goods_kind==26)
+            {
+                $name_trunc=str_replace(UTF8toCP1251("Диван "),"",$name);
+                $title=$name_trunc.UTF8toCP1251(" диван. Купить диван со склада в Киеве");
+                $keywords=UTF8toCP1251("диваны, ").$name.UTF8toCP1251(", склад мебели, купить диван, интернет магазин мебели, недорогие диваны, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика Киев. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика Киев. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине «Файні-меблі», Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+                //$header=$good['goods_header'];
+                /*$title=$good['goods_title'];
+                $keywords=$good['goods_keyw'];
+                $key_h=$good['goods_hkeyw'];
+                $key_f=&$good['goods_fkeyw'];
+                $desc=$good['goods_desc'];*/
+                //break;
+            }
+            //переименовываем кресла
+            if ($goods_kind==24)
+            {
+                $name_trunc=str_replace(UTF8toCP1251("Кресло "),"",$name);
+                $title=$name_trunc.UTF8toCP1251(" кресло. Купить кресло со склада в Киеве");
+                $keywords=UTF8toCP1251("кресла, ").$name.UTF8toCP1251(", склад мебели, купить кресла, интернет магазин мебели, недорогие кресла, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика Киев. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика Киев. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине «Файні-меблі», Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+
+        }
+    }
+    mysqli_close($db_connect);
+}
+
+/**
+ * заполняет СЕО поля по фабрике МКС
+ */
 function seo_mks()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -95,8 +161,14 @@ function seo_mks()
     }
     mysqli_close($db_connect);
 }
-seo_kupe();
-seo_mks();
+$time_start = microtime(true);
+//seo_kupe_dom();
+//seo_mks();
+seo_kiev_sofievka();
+$time_end = microtime(true);
+$time = $time_end - $time_start;
+
+echo "Runtime: $time sec\n";
 /**
  * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
  * @param $str string входящяя строка в кодировке UTF-8
