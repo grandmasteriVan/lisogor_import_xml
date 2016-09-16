@@ -433,7 +433,7 @@ function export_filters()
 			
 			if (mb_strpos ($kindof,"Прямые диваны")!=false)
 			{
-                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (53,$id,6)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (55,$id,6)";
                 mysqli_query($db_connect,$query);
 				echo $query."<br>";
 			}
@@ -521,7 +521,7 @@ function export_filters()
                 mysqli_query($db_connect,$query);
 				echo $query."<br>";
             }
-            if (mb_strpos ($kindof,"Диваны на металокаркасе"))
+            if (mb_strpos ($kindof,"Диваны на металлокаркасе"))
             {
                 $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (76,$id,12)";
                 mysqli_query($db_connect,$query);
