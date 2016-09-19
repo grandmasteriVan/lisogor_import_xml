@@ -139,7 +139,7 @@ function copy_filters($f_id, $goodskind=40)
                     $goodshasfeature_valuefloat=$feat['goodshasfeature_valuefloat'];
                     $goodshasfeature_valuetext=$feat['goodshasfeature_valuetext'];
                     $feature_id=$feat['feature_id'];
-					//нишем размерность (одно/полтора/двуспальные)
+					//пишем размерность (одно/полтора/двуспальные)
 					if ($feature_id==131)
 					{
 						if ($mod_size<=900)
