@@ -25,8 +25,6 @@ define ("pass", "");
  */
 define ("db", "mebli");
 //define ("db", "uh333660_mebli");
-
-
 function copy_review_sof()
 {
     //сначала мы выбираем все диваны фабрики софиевка
@@ -39,61 +37,83 @@ function copy_review_sof()
             //список всех диванв софиевки
             $divs_sof[] = $row;
         }
+		//echo "<pre>";
+		//print_r($divs_sof);
+		//echo "</pre>";
         foreach ($divs_sof as $div_sof)
         {
             //находим все отзвывы к конкретному дивану
             $id_sof=$div_sof['goods_id'];
             $name_sof=$div_sof['goods_name'];
             $url_sof=$div_sof['goods_url'];
-
+			echo "$url_sof<br>";
             $query="SELECT * FROM review WHERE url_id IN".
-                "(SELECT url_id FROM url WHERE url_name=$url_sof";
+                "(SELECT url_id FROM url WHERE url_name='$url_sof')";
+			unset ($reviews);
             if ($res=mysqli_query($db_connect,$query))
             {
-                while ($row = mysqli_fetch_assoc($res))
+                
+				while ($row = mysqli_fetch_assoc($res))
                 {
                     //все отзывы по конкретному дивану
-                    $review[] = $row;
+                    $reviews[] = $row;
                 }
-                if ($review)
-                {
-                    $rev_id=$review['review_id'];
-                    $rev_text=$review['review_content'];
-                    $name_trunc=str_replace(UTF8toCP1251("Диван "),"",$name_sof);
-                    //проверяем есть ли в тексте отзыва название дивана
-                    if (!preg_match($name_trunc,$rev_text))
-                    {
-                        //если не встретили название, то добавляем отзыв к новому дивану
-                        $query="SELECT goods_url FROM goods WHERE имя для менеджера=$name_sof AND factory_id=136";
-                        if ($res=mysqli_query($db_connect,$query))
-                        {
-                            while ($row = mysqli_fetch_assoc($res))
-                            {
-                                //
-                                $urls_keiv[] = $row;
-                            }
-                            foreach ($urls_keiv as $url_keiv)
-                            {
-                                $url_kiev=$url_keiv['goods_url'];
-                                $query="UPDATE review SET новое поле=$url_keiv WHERE review_id=$rev_id";
-                                mysqli_query($db_connect,$query);
-                            }
-                        }
-                    }
-                }
+				echo "<pre>";
+				print_r($reviews);
+				echo "</pre>";
+				//для каждого отзыва
+                if (is_array ($reviews))
+				{
+					foreach ($reviews as $review)
+					{
+						$rev_id=$review['review_id'];
+						$rev_text=$review['review_content'];
+						$name_trunc=str_replace(UTF8toCP1251("Диван "),"",$name_sof);
+						$name_trunc=preg_replace('/\d/','',$name_trunc);
+						//$name_trunc=str_replace(' ','',$name_trunc);
+						echo "name_trunc: $name_trunc<br>";
+						echo "rev_text: $rev_text<br>";
+						//$name_trunc=UTF8toCP1251($name_trunc);
+						//проверяем есть ли в тексте отзыва название дивана
+						if (mb_strpos ($rev_text,$name_trunc)==false)
+						{
+							//если не встретили название, то добавляем отзыв к новому дивану
+							$query="SELECT url_id FROM url WHERE url_name=(SELECT goods_url FROM goods WHERE goods_name_manager='$name_sof' AND factory_id=136)";
+							unset ($urls_keiv);
+							if ($res=mysqli_query($db_connect,$query))
+							{
+								
+								while ($row = mysqli_fetch_assoc($res))
+								{
+									//
+									$urls_keiv[] = $row;
+								}
+								foreach ($urls_keiv as $url_keiv)
+								{
+									$new_url=$url_keiv['url_id'];
+									$query="UPDATE review SET review_url2=$new_url WHERE review_id=$rev_id";
+									mysqli_query($db_connect,$query);
+									echo "$query <br>";
+								}
+							}
+						}
+					}
+				}
+				else
+				{
+					echo "has not a review!<br>";
+				}
+				
             }
         }
     }
     mysqli_close($db_connect);
 }
-
 $runtime = new Timer();
 $runtime->setStartTime();
-
-
+copy_review_sof();
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
-
 /**
  * Class Timer
  * замеряем время выполнения скрипта
@@ -108,7 +128,6 @@ class Timer
      * @var время конца выполнения
      */
     private $end_time;
-
     /**
      * встанавливаем время начала выполнения скрипта
      */
@@ -116,7 +135,6 @@ class Timer
     {
         $this->start_time = microtime(true);
     }
-
     /**
      * устанавливаем время конца выполнения скрипта
      */
@@ -124,7 +142,6 @@ class Timer
     {
         $this->end_time = microtime(true);
     }
-
     /**
      * @return mixed время выполения
      * возвращаем время выполнения скрипта в секундах
