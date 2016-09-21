@@ -5,35 +5,32 @@
  * Date: 19.09.16
  * Time: 10:05
  */
-
-
 /**
  * database host
  */
-define ("host","localhost");
-//define ("host","10.0.0.2");
+//define ("host","localhost");
+define ("host","10.0.0.2");
 /**
  * database username
  */
-define ("user", "root");
-//define ("user", "uh333660_mebli");
+//define ("user", "root");
+define ("user", "uh333660_mebli");
 /**
  * database password
  */
-define ("pass", "");
-//define ("pass", "Z7A8JqUh");
+//define ("pass", "");
+define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
-define ("db", "mebli");
-//define ("db", "uh333660_mebli");
-
+//define ("db", "mebli");
+define ("db", "uh333660_mebli");
 
 function set_filters()
 {
     //выбираем все столы (товары, у которых главная категория - столы)
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id FROM goods WHERE goods_maintcharter=125";
+    $query="SELECT goods_id, goods_name FROM goods WHERE goods_maintcharter=125 AND goods_noactual=0";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
@@ -43,63 +40,84 @@ function set_filters()
         foreach ($tables as $table)
         {
             $id=$table['goods_id'];
+			$name=$table['goods_name'];
+			$name="  ".$name;
+			$jur=UTF8toCP1251("Жур");
+			//$jur="Журн";
+			$tmp=strpos ($name,$jur);
+			echo "$tmp $name  $jur<br>";
+			if (mb_strpos ($name,$jur))
+			{
+				$query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
+								"goodshasfeature_valuetext, goods_id, feature_id) ".
+								"VALUES (15,0,'',$id,151)";
+							mysqli_query($db_connect,$query);
+							echo "журнальный: $query <br>";
+							
+			}
             //для каждого стола выбираем список его вильтров
             $query="SELECT * FROM goodshasfeature WHERE goods_id=$id";
-            if ($res=mysqli_query($db_connect,$query))
+            unset($filters);
+			if ($res=mysqli_query($db_connect,$query))
             {
-                while ($row = mysqli_fetch_assoc($res))
+                
+				while ($row = mysqli_fetch_assoc($res))
                 {
                     $filters[] = $row;
                 }
-                foreach ($filters as $filter)
-                {
-                    $filter_id=$filter['goodshasfeature_valueint'];
-                    $feature_id=$filter['feature_id'];
-                    //проверяем, если значение фильтра равно шаблону, то записываем соответствующее нему значение нового фильтра
-                    //компьюторный
-                    if ($feature_id==128&&$filter_id==10)
-                    {
-                        $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
-                            "goodshasfeature_valuetext, goods_id, feature_id) ".
-                            "VALUES (10,0,'',$id,151)";
-                        mysqli_query($db_connect,$query);
-                        echo "компьюторный: $query <br>";
-                    }
-                    //стол-книжка
-                    if ($feature_id==128&&$filter_id==12)
-                    {
-                        $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
-                            "goodshasfeature_valuetext, goods_id, feature_id) ".
-                            "VALUES (33,0,'',$id,151)";
-                        mysqli_query($db_connect,$query);
-                        echo "стол-книжка: $query <br>";
-                    }
-                    //письменный
-                    if ($feature_id==128&&$filter_id==11)
-                    {
-                        $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
-                            "goodshasfeature_valuetext, goods_id, feature_id) ".
-                            "VALUES (11,0,'',$id,151)";
-                        mysqli_query($db_connect,$query);
-                        echo "письменный: $query <br>";
-                    }
-
-                }
+                if (is_array ($filters))
+				{
+					foreach ($filters as $filter)
+					{
+						$filter_id=$filter['goodshasfeature_valueint'];
+						$feature_id=$filter['feature_id'];
+						//проверяем, если значение фильтра равно шаблону, то записываем соответствующее нему значение нового фильтра
+						//компьюторный
+						if ($feature_id==128&&$filter_id==10)
+						{
+							$query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
+								"goodshasfeature_valuetext, goods_id, feature_id) ".
+								"VALUES (10,0,'',$id,151)";
+							mysqli_query($db_connect,$query);
+							echo "компьюторный: $query <br>";
+						}
+						//стол-книжка
+						if ($feature_id==128&&$filter_id==12)
+						{
+							$query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
+								"goodshasfeature_valuetext, goods_id, feature_id) ".
+								"VALUES (33,0,'',$id,151)";
+							mysqli_query($db_connect,$query);
+							echo "стол-книжка: $query <br>";
+						}
+						//письменный
+						if ($feature_id==128&&$filter_id==11)
+						{
+							$query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
+								"goodshasfeature_valuetext, goods_id, feature_id) ".
+								"VALUES (11,0,'',$id,151)";
+							mysqli_query($db_connect,$query);
+							echo "письменный: $query <br>";
+						}
+					}
+				}
+				
             }
-
         }
     }
+	else 
+	{
+		echo "Error!";
+		return;
+	}
     mysqli_close($db_connect);
 }
-
 $runtime = new Timer();
 $runtime->setStartTime();
+//echo "test";
 set_filters();
-
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
-
-
 class Timer
 {
     /**
@@ -110,7 +128,6 @@ class Timer
      * @var время конца выполнения
      */
     private $end_time;
-
     /**
      * встанавливаем время начала выполнения скрипта
      */
@@ -118,7 +135,6 @@ class Timer
     {
         $this->start_time = microtime(true);
     }
-
     /**
      * устанавливаем время конца выполнения скрипта
      */
@@ -126,14 +142,13 @@ class Timer
     {
         $this->end_time = microtime(true);
     }
-
     /**
      * @return mixed время выполения
      * возвращаем время выполнения скрипта в секундах
      */
     public function getRunTime()
     {
-        return $this->start_time-$this->end_time;
+        return $this->end_time-$this->start_time;
     }
 }
 /**
@@ -175,7 +190,4 @@ function UTF8toCP1251($str)
     $str = str_replace("I", "І", $str);
     return $str;
 }
-
 ?>
-
-
