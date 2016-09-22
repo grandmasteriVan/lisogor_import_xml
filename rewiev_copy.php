@@ -25,6 +25,9 @@ define ("pass", "");
  */
 define ("db", "mebli");
 //define ("db", "uh333660_mebli");
+/**
+ *
+ */
 function copy_review_sof()
 {
     //сначала мы выбираем все диваны фабрики софиевка
@@ -105,11 +108,11 @@ function copy_review_sof()
 								foreach ($urls_keiv as $url_keiv)
 								{
 									$new_url=$url_keiv['url_id'];
-                                    $name_kiev=str_replace('-','',$url_keiv['url_name']);
-									$query="INSERT INTO review (review_name, review_active, review_created, review_content review_username, ".
-                                        "review_usermail, review_ip, review_rating, review_parent, review_showonsite, review_phone, ".
-                                        "review_fio, review_sandmoney, review_sandmoney50, review_sandmoney70, url_id) ".
-                                        "VALUES ('$name_kiev', $rev_active, $rev_created, '$rev_text', '$rev_username', '$rev_mail', ".
+                                    $name_kiev=str_replace('-',' ',$url_keiv['url_name']);
+									$query="INSERT INTO review (review_name, review_active, review_created, review_content, review_username, ".
+                                        "review_useremail, review_ip, review_rating, review_parent, review_showonsite, review_phone, ".
+                                        "review_fio, review_sendmoney, review_sendmoney50, review_sendmoney70, url_id) ".
+                                        "VALUES ('$name_kiev', $rev_active, STR_TO_DATE('$rev_created', '%Y-%m-%d %H:%i:%s'), '$rev_text', '$rev_username', '$rev_mail', ".
                                         "'$rev_ip', $rev_rating, $rev_parent, $rev_show, '$rev_phone', '$rev_fio', $rev_money, $rev_money50, $rev_money70, $new_url)";
 									mysqli_query($db_connect,$query);
 									echo "$query <br>";
