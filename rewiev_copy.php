@@ -94,7 +94,7 @@ function copy_review_sof()
                             $rev_money=$review['review_sendmoney'];
                             $rev_money50=$review['review_sendmoney50'];
                             $rev_money70=$review['review_sendmoney70'];
-                            if
+                            
 
 						    //если не встретили название, то добавляем новый отзыв
 							$query="SELECT url_id, url_name FROM url WHERE url_name=(SELECT goods_url FROM goods WHERE goods_name_manager='$name_sof' AND factory_id=136)";
