@@ -108,9 +108,9 @@ function copy_review_sof()
                                     $name_kiev=str_replace('-','',$url_keiv['url_name']);
 									$query="INSERT INTO review (review_name, review_active, review_created, review_content review_username, ".
                                         "review_usermail, review_ip, review_rating, review_parent, review_showonsite, review_phone, ".
-                                        "review_fio, review_sandmoney, review_sandmoney50, review_sandmoney70) ".
+                                        "review_fio, review_sandmoney, review_sandmoney50, review_sandmoney70, url_id) ".
                                         "VALUES ('$name_kiev', $rev_active, $rev_created, '$rev_text', '$rev_username', '$rev_mail', ".
-                                        "'$rev_ip', $rev_rating, $rev_parent, $rev_show, '$rev_phone', '$rev_fio', $rev_money, $rev_money50, $rev_money70)";
+                                        "'$rev_ip', $rev_rating, $rev_parent, $rev_show, '$rev_phone', '$rev_fio', $rev_money, $rev_money50, $rev_money70, $new_url)";
 									mysqli_query($db_connect,$query);
 									echo "$query <br>";
                                     //а теперь копируем рисунки к нему
