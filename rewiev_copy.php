@@ -84,16 +84,17 @@ function copy_review_sof()
 						    $rev_active=$review['review_active'];
                             $rev_created=$review['review_created'];
                             $rev_username=$review['review_username'];
-                            $rev_mail=$review['review_usermail'];
+                            $rev_mail=$review['review_useremail'];
                             $rev_ip=$review['review_ip'];
                             $rev_rating=$review['review_rating'];
                             $rev_parent=$review['review_parent'];
                             $rev_show=$review['review_showonsite'];
                             $rev_phone=$review['review_phone'];
                             $rev_fio=$review['review_fio'];
-                            $rev_money=$review['review_sandmoney'];
-                            $rev_money50=$review['review_sandmoney50'];
-                            $rev_money70=$review['review_sandmoney70'];
+                            $rev_money=$review['review_sendmoney'];
+                            $rev_money50=$review['review_sendmoney50'];
+                            $rev_money70=$review['review_sendmoney70'];
+                            if
 
 						    //если не встретили название, то добавляем новый отзыв
 							$query="SELECT url_id, url_name FROM url WHERE url_name=(SELECT goods_url FROM goods WHERE goods_name_manager='$name_sof' AND factory_id=136)";
@@ -109,6 +110,8 @@ function copy_review_sof()
 								{
 									$new_url=$url_keiv['url_id'];
                                     $name_kiev=str_replace('-',' ',$url_keiv['url_name']);
+                                    $name_kiev=str_replace('mod','',$name_kiev);
+                                    $name_kiev=preg_replace('/\d/','',$name_kiev);
 									$query="INSERT INTO review (review_name, review_active, review_created, review_content, review_username, ".
                                         "review_useremail, review_ip, review_rating, review_parent, review_showonsite, review_phone, ".
                                         "review_fio, review_sendmoney, review_sendmoney50, review_sendmoney70, url_id) ".
