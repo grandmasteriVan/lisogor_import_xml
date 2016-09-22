@@ -95,7 +95,6 @@ function copy_review_sof()
                             $rev_money50=$review['review_sendmoney50'];
                             $rev_money70=$review['review_sendmoney70'];
                             
-
 						    //если не встретили название, то добавляем новый отзыв
 							$query="SELECT url_id, url_name FROM url WHERE url_name=(SELECT goods_url FROM goods WHERE goods_name_manager='$name_sof' AND factory_id=136)";
 							unset ($urls_keiv);
@@ -142,6 +141,11 @@ function copy_review_sof()
                                             mysqli_query($db_connect,$query);
                                             echo "new review pict: $query <br>";
                                         }
+										$old=$_SERVER['DOCUMENT_ROOT']."/content/review/".$rev_id;
+										$new=$_SERVER['DOCUMENT_ROOT']."/content/review/".$new_rev_id;
+										echo "Old: $old<br>";
+										copy_files($old, $new);
+										
                                     }
 								}
 							}
@@ -238,5 +242,26 @@ function UTF8toCP1251($str)
     $str = str_replace("i", "і", $str);
     $str = str_replace("I", "І", $str);
     return $str;
+}
+
+function copy_files($source, $res)
+{ 
+	mkdir($res."/", 0777);
+    $hendle = opendir($source); // открываем директорию 
+    while ($file = readdir($hendle)) { 
+        if (($file!=".")&&($file!="..")) { 
+            if (is_dir($source."/".$file) == true) { 
+                if(is_dir($res."/".$file)!=true) // существует ли папка 
+                    mkdir($res."/".$file, 0777); // создаю папку 
+                    copy_files ($source."/".$file, $res."/".$file); 
+            } 
+            else{ 
+                if(!copy($source."/".$file, $res."/".$file)) {  
+                    print ("при копировании файла $file произошла ошибка...<br>\n");  
+                }// end if copy 
+            }  
+        } // else $file == .. 
+    } // end while 
+    closedir($hendle); 
 }
 ?>
