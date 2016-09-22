@@ -77,13 +77,27 @@ function copy_review_sof()
 						//проверяем есть ли в тексте отзыва название дивана
 						if (mb_strpos ($rev_text,$name_trunc)==false)
 						{
-							//если не встретили название, то добавляем отзыв к новому дивану
-							$query="SELECT url_id FROM url WHERE url_name=(SELECT goods_url FROM goods WHERE goods_name_manager='$name_sof' AND factory_id=136)";
+                            //копируем поля старого отзыва
+						    $rev_active=$review['review_active'];
+                            $rev_created=$review['review_created'];
+                            $rev_username=$review['review_username'];
+                            $rev_mail=$review['review_usermail'];
+                            $rev_ip=$review['review_ip'];
+                            $rev_rating=$review['review_rating'];
+                            $rev_parent=$review['review_parent'];
+                            $rev_show=$review['review_showonsite'];
+                            $rev_phone=$review['review_phone'];
+                            $rev_fio=$review['review_fio'];
+                            $rev_money=$review['review_sandmoney'];
+                            $rev_money50=$review['review_sandmoney50'];
+                            $rev_money70=$review['review_sandmoney70'];
+
+						    //если не встретили название, то добавляем новый отзыв
+							$query="SELECT url_id, url_name FROM url WHERE url_name=(SELECT goods_url FROM goods WHERE goods_name_manager='$name_sof' AND factory_id=136)";
 							unset ($urls_keiv);
 							if ($res=mysqli_query($db_connect,$query))
 							{
-								
-								while ($row = mysqli_fetch_assoc($res))
+                                while ($row = mysqli_fetch_assoc($res))
 								{
 									//
 									$urls_keiv[] = $row;
@@ -91,9 +105,38 @@ function copy_review_sof()
 								foreach ($urls_keiv as $url_keiv)
 								{
 									$new_url=$url_keiv['url_id'];
-									$query="UPDATE review SET review_url2=$new_url WHERE review_id=$rev_id";
+                                    $name_kiev=str_replace('-','',$url_keiv['url_name']);
+									$query="INSERT INTO review (review_name, review_active, review_created, review_content review_username, ".
+                                        "review_usermail, review_ip, review_rating, review_parent, review_showonsite, review_phone, ".
+                                        "review_fio, review_sandmoney, review_sandmoney50, review_sandmoney70) ".
+                                        "VALUES ('$name_kiev', $rev_active, $rev_created, '$rev_text', '$rev_username', '$rev_mail', ".
+                                        "'$rev_ip', $rev_rating, $rev_parent, $rev_show, '$rev_phone', '$rev_fio', $rev_money, $rev_money50, $rev_money70)";
 									mysqli_query($db_connect,$query);
 									echo "$query <br>";
+                                    //а теперь копируем рисунки к нему
+                                    $new_rev_id=mysqli_insert_id($db_connect);
+                                    $query="SELECT * FROM reviewpict WHERE review_id=$rev_id";
+                                    unset($old_revs);
+                                    if ($res=mysqli_query($db_connect,$query))
+                                    {
+                                        while ($row = mysqli_fetch_assoc($res))
+                                        {
+                                            //
+                                            $old_revs[] = $row;
+                                        }
+                                        foreach ($old_revs as $old_rev)
+                                        {
+                                            $pict_name=$old_rev['reviewpict_name'];
+                                            $pict_active=$old_rev['reviewpict_active'];
+                                            $file=$old_rev['reviewpict_filename'];
+                                            $file_ext=$old_rev['reviewpict_ext'];
+                                            $query="INSERT INTO reviewpict (reviewpict_name, reviewpict_active, ".
+                                                "reviewpict_filename, reviewpict_ext, review_id) ".
+                                                "VALUES ('$pict_name', $rev_active, '$file', '$file_ext', $new_rev_id)";
+                                            mysqli_query($db_connect,$query);
+                                            echo "new review pict: $query <br>";
+                                        }
+                                    }
 								}
 							}
 						}
