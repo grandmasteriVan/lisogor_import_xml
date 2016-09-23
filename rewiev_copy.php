@@ -124,13 +124,15 @@ function copy_review_sof()
                                     unset($old_revs);
                                     if ($res=mysqli_query($db_connect,$query))
                                     {
-                                        while ($row = mysqli_fetch_assoc($res))
+                                        
+										while ($row = mysqli_fetch_assoc($res))
                                         {
                                             //
                                             $old_revs[] = $row;
                                         }
                                         foreach ($old_revs as $old_rev)
                                         {
+											
                                             $pict_name=$old_rev['reviewpict_name'];
                                             $pict_active=$old_rev['reviewpict_active'];
                                             $file=$old_rev['reviewpict_filename'];
@@ -140,11 +142,47 @@ function copy_review_sof()
                                                 "VALUES ('$pict_name', $rev_active, '$file', '$file_ext', $new_rev_id)";
                                             mysqli_query($db_connect,$query);
                                             echo "new review pict: $query <br>";
+											$new_pict_id=mysqli_insert_id($db_connect);
+											echo "new pict id: $new_pict_id";
+											$old=$_SERVER['DOCUMENT_ROOT']."/content/review/".$rev_id;
+											$new=$_SERVER['DOCUMENT_ROOT']."/content/review/".$new_rev_id;
+											mkdir($new."/", 0777);
+											$hendle = opendir($old);
+											while ($file1 = readdir($hendle))
+											{
+												echo "$file1<br>";
+												if (mb_strpos($file1,"review"))
+												{
+													if(!copy($old."/".$file1, $new."/".$file1."_$new_pict_id")) 
+													{
+														print ("при копировании файла $file произошла ошибка...<br>\n");
+													}
+													else
+													{
+														echo "файл $new/$file1_$new_pict_id скопирован<br>";
+													}
+												}
+												if (mb_strpos($file1,$file)===0)
+												{
+													if(!copy($old."/".$file1, $new."/".$file1."_$new_pict_id"))
+													{
+														print ("при копировании файла $file произошла ошибка...<br>\n");
+													}
+													else
+													{
+														echo "файл $new/$file1 скопирован<br>";
+													}
+												}
+											}
+											
+											closedir($hendle);
+											
+											
                                         }
-										$old=$_SERVER['DOCUMENT_ROOT']."/content/review/".$rev_id;
-										$new=$_SERVER['DOCUMENT_ROOT']."/content/review/".$new_rev_id;
-										echo "Old: $old<br>";
-										copy_files($old, $new);
+										//$old=$_SERVER['DOCUMENT_ROOT']."/content/review/".$rev_id;
+										//$new=$_SERVER['DOCUMENT_ROOT']."/content/review/".$new_rev_id;
+										//echo "Old: $old<br>";
+										//copy_files($old, $new);
 										
                                     }
 								}
@@ -244,7 +282,7 @@ function UTF8toCP1251($str)
     return $str;
 }
 
-function copy_files($source, $res)
+/*function copy_files($source, $res, $id)
 { 
 	mkdir($res."/", 0777);
     $hendle = opendir($source); // открываем директорию 
@@ -256,12 +294,12 @@ function copy_files($source, $res)
                     copy_files ($source."/".$file, $res."/".$file); 
             } 
             else{ 
-                if(!copy($source."/".$file, $res."/".$file)) {  
+                if(!copy($source."/".$file, $res."/".$file."_$id")) {  
                     print ("при копировании файла $file произошла ошибка...<br>\n");  
                 }// end if copy 
             }  
         } // else $file == .. 
     } // end while 
     closedir($hendle); 
-}
+}*/
 ?>
