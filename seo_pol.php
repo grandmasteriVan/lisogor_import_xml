@@ -28,7 +28,7 @@ define ("db", "uh333660_mebli");
 function seo_velam_matr()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id FROM goods WHERE goodskind_id=40 AND factory_id=137";
+    $query="SELECT * FROM goods WHERE goodskind_id=40 AND factory_id=137";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
