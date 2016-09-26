@@ -73,7 +73,7 @@ function copy_review_sof()
 						$rev_text=$review['review_content'];
 						$name_trunc=str_replace(UTF8toCP1251("Диван "),"",$name_sof);
 						$name_trunc=preg_replace('/\d/','',$name_trunc);
-						//$name_trunc=str_replace(' ','',$name_trunc);
+						$name_trunc=str_replace('-','',$name_trunc);
 						echo "name_trunc: $name_trunc<br>";
 						echo "rev_text: $rev_text<br>";
 						//$name_trunc=UTF8toCP1251($name_trunc);
@@ -120,6 +120,7 @@ function copy_review_sof()
 									echo "$query <br>";
                                     //а теперь копируем рисунки к нему
                                     $new_rev_id=mysqli_insert_id($db_connect);
+									
                                     $query="SELECT * FROM reviewpict WHERE review_id=$rev_id";
                                     unset($old_revs);
                                     if ($res=mysqli_query($db_connect,$query))
@@ -134,6 +135,8 @@ function copy_review_sof()
                                         {
 											
                                             $pict_name=$old_rev['reviewpict_name'];
+											//$pict_name=preg_replace('/\d/','',$pict_name);
+											
                                             $pict_active=$old_rev['reviewpict_active'];
                                             $file=$old_rev['reviewpict_filename'];
                                             $file_ext=$old_rev['reviewpict_ext'];
@@ -144,6 +147,13 @@ function copy_review_sof()
                                             echo "new review pict: $query <br>";
 											$new_pict_id=mysqli_insert_id($db_connect);
 											echo "new pict id: $new_pict_id";
+											//после того, как вставили запись в таблице - меняем в ней имя файла на правильное!
+											$file=preg_replace('/\d/','',$file);
+											$file=str_replace('_','',$file);
+											$file=$file."_$new_pict_id";
+											$query="UPDATE reviewpict SET reviewpict_filename='$file' WHERE reviewpict_id=$new_pict_id";
+											mysqli_query($db_connect,$query);
+                                            echo "renamed review pict: $query <br>";
 											$old=$_SERVER['DOCUMENT_ROOT']."/content/review/".$rev_id;
 											$new=$_SERVER['DOCUMENT_ROOT']."/content/review/".$new_rev_id;
 											mkdir($new."/", 0777);
@@ -153,7 +163,7 @@ function copy_review_sof()
 												echo "$file1<br>";
 												if (mb_strpos($file1,"review"))
 												{
-													if(!copy($old."/".$file1, $new."/".$file1."_$new_pict_id")) 
+													if(!copy($old."/".$file1, $new."/"."preview_$new_pict_id.jpg")) 
 													{
 														print ("при копировании файла $file произошла ошибка...<br>\n");
 													}
@@ -162,15 +172,15 @@ function copy_review_sof()
 														echo "файл $new/$file1_$new_pict_id скопирован<br>";
 													}
 												}
-												if (mb_strpos($file1,$file)===0)
+												if (mb_strpos($file1,$old_rev['reviewpict_filename'])===0)
 												{
-													if(!copy($old."/".$file1, $new."/".$file1."_$new_pict_id"))
+													if(!copy($old."/".$file1, $new."/".$file."_$new_pict_id.$file_ext"))
 													{
-														print ("при копировании файла $file произошла ошибка...<br>\n");
+														print ("при копировании файла $file1 произошла ошибка...<br>\n");
 													}
 													else
 													{
-														echo "файл $new/$file1 скопирован<br>";
+														echo "файл $new/$file скопирован<br>";
 													}
 												}
 											}
