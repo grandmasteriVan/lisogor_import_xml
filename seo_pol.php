@@ -29,7 +29,7 @@ define ("db", "uh333660_mebli");
 function seo_velam_matr()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id FROM goods WHERE goodskind_id=35 AND factory_id=137";
+    $query="SELECT goods_id FROM goods WHERE goodskind_id=40 AND factory_id=137";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
@@ -227,15 +227,32 @@ function seo_lvs()
             $id=$good['goods_id'];
             $name=$good['goods_name'];
             $header=$good['goods_name'];
-            $name_trunc=str_replace(UTF8toCP1251("Диван "),"",$name);
-            $title=$name_trunc.UTF8toCP1251(" диван. Купить диван со склада в Киеве");
-            $keywords=UTF8toCP1251("диваны, ").$name.UTF8toCP1251(", склад мебели, купить диван, интернет магазин мебели, недорогие диваны, цены, фото, отзывы.");
-            $key_h=UTF8toCP1251("Фабрика ЛВС. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
-            $key_f=UTF8toCP1251("Фабрика ЛВС. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-            $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине «Файні-меблі», Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
-            $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
-            mysqli_query($db_connect,$query);
-            echo $query."<br>";
+            $tcharter=$good['goods_maintcharter'];
+            if ($tcharter==1)
+            {
+                $name_trunc=str_replace(UTF8toCP1251("Диван "),"",$name);
+                $title=$name_trunc.UTF8toCP1251(" диван. Купить диван со склада в Киеве");
+                $keywords=UTF8toCP1251("диваны, ").$name.UTF8toCP1251(", склад мебели, купить диван, интернет магазин мебели, недорогие диваны, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика ЛВС. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика ЛВС. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине «Файні-меблі», Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+            if ($tcharter==2)
+            {
+                $name_trunc=str_replace(UTF8toCP1251("Кресло "),"",$name);
+                $title=$name_trunc.UTF8toCP1251(" кресло. Купить кресло со склада в Киеве");
+                $keywords=UTF8toCP1251("кресла, ").$name.UTF8toCP1251(", склад мебели, купить кресло, интернет магазин мебели, недорогие кресла, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика ЛВС. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика ЛВС. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине «Файні-меблі», Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+
             //$header=$good['goods_header'];
             /*$title=$good['goods_title'];
             $keywords=$good['goods_keyw'];
