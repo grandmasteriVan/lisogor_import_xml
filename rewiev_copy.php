@@ -8,23 +8,23 @@
 /**
  * database host
  */
-define ("host","localhost");
-//define ("host","10.0.0.2");
+//define ("host","localhost");
+define ("host","10.0.0.2");
 /**
  * database username
  */
-define ("user", "root");
-//define ("user", "uh333660_mebli");
+//define ("user", "root");
+define ("user", "uh333660_mebli");
 /**
  * database password
  */
-define ("pass", "");
-//define ("pass", "Z7A8JqUh");
+//define ("pass", "");
+define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
-define ("db", "mebli");
-//define ("db", "uh333660_mebli");
+//define ("db", "mebli");
+define ("db", "uh333660_mebli");
 /**
  *
  */
@@ -156,6 +156,7 @@ function copy_review_sof()
                                             echo "renamed review pict: $query <br>";
 											$old=$_SERVER['DOCUMENT_ROOT']."/content/review/".$rev_id;
 											$new=$_SERVER['DOCUMENT_ROOT']."/content/review/".$new_rev_id;
+											//создаем каталог и копируем файлы
 											mkdir($new."/", 0777);
 											$hendle = opendir($old);
 											while ($file1 = readdir($hendle))
@@ -312,4 +313,5 @@ function UTF8toCP1251($str)
     } // end while 
     closedir($hendle); 
 }*/
+
 ?>
