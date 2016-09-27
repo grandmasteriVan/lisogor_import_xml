@@ -24,7 +24,6 @@ define ("pass", "Z7A8JqUh");
 define ("db", "uh333660_mebli");
 /**
  * @param $factory_id integer - айди фабрики
- * @param $goodskind integer - вид товара
  * @return array - массив, содержащий список всех родительских позиций
  * возвращает список всех родительских товаров, которые принадлежат к оной фабрике и типу товара
  */
@@ -47,7 +46,6 @@ function parrent_matr($factory_id)
 }
 /**
  * @param $factory_id integer - айди фабрики
- * @param $goodskind integer - вид товара
  * @return array - массив, содержащий список дочерних позиций
  * возвращает список всех дочерних товаров, которые принадлежат к оной фабрике и типу товара
  */
@@ -65,6 +63,11 @@ function mod_matr($factory_id)
     mysqli_close($db_connect);
     return $arr;
 }
+
+/**
+ * @param $factory_id integer - айди фабрики
+ * уменьшает изображения в описании путем замены размера в тегах рисунка
+ */
 function res_img($factory_id)
 {
 	//echo "Y!";
@@ -93,6 +96,12 @@ function res_img($factory_id)
     mysqli_close($db_connect);
 }
 
+/**
+ * @param $factory_id integer - айди фабрики
+ * выводит 2 отдельных списка
+ * 1: список основных позиций по фабрике
+ * 2: список всех модификаций по фабрике
+ */
 function count_matr($factory_id)
 {
     $parrent_matr=parrent_matr($factory_id);
