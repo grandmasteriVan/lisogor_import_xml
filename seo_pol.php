@@ -45,7 +45,7 @@ function seo_velam_matr()
             $keywords=UTF8toCP1251("матрасы, ").$name.UTF8toCP1251(", склад мебели, купить матрас, интернет магазин мебели, недорогие матрасы, цены, фото, отзывы.");
             $key_h=UTF8toCP1251("Фабрика Velam. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
             $key_f=UTF8toCP1251("Фабрика Velam. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-            $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине «Файні-меблі», Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+            $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
             $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
             mysqli_query($db_connect,$query);
             echo $query."<br>";

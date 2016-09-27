@@ -26,7 +26,8 @@ define ("pass", "Z7A8JqUh");
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
 /**
- *
+ *копирует отзывы со старых диванов Софиевки в новые (фабрика Киев)
+ * копируются лишь те отзывы, где в тексте не упоминается старое название дивана
  */
 function copy_review_sof()
 {
@@ -170,7 +171,7 @@ function copy_review_sof()
 													}
 													else
 													{
-														echo "файл $new/$file1_$new_pict_id скопирован<br>";
+														echo "файл $new/$file1"."_"."$new_pict_id скопирован<br>";
 													}
 												}
 												if (mb_strpos($file1,$old_rev['reviewpict_filename'])===0)
