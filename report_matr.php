@@ -22,17 +22,16 @@ define ("pass", "Z7A8JqUh");
  */
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
-
 /**
  * @param $factory_id integer - айди фабрики
  * @param $goodskind integer - вид товара
  * @return array - массив, содержащий список всех родительских позиций
  * возвращает список всех родительских товаров, которые принадлежат к оной фабрике и типу товара
  */
-function parrent_matr($factory_id, $goodskind=40)
+function parrent_matr($factory_id)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_article, goods_name FROM goods WHERE goodskind_id=$goodskind and goods_parent=0 AND factory_id=$factory_id";
+    $query="SELECT goods_article, goods_name FROM goods WHERE goods_parent=0 AND factory_id=$factory_id";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
@@ -46,17 +45,16 @@ function parrent_matr($factory_id, $goodskind=40)
 	echo "</pre>";*/
     return $arr;
 }
-
 /**
  * @param $factory_id integer - айди фабрики
  * @param $goodskind integer - вид товара
  * @return array - массив, содержащий список дочерних позиций
  * возвращает список всех дочерних товаров, которые принадлежат к оной фабрике и типу товара
  */
-function mod_matr($factory_id, $goodskind=40)
+function mod_matr($factory_id)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_article, goods_name FROM goods WHERE goodskind_id=$goodskind AND goods_parent<>0 AND factory_id=$factory_id";
+    $query="SELECT goods_article, goods_name FROM goods WHERE goods_parent<>0 AND factory_id=$factory_id";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
@@ -66,6 +64,33 @@ function mod_matr($factory_id, $goodskind=40)
     }
     mysqli_close($db_connect);
     return $arr;
+}
+function res_img($factory_id)
+{
+	//echo "Y!";
+	$db_connect=mysqli_connect(host,user,pass,db);
+    $query="SELECT goods_id, goods_content FROM goods WHERE AND factory_id=$factory_id";
+	if ($res=mysqli_query($db_connect,$query))
+    {
+        
+		while ($row = mysqli_fetch_assoc($res))
+        {
+            $arr[] = $row;
+        }
+		//print_r($arr);
+		foreach ($arr as $matr)
+		{
+			$id=$matr['goods_id'];
+			$cont=$matr['goods_content'];
+			$new_cont=str_replace("800px","700px",$cont);
+			echo "NEW: $new_cont<br>";
+			$query="UPDATE goods SET goods_content='$new_cont' WHERE goods_id=$id";
+			mysqli_query($db_connect,$query);
+			//echo "$query<br>";
+
+		}
+    }
+    mysqli_close($db_connect);
 }
 
 function count_matr($factory_id)
@@ -78,12 +103,11 @@ function count_matr($factory_id)
     {
         $name=$parrent['goods_name'];
         $article=$parrent['goods_article'];
-        if (mb_strpos ($name,UTF8toCP1251("Копия"))!=false)
+        if (mb_strpos ($name,UTF8toCP1251("Копия"))==false)
         {
             echo "$i. $article $name<br>";
             $i++;
         }
-
     }
     $i=1;
     echo "<br>Модификации:<br>";
@@ -91,16 +115,15 @@ function count_matr($factory_id)
     {
         $name=$mod['goods_name'];
         $article=$mod['goods_article'];
-        if (mb_strpos ($name,UTF8toCP1251("Копия"))!=false)
+        if (mb_strpos ($name,UTF8toCP1251("Копия"))==false)
         {
             echo "$i. $article $name<br>";
             $i++;
         }
+	}
 }
-
 count_matr(137);
-
-
+res_img(137);
 /**
  * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
  * @param $str string входящяя строка в кодировке UTF-8
@@ -140,4 +163,5 @@ function UTF8toCP1251($str)
     $str = str_replace("I", "І", $str);
     return $str;
 }
+
 ?>
