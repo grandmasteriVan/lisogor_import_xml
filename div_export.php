@@ -68,9 +68,14 @@ function export_filters()
 			
             if (mb_strpos ($bar,"Есть"))
             {
+                //аксесуары
                 $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (52,$id,5)";
                 mysqli_query($db_connect,$query);
 				echo $query."<br>";
+                //диваны с баром
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (112,$id,11)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
             }
             //на кухню
             $kitchen=$arr[9];
@@ -86,12 +91,17 @@ function export_filters()
             //ниша для белья
             $niche=$arr[8];
             $niche=strip_tags($niche);
-            $niche=str_replace("Подушки: "," ",$niche);
+            $niche=str_replace("Ниша для белья: "," ",$niche);
             if (mb_strpos ($niche,"Есть"))
             {
-                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (50,$id,5)";
+                //аксессуар
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (51,$id,5)";
                 mysqli_query($db_connect,$query);
 				echo $query."<br>";
+                //диваны с ящиками
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (113,$id,11)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
             }
             //подушки
             $pillow=$arr[7];
@@ -99,7 +109,7 @@ function export_filters()
             $pillow=str_replace("Подушки: "," ",$pillow);
             if (mb_strpos ($pillow,"Есть"))
             {
-                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (51,$id,5)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (50,$id,5)";
                 mysqli_query($db_connect,$query);
 				echo $query."<br>";
             }
@@ -165,7 +175,7 @@ function export_filters()
             if (mb_strpos ($trans,"Еврокнижка"))
             {
                 //механизм
-                $query="INSERT INTO goodshasfeature goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (4,$id,1)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (4,$id,1)";
                 mysqli_query($db_connect,$query);
 				echo $query."<br>";
                 //трансвормация
@@ -302,7 +312,7 @@ function export_filters()
             }
             if (mb_strpos ($type,"Кресло"))
             {
-                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (120,$id,15)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (99,$id,15)";
                 mysqli_query($db_connect,$query);
 				echo $query."<br>";
             }
@@ -326,7 +336,7 @@ function export_filters()
             }
             if (mb_strpos ($type,"Софа"))
             {
-                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (120,$id,15)";
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (103,$id,15)";
                 mysqli_query($db_connect,$query);
 				echo $query."<br>";
             }
@@ -533,6 +543,44 @@ function export_filters()
                 mysqli_query($db_connect,$query);
 				echo $query."<br>";
             }
+            if (mb_strpos ($kindof,"Круглые диваны"))
+            {
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (136,$id,11)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+            if (mb_strpos ($kindof,"Для домашних животных"))
+            {
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (138,$id,11)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+            if (mb_strpos ($kindof,"Для домашнего кинотеатра"))
+            {
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (137,$id,11)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+            if (mb_strpos ($kindof,"Диваны для богатырей"))
+            {
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (108,$id,11)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+            if (mb_strpos ($kindof,"Ортопедические диваны"))
+            {
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (61,$id,8)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+            if (mb_strpos ($kindof,"Полукруглые диваны"))
+            {
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (75,$id,11)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+
+
 			
 			//фабрика feature_id=14
 			$factory=$arr[3];
@@ -667,6 +715,51 @@ function del_filters()
 	mysqli_close($db_connect);
 }
 //////////////////////////////////////////
+$runtime = new Timer();
+$runtime->setStartTime();
+echo "Deleteing old features... ";
 del_filters();
+echo "Done!<br>";
 export_filters();
+$runtime->setEndTime();
+echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
+//////////////////////////////////////////
+/**
+ * Class Timer
+ * замеряем время выполнения скрипта
+ */
+class Timer
+{
+    /**
+     * @var время начала выпонения
+     */
+    private $start_time;
+    /**
+     * @var время конца выполнения
+     */
+    private $end_time;
+    /**
+     * встанавливаем время начала выполнения скрипта
+     */
+    public function setStartTime()
+    {
+        $this->start_time = microtime(true);
+    }
+    /**
+     * устанавливаем время конца выполнения скрипта
+     */
+    public function setEndTime()
+    {
+        $this->end_time = microtime(true);
+    }
+    /**
+     * @return mixed время выполения
+     * возвращаем время выполнения скрипта в секундах
+     */
+    public function getRunTime()
+    {
+        return $this->start_time-$this->end_time;
+    }
+}
+
 ?>
