@@ -8,23 +8,23 @@
 /**
  * database host
  */
-//define ("host","localhost");
-define ("host","10.0.0.2");
+define ("host","localhost");
+//define ("host","10.0.0.2");
 /**
  * database username
  */
-//define ("user", "root");
-define ("user", "uh333660_mebli");
+define ("user", "root");
+//define ("user", "uh333660_mebli");
 /**
  * database password
  */
-//define ("pass", "");
-define ("pass", "Z7A8JqUh");
+define ("pass", "");
+//define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
-//define ("db", "mebli");
-define ("db", "uh333660_mebli");
+define ("db", "ddn");
+//define ("db", "uh333660_mebli");
 /**
  *копирует отзывы со старых диванов Софиевки в новые (фабрика Киев)
  * копируются лишь те отзывы, где в тексте не упоминается старое название дивана
@@ -33,44 +33,102 @@ function list_sof()
 {
     //сначала мы выбираем все диваны фабрики софиевка
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT * FROM goods WHERE factory_id=4";
+    $query="SELECT * FROM divan WHERE factory_id=4";
     if ($res=mysqli_query($db_connect,$query))
     {
-        while ($row = mysqli_fetch_assoc($res))
+        unset ($divs_sof);
+		while ($row = mysqli_fetch_assoc($res))
         {
             //список всех диванв софиевки
             $divs_sof[] = $row;
         }
-		//echo "<pre>";
+		echo "<pre>";
 		//print_r($divs_sof);
-		//echo "</pre>";
+		echo "</pre>";
         foreach ($divs_sof as $div_sof)
         {
             //находим все отзвывы к конкретному дивану
-            $id_sof=$div_sof['goods_id'];
-            $name_sof=$div_sof['goods_name'];
-            $url_sof=$div_sof['goods_url'];
-            $query="SELECT * FROM goods WHERE WHERE goods_name_manager='$name_sof' AND factory_id=136";
+            $id_sof=$div_sof['divan_id'];
+            $name_sof=$div_sof['divan_name'];
+            $url_sof=$div_sof['divan_url'];
+			$url_sof=UTF8toCP1251($url_sof);
+            $query="SELECT * FROM divan WHERE divan_name_manager='$name_sof' AND factory_id=29";
             if ($res=mysqli_query($db_connect,$query))
             {
-                while ($row = mysqli_fetch_assoc($res))
+                unset ($div_kiev);
+				while ($row = mysqli_fetch_assoc($res))
                 {
                     //все отзывы по конкретному дивану
                     $div_kiev[] = $row;
                 }
+				echo "<pre>";
+				//print_r($div_kiev);
+				echo "</pre>";
                 if (is_array($div_kiev))
                 {
                     foreach ($div_kiev as $div_new)
                     {
-                        $name_new=$div_new['goods_name'];
-                        $url_new=$div_new['goods_url'];
-                        echo "Name Old: $name_sof Url Old: $url_sof<br>Name new: $name_new Url new: $url_new<br><br>";
+                        $name_new=$div_new['divan_name'];
+                        $url_new=$div_new['divan_url'];
+						$url_new=UTF8toCP1251($url_new);
+                        $str= "divani.kiev.ua/$url_sof.html; divani.kiev.ua/$url_new.html".PHP_EOL;
+						file_put_contents("list_dn.csv", $str, FILE_APPEND);
                     }
                 }
 				
             }
         }
     }
+	file_put_contents("list_dn.csv", "AKCIA;AKCIA".PHP_EOL, FILE_APPEND);
+	//акция
+	$query="SELECT * FROM divan WHERE factory_id=18";
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        unset ($divs_sof);
+		while ($row = mysqli_fetch_assoc($res))
+        {
+            //список всех диванв софиевки
+            $divs_sof[] = $row;
+        }
+		echo "<pre>";
+		//print_r($divs_sof);
+		echo "</pre>";
+        foreach ($divs_sof as $div_sof)
+        {
+            //находим все отзвывы к конкретному дивану
+            $id_sof=$div_sof['divan_id'];
+            $name_sof=$div_sof['divan_name'];
+            $url_sof=$div_sof['divan_url'];
+			$url_sof=UTF8toCP1251($url_sof);
+			//echo $div_sof['divan_name_manager']."<br>";
+            $query="SELECT * FROM divan WHERE divan_name_manager='$name_sof' AND factory_id=18";
+            if ($res=mysqli_query($db_connect,$query))
+            {
+                unset ($div_kiev);
+				while ($row = mysqli_fetch_assoc($res))
+                {
+                    //все отзывы по конкретному дивану
+                    $div_kiev[] = $row;
+                }
+				echo "<pre>";
+				//print_r($div_kiev);
+				echo "</pre>";
+                if (is_array($div_kiev))
+                {
+                    foreach ($div_kiev as $div_new)
+                    {
+                        $name_new=$div_new['divan_name'];
+                        $url_new=$div_new['divan_url'];
+						$url_new=UTF8toCP1251($url_new);
+                        $str= "divani.kiev.ua/$url_sof.html; divani.kiev.ua/$url_new.html".PHP_EOL;
+						file_put_contents("list_dn.csv", $str, FILE_APPEND);
+                    }
+                }
+				
+            }
+        }
+    }
+	
     mysqli_close($db_connect);
 }
 $runtime = new Timer();
@@ -154,7 +212,6 @@ function UTF8toCP1251($str)
     $str = str_replace("I", "І", $str);
     return $str;
 }
-
 /*function copy_files($source, $res, $id)
 { 
 	mkdir($res."/", 0777);
@@ -175,5 +232,4 @@ function UTF8toCP1251($str)
     } // end while 
     closedir($hendle); 
 }*/
-
 ?>
