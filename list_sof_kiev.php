@@ -8,27 +8,57 @@
 /**
  * database host
  */
+//define ("host","localhost");
 define ("host","localhost");
-//define ("host","10.0.0.2");
 /**
  * database username
  */
-define ("user", "root");
-//define ("user", "uh333660_mebli");
+//define ("user", "root");
+define ("user", "shackieo_divani");
 /**
  * database password
  */
-define ("pass", "");
-//define ("pass", "Z7A8JqUh");
+//define ("pass", "");
+define ("pass", "d1van1SQL");
 /**
  * database name
  */
-define ("db", "ddn");
-//define ("db", "uh333660_mebli");
+//define ("db", "ddn");
+define ("db", "shackieo_divani");
 /**
  *копирует отзывы со старых диванов Софиевки в новые (фабрика Киев)
  * копируются лишь те отзывы, где в тексте не упоминается старое название дивана
  */
+function sett_off()
+ {
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="update divan set divan_stock=0 where factory_id=4";
+	mysqli_query($db_connect,$query);
+	echo $query."<br>";
+	$query="SELECT divan_id FROM divan where divan_name in (select divan_name_manager from divan) AND factory_id=18";
+	if ($res=mysqli_query($db_connect,$query))
+	{
+		while ($row = mysqli_fetch_assoc($res))
+        {
+            //список всех диванв софиевки
+            $divs_sof[] = $row;
+        }
+		foreach ($divs_sof as $div_sof)
+		{
+			$id=$div_sof['divan_id'];
+			$query="update divan set divan_stock=0 where divan_id=$id";
+			mysqli_query($db_connect,$query);
+			echo $query."<br>";
+		}
+		
+	}
+	else
+	{
+		echo "i am error";
+	}
+	mysqli_close($db_connect);
+ }
+ 
 function list_sof()
 {
     //сначала мы выбираем все диваны фабрики софиевка
@@ -133,7 +163,8 @@ function list_sof()
 }
 $runtime = new Timer();
 $runtime->setStartTime();
-list_sof();
+//list_sof();
+sett_off();
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
 /**
