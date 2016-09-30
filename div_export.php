@@ -537,6 +537,14 @@ function export_filters()
                 mysqli_query($db_connect,$query);
 				echo $query."<br>";
             }
+            //если не металокаркасс - то он деревянный. Исключая бескаркасные!!!
+            else
+            {
+                if (mb_strpos ($kindof,"Бескаркасные диваны")===false)
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (78,$id,12)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
             if (mb_strpos ($kindof,"Кожаные диваны"))
             {
                 $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (79,$id,13)";
@@ -576,6 +584,12 @@ function export_filters()
             if (mb_strpos ($kindof,"Полукруглые диваны"))
             {
                 $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (75,$id,11)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+            if (mb_strpos ($kindof,"Диваны с деревянными элементами"))
+            {
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (73,$id,11)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
             }
