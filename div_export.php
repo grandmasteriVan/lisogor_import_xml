@@ -724,7 +724,7 @@ function export_filters()
 function del_filters()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="DELETE FROM goodshasfeature WHERE feature_id<>2 AND feature_id<>10";
+    $query="DELETE FROM goodshasfeature WHERE feature_id<>2 AND feature_id<>10 AND feature_id<>14";
 	mysqli_query($db_connect,$query);
 	mysqli_close($db_connect);
 }
