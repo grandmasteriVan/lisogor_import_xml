@@ -94,7 +94,57 @@ function set_filters()
             }
             //По назначению
             $factory_id=$div['factory_id'];
+            //изначально считаем диван не ортопедическим и не для сна
+            $sleep=true;
+            $ortop=false;
             //пружинный блок+ламели фича=4 айди=6
+            $query="SELECT * FROM goodshasfeature WHERE feature_id=4 AND goods_id=$id AND goodshasfeature_valueint=6";
+            if ($res=mysqli_query($db_connect,$query))
+            {
+                unset($arr);
+                while ($row=mysqli_fetch_assoc($res))
+                {
+                    $arr[]=$row;
+                }
+                if (is_array($arr))
+                {
+                    $ortop=true;
+                }
+            }
+            //если фабрика == укризра или у нас есть запись ламели+пружинный блок - диван ортопедический
+            if ($factory_id==52||$ortop)
+            {
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
+                    "goodshasfeature_valuetext, goods_id, feature_id) ".
+                    "VALUES (3,0,'',$id,147)";
+                mysqli_query($db_connect,$query);
+                echo "ортопедический: $query<br>";
+            }
+            //для ежедневного сна
+            $query="SELECT * FROM goodshasfeature WHERE feature_id=3 AND goods_id=$id AND goodshasfeature_valueint=7";
+            if ($res=mysqli_query($db_connect,$query))
+            {
+                unset($arr);
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    $arr[] = $row;
+                }
+                if (is_array($arr))
+                {
+                    $sleep = false;
+                }
+            }
+            if ($sleep)
+            {
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
+                    "goodshasfeature_valuetext, goods_id, feature_id) ".
+                    "VALUES (34,0,'',$id,147)";
+                mysqli_query($db_connect,$query);
+                echo "для ежедневнгого сна: $query<br>";
+            }
+
+            //трансформация
+
         }
     }
 

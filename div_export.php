@@ -594,6 +594,11 @@ function export_filters()
                 echo $query."<br>";
             }
 
+            //оббивка - ставим всем ткань по умолчанию
+            $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (121,$id,13)";
+            mysqli_query($db_connect,$query);
+            echo $query."<br>";
+
 
 			
 			//фабрика feature_id=14
@@ -732,6 +737,7 @@ function del_filters()
 $runtime = new Timer();
 $runtime->setStartTime();
 echo "Deleteing old features... ";
+set_time_limit(2000);
 del_filters();
 echo "Done!<br>";
 export_filters();
