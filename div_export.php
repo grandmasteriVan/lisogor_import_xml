@@ -47,7 +47,25 @@ function export_filters()
 			echo "<pre>";
             print_r($arr);
             echo  "</pre>";
-            
+
+            //размеры!
+            $query="SELECT * FROM size WHERE goods_id=$id";
+            if ($res=mysqli_query($db_connect,$query))
+            {
+                unset($arr);
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    $arr[] = $row;
+                }
+                if ($arr['size_length']>2000||$arr['size_width']>2000||$arr['size_height']>2000)
+                {
+                    $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (108,$id,11)";
+                    mysqli_query($db_connect,$query);
+                    echo $query."<br>";
+                }
+            }
+            //
+
 			//разбор параметров
 			//ниша в подлокотнике
             $armrest=$arr[11];
