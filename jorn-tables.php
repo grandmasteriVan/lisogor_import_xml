@@ -42,11 +42,13 @@ function set_filters()
             $name="  ".$name;
             $jur=UTF8toCP1251("Жур");
             //$jur="Журн";
-            $tmp=strpos ($name,$jur);
-            echo "$tmp $name  $jur<br>";
+            //$tmp=strpos ($name,$jur);
+            //echo "$tmp $name  $jur<br>";
             if (mb_strpos ($name,$jur))
             {
                 $query="UPDATE goods SET goods_maintcharter=7 WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                $query="UPDATE goodshastharter SET tcharter_id=7 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo "журнальный: $query <br>";
 
