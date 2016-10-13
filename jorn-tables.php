@@ -5,7 +5,6 @@
  * Date: 13.10.16
  * Time: 15:10
  */
-
 //define ("host","localhost");
 define ("host","10.0.0.2");
 /**
@@ -28,13 +27,16 @@ function set_filters()
 {
     //выбираем все столы (товары, у которых главная категория - столы)
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods_id, goods_name FROM goods WHERE goods_maintcharter=125 AND goods_noactual=0";
+    $query="SELECT goods_id, goods_name FROM goods WHERE goods_maintcharter=7 AND goods_noactual=0";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
         {
             $tables[] = $row;
         }
+		echo "<pre>";
+		print_r($tables);
+		echo "</re>";
         foreach ($tables as $table)
         {
             $id=$table['goods_id'];
@@ -48,12 +50,10 @@ function set_filters()
             {
                 $query="UPDATE goods SET goods_maintcharter=7 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
-                $query="UPDATE goodshastharter SET tcharter_id=7 WHERE goods_id=$id";
+                $query="UPDATE goodshastcharter SET tcharter_id=7 WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo "журнальный: $query <br>";
-
             }
-
         }
     }
     else
