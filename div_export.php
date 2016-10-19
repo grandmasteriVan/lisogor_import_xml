@@ -49,7 +49,7 @@ function export_filters()
             echo  "</pre>";
 
             //+++
-            //размеры!
+            //размеры
             $query="SELECT * FROM size WHERE goods_id=$id";
             if ($res=mysqli_query($db_connect,$query))
             {
@@ -58,34 +58,38 @@ function export_filters()
                 {
                     $arr[] = $row;
                 }
-                if ($arr['size_length']>2000||$arr['size_width']>2000||$arr['size_height']>2000)
-                {
-                    $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (108,$id,11)";
-                    mysqli_query($db_connect,$query);
-                    echo $query."<br>";
-                }
-                //спальное место
-                //односпальные
-                if ($arr['size_width_sl']<=1200)
-                {
-                    $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (114,$id,10)";
-                    mysqli_query($db_connect,$query);
-                    echo $query."<br>";
-                }
-                //двуспальные
-                if ($arr['size_width_sl']>1200&&$arr['size_width_sl']<1800)
-                {
-                    $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (71,$id,10)";
-                    mysqli_query($db_connect,$query);
-                    echo $query."<br>";
-                }
-                //трехспальные
-                if ($arr['size_width_sl']>=1800)
-                {
-                    $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (71,$id,10)";
-                    mysqli_query($db_connect,$query);
-                    echo $query."<br>";
-                }
+                 foreach ($arr as $ar)
+                 {
+                     if ($ar['size_length']>2000||$ar['size_width']>2000||$ar['size_height']>2000)
+                     {
+                         $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (108,$id,11)";
+                         mysqli_query($db_connect,$query);
+                         echo $query."<br>";
+                     }
+                     //спальное место
+                     //односпальные
+                     if ($ar['size_width_sl']<=1200)
+                     {
+                         $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (114,$id,10)";
+                         mysqli_query($db_connect,$query);
+                         echo $query."<br>";
+                     }
+                     //двуспальные
+                     if ($ar['size_width_sl']>1200&&$ar['size_width_sl']<1800)
+                     {
+                         $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (71,$id,10)";
+                         mysqli_query($db_connect,$query);
+                         echo $query."<br>";
+                     }
+                     //трехспальные
+                     if ($ar['size_width_sl']>=1800)
+                     {
+                         $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (71,$id,10)";
+                         mysqli_query($db_connect,$query);
+                         echo $query."<br>";
+                     }
+                 }
+
             }
             //цена
             $price=$good['goods_price'];
@@ -131,6 +135,25 @@ function export_filters()
                     echo $query."<br>";
                 }
             }
+            //оббивка - ставим всем кожзам по умолчанию
+            $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (80,$id,13)";
+            mysqli_query($db_connect,$query);
+            echo $query."<br>";
+            //оббивка - ставим всем экокожу по умолчанию
+            $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (81,$id,13)";
+            mysqli_query($db_connect,$query);
+            echo $query."<br>";
+            //оббивка - кожа (ставим по умолчанию всем диванам Ливс)
+            $factory=$arr[3];
+            $factory=strip_tags($factory);
+            $factory=str_replace("Фабрика: "," ",$factory);
+            if ($factory=="Фабрика Ливс")
+            {
+                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (79,$id,13)";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+
             //+++
 
 			//разбор параметров
@@ -683,6 +706,7 @@ function export_filters()
             $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (121,$id,13)";
             mysqli_query($db_connect,$query);
             echo $query."<br>";
+
 
 
 			

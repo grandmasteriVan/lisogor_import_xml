@@ -26,7 +26,7 @@ function set_filters()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
     //выбираем все диваны
-    $query="SELECT goods_id, goods_name FROM goods WHERE goods_maintcharter=1";
+    $query="SELECT * FROM goods WHERE goods_maintcharter=1";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
@@ -84,7 +84,7 @@ function set_filters()
                 echo "$query<br>";
             }
             //маленькие
-            if ($length<=500)
+            if ($length<=800)
             {
                 $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
                     "goodshasfeature_valuetext, goods_id, feature_id) ".
@@ -144,6 +144,46 @@ function set_filters()
             }
 
             //трансформация
+            //выбираем диваны, у которых вид трансформации - не раскладывется
+            $query="SELECT * FROM goodshasfeature WHERE goods_id=$id AND feature_id=3 AND goodshasfeature_valueint=9";
+            if ($res=mysqli_query($db_connect,$query))
+            {
+                unset($arr);
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    $arr[] = $row;
+                }
+                //массив не пуст - значит диван не раскладывается
+                if (is_array($arr))
+                {
+                    $query = "INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, " .
+                        "goodshasfeature_valuetext, goods_id, feature_id) " .
+                        "VALUES (13,0,'',$id,157)";
+                    mysqli_query($db_connect, $query);
+                    echo "Не раскладные: $query<br>";
+                    //удаляем запись в механизмах
+                    $query = "DELETE FROM goodshasfeature WHERE goods_id=$id AND feature_id=3 AND goodshasfeature_valueint=9";
+                    mysqli_query($db_connect, $query);
+                } //массив пуст - значит раскладывется
+                else
+                {
+                    $query = "INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, " .
+                        "goodshasfeature_valuetext, goods_id, feature_id) " .
+                        "VALUES (12,0,'',$id,157)";
+                    mysqli_query($db_connect, $query);
+                    echo "Раскладные: $query<br>";
+                }
+            }
+            //материал
+            //если фабрика ливс - тогда кожа
+            if ($factory_id==7)
+            {
+                $query = "INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, " .
+                    "goodshasfeature_valuetext, goods_id, feature_id) " .
+                    "VALUES (13,0,'',$id,149)";
+                mysqli_query($db_connect, $query);
+                echo "кожа: $query<br>";
+            }
 
         }
     }
