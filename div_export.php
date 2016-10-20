@@ -50,46 +50,46 @@ function export_filters()
 
             //+++
             //размеры
-            $query="SELECT * FROM size WHERE goods_id=$id";
+           $query="SELECT * FROM size WHERE goods_id=$id";
             if ($res=mysqli_query($db_connect,$query))
             {
-                unset($arr);
+                unset($arr1);
                 while ($row = mysqli_fetch_assoc($res))
                 {
-                    $arr[] = $row;
+                    $arr1[] = $row;
                 }
-                 foreach ($arr as $ar)
-                 {
-                     if ($ar['size_length']>2000||$ar['size_width']>2000||$ar['size_height']>2000)
-                     {
-                         $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (108,$id,11)";
-                         mysqli_query($db_connect,$query);
-                         echo $query."<br>";
-                     }
-                     //спальное место
-                     //односпальные
-                     if ($ar['size_width_sl']<=1200)
-                     {
-                         $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (114,$id,10)";
-                         mysqli_query($db_connect,$query);
-                         echo $query."<br>";
-                     }
-                     //двуспальные
-                     if ($ar['size_width_sl']>1200&&$ar['size_width_sl']<1800)
-                     {
-                         $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (71,$id,10)";
-                         mysqli_query($db_connect,$query);
-                         echo $query."<br>";
-                     }
-                     //трехспальные
-                     if ($ar['size_width_sl']>=1800)
-                     {
-                         $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (71,$id,10)";
-                         mysqli_query($db_connect,$query);
-                         echo $query."<br>";
-                     }
-                 }
-
+                foreach ($arr1 as $ar)
+				{
+					if ($arr['size_length']>2000||$arr['size_width']>2000||$arr['size_height']>2000)
+					{
+						$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (108,$id,11)";
+						mysqli_query($db_connect,$query);
+						echo $query."<br>";
+					}
+					//спальное место
+					//односпальные
+					if ($arr['size_width_sl']<=1200)
+					{
+						$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (114,$id,10)";
+						mysqli_query($db_connect,$query);
+						echo $query."<br>";
+					}
+					//двуспальные
+					if ($arr['size_width_sl']>1200&&$arr['size_width_sl']<1800)
+					{
+						$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (71,$id,10)";
+						mysqli_query($db_connect,$query);
+						echo $query."<br>";
+					}
+					//трехспальные
+					if ($arr['size_width_sl']>=1800)
+					{
+						$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (71,$id,10)";
+						mysqli_query($db_connect,$query);
+						echo $query."<br>";
+					}
+				}
+				
             }
             //цена
             $price=$good['goods_price'];
@@ -114,29 +114,39 @@ function export_filters()
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
             }
-
             //модульные диваны
             //если в имени или в тексте есть модульный
             $query="SELECT * FROM goodshaslang WHERE goods_id=$id";
             if ($res=mysqli_query($db_connect,$query))
             {
-                unset($arr);
+                unset($arr1);
                 while ($row = mysqli_fetch_assoc($res))
                 {
-                    $arr[] = $row;
+                    $arr1[] = $row;
                 }
-                $name=$arr['goodshaslang_name'];
-                $name=" ".$name;
-                $content=$arr['goodshaslang_content'];
-                if (mb_stripos("модуль",$name)||(mb_stripos("модуль",$content)))
-                {
-                    $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (57,$id,6)";
-                    mysqli_query($db_connect,$query);
-                    echo $query."<br>";
-                }
+				//print_r($arr);
+				if (!empty($arr1))
+				{
+					foreach ($arr1 as $ar)
+					{
+						$name=$ar['goodshaslang_name'];
+						$name=" ".$name;
+						$content=$ar['goodshaslang_content'];
+						$content=" ".$content;
+						//echo $name;
+						if (mb_stripos("модуль",$name)||(mb_stripos("модуль",$content)))
+						{
+							$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (57,$id,6)";
+							mysqli_query($db_connect,$query);
+							echo $query."<br>";
+						}
+					}
+				}
+                
+				
             }
-            //оббивка - ставим всем кожзам по умолчанию
-            $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (80,$id,13)";
+            //+++
+			$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (80,$id,13)";
             mysqli_query($db_connect,$query);
             echo $query."<br>";
             //оббивка - ставим всем экокожу по умолчанию
@@ -147,9 +157,12 @@ function export_filters()
             $factory=$arr[3];
             $factory=strip_tags($factory);
             $factory=str_replace("Фабрика: "," ",$factory);
-            if ($factory=="Фабрика Ливс")
+			//echo "$factory Фабрика Ливс<br>";
+            //$factory="Фабрика Ливс";
+			if (strcmp ($factory," Фабрика Ливс")==0)
             {
-                $query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (79,$id,13)";
+                //echo "Yay!<br>";
+				$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (79,$id,13)";
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
             }
