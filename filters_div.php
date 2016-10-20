@@ -25,7 +25,32 @@ define ("db", "uh333660_mebli");
 function set_filters()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    //выбираем все диваны
+    
+	//тип дивана
+    //сначала ужаляем все записи из фильтра, кроме кушеток и тахты
+    $query="DELETE FROM goodshasfeature WHERE feature_id=2 AND goodshasfeature_valueint=5";
+    mysqli_query($db_connect,$query);
+	$query="DELETE FROM goodshasfeature WHERE feature_id=2 AND goodshasfeature_valueint=1";
+    mysqli_query($db_connect,$query);
+	$query="DELETE FROM goodshasfeature WHERE feature_id=2 AND goodshasfeature_valueint=2";
+    mysqli_query($db_connect,$query);
+	$query="DELETE FROM goodshasfeature WHERE feature_id=2 AND goodshasfeature_valueint=11";
+    mysqli_query($db_connect,$query);
+	$query="DELETE FROM goodshasfeature WHERE feature_id=2 AND goodshasfeature_valueint=13";
+    mysqli_query($db_connect,$query);
+	
+	//и месторасположение
+	$query="DELETE FROM goodshasfeature WHERE feature_id=154 AND goodshasfeature_valueint=7";
+    mysqli_query($db_connect,$query);
+	$query="DELETE FROM goodshasfeature WHERE feature_id=154 AND goodshasfeature_valueint=6";
+    mysqli_query($db_connect,$query);
+	$query="DELETE FROM goodshasfeature WHERE feature_id=154 AND goodshasfeature_valueint=5";
+    mysqli_query($db_connect,$query);
+	
+	$query="DELETE FROM goodshasfeature WHERE feature_id=157 AND goodshasfeature_valueint=3";
+    mysqli_query($db_connect,$query);
+	
+	//выбираем все диваны
     $query="SELECT * FROM goods WHERE goods_maintcharter=1";
     if ($res=mysqli_query($db_connect,$query))
     {
@@ -33,16 +58,20 @@ function set_filters()
         {
             $divs[] = $row;
         }
+		//echo "<pre>";
+		//print_r($divs);
+		//echo "</pre>";
         foreach ($divs as $div)
         {
-            $id=$div['id'];
+            $id=$div['goods_id'];
             $kind=$div['goodskind_id'];
             $name=$div['goods_name'];
             $cont=$div['goods_content'];
             //тип дивана
-            //сначала ужаляем все записи из фильтра, кроме кушеток и тахты
-            $query="DELETE FROM goodshasfeature WHERE goods_id=$id AND future_id=2 AND (goodshasfeature_valueint<>14 OR goodshasfeature_valueint<>3)";
-            mysqli_query($db_connect,$query);
+			
+			$query="DELETE FROM goodshasfeature WHERE goods_id=$id feature_id=157 AND goodshasfeature_valueint=3";
+			mysqli_query($db_connect,$query);
+			
             echo "$query<br>";
             //прямой
             if ($kind==23)
@@ -64,6 +93,7 @@ function set_filters()
             }
             //модульный
             if (mb_strpos($name ,UTF8toCP1251("модульный"))||(mb_stripos($cont,UTF8toCP1251("модул"))))
+            //if (mb_strpos($name ,"одульный")||mb_stripos($cont,"модул"))
             {
                 $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
                     "goodshasfeature_valuetext, goods_id, feature_id) ".
@@ -116,7 +146,7 @@ function set_filters()
             {
                 $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
                     "goodshasfeature_valuetext, goods_id, feature_id) ".
-                    "VALUES (3,0,'',$id,147)";
+                    "VALUES (12,0,'',$id,147)";
                 mysqli_query($db_connect,$query);
                 echo "ортопедический: $query<br>";
             }
@@ -138,11 +168,10 @@ function set_filters()
             {
                 $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
                     "goodshasfeature_valuetext, goods_id, feature_id) ".
-                    "VALUES (34,0,'',$id,147)";
+                    "VALUES (13,0,'',$id,147)";
                 mysqli_query($db_connect,$query);
                 echo "для ежедневнгого сна: $query<br>";
             }
-
             //трансформация
             //выбираем диваны, у которых вид трансформации - не раскладывется
             $query="SELECT * FROM goodshasfeature WHERE goods_id=$id AND feature_id=3 AND goodshasfeature_valueint=9";
@@ -184,16 +213,18 @@ function set_filters()
                 mysqli_query($db_connect, $query);
                 echo "кожа: $query<br>";
             }
-
+			//удаляем лишние фильтры
+			//$query="DELETE FROM goodshasfeature WHERE goods_id=$id AND feature_id=2 AND (goodshasfeature_valueint<>14 OR goodshasfeature_valueint<>3)";
+            //mysqli_query($db_connect,$query);
+            //echo "$query<br>";
         }
     }
-
-
     mysqli_close($db_connect);
 }
 //////////////////////////
 $runtime = new Timer();
 $runtime->setStartTime();
+set_time_limit(2000);
 //echo "test";
 set_filters();
 $runtime->setEndTime();
