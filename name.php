@@ -441,6 +441,20 @@ function rename_tov ($goods_kind)
 				echo $i.". ".$query."<br>";
 				//return;
 			}
+			//диваны
+			if ($goods_kind==23||$goods_kind==26||$goods_kind==28||$goods_kind==57)
+			{
+				$name=str_replace(UTF8toCP1251("Диван "),"",$name);
+				$name=str_replace(UTF8toCP1251("диван "),"",$name);
+				$name=str_replace(UTF8toCP1251(" Диван"),"",$name);
+				$name=str_replace(UTF8toCP1251(" диван"),"",$name);
+
+				$name="Диван ".$name;
+				$name=UTF8toCP1251($name);
+				$query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $i.". ".$query."<br>";
+			}
 			$i++;
         }
     }
@@ -484,6 +498,11 @@ function print_names ($goods_kind)
 //rename_tov(64);//тумбы для обуви
 //rename_tov(80);//туалетные столики
 //rename_tov(65);//столы рабочие
+rename_tov(23);//диваны
+rename_tov(26);//угловык диваны
+rename_tov(28);//диваны для кафе
+rename_tov(57);//диваны для офиса
+
 //переименование по разделу каталога
 //ren_tov_cat(2);//кресла 
 //ren_tov_cat(10);//шкафы
@@ -493,10 +512,10 @@ function print_names ($goods_kind)
 //ren_tov_cat(68);//Кухонные уголки
 //ren_tov_cat(57);//кухни модульные
 //ren_tov_cat(63);//парты
-ren_tov_cat(17);//детский диван
+//ren_tov_cat(17);//детский диван
 //ren_tov_cat(74);//детский шкаф
 //ren_tov_cat(16);//детская комната
-ren_tov_cat(32);//детский комод
+//ren_tov_cat(32);//детский комод
 
 /**
  * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
