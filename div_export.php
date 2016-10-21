@@ -5,6 +5,7 @@
  * Date: 21.07.16
  * Time: 11:11
  */
+header('Content-type: text/html; charset=UTF-8');
 define ("host","localhost");
 //define ("host","10.0.0.2");
 /**
@@ -28,6 +29,7 @@ define ("db", "divani_new");
 function export_filters()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
+	mysqli_query($db_connect,"SET NAMES 'utf8'");
     $query="SELECT goods_id, goods_price, goods_exfeature FROM goods";
     if ($res=mysqli_query($db_connect,$query))
     {
