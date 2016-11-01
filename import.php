@@ -110,6 +110,14 @@ switch ($selectedFactory)
         $test->test_data();
         $test->add_db_nova();
         break;
+    case "FunDesk":
+        //new untested!!!
+        include_once "/factory/fundesk.php";
+        $test= new FunDesk($_FILES['file']['tmp_name']);
+        $test->parce_price_fundesk();
+        $test->test_data();
+        $test->add_db_fundesk();
+        break;
 
 
     default:

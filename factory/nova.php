@@ -18,7 +18,7 @@ class Nova
      */
     protected $data;
     /**
-     * Sidim constructor.
+     * Nova constructor.
      * @param \$f передаем файл с прайсом в конструктор
      */
     function __construct($f)
@@ -39,6 +39,10 @@ class Nova
         //var_dump($this->data);
         //echo "test!";
     }
+
+    /**
+     * парсим прайс
+     */
     public function parce_price_nova()
     {
         if ($this->file1)
@@ -76,6 +80,7 @@ class Nova
                         //echo "Yay!";
                     }
                 }
+                $row_num++;
             }
         }
         else
@@ -84,6 +89,10 @@ class Nova
             return;
         }
     }
+
+    /**
+     *записываем распарсеный прайс в БД
+     */
     public function add_db_nova()
     {
         $db_connect=mysqli_connect(host,user,pass,db);

@@ -72,7 +72,8 @@ function copy_review_sof()
 					{
 						$rev_id=$review['review_id'];
 						$rev_text=$review['review_content'];
-						$name_trunc=str_replace(UTF8toCP1251("Диван "),"",$name_sof);
+						//находим название дивана без всякого мусора
+                        $name_trunc=str_replace(UTF8toCP1251("Диван "),"",$name_sof);
 						$name_trunc=preg_replace('/\d/','',$name_trunc);
 						$name_trunc=str_replace('-','',$name_trunc);
 						echo "name_trunc: $name_trunc<br>";
