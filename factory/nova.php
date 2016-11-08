@@ -106,7 +106,7 @@ class Nova
             $factory_id=14;
             $strSQL="UPDATE goods ".
                 "SET goods_price=$d_price ".
-                "WHERE goods.goods_article_link=$d_name AND factory_id=$factory_id";
+                "WHERE goods.goods_article_link='$d_name' AND factory_id=$factory_id";
             echo $strSQL."<br>";
             //break;
             mysqli_query($db_connect, $strSQL);
@@ -174,7 +174,7 @@ class Nova
             {?>
                 <tr>
                     <td><?php echo ($row['name']); ?></td>
-                    <td><?php echo ($row['kat0']); ?></td>
+                    <td><?php echo ($row['price']); ?></td>
                 </tr>
 
             <?php } ?>
