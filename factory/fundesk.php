@@ -5,7 +5,6 @@
  * Date: 01.11.16
  * Time: 09:36
  */
-
 class FunDesk
 {
     /**
@@ -38,7 +37,6 @@ class FunDesk
         //var_dump($this->data);
         //echo "test!";
     }
-
     /**
      * парсим прайс
      */
@@ -55,7 +53,7 @@ class FunDesk
             //цена - 4 ячейка
             foreach ($rows as $row)
             {
-                if ($row_num>=7)
+                if ($row_num>=3)
                 {
                     $cells=$row->getElementsByTagName('Cell');
                     $cell_num=1;
@@ -66,7 +64,7 @@ class FunDesk
                         {
                             $name=$elem;
                         }
-                        if ($cell_num==7)
+                        if ($cell_num==4)
                         {
                             $price=$elem;
                         }
@@ -87,7 +85,6 @@ class FunDesk
             return;
         }
     }
-
     /**
      *записываем распарсеный прайс в БД
      */
@@ -105,7 +102,7 @@ class FunDesk
                 "WHERE goods.goods_article_link=$d_name AND factory_id=$factory_id";
             echo $strSQL."<br>";
             //break;
-            mysqli_query($db_connect, $strSQL);
+            //mysqli_query($db_connect, $strSQL);
             //break;
         }
         mysqli_close($db_connect);
@@ -138,5 +135,4 @@ class FunDesk
         </html> --> <?php
     }
 }
-
 ?>
