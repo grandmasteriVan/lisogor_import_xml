@@ -31,6 +31,7 @@ class FunDesk
      */
     private function add_price ($name, $price)
     {
+        $price=round($price);
         $this->data[]=array(
             'name'=>$name,
             'price'=>$price);
@@ -48,7 +49,7 @@ class FunDesk
             $rows=$dom->getElementsByTagName('Row');
             //print_r($rows);
             $row_num=1;
-            //полезная инфа начинается с 7 строки!
+            //полезная инфа начинается с 3 строки!
             //название позиции находится в 1 ячейке
             //цена - 4 ячейка
             foreach ($rows as $row)
@@ -99,7 +100,7 @@ class FunDesk
             $factory_id=139;
             $strSQL="UPDATE goods ".
                 "SET goods_price=$d_price ".
-                "WHERE goods.goods_article_link=$d_name AND factory_id=$factory_id";
+                "WHERE goods.goods_article_link='$d_name' AND factory_id=$factory_id";
             echo $strSQL."<br>";
             //break;
             //mysqli_query($db_connect, $strSQL);
