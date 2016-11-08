@@ -39,6 +39,9 @@ class FunDesk
         //echo "test!";
     }
 
+    /**
+     * парсим прайс
+     */
     public function parce_price_fundesk()
     {
         if($this->file1)
@@ -85,6 +88,9 @@ class FunDesk
         }
     }
 
+    /**
+     *записываем распарсеный прайс в БД
+     */
     public function add_db_fundesk()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -103,6 +109,33 @@ class FunDesk
             //break;
         }
         mysqli_close($db_connect);
+    }
+    /**
+     * для тестов
+     * "красиво" выводим поле $data в котором лежат наименование товара и его цена
+     */
+    public function test_data()
+    {
+        ?>
+        <!--<html>
+        <body> -->
+        <table>
+            <tr>
+                <th>Артикул</th>
+                <th>Цена </th>
+            </tr>
+            <?php foreach($this->data as $row)
+            {?>
+                <tr>
+                    <td><?php echo ($row['name']); ?></td>
+                    <td><?php echo ($row['price']); ?></td>
+                </tr>
+
+            <?php } ?>
+
+        </table>
+        <!-- </body>
+        </html> --> <?php
     }
 }
 
