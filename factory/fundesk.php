@@ -103,7 +103,7 @@ class FunDesk
                 "WHERE goods.goods_article_link='$d_name' AND factory_id=$factory_id";
             echo $strSQL."<br>";
             //break;
-            //mysqli_query($db_connect, $strSQL);
+            mysqli_query($db_connect, $strSQL);
             //break;
         }
         mysqli_close($db_connect);
