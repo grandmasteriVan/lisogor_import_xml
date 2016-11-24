@@ -5,24 +5,23 @@
  * Date: 23.11.16
  * Time: 16:06
  */
-//define ("host","localhost");
-define ("host","10.0.0.2");
+define ("host","localhost");
+//define ("host","10.0.0.2");
 /**
  * database username
  */
-//define ("user", "root");
-define ("user", "uh333660_mebli");
+define ("user", "root");
+//define ("user", "uh333660_mebli");
 /**
  * database password
  */
-//define ("pass", "");
-define ("pass", "Z7A8JqUh");
+define ("pass", "");
+//define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
-//define ("db", "mebli");
-define ("db", "uh333660_mebli");
-
+define ("db", "mebli");
+//define ("db", "uh333660_mebli");
 function resiz($factory_id=64)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -34,22 +33,31 @@ function resiz($factory_id=64)
         foreach ($goods as $good){
             $id=$good['goods_id'];
             $pict_ext=$good['goods_pict'];
-            $old=$_SERVER['DOCUMENT_ROOT']."/content/goods/".$id."/$id_pict.".$pict_ext;
+            $old=$_SERVER['DOCUMENT_ROOT']."/content/goods/".$id."/$id"."_pict.".$pict_ext;
             $arr=getimagesize($old);
             echo "<pre>";
             print_r($arr);
             echo "</pre>";
-            return;
-            /*
-            $image = new SimpleImage();
-            $image->load($old);
-            $image->resizeToHeight(650);
-            $image->save($old);
-            return; */
+            
+			$height=$arr[1];
+			echo $height;
+			if ($height>=700){
+				echo "Resizing<br>";
+				$image = new SimpleImage();
+				$image->load($old);
+				$image->resizeToHeight(700);
+				$image->save($old);
+            //return;
+			}
+			else{
+				echo "product $id has normal picture<br>";
+			}
+            //return;
         }
     }
 }
 
+resiz();
 /**
  * Class Timer
  * замеряем время выполнения скрипта
@@ -64,7 +72,6 @@ class Timer
      * @var время конца выполнения
      */
     private $end_time;
-
     /**
      * встанавливаем время начала выполнения скрипта
      */
@@ -72,7 +79,6 @@ class Timer
     {
         $this->start_time = microtime(true);
     }
-
     /**
      * устанавливаем время конца выполнения скрипта
      */
@@ -80,7 +86,6 @@ class Timer
     {
         $this->end_time = microtime(true);
     }
-
     /**
      * @return mixed время выполения
      * возвращаем время выполнения скрипта в секундах
@@ -90,10 +95,8 @@ class Timer
         return $this->start_time-$this->end_time;
     }
 }
-
 //from http://sanchiz.net/blog/resizing-images-with-php
 class SimpleImage {
-
     /**
      * @var
      */
@@ -102,7 +105,6 @@ class SimpleImage {
      * @var
      */
     var $image_type;
-
     /**
      * @param $filename
      */
@@ -117,7 +119,6 @@ class SimpleImage {
             $this->image = imagecreatefrompng($filename);
         }
     }
-
     /**
      * @param $filename
      * @param int $image_type
@@ -136,7 +137,6 @@ class SimpleImage {
             chmod($filename,$permissions);
         }
     }
-
     /**
      * @param int $image_type
      */
@@ -149,21 +149,18 @@ class SimpleImage {
             imagepng($this->image);
         }
     }
-
     /**
      * @return int
      */
     function getWidth() {
         return imagesx($this->image);
     }
-
     /**
      * @return int
      */
     function getHeight() {
         return imagesy($this->image);
     }
-
     /**
      * @param $height
      */
@@ -172,7 +169,6 @@ class SimpleImage {
         $width = $this->getWidth() * $ratio;
         $this->resize($width,$height);
     }
-
     /**
      * @param $width
      */
@@ -181,7 +177,6 @@ class SimpleImage {
         $height = $this->getheight() * $ratio;
         $this->resize($width,$height);
     }
-
     /**
      * @param $scale
      */
@@ -190,7 +185,6 @@ class SimpleImage {
         $height = $this->getheight() * $scale/100;
         $this->resize($width,$height);
     }
-
     /**
      * @param $width
      * @param $height
@@ -201,7 +195,4 @@ class SimpleImage {
         $this->image = $new_image;
     }
 }
-
-
-
 ?>
