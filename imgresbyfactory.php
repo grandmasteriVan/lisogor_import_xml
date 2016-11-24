@@ -22,6 +22,11 @@ define ("pass", "");
  */
 define ("db", "mebli");
 //define ("db", "uh333660_mebli");
+/**
+ * @param int $factory_id id фабрики по которой изменяем размер картинок (по умолчанию это Флеш)
+ * пробегает по всем товарам заданной фабрики и проверяет размер картинок. Если высота картинки больше 700 пикселей -
+ * меняет размер картинки на 700 пикселей по высоте и пропорционально 700 пикселям по ширине
+ */
 function resiz($factory_id=64)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -56,8 +61,11 @@ function resiz($factory_id=64)
         }
     }
 }
-
+$time_start = microtime(true);
 resiz();
+$time_end = microtime(true);
+$time = $time_end - $time_start;
+echo "Runtime: $time sec\n";
 /**
  * Class Timer
  * замеряем время выполнения скрипта
@@ -95,10 +103,15 @@ class Timer
         return $this->start_time-$this->end_time;
     }
 }
-//from http://sanchiz.net/blog/resizing-images-with-php
+//
+/**
+ * Class SimpleImage
+ * класс для работы с изображениями
+ * from http://sanchiz.net/blog/resizing-images-with-php
+ */
 class SimpleImage {
     /**
-     * @var
+     * @var 
      */
     var $image;
     /**
