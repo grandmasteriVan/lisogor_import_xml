@@ -40,14 +40,14 @@ function resiz($factory_id=64)
             $pict_ext=$good['goods_pict'];
             $old=$_SERVER['DOCUMENT_ROOT']."/content/goods/".$id."/$id"."_pict.".$pict_ext;
             $arr=getimagesize($old);
-            echo "<pre>";
+            /*echo "<pre>";
             print_r($arr);
-            echo "</pre>";
+            echo "</pre>";*/
             
 			$height=$arr[1];
-			echo $height;
-			if ($height>=700){
-				echo "Resizing<br>";
+			//echo $height;
+			if ($height>700){
+				echo "Resizing $id<br>";
 				$image = new SimpleImage();
 				$image->load($old);
 				$image->resizeToHeight(700);
@@ -62,6 +62,7 @@ function resiz($factory_id=64)
     }
 }
 $time_start = microtime(true);
+set_time_limit(5000);
 resiz();
 $time_end = microtime(true);
 $time = $time_end - $time_start;
@@ -111,7 +112,7 @@ class Timer
  */
 class SimpleImage {
     /**
-     * @var 
+     * @var
      */
     var $image;
     /**
