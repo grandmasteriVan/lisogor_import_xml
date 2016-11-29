@@ -22,6 +22,10 @@ define ("pass", "");
  */
 define ("db", "mebli");
 //define ("db", "uh333660_mebli");
+/**
+ * @param $kind integer айди вида товара
+ * добавляет дополнительный каталог (диваны) кухонным уголкам со спальным местом
+ */
 function move($kind)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -48,9 +52,9 @@ function move($kind)
                 }
                 if (isset($spaln))
                 {
-					echo "<pre>";
+					/*echo "<pre>";
 					print_r($spaln);
-					echo "</pre>";
+					echo "</pre>";*/
 					if ($spaln[0]['goodshasfeature_valueint']==1)
                     {
                         //делаем соотв запись в БД
@@ -65,7 +69,42 @@ function move($kind)
     }
     mysqli_close($db_connect);
 }
-function move_width()
+
+/**
+ * пробегается по всем диванам и смотрит их размеры. ставит самый большой размер в длинну
+ */
+function swap_whith()
+{
+    $db_connect=mysqli_connect(host,user,pass,db);
+    $query="SELECT * FROM goods WHERE goodskind_id=23";
+    mysqli_close($db_connect);
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        unset($tovars);
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            //список всех диванов
+            $tovars[] = $row;
+        }
+        foreach ($tovars as $tovar)
+        {
+            $len=$tovar['goods_length'];
+            $width=$tovar['goods_width'];
+            if ($width<$len)
+            {
+                $tmp=$width;
+                $width=$len;
+                $len=$tmp;
+                $query="UPDATE goods SET goods_length=$len, goods_width=$width";
+                //mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+        }
+    }
+}
+/**
+ * пробегает по всем диванам, и ставит фильтр для кухни тем, чья длинна <= 1000 мм
+ */function move_width()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
     $query="SELECT * FROM goods WHERE goodskind_id=23 AND goods_length<1001";
@@ -100,6 +139,7 @@ $runtime->setStartTime();
 move (69);
 move (53);
 echo "<br><b>SIZE</b><br>";
+swap_whith();
 move_width();
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
