@@ -5,25 +5,23 @@
  * Date: 28.11.16
  * Time: 10:45
  */
-
-//define ("host","localhost");
-define ("host","10.0.0.2");
+define ("host","localhost");
+//define ("host","10.0.0.2");
 /**
  * database username
  */
-//define ("user", "root");
-define ("user", "uh333660_mebli");
+define ("user", "root");
+//define ("user", "uh333660_mebli");
 /**
  * database password
  */
-//define ("pass", "");
-define ("pass", "Z7A8JqUh");
+define ("pass", "");
+//define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
-//define ("db", "mebli");
-define ("db", "uh333660_mebli");
-
+define ("db", "mebli");
+//define ("db", "uh333660_mebli");
 function move($kind)
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -50,12 +48,15 @@ function move($kind)
                 }
                 if (isset($spaln))
                 {
-                    if ($spaln['goodshasfeature_valueint']==2)
+					echo "<pre>";
+					print_r($spaln);
+					echo "</pre>";
+					if ($spaln[0]['goodshasfeature_valueint']==1)
                     {
                         //делаем соотв запись в БД
                         $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) ".
                             "VALUES ($id, 2)";
-                        mysqli_query($db_connect,$query);
+                        //mysqli_query($db_connect,$query);
                         echo $query."<br>";
                     }
                 }
@@ -64,11 +65,10 @@ function move($kind)
     }
     mysqli_close($db_connect);
 }
-
 function move_width()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT * FROM goods WHERE goods_maintcharter=2 AND goods_width<1001";
+    $query="SELECT * FROM goods WHERE goodskind_id=23 AND goods_length<1001";
     if ($res=mysqli_query($db_connect,$query))
     {
         unset($tovars);
@@ -80,16 +80,18 @@ function move_width()
         foreach ($tovars as $tovar)
         {
             $id=$tovar['goods_id'];
-            $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) ".
-                "VALUES ($id, 2)";
-            mysqli_query($db_connect,$query);
-            echo $query."<br>";
+			if ($tovar['goods_length']!=0)
+			{
+				$query="INSERT INTO goodshastcharter (goods_id, tcharter_id) ".
+					"VALUES ($id, 2)";
+				//mysqli_query($db_connect,$query);
+				echo $query."<br>";
+			}
+            
         }
-
     }
     mysqli_close($db_connect);
 }
-
 $runtime = new Timer();
 $runtime->setStartTime();
 //set_time_limit(2000);
@@ -97,11 +99,10 @@ $runtime->setStartTime();
 //set_filters();
 move (69);
 move (53);
+echo "<br><b>SIZE</b><br>";
 move_width();
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
-
-
 /**
  * Class Timer
  * замеряем время выполнения скрипта
@@ -116,7 +117,6 @@ class Timer
      * @var время конца выполнения
      */
     private $end_time;
-
     /**
      * встанавливаем время начала выполнения скрипта
      */
@@ -124,7 +124,6 @@ class Timer
     {
         $this->start_time = microtime(true);
     }
-
     /**
      * устанавливаем время конца выполнения скрипта
      */
@@ -132,7 +131,6 @@ class Timer
     {
         $this->end_time = microtime(true);
     }
-
     /**
      * @return mixed время выполения
      * возвращаем время выполнения скрипта в секундах
@@ -142,5 +140,4 @@ class Timer
         return $this->start_time-$this->end_time;
     }
 }
-
 ?>
