@@ -77,7 +77,6 @@ function swap_whith()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
     $query="SELECT * FROM goods WHERE goodskind_id=23";
-    mysqli_close($db_connect);
     if ($res=mysqli_query($db_connect,$query))
     {
         unset($tovars);
@@ -101,6 +100,7 @@ function swap_whith()
             }
         }
     }
+    mysqli_close($db_connect);
 }
 /**
  * пробегает по всем диванам, и ставит фильтр для кухни тем, чья длинна <= 1000 мм

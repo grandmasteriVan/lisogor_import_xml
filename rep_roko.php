@@ -66,7 +66,7 @@ class RokoReport
 				$counter++;
 			}
 			
-            //выводим счетчик
+            //выводим счетчик позиций
             echo "<br>Total: $counter";
             mysqli_close($db_connect);
         }
