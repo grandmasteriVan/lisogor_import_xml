@@ -23,9 +23,9 @@ define ("pass", "Z7A8JqUh");
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
 /**
- * Class FlashReport
+ * Class RokoReport
  */
-class FlashReport
+class RokoReport
 {
     /**
      *заполняем СЕО поля и включаем созданные позиции
@@ -39,29 +39,33 @@ class FlashReport
         {
             while ($row = mysqli_fetch_assoc($res))
             {
-                $site_pos = $row;
+                $site_pos[] = $row;
             }
-            //print_r($site_pos);
-            $id = $site_pos['goods_id'];
-            $name = $site_pos['goods_name'];
-            $header = $site_pos['goods_name'];
-            //прописываем нужные сео поля
-            $name_trunc = str_replace($this->UTF8toCP1251("Шкаф-купе "), "", $name);
-            $title = $name_trunc . $this->UTF8toCP1251(" стол. Купить шкафы купе со склада в Киеве");
-            $keywords = $this->UTF8toCP1251("шкафы-купе, ") . $name . $this->UTF8toCP1251(", склад мебели, купить шкаф-купе, интернет магазин мебели, недорогие шкафы-купе, цены, фото, отзывы.");
-            $key_h = $this->UTF8toCP1251("Фабрика Roko. ") . $name . $this->UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
-            $key_f = $this->UTF8toCP1251("Фабрика Roko. ") . $name . $this->UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-            $desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
-            $query = "UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
-            mysqli_query($db_connect, $query);
-            echo $query . "<br>";
-
-            //а теперь включаем товар
-            $query = "UPDATE goods SET goods_active=1 WHERE goods_id=$id";
-            mysqli_query($db_connect, $query);
-            echo $query . "<br>";
-            $counter++;
-
+            /*echo "<pre>";
+			print_r($site_pos);
+			echo "</pre>";*/
+            foreach ($site_pos as $pos)
+			{
+				$id = $pos['goods_id'];
+				$name = $pos['goods_name'];
+				$header = $pos['goods_name'];
+				//прописываем нужные сео поля
+				$name_trunc = str_replace($this->UTF8toCP1251("Шкаф-купе "), "", $name);
+				$title = $name_trunc . $this->UTF8toCP1251(" стол. Купить шкафы купе со склада в Киеве");
+				$keywords = $this->UTF8toCP1251("шкафы-купе, ") . $name . $this->UTF8toCP1251(", склад мебели, купить шкаф-купе, интернет магазин мебели, недорогие шкафы-купе, цены, фото, отзывы.");
+				$key_h = $this->UTF8toCP1251("Фабрика Roko. ") . $name . $this->UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+				$key_f = $this->UTF8toCP1251("Фабрика Roko. ") . $name . $this->UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+				$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+				$query = "UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+				mysqli_query($db_connect, $query);
+				echo $query . "<br>";
+				//а теперь включаем товар
+				$query = "UPDATE goods SET goods_active=1 WHERE goods_id=$id";
+				mysqli_query($db_connect, $query);
+				echo $query . "<br>";
+				$counter++;
+			}
+			
             //выводим счетчик
             echo "<br>Total: $counter";
             mysqli_close($db_connect);
@@ -145,7 +149,7 @@ class Timer
 set_time_limit(2000);
 $runtime = new Timer();
 $runtime->setStartTime();
-$report=new FlashReport();
+$report=new RokoReport();
 $report->report();
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
