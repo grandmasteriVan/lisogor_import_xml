@@ -70,9 +70,13 @@ switch ($selectedFactory)
         break;
     case "Vika":
         include_once "/factory/vika.php";
-        parse_price_vika();
+        //parse_price_vika();
         //test_data_arr();
-        add_db_vika($data);
+        //add_db_vika($data);
+        $test = new Vika($_FILES['file']['tmp_name']);
+        $test->parce_price_vika();
+        $test->test_data();
+        //$test->add_db_vika();
         break;
     case "Domini":
         //final!!!
