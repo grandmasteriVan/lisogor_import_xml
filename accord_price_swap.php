@@ -5,7 +5,6 @@
  * Date: 06.12.16
  * Time: 11:13
  */
-
 //define ("host","localhost");
 define ("host","10.0.0.2");
 /**
@@ -23,7 +22,6 @@ define ("pass", "Z7A8JqUh");
  */
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
-
 class PriceSwap
 {
     public function Swap()
@@ -40,16 +38,16 @@ class PriceSwap
             {
                 $id=$good['goods_id'];
                 $price_hrn=$good['goods_price'];
-                $price_dol=round($price_hrn/26.6,PHP_ROUND_HALF_UP);
-                echo "$id = $price_dol<br>";
+                $price_dol=round($price_hrn/26.6);
+                echo "$id = $price_dol old=$price_hrn<br>";
                 $query="UPDATE goods SET goods_pricecur=$price_dol WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
                 echo "$query<br>";
             }
-
         }
         mysqli_close($db_connect);
     }
 }
-
+$tmp=new PriceSwap();
+$tmp->Swap();
 ?>
