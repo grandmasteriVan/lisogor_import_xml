@@ -40,49 +40,65 @@ class MelbiReport
         {
             while ($row = mysqli_fetch_assoc($res))
             {
-                $site_pos = $row;
+                $site_poss[] = $row;
             }
-            //print_r($site_pos);
-            $goods_charter=$site_pos['goods_maintcharter'];
-            echo "<br>charter= $goods_charter<br>";
-            $id=$site_pos['goods_id'];
-            $name=$site_pos['goods_name'];
-            $header=$site_pos['goods_name'];
-            //прописываем нужные сео поля в зависимости от категории товара
-            switch ($goods_charter)
-            {
-                case 13:
-                    //кровати
-                    $name_trunc=str_replace($this->UTF8toCP1251("кровать "),"",$name);
-                    $name_trunc=str_replace($this->UTF8toCP1251("Кровать "),"",$name_trunc);
-                    $title=$name_trunc.$this->UTF8toCP1251(" кровать. Купить кровати со склада в Киеве");
-                    $keywords=$this->UTF8toCP1251("кровати, ").$name.$this->UTF8toCP1251(", склад мебели, купить кровать, интернет магазин мебели, недорогие кровати, цены, фото, отзывы.");
-                    $key_h=$this->UTF8toCP1251("Фабрика Мелби. ").$name.$this->UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
-                    $key_f=$this->UTF8toCP1251("Фабрика Мелби. ").$name.$this->UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-                    $desc=$this->UTF8toCP1251("Купить ").$name.$this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
-                    $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
-                    mysqli_query($db_connect,$query);
-                    echo $query."<br>";
-                    break;
-                case 124:
-                    //тумбы
-                    $name_trunc=str_replace($this->UTF8toCP1251("Тумба "),"",$name);
-                    $name_trunc=str_replace($this->UTF8toCP1251("тумба "),"",$name_trunc);
-                    $title=$name_trunc.$this->UTF8toCP1251(" тумба. Купить тумбы со склада в Киеве");
-                    $keywords=$this->UTF8toCP1251("тумбы, ").$name.$this->UTF8toCP1251(", склад мебели, купить тумбу, интернет магазин мебели, недорогие тумбы, цены, фото, отзывы.");
-                    $key_h=$this->UTF8toCP1251("Фабрика Мелби. ").$name.$this->UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
-                    $key_f=$this->UTF8toCP1251("Фабрика Мелби. ").$name.$this->UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-                    $desc=$this->UTF8toCP1251("Купить ").$name.$this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
-                    $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
-                    mysqli_query($db_connect,$query);
-                    echo $query."<br>";
-                    break;
-            }
-            //а теперь включаем товар
-            $query="UPDATE goods SET goods_active=1 WHERE goods_id=$id";
-            mysqli_query($db_connect,$query);
-            echo $query."<br>";
-            $counter++;
+            foreach ($site_poss as $site_pos)
+			{
+				//print_r($site_pos);
+				$goods_charter=$site_pos['goods_maintcharter'];
+				echo "<br>charter= $goods_charter<br>";
+				$id=$site_pos['goods_id'];
+				$name=$site_pos['goods_name'];
+				$header=$site_pos['goods_name'];
+				//прописываем нужные сео поля в зависимости от категории товара
+				switch ($goods_charter)
+				{
+					case 13:
+						//кровати
+						$name_trunc=str_replace($this->UTF8toCP1251("кровать "),"",$name);
+						$name_trunc=str_replace($this->UTF8toCP1251("Кровать "),"",$name_trunc);
+						$title=$name_trunc.$this->UTF8toCP1251(" кровать. Купить кровати со склада в Киеве");
+						$keywords=$this->UTF8toCP1251("кровати, ").$name.$this->UTF8toCP1251(", склад мебели, купить кровать, интернет магазин мебели, недорогие кровати, цены, фото, отзывы.");
+						$key_h=$this->UTF8toCP1251("Фабрика Мелби. ").$name.$this->UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+						$key_f=$this->UTF8toCP1251("Фабрика Мелби. ").$name.$this->UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+						$desc=$this->UTF8toCP1251("Купить ").$name.$this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+						$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+						mysqli_query($db_connect,$query);
+						echo $query."<br>";
+						break;
+					case 124:
+						//тумбы
+						$name_trunc=str_replace($this->UTF8toCP1251("Тумба "),"",$name);
+						$name_trunc=str_replace($this->UTF8toCP1251("тумба "),"",$name_trunc);
+						$title=$name_trunc.$this->UTF8toCP1251(" тумба. Купить тумбы со склада в Киеве");
+						$keywords=$this->UTF8toCP1251("тумбы, ").$name.$this->UTF8toCP1251(", склад мебели, купить тумбу, интернет магазин мебели, недорогие тумбы, цены, фото, отзывы.");
+						$key_h=$this->UTF8toCP1251("Фабрика Мелби. ").$name.$this->UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+						$key_f=$this->UTF8toCP1251("Фабрика Мелби. ").$name.$this->UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+						$desc=$this->UTF8toCP1251("Купить ").$name.$this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+						$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+						mysqli_query($db_connect,$query);
+						echo $query."<br>";
+						break;
+					case 41:
+						//пуфы
+						$name_trunc=str_replace($this->UTF8toCP1251("Пуф "),"",$name);
+						$name_trunc=str_replace($this->UTF8toCP1251("пуф "),"",$name_trunc);
+						$title=$name_trunc.$this->UTF8toCP1251(" пуф. Купить пуфы со склада в Киеве");
+						$keywords=$this->UTF8toCP1251("пуфы, ").$name.$this->UTF8toCP1251(", склад мебели, купить пуф, интернет магазин мебели, недорогие пуфы, цены, фото, отзывы.");
+						$key_h=$this->UTF8toCP1251("Фабрика Мелби. ").$name.$this->UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+						$key_f=$this->UTF8toCP1251("Фабрика Мелби. ").$name.$this->UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+						$desc=$this->UTF8toCP1251("Купить ").$name.$this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+						$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+						mysqli_query($db_connect,$query);
+						echo $query."<br>";
+						break;
+				}
+				//а теперь включаем товар
+				$query="UPDATE goods SET goods_active=1 WHERE goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo $query."<br>";
+				$counter++;
+			}
         }
         echo "<br>Total: $counter";
         mysqli_close($db_connect);
