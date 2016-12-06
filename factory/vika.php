@@ -91,7 +91,7 @@ class Vika
                         {
                             if ($cell_num%2==0)
                             {
-                                $kat[$kat_num]=$cell->nodeValue;
+                                $kat[$kat_num]=round($cell->nodeValue);
                                 $kat_num++;
                             }
                         }
