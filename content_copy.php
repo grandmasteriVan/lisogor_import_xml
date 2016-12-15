@@ -60,7 +60,7 @@ class ContentCopy
             foreach ($goods  as $good)
             {
                 $id=$good['goods_id'];
-                $query="UPDATE goods SET goods_content='$sample_cont'";
+                $query="UPDATE goods SET goods_content='$sample_cont' WHERE goods_id=$id";
                 //mysqli_query($db_connect,$query);
                 echo "$query<br>";
             }
