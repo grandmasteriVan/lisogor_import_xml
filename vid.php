@@ -5,23 +5,23 @@
  * Date: 15.12.16
  * Time: 12:32
  */
-define ("host","localhost");
-//define ("host","10.0.0.2");
+//define ("host","localhost");
+define ("host","10.0.0.2");
 /**
  * database username
  */
-define ("user", "root");
-//define ("user", "uh333660_mebli");
+//define ("user", "root");
+define ("user", "uh333660_mebli");
 /**
  * database password
  */
-define ("pass", "");
-//define ("pass", "Z7A8JqUh");
+//define ("pass", "");
+define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
-define ("db", "mebli");
-//define ("db", "uh333660_mebli");
+//define ("db", "mebli");
+define ("db", "uh333660_mebli");
 /**
  * Class Timer
  */
@@ -92,21 +92,29 @@ class CopyVid
 			//break;
             $id=$good['goods_id'];
 			
-            if (mb_strpos($content,'iframe')!==false)
+            if (mb_strpos($content,'iframe')!=false)
             {
                 //echo "Whghgh<pre>";
 				preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $content, $videoId);
-                if (count ($videoId) == 1)
+				//echo count ($videoId)."<br>";
+                if (count ($videoId) > 0)
                 {
                     //у нас есть id video, ссылка правильная
                     // $videoId[1] - ID видео
-                    echo "$id has video $videoId[1]<br>";
-                    $url="https://www.youtube.com/embed/".$videoId[1];
-                    $query="INSERT INTO goodsfile (goodsfile_name, goodsfile_active, goodsfile_filename, goodsfile_ext, goods_id, goodsfile_actual) ".
-                        "VALUES ('$url',1,'video','',$id,1)";
-                    //mysqli_query($db_connect,$query);
+					if (mb_strpos($videoId[1],PHP_EOL)==false)
+					{
+						echo "$id has video $videoId[1]<br>";
+						$url="https://www.youtube.com/embed/".$videoId[1];
+						$query="INSERT INTO goodsfile (goodsfile_name, goodsfile_active, goodsfile_filename, goodsfile_ext, goods_id, goodsfile_actual) ".
+							"VALUES ('$url',1,'video','',$id,1)";
+						mysqli_query($db_connect,$query);
+						echo "$query<br>";
+					}
+					else
+					{
+						echo "$id<br>";
+					}
                     
-                    echo "$query<br>";
                 }
             }
         }
@@ -114,5 +122,9 @@ class CopyVid
         mysqli_close($db_connect);
     }
 }
+$runtime = new Timer();
+$runtime->setStartTime();
 $test=new CopyVid();
 $test->FindVideo();
+$runtime->setEndTime();
+echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
