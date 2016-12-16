@@ -58,8 +58,17 @@ class Timer
         return $this->end_time-$this->start_time;
     }
 }
+
+/**
+ * Class CopyVid
+ * класс пробегается по всем товарам, ищет в контенте товары где есть ссылка на ютуб видео и
+ * помещает эту ссылку в таблицу файлов
+ */
 class CopyVid
 {
+    /**
+     * @return array - массив, содержащий все актуальные товары
+     */
     private function AllTovs()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -78,6 +87,12 @@ class CopyVid
         }
         return 0;
     }
+
+    /**
+     * пробегает по всем товарам, ищет вовары, у которых в контенте есть iframe вставка
+     * дальше с помошью регулярки ищем id видео
+     * формируем полный путь к этому видео и вставляем получившуюся ссылку в таблицу файлов
+     */
     public function FindVideo()
     {
         $goods=$this->AllTovs();
@@ -91,7 +106,7 @@ class CopyVid
 			//echo $content;
 			//break;
             $id=$good['goods_id'];
-			
+			//если есть видео
             if (mb_strpos($content,'iframe')!=false)
             {
                 //echo "Whghgh<pre>";
@@ -101,6 +116,7 @@ class CopyVid
                 {
                     //у нас есть id video, ссылка правильная
                     // $videoId[1] - ID видео
+                    //все ли пошло так?
 					if (mb_strpos($videoId[1],PHP_EOL)==false)
 					{
 						echo "$id has video $videoId[1]<br>";
@@ -112,7 +128,8 @@ class CopyVid
 					}
 					else
 					{
-						echo "$id<br>";
+						//два видео на странице
+					    echo "$id<br>";
 					}
                     
                 }
