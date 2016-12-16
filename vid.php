@@ -105,6 +105,7 @@ class CopyVid
                     $query="INSERT INTO goodsfile (goodsfile_name, goodsfile_active, goodsfile_filename, goodsfile_ext, goods_id, goodsfile_actual) ".
                         "VALUES ('$url',1,'video','',$id,1)";
                     //mysqli_query($db_connect,$query);
+                    
                     echo "$query<br>";
                 }
             }
