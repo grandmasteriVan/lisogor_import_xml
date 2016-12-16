@@ -81,6 +81,7 @@ class CopyVid
     public function FindVideo()
     {
         $goods=$this->AllTovs();
+        $db_connect=mysqli_connect(host,user,pass,db);
 		//print_r($goods);
 		$i=0;
         foreach ($goods as $good)
@@ -95,15 +96,21 @@ class CopyVid
             {
                 //echo "Whghgh<pre>";
 				preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $content, $videoId);
-                if (count ($videoId) > 0)
+                if (count ($videoId) == 1)
                 {
                     //у нас есть id video, ссылка правильная
                     // $videoId[1] - ID видео
                     echo "$id has video $videoId[1]<br>";
+                    $url="https://www.youtube.com/embed/".$videoId[1];
+                    $query="INSERT INTO goodsfile (goodsfile_name, goodsfile_active, goodsfile_filename, goodsfile_ext, goods_id, goodsfile_actual) ".
+                        "VALUES ('$url',1,'video','',$id,1)";
+                    //mysqli_query($db_connect,$query);
+                    echo "$query<br>";
                 }
             }
         }
 		echo $i;
+        mysqli_close($db_connect);
     }
 }
 $test=new CopyVid();
