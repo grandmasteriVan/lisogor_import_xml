@@ -28,14 +28,16 @@ class ContentCopy
 {
 
     var $factory;
+    var $base;
 
     /**
      * ContentCopy constructor.
      * @param $factory
      */
-    public function __construct($factory)
+    public function __construct($factory,$base)
     {
         $this->factory = $factory;
+        $this->base = $base;
     }
 
     public function ContCopy()
@@ -48,7 +50,7 @@ class ContentCopy
             {
                 $goods[] = $row;
             }
-            $query="SELECT * FROM goods WHERE goods_id=25328";
+            $query="SELECT * FROM goods WHERE goods_id=$this->base";
             if ($res=mysqli_query($db_connect,$query))
             {
                 while ($row = mysqli_fetch_assoc($res))
@@ -107,7 +109,7 @@ class Timer
 
 $runtime = new Timer();
 $runtime->setStartTime();
-$test=new ContentCopy(141);
+$test=new ContentCopy(141,25328);
 $test->ContCopy();
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
