@@ -61,8 +61,16 @@ class Timer
     }
 }
 
+/**
+ * Class Check
+ * выбирает все товары, у которых старая цена меньше, чем новая. ставит старую цену равную 0
+ */
 class Check
 {
+    /**
+     * возвращает список товаров, у которых старая цена больше новой, или пустую переменную если таких товаров нет
+     * @return array|null - либо список товаров у которых старая цена больше новой, либо пустая переменая если таких нет
+     */
     private function getWrongActionList()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -81,6 +89,10 @@ class Check
             return null;
         }
     }
+
+    /**
+     *выставляет товарам, у которых старая цена выше новой старую цену = 0
+     */
     public function checkActions()
     {
         $goods=$this->getWrongActionList();
