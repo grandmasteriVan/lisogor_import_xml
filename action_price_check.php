@@ -101,13 +101,16 @@ class Check
         {
             foreach ($goods as $good)
             {
-                $id=$goods['goods_id'];
+                $id=$good['goods_id'];
                 $query="UPDATE goods SET goods_oldprice=0 WHERE goods_id=$id";
                 //mysqli_query($db_connect,$query);
                 echo "$query<br>";
             }
         }
-
+        else
+        {
+            echo "All is ok!<br>";
+        }
         mysqli_close($db_connect);
     }
 }
