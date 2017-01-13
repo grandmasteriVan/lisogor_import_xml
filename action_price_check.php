@@ -86,6 +86,7 @@ class Check
         }
         else
         {
+            mysqli_close($db_connect);
             return null;
         }
     }
@@ -115,9 +116,97 @@ class Check
     }
 }
 
+/**
+ * Class CheckDiv
+ * проверяет акционные цены на ддн
+ */
+class CheckDiv
+{
+    /**
+     * возвращает список акционных позиций
+     * @return array|null - список позиций, которые имеют акционную цену
+     */
+    private function getActionList()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT * FROM divan WHERE divan_oldprice<>0";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+            mysqli_close($db_connect);
+            return $goods;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /**
+     * возвращает все цены дивана с определенным ид
+     * @param $id int айди дивана
+     * @return array массив, содержащий все цены дивана
+     */
+    private function getPrices($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT categorydivan_price FROM categorydivan WHERE divan_id=$id";
+        unset($prices);
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $prices[] = $row;
+            }
+        }
+        return $prices;
+        mysqli_close($db_connect);
+    }
+
+    /**
+     * сбрасывает акционную цену дивану с определенным ид
+     * @param $id int айди дивана
+     */
+    private function setNullPrice($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="UPDATE divan SET divan_oldprice=0, divan_superprice=0 WHERE divan_id=$id";
+        mysqli_query($db_connect,$query);
+        echo "$query <br>";
+        mysqli_close($db_connect);
+    }
+
+    /**
+     * прверяет акционные цены диванов, если у кого-то акционная цена выше, чем обычная - исправляет
+     */
+    public function checkActions()
+    {
+        $divans=$this->getActionList();
+        if (is_array($divans))
+        {
+            foreach ($divans as $divan)
+            {
+                $id=$divan['divan_id'];
+                $oldPrice=$divan['divan_oldprice'];
+                $prices=$this->getPrices($id);
+                $priceMin=min($prices);
+                if ($priceMin>$oldPrice)
+                {
+                    $this->setNullPrice($id);
+                }
+            }
+        }
+    }
+}
+
 $runtime = new Timer();
 $runtime->setStartTime();
-$test=new Check();
-$test->checkActions();
+//$test=new Check();
+//$test->checkActions();
+$testDiv=new CheckDiv();
+$testDiv->checkActions();
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
