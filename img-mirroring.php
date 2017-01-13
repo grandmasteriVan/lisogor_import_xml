@@ -146,7 +146,7 @@ class imgWorks
             return $arr;
         }
     }
-    
+
     public function mirrorImgByList()
     {
         $tovs=$this->readListFromFile();
@@ -157,3 +157,12 @@ class imgWorks
         }
     }
 }
+
+$runtime = new Timer();
+$runtime->setStartTime();
+//$test=new Check();
+//$test->checkActions();
+$test=new imgWorks();
+$test->mirrorImgByList();
+$runtime->setEndTime();
+echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
