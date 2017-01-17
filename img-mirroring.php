@@ -5,7 +5,6 @@
  * Date: 13.01.17
  * Time: 11:35
  */
-
 //define ("host","localhost");
 define ("host","10.0.0.2");
 /**
@@ -23,7 +22,6 @@ define ("pass", "Z7A8JqUh");
  */
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
-
 /**
  * Class Timer
  */
@@ -60,7 +58,6 @@ class Timer
         return $this->end_time-$this->start_time;
     }
 }
-
 /**
  * Class imgWorks
  */
@@ -75,7 +72,8 @@ class imgWorks
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="SELECT goods_id FROM goods WHERE goods_article=$article";
-        if ($res=mysqli_query($db_connect,$query))
+        unset ($goods);
+		if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
             {
@@ -96,7 +94,6 @@ class imgWorks
                 mysqli_close($db_connect);
                 return null;
             }
-
         }
         else
         {
@@ -105,7 +102,6 @@ class imgWorks
             return null;
         }
     }
-
     /**
      * @param $id int id товара
      * функция берет картинку превью у овара с определенным id и передает ее функции, которая ее отзеркалит
@@ -130,7 +126,6 @@ class imgWorks
         }
         mysqli_close($db_connect);
     }
-
     /**
      * @param $file string старый файл
      * @param $newFile string новый файл
@@ -139,7 +134,7 @@ class imgWorks
      */
     private function makeMirrorPict($file, $newFile, $ext)
     {
-        if ($ext=="jpg")
+        if ($ext=="jpg"||$ext=="JPG")
         {
             //загружаем картинку
             $source=imagecreatefromjpeg($file);
@@ -185,9 +180,7 @@ class imgWorks
         {
             echo "unknown format $ext<br>";
         }
-
     }
-
     /**
      * @return array массив, содержащий котды товаров
      * читает из файла коды товаров и возвращает массив с ними
@@ -205,21 +198,24 @@ class imgWorks
             return $arr;
         }
     }
-
     /**
      *отзеркаливает изображения полученные из списка товаров
      */
     public function mirrorImgByList()
     {
         $tovs=$this->readListFromFile();
+		echo "<pre>";
+		print_r ($tovs);
+		echo "</pre>";
         foreach ($tovs as $tov)
         {
-            $imgId=$this->getIdByArticle($tov[0]);
+            $imgId=$this->getIdByArticle($tov);
+			echo "id=$imgId<br>";
             $this->mirrorImgById($imgId);
         }
     }
 }
-
+set_time_limit(2000);
 $runtime = new Timer();
 $runtime->setStartTime();
 $test=new imgWorks();
