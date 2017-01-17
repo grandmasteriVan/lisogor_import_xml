@@ -60,8 +60,17 @@ class Timer
         return $this->end_time-$this->start_time;
     }
 }
+
+/**
+ * Class imgWorks
+ */
 class imgWorks
 {
+    /**
+     * @param $article int код товара
+     * @return null id товара
+     * функция возвращает id по его коду на сайте
+     */
     private function getIdByArticle($article)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -96,6 +105,11 @@ class imgWorks
             return null;
         }
     }
+
+    /**
+     * @param $id int id товара
+     * функция берет картинку превью у овара с определенным id и передает ее функции, которая ее отзеркалит
+     */
     private function mirrorImgById($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -110,29 +124,74 @@ class imgWorks
             {
                 $pict_ext=$pict['goods_pict'];
             }
-            $pict_file=$_SERVER['DOCUMENT_ROOT']."/content/goods/.".$id."/$id"."_list.".$pict_ext;
+            $pict_file=$_SERVER['DOCUMENT_ROOT']."/content/goods/".$id."/$id"."_list.".$pict_ext;
             //вызываем функцию
-            $this->makeMirrorPict($pict_file,$pict_file);
+            $this->makeMirrorPict($pict_file,$pict_file, $pict_ext);
         }
         mysqli_close($db_connect);
     }
-    private function makeMirrorPict($file, $newFile)
+
+    /**
+     * @param $file string старый файл
+     * @param $newFile string новый файл
+     * @param $ext string расширение (формат) файла
+     * функция зеркально отображает $file и записывает его как $newFile
+     */
+    private function makeMirrorPict($file, $newFile, $ext)
     {
-        $source=imagecreatefromjpeg($file);
-        $size=getimagesize($file);
-        $img=imagecreatetruecolor($size[0], $size[1]);
-        for ($x=0;$x<$size[0];$x++)
+        if ($ext=="jpg")
         {
-            for ($y=0;$y<$size[1];$y++)
+            //загружаем картинку
+            $source=imagecreatefromjpeg($file);
+            //получаем ее размер
+            $size=getimagesize($file);
+            //создаем новое изображение
+            $img=imagecreatetruecolor($size[0], $size[1]);
+            //попиксельно переносим изображение в обратном порядке
+            for ($x=0;$x<$size[0];$x++)
             {
-                $color=imagecolorat($source,$x,$y);
-                imagesetpixel($img,$size[0]-$x,$y,$color);
+                for ($y=0;$y<$size[1];$y++)
+                {
+                    $color=imagecolorat($source,$x,$y);
+                    imagesetpixel($img,$size[0]-$x-1,$y,$color);
+                }
             }
+            imagejpeg($img,$newFile);
+            //чистим память
+            imagedestroy($img);
         }
-        imagejpeg($img,$newFile);
-        imagedestroy($img);
+        elseif ($ext=="png")
+        {
+            //загружаем картинку
+            $source=imagecreatefrompng($file);
+            //получаем ее размер
+            $size=getimagesize($file);
+            //создаем новое изображение
+            $img=imagecreatetruecolor($size[0], $size[1]);
+            //попиксельно переносим изображение в обратном порядке
+            for ($x=0;$x<$size[0];$x++)
+            {
+                for ($y=0;$y<$size[1];$y++)
+                {
+                    $color=imagecolorat($source,$x,$y);
+                    imagesetpixel($img,$size[0]-$x-1,$y,$color);
+                }
+            }
+            imagepng($img,$newFile);
+            //чистим память
+            imagedestroy($img);
+        }
+        else
+        {
+            echo "unknown format $ext<br>";
+        }
+
     }
 
+    /**
+     * @return array массив, содержащий котды товаров
+     * читает из файла коды товаров и возвращает массив с ними
+     */
     private function readListFromFile()
     {
         $handle=fopen("list.txt","r");
@@ -147,6 +206,9 @@ class imgWorks
         }
     }
 
+    /**
+     *отзеркаливает изображения полученные из списка товаров
+     */
     public function mirrorImgByList()
     {
         $tovs=$this->readListFromFile();
@@ -160,8 +222,6 @@ class imgWorks
 
 $runtime = new Timer();
 $runtime->setStartTime();
-//$test=new Check();
-//$test->checkActions();
 $test=new imgWorks();
 $test->mirrorImgByList();
 $runtime->setEndTime();
