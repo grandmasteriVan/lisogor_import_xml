@@ -204,9 +204,9 @@ class imgWorks
     public function mirrorImgByList()
     {
         $tovs=$this->readListFromFile();
-		echo "<pre>";
-		print_r ($tovs);
-		echo "</pre>";
+		//echo "<pre>";
+		//print_r ($tovs);
+		//echo "</pre>";
         foreach ($tovs as $tov)
         {
             $imgId=$this->getIdByArticle($tov);
