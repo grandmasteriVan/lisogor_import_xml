@@ -5,7 +5,6 @@
  * Date: 08.06.16
  * Time: 14:38
  */
-
 Class Livs
 {
     /**
@@ -15,8 +14,7 @@ Class Livs
     /**
      * @var \$data ассоциативный массив, в котором хранится информация о названии товара из прайса и его цене
      */
-    protected $data;
-
+    private $data;
     /**
      * Livs constructor.
      * @param $f file файл с прайсом в конструктор
@@ -26,7 +24,6 @@ Class Livs
         if ($f)
             $this->file1=$f;
     }
-
     /**
      * записывает в поле $data наименование товара и его цену
      * @param $name string - id дивана в прасе производителя
@@ -46,8 +43,8 @@ Class Livs
      */
     private function add_price($name, $kat0, $kat1, $kat2, $kat3, $kat4, $kat5, $kat6, $kat7, $kat8, $kat9, $kat10, $kat11, $kat12)
     {
-        $this->$data[]= [
-            'name'=>$name,
+       $this->data[]=array(
+			'name'=>$name,
             'kat0'=>$kat0,
             'kat1'=>$kat1,
             'kat2'=>$kat2,
@@ -60,10 +57,8 @@ Class Livs
             'kat9'=>$kat9,
             'kat10'=>$kat10,
             'kat11'=>$kat11,
-            'kat12'=>$kat12
-        ];
+            'kat12'=>$kat12);
     }
-
     public function parce_price_livs()
     {
         if ($this->file1)
@@ -99,20 +94,17 @@ Class Livs
                     //
                     if ($name>0)
                     {
-                        $$this->add_price($name,$kat[0],$kat[1],$kat[2],$kat[3],$kat[4],$kat[5],$kat[6],$kat[7],$kat[8],$kat[9],$kat[10],$kat[11],$kat[12]);
+                        $this->add_price($name,$kat[0],$kat[1],$kat[2],$kat[3],$kat[4],$kat[5],$kat[6],$kat[7],$kat[8],$kat[9],$kat[10],$kat[11],$kat[12]);
                     }
                 }
                 $row_num++;
             }
-
         }
         else
         {
             echo "No file, no life!";
         }
     }
-
-
     public function add_db_livs()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -130,10 +122,8 @@ Class Livs
                 }
                 else
                 {
-                    $cat_id=543+$i;
+                    $cat_id=541+$i;
                 }
-
-
                 $kat_name="kat".strval($i);
                 //echo $kat_name."<br>";
                 $d_cat=$d[$kat_name];
@@ -142,22 +132,25 @@ Class Livs
                     "WHERE goodshascategory.goods_id= ".
                     "(SELECT goods_id FROM goods WHERE (goods.goods_article_link='$d_name') AND (goods.factory_id=7)) ".
                     "AND (goodshascategory.category_id=$cat_id)";
-                echo $strSQL."<br>";
+                //echo $strSQL."<br>";
                 //break;
+				if ($d_name=='1099')
+				{
+					echo $strSQL."<br>";
+				}
                 mysqli_query($db_connect, $strSQL);
             }
             //set goods price
-            $d_cat=$d['kat1'];
+            $d_cat=$d['kat0'];
             $strSQL="UPDATE goods ".
                 "SET goods_pricecur=$d_cat ".
                 "WHERE goods_article_link='$d_name' AND factory_id=7";
-            echo $strSQL."<br>";
+            //echo $strSQL."<br>";
+			echo "$d_name is OK!<br>";
             //break;
             mysqli_query($db_connect, $strSQL);
         }
     }
-
-
     /**
      * для тестов
      * "красиво" выводим поле $data в котором лежат наименование товара и его цена
@@ -209,7 +202,4 @@ Class Livs
         <!-- </body>
         </html> --> <?php
     }
-
-
-
 }
