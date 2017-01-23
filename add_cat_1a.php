@@ -110,9 +110,9 @@ function add_cat($cat1, $cat1a, $percent, $currency=false)
 	echo "Время выполнения скрипта: $time секунд\n";
 }
 //vika
-add_cat(119,129,4,true);
+//add_cat(119,129,4,true);
 //katun
-//add_cat(17,542,5,true);
+add_cat(17,542,5,true);
 //uyut
 //add_cat(33,620,4,true);
 ?>

@@ -74,7 +74,7 @@ switch ($selectedFactory)
         //test_data_arr();
         //add_db_vika($data);
         $test = new Vika($_FILES['file']['tmp_name']);
-        $test->parce_price_vika();
+        $test->parse_price_vika();
         $test->test_data();
         //$test->add_db_vika();
         break;
@@ -99,10 +99,10 @@ switch ($selectedFactory)
         $test->add_db_comefor();
         break;
     case "Livs":
-        //new untested!!!
+        //working unit!!!
         include_once "/factory/livs_divani.php";
         $test= new Livs($_FILES['file']['tmp_name']);
-        $test->parce_price_livs();
+        $test->parse_price_livs();
         $test->test_data();
         $test->add_db_livs();
         break;
@@ -121,6 +121,9 @@ switch ($selectedFactory)
         $test->parce_price_fundesk();
         $test->test_data();
         $test->add_db_fundesk();
+        break;
+
+    case "Agat-M":
         break;
 
 

@@ -58,7 +58,7 @@ class Vika
         //echo "test!";
     }
 
-    public function parce_price_vika()
+    public function parse_price_vika()
     {
         if ($this->file1)
         {

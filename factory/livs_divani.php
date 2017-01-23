@@ -59,7 +59,11 @@ Class Livs
             'kat11'=>$kat11,
             'kat12'=>$kat12);
     }
-    public function parce_price_livs()
+
+    /**
+     *
+     */
+    public function parse_price_livs()
     {
         if ($this->file1)
         {
@@ -67,7 +71,7 @@ Class Livs
             $rows=$dom->getElementsByTagName('Row');
             //print_r($rows);
             $row_num=1;
-            //полезная инфа начинается с 13 строки!
+            //полезная инфа начинается с 4 строки!
             //артикул позиции находится в 1 ячейке
             //цена - c 6 по 18 ячейке
             foreach ($rows as $row)
@@ -105,6 +109,10 @@ Class Livs
             echo "No file, no life!";
         }
     }
+
+    /**
+     *
+     */
     public function add_db_livs()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
