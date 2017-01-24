@@ -5,7 +5,6 @@
  * Date: 23.01.17
  * Time: 14:35
  */
-
 class AgatM
 {
     /**
@@ -58,7 +57,6 @@ class AgatM
             'kat9'=>$kat9,
             'kat10'=>$kat10);
     }
-
     public function parse_price()
     {
         if ($this->file1)
@@ -72,9 +70,10 @@ class AgatM
             //цена - c 4 по 26 ячейке через одну ячейку
             foreach ($rows as $row)
             {
-                if ($row_num>=5)
+                if (($row_num>=5)&&($row_num<=40))
                 {
-                    $cells=$row->getElementsByTagName('Cell');
+                    unset($name);
+					$cells=$row->getElementsByTagName('Cell');
                     $cell_num=1;
                     $kat_num=0;
                     foreach ($cells as $cell)
@@ -83,35 +82,37 @@ class AgatM
                         if ($cell_num==1)
                         {
                             $name=$elem;
+							echo "$elem<br>";
                         }
                         if (($cell_num>=4)&&($cell_num%2==0)&&($cell_num<=26)) {
                             if ($cell_num == 4)
                             {
-                                $light = $elem;
+                                $light = round($elem);
                             }
                             else
                             {
-                                $kat[$kat_num] = $elem;
+                                $kat[$kat_num] = round($elem);
                                 $kat_num++;
                             }
                         }
                         $cell_num++;
                     }
-                    if ($name>0)
+                    if (isset($name))
                     {
                         $this->add_price($name,$light,$kat[0],$kat[1],$kat[2],$kat[3],$kat[4],$kat[5],$kat[6],$kat[7],$kat[8],$kat[9],$kat[10],$kat[11]);
+						echo "YaY!<br>";
                     }
-
                 }
                 $row_num++;
             }
-
-
         }
         else
         {
             echo "No file!";
         }
+		echo "<pre>";
+		print_r ($this->data);
+		echo "</pre>";
     }
     /**
      * для тестов
@@ -125,6 +126,8 @@ class AgatM
         <table>
             <tr>
                 <th>Артикул</th>
+				<th>Цена light кат</th>
+				<th>Цена 0 кат</th>
                 <th>Цена 1 кат</th>
                 <th>Цена 2 кат</th>
                 <th>Цена 3 кат</th>
@@ -136,13 +139,13 @@ class AgatM
                 <th>Цена 9 кат</th>
                 <th>Цена 10 кат</th>
                 <th>Цена 11 кат</th>
-                <th>Цена 12 кат</th>
-                <th>Цена 13 кат</th>
+               
             </tr>
             <?php foreach($this->data as $row)
             {?>
                 <tr>
                     <td><?php echo ($row['name']); ?></td>
+                    <td><?php echo ($row['light']); ?></td>
                     <td><?php echo ($row['kat0']); ?></td>
                     <td><?php echo ($row['kat1']); ?></td>
                     <td><?php echo ($row['kat2']); ?></td>
@@ -155,7 +158,7 @@ class AgatM
                     <td><?php echo ($row['kat9']); ?></td>
                     <td><?php echo ($row['kat10']); ?></td>
                     <td><?php echo ($row['kat11']); ?></td>
-                    <td><?php echo ($row['kat12']); ?></td>
+                    
                 </tr>
 
             <?php } ?>
