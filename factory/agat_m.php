@@ -117,6 +117,53 @@ class AgatM
 		print_r ($this->data);
 		echo "</pre>";
     }
+
+    public function add_db_livs()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        foreach ($this->data as $d)
+        {
+            $d_name=$d['name'];
+            //echo $d_name."<br>";
+            //set category prices
+            for ($i=0;$i<=10;$i++)
+            {
+                //йади каегории зависит от номера категории
+                if ($i>=0&&$i<=9)
+                {
+                    $cat_id=849+$i;
+                }
+                else
+                {
+                    $cat_id=960+$i;
+                }
+                $kat_name="kat".strval($i);
+                //echo $kat_name."<br>";
+                $d_cat=$d[$kat_name];
+                $strSQL="UPDATE goodshascategory ".
+                    "SET goodshascategory_pricecur=$d_cat ".
+                    "WHERE goodshascategory.goods_id= ".
+                    "(SELECT goods_id FROM goods WHERE (goods.goods_article_link='$d_name') AND (goods.factory_id=95)) ".
+                    "AND (goodshascategory.category_id=$cat_id)";
+                //echo $strSQL."<br>";
+                //break;
+                //if ($d_name=='1099')
+                //{
+                //    echo $strSQL."<br>";
+                //}
+                mysqli_query($db_connect, $strSQL);
+            }
+            //set goods price
+            $d_cat=$d['kat0'];
+            $strSQL="UPDATE goods ".
+                "SET goods_pricecur=$d_cat ".
+                "WHERE goods_article_link='$d_name' AND factory_id=95";
+            //echo $strSQL."<br>";
+            echo "$d_name is OK!<br>";
+            //break;
+            mysqli_query($db_connect, $strSQL);
+        }
+    }
     /**
      * для тестов
      * "красиво" выводим поле $data в котором лежат наименование товара и его цена
@@ -142,13 +189,13 @@ class AgatM
                 <th>Цена 9 кат</th>
                 <th>Цена 10 кат</th>
                 <th>Цена 11 кат</th>
-               
+                <th>Цена 12 кат</th>
+
             </tr>
             <?php foreach($this->data as $row)
             {?>
                 <tr>
                     <td><?php echo ($row['name']); ?></td>
-                    <td><?php echo ($row['light']); ?></td>
                     <td><?php echo ($row['kat0']); ?></td>
                     <td><?php echo ($row['kat1']); ?></td>
                     <td><?php echo ($row['kat2']); ?></td>
@@ -161,7 +208,8 @@ class AgatM
                     <td><?php echo ($row['kat9']); ?></td>
                     <td><?php echo ($row['kat10']); ?></td>
                     <td><?php echo ($row['kat11']); ?></td>
-                    
+                    <td><?php echo ($row['kat12']); ?></td>
+
                 </tr>
 
             <?php } ?>
