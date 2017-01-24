@@ -84,7 +84,12 @@ class AgatM
                             $name=$elem;
 							echo "$elem<br>";
                         }
-                        if (($cell_num>=4)&&($cell_num%2==0)&&($cell_num<=26)) {
+                        if (($cell_num>=4)&&($cell_num%2==0)&&($cell_num<=26))
+                        {
+                            if (($cell_num!=1)&&(!is_numeric($elem)))
+                            {
+                                break;
+                            }
                             if ($cell_num == 4)
                             {
                                 $light = round($elem);

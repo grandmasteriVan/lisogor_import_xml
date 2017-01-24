@@ -5,6 +5,7 @@
  * Date: 01.02.16
  * Time: 10:18
  */
+header('Content-Type: text/html; charset=utf-8');
 /**
  * database host
  */
