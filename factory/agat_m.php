@@ -27,7 +27,6 @@ class AgatM
     /**
      * записывает в поле $data наименование товара и его цену
      * @param $name string - id дивана в прасе производителя
-     * @param $light integer цена на категорию light
      * @param $kat0 integer цена за 0 категорию
      * @param $kat1 integer цена за 1 категорию
      * @param $kat2 integer цена за 2 категорию
@@ -39,12 +38,12 @@ class AgatM
      * @param $kat8 integer цена за 8 категорию
      * @param $kat9 integer цена за 9 категорию
      * @param $kat10 integer цена за 10 категорию
+     * @param $kat11 integer цена за 11 категорию
      */
-    private function add_price($name, $light, $kat0, $kat1, $kat2, $kat3, $kat4, $kat5, $kat6, $kat7, $kat8, $kat9, $kat10)
+    private function add_price($name, $kat0, $kat1, $kat2, $kat3, $kat4, $kat5, $kat6, $kat7, $kat8, $kat9, $kat10, $kat11)
     {
         $this->data[]=array(
             'name'=>$name,
-            'light'=>$light,
             'kat0'=>$kat0,
             'kat1'=>$kat1,
             'kat2'=>$kat2,
@@ -55,7 +54,8 @@ class AgatM
             'kat7'=>$kat7,
             'kat8'=>$kat8,
             'kat9'=>$kat9,
-            'kat10'=>$kat10);
+            'kat10'=>$kat10,
+			'kat11'=>$kat11);
     }
     public function parse_price()
     {
@@ -76,36 +76,34 @@ class AgatM
 					$cells=$row->getElementsByTagName('Cell');
                     $cell_num=1;
                     $kat_num=0;
+					$excess_val=false;
                     foreach ($cells as $cell)
                     {
                         $elem=$cell->nodeValue;
-                        if ($cell_num==1)
+                        echo "$elem<br>";
+						if ($cell_num==1)
                         {
                             $name=$elem;
-							echo "$elem<br>";
+							//echo "$elem<br>";
                         }
-                        if (($cell_num>=4)&&($cell_num%2==0)&&($cell_num<=26))
+						if ((!$excess_val)&&($cell_num>2)&&(!is_numeric($elem)))
                         {
-                            if (($cell_num!=1)&&(!is_numeric($elem)))
-                            {
-                                break;
-                            }
-                            if ($cell_num == 4)
-                            {
-                                $light = round($elem);
-                            }
-                            else
-                            {
-                                $kat[$kat_num] = round($elem);
-                                $kat_num++;
-                            }
+                            echo "$elem break<br>";
+							$excess_val=true;
+							//break;
+                        }
+                        if ((!$excess_val)&&($cell_num>=4)&&($cell_num%2==0)&&($cell_num<=26))
+                        {
+                            $kat[$kat_num] = round($elem);
+                            $kat_num++;	
                         }
                         $cell_num++;
                     }
                     if (isset($name))
                     {
-                        $this->add_price($name,$light,$kat[0],$kat[1],$kat[2],$kat[3],$kat[4],$kat[5],$kat[6],$kat[7],$kat[8],$kat[9],$kat[10],$kat[11]);
-						echo "YaY!<br>";
+                        $this->add_price($name,$kat[0],$kat[1],$kat[2],$kat[3],$kat[4],$kat[5],$kat[6],$kat[7],$kat[8],$kat[9],$kat[10],$kat[11],$kat[12]);
+						//echo "YaY!<br>";
+						unset ($name, $kat);
                     }
                 }
                 $row_num++;
