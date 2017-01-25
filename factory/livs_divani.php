@@ -59,7 +59,6 @@ Class Livs
             'kat11'=>$kat11,
             'kat12'=>$kat12);
     }
-
     /**
      * вынимаем из прайса наименование товара и его цену
      * и записываем их в поле $data
@@ -110,7 +109,6 @@ Class Livs
             echo "No file, no life!";
         }
     }
-
     /**
      *записываем распарсеный прайс в БД
      * сначала записываем данные в таблицу с прайсами
@@ -139,8 +137,13 @@ Class Livs
                 //echo $kat_name."<br>";
                 $d_cat=$d[$kat_name];
                 $oldPrice=$this->findOldPrice($d_name,$cat_id);
-                $diff=$this->priceDif($d_cat,$oldPrice);
-                echo "$diff <br>";
+                if ($oldPrice)
+				{
+					//echo "$oldPrice<br>";
+					$diff=$this->priceDif($d_cat,$oldPrice);
+				    echo "$diff <br>";
+				}
+				
                 $strSQL="UPDATE goodshascategory ".
                     "SET goodshascategory_pricecur=$d_cat ".
                     "WHERE goodshascategory.goods_id= ".
@@ -152,7 +155,7 @@ Class Livs
 				{
 					echo $strSQL."<br>";
 				}
-                mysqli_query($db_connect, $strSQL);
+                //mysqli_query($db_connect, $strSQL);
             }
             //set goods price
             $d_cat=$d['kat0'];
@@ -162,16 +165,17 @@ Class Livs
             //echo $strSQL."<br>";
 			echo "$d_name is OK!<br>";
             //break;
-            mysqli_query($db_connect, $strSQL);
+            //mysqli_query($db_connect, $strSQL);
+			//break 3;
         }
     }
-
     private function findOldPrice($name,$cat_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="SELECT goodshascategory_pricecur FROM goodshascategory WHERE goodshascategory.goods_id= ".
-            "(SELECT goods_id FROM goods WHERE (goods.goods_article_link='$d_name') AND (goods.factory_id=7)) ".
+            "(SELECT goods_id FROM goods WHERE (goods.goods_article_link='$name') AND (goods.factory_id=7)) ".
             "AND (goodshascategory.category_id=$cat_id)";
+		//echo "$query<br>";
         if ($res=mysqli_query($db_connect,$query))
         {
             unset($oldPrice);
@@ -180,11 +184,12 @@ Class Livs
                 //массив со всеми названиями товара в прайсе
                 $oldPrice = $row;
             }
+			$oldPrice=$oldPrice["goodshascategory_pricecur"];
+			//var_dump ($oldPrice);
         }
         return $oldPrice;
         mysqli_close($db_connect);
     }
-
     private function priceDif($newPrice,$oldPrice)
     {
         if ($newPrice>$oldPrice)
@@ -295,5 +300,6 @@ Class Livs
         </table>
         <!-- </body>
         </html> --> <?php
+		$this->findDif();
     }
 }
