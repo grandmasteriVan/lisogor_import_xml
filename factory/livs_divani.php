@@ -138,6 +138,9 @@ Class Livs
                 $kat_name="kat".strval($i);
                 //echo $kat_name."<br>";
                 $d_cat=$d[$kat_name];
+                $oldPrice=$this->findOldPrice($d_name,$cat_id);
+                $diff=$this->priceDif($d_cat,$oldPrice);
+                echo "$diff <br>";
                 $strSQL="UPDATE goodshascategory ".
                     "SET goodshascategory_pricecur=$d_cat ".
                     "WHERE goodshascategory.goods_id= ".
@@ -163,7 +166,41 @@ Class Livs
         }
     }
 
+    private function findOldPrice($name,$cat_id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goodshascategory_pricecur FROM goodshascategory WHERE goodshascategory.goods_id= ".
+            "(SELECT goods_id FROM goods WHERE (goods.goods_article_link='$d_name') AND (goods.factory_id=7)) ".
+            "AND (goodshascategory.category_id=$cat_id)";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            unset($oldPrice);
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                //массив со всеми названиями товара в прайсе
+                $oldPrice = $row;
+            }
+        }
+        return $oldPrice;
+        mysqli_close($db_connect);
+    }
 
+    private function priceDif($newPrice,$oldPrice)
+    {
+        if ($newPrice>$oldPrice)
+        {
+            $diff=$newPrice/$oldPrice;
+        }
+        elseif ($newPrice<$oldPrice)
+        {
+            $diff=$oldPrice/$newPrice;
+        }
+        else
+        {
+            $diff=0;
+        }
+        return $diff;
+    }
     /**
      * @return array список имен позиций, которые есть в прайсе, но нет на сайте
      */
@@ -202,7 +239,11 @@ Class Livs
             mysqli_close($db_connect);
             return $result;
         }
-        mysqli_close($db_connect);
+        else
+        {
+            mysqli_close($db_connect);
+            return null;
+        }
     }
     /**
      * для тестов
