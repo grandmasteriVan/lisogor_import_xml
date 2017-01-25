@@ -162,6 +162,48 @@ Class Livs
             mysqli_query($db_connect, $strSQL);
         }
     }
+
+
+    /**
+     * @return array список имен позиций, которые есть в прайсе, но нет на сайте
+     */
+    private function findDif()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        if ($this->data)
+        {
+            //выбираем все названия товаров в прайсе для фабрики
+            $query="SELECT goods_article_link FROM goods WHERE factory_id=7";
+            if ($res=mysqli_query($db_connect,$query))
+            {
+                unset($site_names);
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    //массив со всеми названиями товара в прайсе
+                    $site_names[] = $row;
+                }
+                //дальше просто сравниваем наши загруженные названия и те, что уже есть на сайте и получаем разницу
+                //выбираем в отдельный массив только полученные названия с прайса
+                unset($price_names);
+                foreach ($this->data as $d)
+                {
+                    //те названия, что мы прочитали в прайсе
+                    $price_names[]=$d['name'];
+                }
+                //сравниваем 2 массива и получаем массив, в котором есть названия товаров, которые есть в прайсе, но нет на сайте
+                $result=array_diff($price_names, $site_names);
+            }
+        }
+        if ($result)
+        {
+            echo "<pre>";
+            print_r($result);
+            echo "</pre>";
+            mysqli_close($db_connect);
+            return $result;
+        }
+        mysqli_close($db_connect);
+    }
     /**
      * для тестов
      * "красиво" выводим поле $data в котором лежат наименование товара и его цена
