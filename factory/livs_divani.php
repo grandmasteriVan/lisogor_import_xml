@@ -194,7 +194,7 @@ Class Livs
     {
         if ($newPrice>$oldPrice)
         {
-            $diff=round((1-$newPrice/$oldPrice)*100);
+            $diff=round(($newPrice/$oldPrice-1)*100);
         }
         elseif ($newPrice<$oldPrice)
         {
