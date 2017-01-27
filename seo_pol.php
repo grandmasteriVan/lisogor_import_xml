@@ -264,7 +264,7 @@ function seo_lvs()
  */
 function seo_fundesk()
 {
-	 $db_connect=mysqli_connect(host,user,pass,db);
+    $db_connect=mysqli_connect(host,user,pass,db);
     $query="SELECT * FROM goods WHERE factory_id=139";
 	if ($res=mysqli_query($db_connect,$query))
 	{
@@ -308,13 +308,83 @@ function seo_fundesk()
 	mysqli_close($db_connect);
 }
 
+function seo_karkas()
+{
+    $db_connect=mysqli_connect(host,user,pass,db);
+    $query="SELECT * FROM goods WHERE goods_maintcharter=98";
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            $goods[]=$row;
+        }
+        foreach ($goods as $good)
+        {
+            $id=$good['goods_id'];
+            $name=$good['goods_name'];
+            $header=$good['goods_name'];
+            $factory=$good['factory_id'];
+            if ($factory==56)
+            {
+                $name_trunc=str_replace(UTF8toCP1251("Каркас для кровати "),"",$name);
+                $title=$name_trunc.UTF8toCP1251(" каркас для кровати. Купить каркас для кровати со склада в Киеве");
+                $keywords=UTF8toCP1251("каркасы, ").$name.UTF8toCP1251(", склад мебели, купить каркас для кровати, интернет магазин мебели, недорогие каркасы, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика BRW. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика BRW. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+            if ($factory==123)
+            {
+                $name_trunc=str_replace(UTF8toCP1251("Каркас для кровати "),"",$name);
+                $title=$name_trunc.UTF8toCP1251(" каркас для кровати. Купить каркас для кровати со склада в Киеве");
+                $keywords=UTF8toCP1251("каркасы, ").$name.UTF8toCP1251(", склад мебели, купить каркас для кровати, интернет магазин мебели, недорогие каркасы, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика  Мебель сервис. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика Мебель сервис. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+            if ($factory==15)
+            {
+                $name_trunc=str_replace(UTF8toCP1251("Каркас для кровати "),"",$name);
+                $title=$name_trunc.UTF8toCP1251(" каркас для кровати. Купить каркас для кровати со склада в Киеве");
+                $keywords=UTF8toCP1251("каркасы, ").$name.UTF8toCP1251(", склад мебели, купить каркас для кровати, интернет магазин мебели, недорогие каркасы, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика  Свит меблив. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика Свит меблив. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+            if ($factory==16)
+            {
+                $name_trunc=str_replace(UTF8toCP1251("Каркас для кровати "),"",$name);
+                $title=$name_trunc.UTF8toCP1251(" каркас для кровати. Купить каркас для кровати со склада в Киеве");
+                $keywords=UTF8toCP1251("каркасы, ").$name.UTF8toCP1251(", склад мебели, купить каркас для кровати, интернет магазин мебели, недорогие каркасы, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика  Сокме. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика Сокме. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+        }
+    }
+    mysqli_close($db_connect);
+}
+
 $time_start = microtime(true);
 //seo_kupe_dom();
 //seo_mks();
 //seo_kiev_sofievka();
 //seo_velam_matr();
 //seo_lvs();
-seo_fundesk();
+//seo_fundesk();
+seo_karkas();
 $time_end = microtime(true);
 $time = $time_end - $time_start;
 echo "Runtime: $time sec\n";
