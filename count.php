@@ -22,13 +22,12 @@ define ("pass", "Z7A8JqUh");
  */
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
-
 class countTov
 {
     private function countPerFactory($factory_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT COUNT (goods_id) FROM goods WHERE factory_id=$factory_id AND goods_active=1 AND goods_noactual=0";
+        $query="SELECT count(goods_id) FROM goods WHERE factory_id=$factory_id AND goods_active=1 AND goods_noactual=0";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -36,15 +35,17 @@ class countTov
                 $goods=$row;
             }
             mysqli_close($db_connect);
+			//print_r ($goods);
+			//echo "Y!<br>";
             return $goods['count(goods_id)'];
         }
         else
         {
             mysqli_close($db_connect);
+			echo "Error<br>";
             return null;
         }
     }
-
     public function countTov()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -63,13 +64,12 @@ class countTov
                     $id=$factory['factory_id'];
                     $count_tov=$this->countPerFactory($id);
                     $name=$factory['factory_name'];
-                    echo "$name has $count_tov goods<br>";
+                    if (!is_null($count_tov))
+						echo "$name has $count_tov goods<br>";
                 }
             }
-
         }
         mysqli_close($db_connect);
-
     }
 }
 class Timer
@@ -105,7 +105,6 @@ class Timer
         return $this->end_time-$this->start_time;
     }
 }
-
 $runtime = new Timer();
 $runtime->setStartTime();
 //echo "test";
@@ -113,4 +112,3 @@ $test=new countTov();
 $test->countTov();
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
-
