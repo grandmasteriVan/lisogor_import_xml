@@ -186,7 +186,7 @@ Class Universal
                 //в цыкле проходим по всем категориям и меняем цены
                 for ($i = 0; $i <= count($pId); $i++)
                 {
-                    $oldPrice=$this->findOldPrice($d_name,$pId[$i]);
+                    $oldPrice=$this->findOldPrice($d_name,$pId[$i],true);
                     if ($oldPrice)
                     {
                         //echo "$oldPrice<br>";
@@ -217,7 +217,7 @@ Class Universal
                 //в цыкле проходим по всем категориям и меняем цены
                 for ($i = 0; $i <= count($pId); $i++)
                 {
-                    $oldPrice=$this->findOldPrice($d_name,$pId[$i]);
+                    $oldPrice=$this->findOldPrice($d_name,$pId[$i],false);
                     if ($oldPrice)
                     {
                         //echo "$oldPrice<br>";
