@@ -69,23 +69,24 @@ Class Universal
 
     /**
      * парсит прайс
-     * @param $begin int - номер строки, с которой начинается прайс
-     * @param $pos_name string - номер ячейки, в котором содержится имя товара
-     * @param $pos_0 int - номер ячейки, в которой содержится цена за 0 категорию
-     * @param $pos_1 int - номер ячейки, в которой содержится цена за 1 категорию
-     * @param $pos_2 int - номер ячейки, в которой содержится цена за 2 категорию
-     * @param $pos_3 int - номер ячейки, в которой содержится цена за 3 категорию
-     * @param $pos_4 int - номер ячейки, в которой содержится цена за 4 категорию
-     * @param $pos_5 int - номер ячейки, в которой содержится цена за 5 категорию
-     * @param $pos_6 int - номер ячейки, в которой содержится цена за 6 категорию
-     * @param $pos_7 int - номер ячейки, в которой содержится цена за 7 категорию
-     * @param $pos_8 int - номер ячейки, в которой содержится цена за 8 категорию
-     * @param $pos_9 int - номер ячейки, в которой содержится цена за 9 категорию
-     * @param $pos_10 int - номер ячейки, в которой содержится цена за 10 категорию
-     * @param $pos_11 int - номер ячейки, в которой содержится цена за 11 категорию
-     * @param $pos_12 int - номер ячейки, в которой содержится цена за 12 категорию
+     * @param $params array -  именнованный массив с параметрами, содержить поля:
+     * begin int - номер строки, с которой начинается прайс
+     * pos_name string - номер ячейки, в котором содержится имя товара
+     * pos_0 int - номер ячейки, в которой содержится цена за 0 категорию
+     * pos_1 int - номер ячейки, в которой содержится цена за 1 категорию
+     * pos_2 int - номер ячейки, в которой содержится цена за 2 категорию
+     * pos_3 int - номер ячейки, в которой содержится цена за 3 категорию
+     * pos_4 int - номер ячейки, в которой содержится цена за 4 категорию
+     * pos_5 int - номер ячейки, в которой содержится цена за 5 категорию
+     * pos_6 int - номер ячейки, в которой содержится цена за 6 категорию
+     * pos_7 int - номер ячейки, в которой содержится цена за 7 категорию
+     * pos_8 int - номер ячейки, в которой содержится цена за 8 категорию
+     * pos_9 int - номер ячейки, в которой содержится цена за 9 категорию
+     * pos_10 int - номер ячейки, в которой содержится цена за 10 категорию
+     * pos_11 int - номер ячейки, в которой содержится цена за 11 категорию
+     * pos_12 int - номер ячейки, в которой содержится цена за 12 категорию
      */
-    public function parse_price($begin, $pos_name, $pos_0, $pos_1, $pos_2, $pos_3, $pos_4, $pos_5, $pos_6, $pos_7, $pos_8, $pos_9, $pos_10, $pos_11, $pos_12)
+    public function parse_price($params)
     {
         if ($this->file1)
         {
@@ -94,7 +95,7 @@ Class Universal
             $row_num=1;
             foreach ($rows as $row)
             {
-                if ($row_num>=$begin)
+                if ($row_num>=$params['begin'])
                 {
 
                     $cells=$row->getElementsByTagName('Cell');
@@ -102,49 +103,49 @@ Class Universal
                     foreach ($cells as $cell)
                     {
                         $elem=$cell->nodeValue;
-                        if ($cell_num==$pos_name)
+                        if ($cell_num==$params['pos_name'])
                         {
                             $name=$elem;
                         }
                         switch ($cell_num)
                         {
-                            case $pos_0:
+                            case $params['pos_0']:
                                 $kat[0]=$elem;
                                 break;
-                            case $pos_1:
+                            case $params['pos_1']:
                                 $kat[1]=$elem;
                                 break;
-                            case $pos_2:
+                            case $params['pos_2']:
                                 $kat[2]=$elem;
                                 break;
-                            case $pos_3:
+                            case $params['pos_3']:
                                 $kat[3]=$elem;
                                 break;
-                            case $pos_4:
+                            case $params['pos_4']:
                                 $kat[4]=$elem;
                                 break;
-                            case $pos_5:
+                            case $params['pos_5']:
                                 $kat[5]=$elem;
                                 break;
-                            case $pos_6:
+                            case $params['pos_6']:
                                 $kat[6]=$elem;
                                 break;
-                            case $pos_7:
+                            case $params['pos_7']:
                                 $kat[7]=$elem;
                                 break;
-                            case $pos_8:
+                            case $params['pos_8']:
                                 $kat[8]=$elem;
                                 break;
-                            case $pos_9:
+                            case $params['pos_9']:
                                 $kat[9]=$elem;
                                 break;
-                            case $pos_10:
+                            case $params['pos_10']:
                                 $kat[10]=$elem;
                                 break;
-                            case $pos_11:
+                            case $params['pos_11']:
                                 $kat[11]=$elem;
                                 break;
-                            case $pos_12:
+                            case $params['pos_12']:
                                 $kat[12]=$elem;
                                 break;
 
