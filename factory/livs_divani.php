@@ -5,25 +5,25 @@
  * Date: 08.06.16
  * Time: 14:38
  */
-Class Livs
+Class Livs extends Universal
 {
     /**
      * @var \$file1 xml файл с прайсом
      */
-    private $file1;
+    //private $file1;
     /**
      * @var \$data ассоциативный массив, в котором хранится информация о названии товара из прайса и его цене
      */
-    private $data;
+    //private $data;
     /**
      * Livs constructor.
      * @param $f file файл с прайсом в конструктор
      */
-    function __construct($f)
+    /*function __construct($f)
     {
         if ($f)
             $this->file1=$f;
-    }
+    }*/
     /**
      * записывает в поле $data наименование товара и его цену
      * @param $name string - id дивана в прасе производителя
@@ -41,7 +41,7 @@ Class Livs
      * @param $kat11 integer цена за 11 категорию в долларах
      * @param $kat12 integer цена за 12 категорию в долларах
      */
-    private function add_price($name, $kat0, $kat1, $kat2, $kat3, $kat4, $kat5, $kat6, $kat7, $kat8, $kat9, $kat10, $kat11, $kat12)
+    /*private function add_price($name, $kat0, $kat1, $kat2, $kat3, $kat4, $kat5, $kat6, $kat7, $kat8, $kat9, $kat10, $kat11, $kat12)
     {
        $this->data[]=array(
 			'name'=>$name,
@@ -58,12 +58,12 @@ Class Livs
             'kat10'=>$kat10,
             'kat11'=>$kat11,
             'kat12'=>$kat12);
-    }
+    }*/
     /**
      * вынимаем из прайса наименование товара и его цену
      * и записываем их в поле $data
      */
-    public function parse_price_livs()
+    public function parse_price()
     {
         if ($this->file1)
         {
@@ -114,7 +114,7 @@ Class Livs
      * сначала записываем данные в таблицу с прайсами
      * потом, в таблицу товаров в сам товар
      */
-    public function add_db_livs()
+    public function add_db()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         foreach ($this->data as $d)
@@ -169,7 +169,7 @@ Class Livs
 			//break 3;
         }
     }
-    private function findOldPrice($name,$cat_id)
+    /*private function findOldPrice($name,$cat_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="SELECT goodshascategory_pricecur FROM goodshascategory WHERE goodshascategory.goods_id= ".
@@ -189,8 +189,8 @@ Class Livs
         }
         return $oldPrice;
         mysqli_close($db_connect);
-    }
-    private function priceDif($newPrice,$oldPrice)
+    }*/
+    /*private function priceDif($newPrice,$oldPrice)
     {
         if ($newPrice>$oldPrice)
         {
@@ -205,11 +205,11 @@ Class Livs
             $diff=0;
         }
         return $diff;
-    }
+    }*/
     /**
      * @return array список имен позиций, которые есть в прайсе, но нет на сайте
      */
-    private function findDif()
+    /*private function findDif()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         if ($this->data)
@@ -249,7 +249,7 @@ Class Livs
             mysqli_close($db_connect);
             return null;
         }
-    }
+    }*/
     /**
      * для тестов
      * "красиво" выводим поле $data в котором лежат наименование товара и его цена

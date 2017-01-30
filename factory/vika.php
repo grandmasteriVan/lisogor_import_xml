@@ -40,7 +40,7 @@ class Vika
      * @param $kat10 integer цена в десятой категории ткани
      * записывает в поле $data наименование товара и его цену
      */
-    private function add_price ($name, $kat1, $kat2, $kat3, $kat4, $kat5, $kat6, $kat7, $kat8, $kat9, $kat10)
+    public function add_price ($name, $kat1, $kat2, $kat3, $kat4, $kat5, $kat6, $kat7, $kat8, $kat9, $kat10)
     {
         $this->data[]=array(
             'name'=>$name,

@@ -11,15 +11,15 @@ Class Universal
     /**
      * @var int id фабрики с которой в данный момент работаем
      */
-    private $factory_id;
+    public $factory_id;
     /**
      * @var \$file1 xml файл с прайсом
      */
-    private $file1;
+    public $file1;
     /**
      * @var \$data ассоциативный массив, в котором хранится информация о названии товара из прайса и его цене
      */
-    private $data;
+    public $data;
     /**
      * Universal constructor.
      * @param $f string file файл с прайсом в конструктор
@@ -48,7 +48,7 @@ Class Universal
      * @param $kat11 integer цена за 11 категорию в долларах
      * @param $kat12 integer цена за 12 категорию в долларах
      */
-    private function add_price($name, $kat0, $kat1, $kat2, $kat3, $kat4, $kat5, $kat6, $kat7, $kat8, $kat9, $kat10, $kat11, $kat12)
+    public function add_price($name, $kat0, $kat1, $kat2, $kat3, $kat4, $kat5, $kat6, $kat7, $kat8, $kat9, $kat10, $kat11, $kat12)
     {
         $this->data[]=array(
             'name'=>$name,
@@ -252,7 +252,7 @@ Class Universal
      * @param $priceInCurr bool флажочек, означающий что прайс в валюте
      * @return array|null старая цена товара, взятая из бд
      */
-    private function findOldPrice($name, $cat_id, $priceInCurr)
+    public function findOldPrice($name, $cat_id, $priceInCurr)
     {
         $factory_id=$this->factory_id;
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -306,7 +306,7 @@ Class Universal
      * @param $oldPrice int старая цена товара, полученная из базы данных
      * @return float|int разница между новой и старой ценами в процентах
      */
-    private function priceDif($newPrice, $oldPrice)
+    public function priceDif($newPrice, $oldPrice)
     {
         if ($newPrice>$oldPrice)
         {
