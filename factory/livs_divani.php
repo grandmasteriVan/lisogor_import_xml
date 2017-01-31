@@ -300,6 +300,6 @@ Class Livs extends Universal
         </table>
         <!-- </body>
         </html> --> <?php
-		$this->findDif();
+	//$this->findDif();
     }
 }
