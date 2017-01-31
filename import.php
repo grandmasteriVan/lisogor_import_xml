@@ -27,7 +27,7 @@ define ("pass", "");
 define ("db", "mebli");
 //define ("db", "uh333660_mebli");
 
-
+include_once "/factory/universal.php";
 $selectedFactory=$_POST["factory"];
 $runtime = new Timer();
 $runtime->setStartTime();
@@ -102,10 +102,10 @@ switch ($selectedFactory)
     case "Livs":
         //working unit!!!
         include_once "/factory/livs_divani.php";
-        $test= new Livs($_FILES['file']['tmp_name']);
-        $test->parse_price_livs();
+        $test= new Livs($_FILES['file']['tmp_name'],7);
+        $test->parse_price();
         $test->test_data();
-        $test->add_db_livs();
+        //$test->add_db();
         break;
     case "Nova":
         //new untested!!!
