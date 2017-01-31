@@ -136,7 +136,7 @@ Class Livs extends Universal
                 $kat_name="kat".strval($i);
                 //echo $kat_name."<br>";
                 $d_cat=$d[$kat_name];
-                $oldPrice=$this->findOldPrice($d_name,$cat_id);
+                $oldPrice=$this->findOldPrice($d_name,$cat_id,true);
                 if ($oldPrice)
 				{
 					//echo "$oldPrice<br>";

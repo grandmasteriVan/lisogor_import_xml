@@ -417,7 +417,7 @@ Class Universal
     /**
      * @return array список имен позиций, которые есть в прайсе, но нет на сайте
      */
-    private function findDif()
+    public function findDif()
     {
         $db_connect = mysqli_connect(host, user, pass, db);
         if ($this->data)
