@@ -162,8 +162,8 @@ class CheckDiv
                 $prices[] = $row;
             }
         }
-        return $prices;
         mysqli_close($db_connect);
+        return $prices;
     }
 
     /**
