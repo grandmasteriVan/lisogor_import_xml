@@ -9,6 +9,10 @@
 Class Universal
 {
     /**
+     * @var array лог всех изменений
+     */
+    public $log;
+    /**
      * @var int id фабрики с которой в данный момент работаем
      */
     public $factory_id;
@@ -271,11 +275,11 @@ Class Universal
                     //массив со всеми названиями товара в прайсе
                     $oldPrice = $row;
                 }
-                $oldPrice=$oldPrice["goodshascategory_pricecur"];
+                $oldPrice=$oldPrice['goodshascategory_pricecur'];
                 //var_dump ($oldPrice);
             }
-            return $oldPrice;
             mysqli_close($db_connect);
+            return $oldPrice;
         }
         else //если в гривнах, то берем гривневую цену
         {
@@ -291,11 +295,12 @@ Class Universal
                     //массив со всеми названиями товара в прайсе
                     $oldPrice = $row;
                 }
-                $oldPrice=$oldPrice["goodshascategory_price"];
+                $oldPrice=$oldPrice['goodshascategory_price'];
                 //var_dump ($oldPrice);
             }
-            return $oldPrice;
             mysqli_close($db_connect);
+            return $oldPrice;
+
         }
 
     }
@@ -321,5 +326,91 @@ Class Universal
             $diff=0;
         }
         return $diff;
+    }
+
+    /**
+     * записываем лог на диск
+     */
+    public function logWrite()
+    {
+        if ($this->log)
+        {
+            foreach ($this->log as $logRec)
+            {
+                $filename=$this->makeLogName();
+                $goods_id=$logRec['goods_id'];
+                $cat_id=$logRec['cat_id'];
+                $oldPrice=$logRec['oldPrice'];
+                $newPrice=$logRec['newPrice'];
+                $str="$goods_id;$cat_id;$oldPrice;$newPrice".PHP_EOL;
+                file_put_contents($filename,$str,FILE_APPEND);
+
+            }
+        }
+
+    }
+
+
+    /**
+     * записываем изменения в таблицу с логами
+     * @param $goods_id int id товара
+     * @param $cat_id int айди категории
+     * @param $oldPrice int старая цена товара
+     * @param $newPrice int новая цена товара
+     */
+    public function logForm($goods_id, $cat_id, $oldPrice, $newPrice)
+    {
+        $this->log[]=array(
+            'goods_id'=>$goods_id,
+            '$cat_id'=>$cat_id,
+            'oldPrice'=>$oldPrice,
+            'newPrice'=>$newPrice
+        );
+
+    }
+
+    /**
+     * получаем имя фабрики
+     * @param $factory_id int id фабрики
+     * @return array|null имя фабрики
+     */
+    public function getFactoryName($factory_id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT factory_name FROM factory WHERE factory_id=$factory_id";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            unset($factory_name);
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                //массив со всеми названиями товара в прайсе
+                $factory_name = $row;
+            }
+            $factory_name=$factory_name['factory_name'];
+        }
+        if ($factory_name)
+        {
+            mysqli_close($db_connect);
+            return $factory_name;
+        }
+        else
+        {
+            mysqli_close($db_connect);
+            return null;
+        }
+
+    }
+
+    /**
+     * получаем имя файла для записи лога
+     * @return array|null|string имя файла в формате название фабрики_дата_время.csv
+     *
+     */
+    public function makeLogName()
+    {
+        $date=date('d-m-y\_H:i:s');
+        $name=$this->getFactoryName();
+        $name.="_$date.csv";
+        return $name;
     }
 }
