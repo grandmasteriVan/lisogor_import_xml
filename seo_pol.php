@@ -25,6 +25,7 @@ define ("db", "uh333660_mebli");
 /**
  * заполняет СЕО поля по фабрике Velam
  */
+
 function seo_velam_matr()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
