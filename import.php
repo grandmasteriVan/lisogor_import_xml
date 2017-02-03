@@ -94,10 +94,10 @@ switch ($selectedFactory)
     case "Come-for":
         //new untested!!!
         include_once "/factory/come-for.php";
-        $test= new ComeFor($_FILES['file']['tmp_name']);
-        $test->parce_price_comefor();
+        $test= new ComeFor($_FILES['file']['tmp_name'],35);
+        $test->parce_price();
         $test->test_data();
-        $test->add_db_comefor();
+        //$test->add_db();
         break;
     case "Livs":
         //working unit!!!

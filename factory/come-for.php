@@ -40,28 +40,32 @@ class ComeFor extends Universal
             //print_r($rows);
             $row_num = 1;
             //полезная инфа начинается с 15 строки!
-            //артикул позиции находится в 2 ячейке
-            //цена - 5 ячейка
+            //артикул позиции находится в 3 ячейке
+            //цена - 6 ячейка
             foreach ($rows as $row)
             {
                 if ($row_num>=15)
                 {
                     $cells=$row->getElementsByTagName('Cell');
                     $cell_num=1;
+                    unset($name);
                     foreach ($cells as $cell)
                     {
                         $elem=$cell->nodeValue;
-                        if ($cell_num==2)
+                        if ($cell_num==3)
                         {
                             $name=$elem;
                         }
-                        if ($cell_num==5)
+                        if ($cell_num==6)
                         {
                             $price=$elem;
                         }
                         $cell_num++;
                     }
-                    $this->add_price($name,$price);
+                    if ($name)
+                    {
+                        $this->add_price($name,$price);
+                    }
                 }
                 $row_num++;
             }
