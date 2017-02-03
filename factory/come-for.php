@@ -6,31 +6,15 @@
  * Time: 16:38
  */
 
-class ComeFor
+class ComeFor extends Universal
 {
-    /**
-     * @var \$file1 xml файл с прайсом
-     */
-    private $file1;
-    /**
-     * @var \$data ассоциативный массив, в котором хранится информация о названии товара из прайса и его цене
-     */
-    protected $data;
-    /**
-     * ComeFor constructor.
-     * @param \$f передаем файл с прайсом в конструктор
-     */
-    function __construct($f)
-    {
-        if ($f)
-            $this->file1=$f;
-    }
+
     /**
      * @param $name string[] код товара
      * @param $price int цена товара
      * записывает в поле $data наименование товара и его цену
      */
-    private function add_price ($name, $price)
+    /*public function add_price ($name, $price)
     {
         if ($name&&$price)
         {
@@ -41,13 +25,13 @@ class ComeFor
             //echo "test!";
         }
 
-    }
+    }*/
 
     /**
      *вынимаем из прайса наименование товара и его цену
      * и записываем их в поле $data
      */
-    public function parce_price_comefor()
+    public function parce_price()
     {
         if ($this->file1)
         {
@@ -91,15 +75,16 @@ class ComeFor
     /**
      *сохраняет информацию из поля $data в базу данных сайта
      */
-    public function add_db_comefor()
+    public function add_db()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         foreach ($this->data as $d)
         {
             $d_name=$d['name'];
             //echo $d_name."<br>";
-            $d_price=$d['price'];
+            $d_price=$d['kat0'];
             $factory_id=35;
+
             $strSQL="UPDATE goods ".
                 "SET goods_pricecur=$d_price ".
                 "WHERE goods.goods_article_link=$d_name AND factory_id=$factory_id";
@@ -139,6 +124,7 @@ class ComeFor
         </table>
         <!-- </body>
         </html> --> <?php
+        $this->findDif();
     }
 
 }

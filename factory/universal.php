@@ -190,7 +190,7 @@ Class Universal
                 //в цыкле проходим по всем категориям и меняем цены
                 for ($i = 0; $i <= count($pId); $i++)
                 {
-                    $oldPrice=$this->findOldPrice($d_name,$pId[$i],true);
+                    $oldPrice=$this->findOldPriceCat($d_name,$pId[$i],true);
                     if ($oldPrice)
                     {
                         //echo "$oldPrice<br>";
@@ -221,7 +221,7 @@ Class Universal
                 //в цыкле проходим по всем категориям и меняем цены
                 for ($i = 0; $i <= count($pId); $i++)
                 {
-                    $oldPrice=$this->findOldPrice($d_name,$pId[$i],false);
+                    $oldPrice=$this->findOldPriceCat($d_name,$pId[$i],false);
                     if ($oldPrice)
                     {
                         //echo "$oldPrice<br>";
@@ -250,13 +250,63 @@ Class Universal
     }
 
     /**
-     * выбираем старую цену товара
+     * выбираем старую цену товара из таблицы товара
+     * @param $name string название товара в прайсе
+     * @param $priceInCurr bool флажочек, означающий что прайс в валюте
+     * @return array|null старая цена товара, взятая из бд
+     */
+    public function findOldPrice($name, $priceInCurr)
+    {
+        $factory_id=$this->factory_id;
+        $db_connect=mysqli_connect(host,user,pass,db);
+        //если в валюте, то берем цену в валюте
+        if ($priceInCurr)
+        {
+            $query="SELECT goods_pricecur FROM goods WHERE factory_id=$factory_id AND goods_article_link='$name'";
+            //echo "$query<br>";
+            if ($res=mysqli_query($db_connect,$query))
+            {
+                unset($oldPrice);
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    //массив со всеми названиями товара в прайсе
+                    $oldPrice = $row;
+                }
+                $oldPrice=$oldPrice['goods_pricecur'];
+                //var_dump ($oldPrice);
+            }
+            mysqli_close($db_connect);
+            return $oldPrice;
+        }
+        else //если в гривнах, то берем гривневую цену
+        {
+            $query="SELECT goods_price FROM goods WHERE factory_id=$factory_id AND goods_article_link='$name'";
+            //echo "$query<br>";
+            if ($res=mysqli_query($db_connect,$query))
+            {
+                unset($oldPrice);
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    //массив со всеми названиями товара в прайсе
+                    $oldPrice = $row;
+                }
+                $oldPrice=$oldPrice['goods_price'];
+                //var_dump ($oldPrice);
+            }
+            mysqli_close($db_connect);
+            return $oldPrice;
+        }
+
+    }
+
+    /**
+     * выбираем старую цену товара из категории
      * @param $name string название товара в прайсе
      * @param $cat_id int id категории в таблице goodshascategory
      * @param $priceInCurr bool флажочек, означающий что прайс в валюте
      * @return array|null старая цена товара, взятая из бд
      */
-    public function findOldPrice($name, $cat_id, $priceInCurr)
+    public function findOldPriceCat($name, $cat_id, $priceInCurr)
     {
         $factory_id=$this->factory_id;
         $db_connect=mysqli_connect(host,user,pass,db);
