@@ -308,6 +308,86 @@ function seo_fundesk()
 	mysqli_close($db_connect);
 }
 
+function seo_brw()
+{
+    $db_connect=mysqli_connect(host,user,pass,db);
+    $query="SELECT * FROM goods WHERE factory_id=56";
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            $goods[]=$row;
+        }
+        foreach ($goods as $good)
+        {
+            $id=$good['goods_id'];
+            $name=$good['goods_name'];
+            $header=$good['goods_name'];
+            $tcharter=$good['goods_maintcharter'];
+            if ($tcharter==126)
+            {
+                $name_trunc=str_replace(UTF8toCP1251("Стол "),"",$name);
+                $name_trunc=str_replace(UTF8toCP1251("детский "),"",$name_trunc);
+                $name_trunc=str_replace(UTF8toCP1251("письменный "),"",$name_trunc);
+                $title=$name_trunc.UTF8toCP1251(" стол. Купить стол со склада в Киеве");
+                $keywords=UTF8toCP1251("столы, ").$name.UTF8toCP1251(", склад мебели, купить стол, интернет магазин мебели, недорогие столы, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика BRW. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика BRW. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+            if ($tcharter==33)
+            {
+                $name_trunc=str_replace(UTF8toCP1251("Детская "),"",$name);
+                $name_trunc=str_replace(UTF8toCP1251("кровать "),"",$name_trunc);
+                $title=$name_trunc.UTF8toCP1251(" кровать детская. Купить детскую кровать со склада в Киеве");
+                $keywords=UTF8toCP1251("детские кровати, ").$name.UTF8toCP1251(", склад мебели, купить кровать детскую, интернет магазин мебели, недорогие детские кровати, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика BRW. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика BRW. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+            if ($tcharter==74)
+            {
+                $name_trunc=str_replace(UTF8toCP1251("Шкаф "),"",$name);
+                $name_trunc=str_replace(UTF8toCP1251("угловой "),"",$name_trunc);
+                $name_trunc=str_replace(UTF8toCP1251("детский "),"",$name_trunc);
+                $name_trunc=str_replace(UTF8toCP1251("Детский "),"",$name_trunc);
+                $name_trunc=str_replace(UTF8toCP1251("детский "),"",$name_trunc);
+                $title=$name_trunc.UTF8toCP1251(" детский шкаф. Купить детский шкаф со склада в Киеве");
+                $keywords=UTF8toCP1251("детские шкафы, ").$name.UTF8toCP1251(", склад мебели, купить детский шкаф, интернет магазин мебели, недорогие детские шкафы, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика BRW. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика BRW. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+            if ($tcharter==32)
+            {
+                $name_trunc=str_replace(UTF8toCP1251("Шкаф "),"",$name);
+                $name_trunc=str_replace(UTF8toCP1251("Комод "),"",$name_trunc);
+                $name_trunc=str_replace(UTF8toCP1251("комод "),"",$name_trunc);
+                $name_trunc=str_replace(UTF8toCP1251("Детский "),"",$name_trunc);
+                $name_trunc=str_replace(UTF8toCP1251("детский "),"",$name_trunc);
+                $title=$name_trunc.UTF8toCP1251(" детский комод. Купить детский комод со склада в Киеве");
+                $keywords=UTF8toCP1251("детские комоды, ").$name.UTF8toCP1251(", склад мебели, купить детский комод, интернет магазин мебели, недорогие детские комоды, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика BRW. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика BRW. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+        }
+    }
+    mysqli_close($db_connect);
+}
+
 function seo_karkas()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -384,7 +464,8 @@ $time_start = microtime(true);
 //seo_velam_matr();
 //seo_lvs();
 //seo_fundesk();
-seo_karkas();
+//seo_karkas();
+seo_brw();
 $time_end = microtime(true);
 $time = $time_end - $time_start;
 echo "Runtime: $time sec\n";
