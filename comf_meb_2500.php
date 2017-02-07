@@ -5,7 +5,6 @@
  * Date: 06.02.17
  * Time: 17:13
  */
-
 header('Content-Type: text/html; charset=utf-8');
 /**
  * database host
@@ -27,14 +26,12 @@ define ("pass", "");
  */
 define ("db", "mebli");
 //define ("db", "uh333660_mebli");
-
 /**
  * Class comfMebPlus
  * проставляет цену за размеры шкафов 2500 (+10% к такому же шкафу с размером 2350)
  */
 class comfMebPlus
 {
-
     /**
      * выбирает все шкафы заданного размер по высоте
      * @param $size int - размер шкафа
@@ -59,7 +56,6 @@ class comfMebPlus
             return null;
         }
     }
-
     /**
      *для каждого шкафа высотой 2350 находим соответствующий ему (по имени) шкаф высотой 2500
      * и для такого шкафа ставим цену на 10% выше.
@@ -72,12 +68,33 @@ class comfMebPlus
         {
             foreach ($goods_2350 as $good_2350)
             {
-                $name_2350_sub=substr($good_2350['goods_name'],0,-4);
+                $name_2350=$good_2350['goods_name'];
+				//echo $name_2350." len=".strlen($name_2350)."<br>";
+				if (strlen($name_2350)<=42)
+				{
+					$name_2350_sub=substr($name_2350,0,-4);
+					//echo $name_2350_sub."<br>";
+				}
+				else
+				{
+					$name_2350_sub=substr($name_2350,0,-11);
+					//if (
+					//echo $name_2350_sub."<br>";
+				}
                 if (is_array($goods_2500))
                 {
                     foreach ($goods_2500 as $good_2500)
                     {
-                        $name_2500_sub=substr($good_2500['goods_name'],0,-4);
+                        $name_2500=$good_2500['goods_name'];
+						if (strlen($name_2500)<=42)
+						{
+							$name_2500_sub=substr($name_2500,0,-4);
+						}
+						else
+						{
+							$name_2500_sub=substr($name_2500,0,-11);
+						}
+						
                         if ($name_2350_sub==$name_2500_sub)
                         {
                             //меняем цены!
@@ -86,11 +103,9 @@ class comfMebPlus
                         }
                     }
                 }
-
             }
         }
     }
-
     /**
      * записывает изменение цен в базу данных
      * @param $price  int - цена за шкаф, высотой в 2350
@@ -101,8 +116,49 @@ class comfMebPlus
         $new_price=round($price*1,1);
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="UPDATE goods SET goods_price=$new_price WHERE goods_id=$good_id";
-        mysqli_query($db_connect,$query);
+        //mysqli_query($db_connect,$query);
         echo "$query<br>";
         mysqli_close($db_connect);
     }
 }
+
+class Timer
+{
+    /**
+     * @var время начала выпонения
+     */
+    private $start_time;
+    /**
+     * @var время конца выполнения
+     */
+    private $end_time;
+    /**
+     * встанавливаем время начала выполнения скрипта
+     */
+    public function setStartTime()
+    {
+        $this->start_time = microtime(true);
+    }
+    /**
+     * устанавливаем время конца выполнения скрипта
+     */
+    public function setEndTime()
+    {
+        $this->end_time = microtime(true);
+    }
+    /**
+     * @return mixed время выполения
+     * возвращаем время выполнения скрипта в секундах
+     */
+    public function getRunTime()
+     {
+         return $this->start_time-$this->end_time;
+     }
+}
+
+$runtime = new Timer();
+$runtime->setStartTime();
+$test=new comfMebPlus();
+$test->makePlus();
+$runtime->setEndTime();
+echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
