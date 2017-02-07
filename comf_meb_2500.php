@@ -40,7 +40,7 @@ class comfMebPlus
     private function selectSize($size)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT * FROM goods WHERE goods_height=$size AND factory_id=122";
+        $query="SELECT * FROM goods WHERE goods_height=$size AND factory_id=122 AND goods_active=1 AND goods_noactual=0";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -65,6 +65,34 @@ class comfMebPlus
         $goods_2350=$this->selectSize(2350);
         $goods_2500=$this->selectSize(2500);
         if (is_array($goods_2350))
+        {
+            foreach ($goods_2350 as $good_2350)
+            {
+                $depth_2350=$good_2350['goods_depth'];
+                $width_2350=$good_2350['goods_width'];
+                $name_2350=$good_2350['goods_name'];
+                $name_2350_sub=substr($name_2350,0,26);
+                $price=$good_2350['goods_price'];
+                if (is_array($goods_2500))
+                {
+                    foreach ($goods_2500 as $good_2500)
+                    {
+                        $depth_2500=$good_2500['goods_depth'];
+                        $width_2500=$good_2500['goods_width'];
+                        $name_2500=$good_2500['goods_name'];
+                        $name_2500_sub==substr($name_2500,0,26);
+                        $id=$good_2500['goods_id'];
+
+                        if (($depth_2350==$depth_2500)&&($width_2350==$width_2500)&&($name_2350_sub==$name_2500_sub))
+                        {
+                            $this->changePrice($price,$id);
+                        }
+                    }
+                }
+            }
+        }
+
+        /*if (is_array($goods_2350))
         {
             foreach ($goods_2350 as $good_2350)
             {
@@ -104,7 +132,7 @@ class comfMebPlus
                     }
                 }
             }
-        }
+        }*/
     }
     /**
      * записывает изменение цен в базу данных
