@@ -119,7 +119,7 @@ function seo_kiev_sofievka()
             $goods_kind=$good['goodskind_id'];
             $id=$good['goods_id'];
             //$name=$good['goods_name'];
-			echo "Goods name: $name<br>";
+			//echo "Goods name: $name<br>";
 			
 			$name=UTF8toCP1251("Диван ").$header;
             //переименовываем диваны
@@ -458,6 +458,94 @@ function seo_karkas()
     mysqli_close($db_connect);
 }
 
+function seo_mej_dveri()
+{
+    $db_connect=mysqli_connect(host,user,pass,db);
+    $query="SELECT goods.goods_id, goods.goods_name, factory.factory_name ".
+        "FROM goods JOIN factory ON goods.factory_id=factory.factory_id ".
+        "WHERE goods.goods_maintcharter=76";
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            $goods[] = $row;
+        }
+        if (is_array($goods))
+        {
+            foreach ($goods as $good)
+            {
+                $id=$good['goods_id'];
+                $name=$good['goods_name'];
+                $header=$good['goods_name'];
+                $factory=$good['factory_name'];
+
+                $factory=str_replace(UTF8toCP1251("Фабрика "),"",$factory);
+                $name_trunc=str_replace(UTF8toCP1251("Дверь "),"",$name);
+                $name_trunc=str_replace(UTF8toCP1251("межкомнатная "),"",$name_trunc);
+
+                $title=$name_trunc.UTF8toCP1251(" межкомнатная дверь. Купить межкомнатную дверь со склада в Киеве");
+                $keywords=UTF8toCP1251("межкомнатные двери, ").$name.UTF8toCP1251(", склад мебели, купить межкомнатную дверь, интернет магазин мебели, недорогие межкомнатные двери, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                //mysqli_query($db_connect,$query);
+                echo $query."<br>";
+                break;
+            }
+        }
+        else
+        {
+            echo "No array to work with!";
+        }
+    }
+    mysqli_close($db_connect);
+}
+
+function seo_ent_door()
+{
+    $db_connect=mysqli_connect(host,user,pass,db);
+    $query="SELECT goods.goods_id, goods.goods_name, factory.factory_name ".
+        "FROM goods JOIN factory ON goods.factory_id=factory.factory_id ".
+        "WHERE goods.goods_maintcharter=76";
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            $goods[] = $row;
+        }
+        if (is_array($goods))
+        {
+            foreach ($goods as $good)
+            {
+                $id=$good['goods_id'];
+                $name=$good['goods_name'];
+                $header=$good['goods_name'];
+                $factory=$good['factory_name'];
+
+                $factory=str_replace(UTF8toCP1251("Фабрика "),"",$factory);
+                $name_trunc=str_replace(UTF8toCP1251("дверь "),"",$name);
+                $name_trunc=str_replace(UTF8toCP1251("Входная "),"",$name_trunc);
+
+                $title=$name_trunc.UTF8toCP1251(" входная дверь. Купить входную дверь со склада в Киеве");
+                $keywords=UTF8toCP1251("входные двери, ").$name.UTF8toCP1251(", склад мебели, купить входную дверь, интернет магазин мебели, недорогие входные двери, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                //mysqli_query($db_connect,$query);
+                echo $query."<br>";
+                break;
+            }
+        }
+        else
+        {
+            echo "No array to work with!";
+        }
+    }
+    mysqli_close($db_connect);
+}
+
 $time_start = microtime(true);
 //seo_kupe_dom();
 //seo_mks();
@@ -466,7 +554,9 @@ $time_start = microtime(true);
 //seo_lvs();
 //seo_fundesk();
 //seo_karkas();
-seo_brw();
+//seo_brw();
+seo_mej_dveri();
+seo_ent_door();
 $time_end = microtime(true);
 $time = $time_end - $time_start;
 echo "Runtime: $time sec\n";
