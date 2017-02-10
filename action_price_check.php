@@ -74,7 +74,7 @@ class Check
     private function getWrongActionList()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT * FROM goods WHERE goods_price<goods_oldprice";
+        $query="SELECT goods_id FROM goods WHERE goods_price>goods_oldprice AND goods_oldprice<>0";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -82,6 +82,7 @@ class Check
                 $goods[] = $row;
             }
             mysqli_close($db_connect);
+			var_dump ($goods);
             return $goods;
         }
         else
@@ -104,7 +105,7 @@ class Check
             {
                 $id=$good['goods_id'];
                 $query="UPDATE goods SET goods_oldprice=0 WHERE goods_id=$id";
-                //mysqli_query($db_connect,$query);
+                mysqli_query($db_connect,$query);
                 echo "$query<br>";
             }
         }
@@ -162,8 +163,8 @@ class CheckDiv
                 $prices[] = $row;
             }
         }
-        mysqli_close($db_connect);
         return $prices;
+        mysqli_close($db_connect);
     }
 
     /**
@@ -174,7 +175,7 @@ class CheckDiv
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="UPDATE divan SET divan_oldprice=0, divan_superprice=0 WHERE divan_id=$id";
-        mysqli_query($db_connect,$query);
+        //mysqli_query($db_connect,$query);
         echo "$query <br>";
         mysqli_close($db_connect);
     }
@@ -204,9 +205,9 @@ class CheckDiv
 
 $runtime = new Timer();
 $runtime->setStartTime();
-//$test=new Check();
-//$test->checkActions();
-$testDiv=new CheckDiv();
-$testDiv->checkActions();
+$test=new Check();
+$test->checkActions();
+//$testDiv=new CheckDiv();
+//$testDiv->checkActions();
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
