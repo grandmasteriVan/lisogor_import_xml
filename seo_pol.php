@@ -58,6 +58,37 @@ function seo_velam_matr()
             //break;
         }
     }
+
+    $query="SELECT * FROM goods WHERE goodskind_id=88 AND factory_id=137";
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            $goods[]=$row;
+        }
+        foreach ($goods as $good)
+        {
+            $id=$good['goods_id'];
+            $name=$good['goods_name'];
+            $header=$good['goods_name'];
+            $name_trunc=str_replace(UTF8toCP1251("Наматрасник "),"",$name);
+            $title=$name_trunc.UTF8toCP1251(" наматрасник. Купить наматрасники со склада в Киеве");
+            $keywords=UTF8toCP1251("наматрасники, ").$name.UTF8toCP1251(", склад мебели, купить наматрасник, интернет магазин мебели, недорогие наматрасники, цены, фото, отзывы.");
+            $key_h=UTF8toCP1251("Фабрика Velam. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+            $key_f=UTF8toCP1251("Фабрика Velam. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+            $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+            $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+            mysqli_query($db_connect,$query);
+            echo $query."<br>";
+            //$header=$good['goods_header'];
+            /*$title=$good['goods_title'];
+            $keywords=$good['goods_keyw'];
+            $key_h=$good['goods_hkeyw'];
+            $key_f=&$good['goods_fkeyw'];
+            $desc=$good['goods_desc'];*/
+            //break;
+        }
+    }
     mysqli_close($db_connect);
 }
 /**
@@ -540,13 +571,13 @@ $time_start = microtime(true);
 //seo_kupe_dom();
 //seo_mks();
 //seo_kiev_sofievka();
-//seo_velam_matr();
+seo_velam_matr();
 //seo_lvs();
 //seo_fundesk();
 //seo_karkas();
 //seo_brw();
-seo_mej_dveri();
-seo_ent_door();
+//seo_mej_dveri();
+//seo_ent_door();
 $time_end = microtime(true);
 $time = $time_end - $time_start;
 echo "Runtime: $time sec\n";
