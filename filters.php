@@ -53,11 +53,31 @@ class Filter
                     {
                         $values[] = $row;
                     }
-                    $tab['$table'][]=$values;
+					/*echo "<pre>";
+					print_r($values);
+					echo "</pre>";*/
+					/*if (is_array($values))
+					{
+						foreach ($values as $value)
+						{
+							$val_id=$table."_id";
+							$val_name=$table."_name";
+							$tab_tmp["$table"]['id']=$value["$val_id"];
+							$tab_tmp["$table"]['value']=$value["$val_name"];
+							$tab[]=$tab_tmp;
+						}	
+					}
+					else
+					{
+						echo "table $table is empty! <br>";
+					}*/
+										
+					//echo "table name: $table<br>";
+                    $tab["$table"][]=$values;
                 }
             }
+			
             return $tab;
-
         }
     }
     private function getTables()
