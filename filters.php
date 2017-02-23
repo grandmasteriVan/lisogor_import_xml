@@ -30,7 +30,35 @@ class Filter
         echo "<pre>";
         print_r($tables);
         echo "<pre>";*/
-        $this->getRTables();
+        //$this->getRTables();
+        $test=$this->getValues();
+        echo "<pre>";
+        print_r($test);
+        echo "</pre>";
+    }
+    private function getValues()
+    {
+        $tables_list=$this->getRTables();
+        if (is_array($tables_list))
+        {
+            $db_connect=&$this->getConnection();
+            unset($tab);
+            foreach ($tables_list as $table)
+            {
+                $query="SELECT * FROM $table";
+                if ($res=mysqli_query($db_connect,$query))
+                {
+                    unset ($values);
+                    while ($row = mysqli_fetch_assoc($res))
+                    {
+                        $values[] = $row;
+                    }
+                    $tab['$table'][]=$values;
+                }
+            }
+            return $tab;
+
+        }
     }
     private function getTables()
     {
