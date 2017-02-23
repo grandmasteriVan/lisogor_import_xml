@@ -5,8 +5,6 @@
  * Date: 23.02.17
  * Time: 15:19
  */
-
-
 define ("host","localhost");
 //define ("host","10.0.0.2");
 /**
@@ -24,8 +22,6 @@ define ("pass", "");
  */
 define ("db", "mebli");
 //define ("db", "uh333660_mebli");
-
-
 class Filter
 {
     public function test()
@@ -36,7 +32,6 @@ class Filter
         echo "<pre>";*/
         $this->getRTables();
     }
-
     private function getTables()
     {
         $db_connect=$this->getConnection();
@@ -49,22 +44,25 @@ class Filter
                 $tables[] = $row;
             }
         }
-
-        return $tables;
+        $this->breakConnection($db_connect);
+		return $tables;
     }
-
     private function getRTables()
     {
         $tables=$this->getTables();
-        foreach ($tables as $table)
+        unset ($rTables);
+		foreach ($tables as $table)
         {
-            if (mb_strpos($table['Tables_in_mebli'],0,1)=='r')
+            $table_name=$table['Tables_in_mebli'];
+			//echo "$table_name";
+			if (mb_substr($table_name,0,1)=='r')
             {
-                echo $table['Tables_in_mebli']."<br>";
+                $rTables[]=$table_name;
+				//echo $table_name."<br>";
             }
         }
+		return $rTables;
     }
-
     private function getConnection()
     {
         return $db_connect=mysqli_connect(host,user,pass,db);
@@ -74,6 +72,5 @@ class Filter
         mysqli_close($db_connect);
     }
 }
-
 $test=new Filter();
 $test->test();
