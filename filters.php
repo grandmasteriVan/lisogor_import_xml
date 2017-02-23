@@ -83,7 +83,7 @@ class Filter
         {
             $table_name=$table['Tables_in_mebli'];
 			//echo "$table_name";
-			if (mb_substr($table_name,0,1)=='r')
+			if ((mb_substr($table_name,0,1)=='r')&&(strcasecmp($table_name,'reviewpict')!=0)&&(strcasecmp($table_name,'review')!=0))
             {
                 $rTables[]=$table_name;
 				//echo $table_name."<br>";
