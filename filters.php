@@ -7,33 +7,34 @@
  */
 
 
-//define ("host","localhost");
-define ("host","10.0.0.2");
+define ("host","localhost");
+//define ("host","10.0.0.2");
 /**
  * database username
  */
-//define ("user", "root");
-define ("user", "uh333660_mebli");
+define ("user", "root");
+//define ("user", "uh333660_mebli");
 /**
  * database password
  */
-//define ("pass", "");
-define ("pass", "Z7A8JqUh");
+define ("pass", "");
+//define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
-//define ("db", "mebli");
-define ("db", "uh333660_mebli");
+define ("db", "mebli");
+//define ("db", "uh333660_mebli");
 
 
 class Filter
 {
     public function test()
     {
-        $tables=$this->getTables();
+        /*$tables=$this->getTables();
         echo "<pre>";
         print_r($tables);
-        echo "<pre>";
+        echo "<pre>";*/
+        $this->getRTables();
     }
 
     private function getTables()
@@ -50,7 +51,18 @@ class Filter
         }
 
         return $tables;
+    }
 
+    private function getRTables()
+    {
+        $tables=$this->getTables();
+        foreach ($tables as $table)
+        {
+            if (mb_strpos($table['Tables_in_mebli'],0,1)=='r')
+            {
+                echo $table['Tables_in_mebli']."<br>";
+            }
+        }
     }
 
     private function getConnection()
