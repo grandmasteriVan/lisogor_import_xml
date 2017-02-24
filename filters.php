@@ -31,10 +31,10 @@ class Filter
         print_r($tables);
         echo "<pre>";*/
         //$this->getRTables();
-        $test=$this->getRTables();
-        /*echo "<pre>";
-        print_r($test);
-        echo "</pre>";*/
+        $test=$this->getValues();
+        //echo "<pre>";
+        //print_r($test);
+        //echo "</pre>";
         $this->getEqualInOne($test);
     }
     private function getValues()
@@ -52,7 +52,10 @@ class Filter
                     unset ($values);
                     while ($row = mysqli_fetch_assoc($res))
                     {
-                        $values[] = $row;
+                        array_push($row,"$table");
+						$values[] = $row;
+						//array_push($values[],$row);
+						//break;
                     }
 					/*echo "<pre>";
 					print_r($values);
@@ -74,10 +77,14 @@ class Filter
 					}*/
 										
 					//echo "table name: $table<br>";
-                    $tab["$table"][]=$values;
+					//$tab[]=array(["$table"],$values);
+					//array_push($values,"$table");
+                    $tab["$table"]=$values;
+                    //$tab[]=$values;
+					
                 }
+				//break;
             }
-			
             return $tab;
         }
         else
@@ -91,17 +98,29 @@ class Filter
         {
             foreach ($tabs as $tab)
             {
-                 echo "<pre>";
-                 print_r($tab);
-                 echo "</pre>";
+                //echo "<pre>";
+                //print_r($tab);
+                //echo "</pre>";
+				//break;
+				for ($i=0;$i<count($tab);$i++)
+				{
+					//print_r ($tab);
+					//echo "<br>------------------------------------------<br>";
+					//print_r ($tab[$i]);// $tab[i][0]."<br>"; 
+					$name_val=$tab[$i][0]."_name";
+					$tab[$i]["$name_val"]=ucfirst($tab[$i]["$name_val"]);
+					$newArr[]=array($tab[$i][0],$tab[$i]["$name_val"]);
+				}
             }
+			echo "<pre>";
+            print_r($newArr);
+            echo "</pre>";
         }
         else
         {
             echo "No Array!";
         }
     }
-
     private function getTables()
     {
         $db_connect=$this->getConnection();
