@@ -31,10 +31,11 @@ class Filter
         print_r($tables);
         echo "<pre>";*/
         //$this->getRTables();
-        $test=$this->getValues();
-        echo "<pre>";
+        $test=$this->getRTables();
+        /*echo "<pre>";
         print_r($test);
-        echo "</pre>";
+        echo "</pre>";*/
+        $this->getEqualInOne($test);
     }
     private function getValues()
     {
@@ -79,7 +80,28 @@ class Filter
 			
             return $tab;
         }
+        else
+        {
+            return null;
+        }
     }
+    private function getEqualInOne($tabs)
+    {
+        if (is_array($tabs))
+        {
+            foreach ($tabs as $tab)
+            {
+                 echo "<pre>";
+                 print_r($tab);
+                 echo "</pre>";
+            }
+        }
+        else
+        {
+            echo "No Array!";
+        }
+    }
+
     private function getTables()
     {
         $db_connect=$this->getConnection();
