@@ -58,7 +58,6 @@ function seo_velam_matr()
             //break;
         }
     }
-
     $query="SELECT * FROM goods WHERE goodskind_id=88 AND factory_id=137";
     if ($res=mysqli_query($db_connect,$query))
     {
@@ -526,7 +525,6 @@ function seo_mej_dveri()
     }
     mysqli_close($db_connect);
 }
-
 function seo_detskaj()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -614,7 +612,6 @@ function seo_detskaj()
                     echo $query."<br>";
                     //break;
                 }
-
             }
         }
         else
@@ -622,9 +619,7 @@ function seo_detskaj()
             echo "No array to work with!";
         }
     }
-
 }
-
 function seo_ent_door()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -666,7 +661,6 @@ function seo_ent_door()
     }
     mysqli_close($db_connect);
 }
-
 function seo_dalio()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -689,8 +683,8 @@ function seo_dalio()
                 $name_trunc=str_replace(UTF8toCP1251(" угловой"),"",$name_trunc);
                 $title=$name_trunc.UTF8toCP1251(" диван. Купить диван со склада в Киеве");
                 $keywords=UTF8toCP1251("диваны, ").$name.UTF8toCP1251(", склад мебели, купить диван, интернет магазин мебели, недорогие диваны, цены, фото, отзывы.");
-                $key_h=UTF8toCP1251("Фабрика Dalio. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
-                $key_f=UTF8toCP1251("Фабрика Dalio. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $key_h=UTF8toCP1251("Фабрика ")."Dalio. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика ")."Dalio. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
                 $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
                 $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -701,8 +695,8 @@ function seo_dalio()
                 $name_trunc=str_replace(UTF8toCP1251("Кресло "),"",$name);
                 $title=$name_trunc.UTF8toCP1251(" кресло. Купить кресло со склада в Киеве");
                 $keywords=UTF8toCP1251("кресла, ").$name.UTF8toCP1251(", склад мебели, купить кресло, интернет магазин мебели, недорогие кресла, цены, фото, отзывы.");
-                $key_h=UTF8toCP1251("Фабрика Dalio. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
-                $key_f=UTF8toCP1251("Фабрика Dalio. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $key_h=UTF8toCP1251("Фабрика ")."Dalio. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика ")."Dalio. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
                 $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
                 $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -713,8 +707,8 @@ function seo_dalio()
                 $name_trunc=str_replace(UTF8toCP1251("Кровать "),"",$name);
                 $title=$name_trunc.UTF8toCP1251(" кровать. Купить кровать со склада в Киеве");
                 $keywords=UTF8toCP1251("кровати, ").$name.UTF8toCP1251(", склад мебели, купить кровати, интернет магазин мебели, недорогие кровати, цены, фото, отзывы.");
-                $key_h=UTF8toCP1251("Фабрика Dalio. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
-                $key_f=UTF8toCP1251("Фабрика Dalio. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $key_h=UTF8toCP1251("Фабрика ")."Dalio. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика ")."Dalio. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
                 $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
                 $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
                 mysqli_query($db_connect,$query);
@@ -725,8 +719,6 @@ function seo_dalio()
     }
     mysqli_close($db_connect);
 }
-
-
 $time_start = microtime(true);
 //seo_kupe_dom();
 //seo_mks();
