@@ -528,12 +528,13 @@ function seo_mej_dveri()
 function seo_detskaj()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT goods.goods_id, goods.goods_name, factory.factory_name ".
+    $query="SELECT goods.goods_id, goods.goods_name, goods.goods_maintcharter, factory.factory_name ".
         "FROM goods JOIN factory ON goods.factory_id=factory.factory_id ".
         "WHERE goods.goods_maintcharter=135 OR goods.goods_maintcharter=134 OR goods.goods_maintcharter=133 ".
         "OR goods.goods_maintcharter=132 OR goods.goods_maintcharter=131 OR goods.goods_maintcharter=130 ".
-        "OR goods.goods_maintcharter=129 OR goods.goods_maintcharter=128 OR goods.goods_maintcharter=127";
-    mysqli_close($db_connect);
+        "OR goods.goods_maintcharter=129 OR goods.goods_maintcharter=128 OR goods.goods_maintcharter=127 ".
+        "OR goods.goods_maintcharter=33 OR goods.goods_maintcharter=74";
+    
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
@@ -542,7 +543,10 @@ function seo_detskaj()
         }
         if (is_array($goods))
         {
-            foreach ($goods as $good)
+            /*echo "<pre>";
+			print_r ($goods);
+			echo "</pre>";*/
+			foreach ($goods as $good)
             {
                 $id=$good['goods_id'];
                 $name=$good['goods_name'];
@@ -551,7 +555,7 @@ function seo_detskaj()
                 $factory=str_replace(UTF8toCP1251("Фабрика "),"",$factory);
                 $tcharter=$good['goods_maintcharter'];
                 //кроватки для новорожденных
-                if ($tcharter==127)
+                /*if ($tcharter==127)
                 {
                     $name_trunc=str_replace(UTF8toCP1251("Дверь "),"",$name);
                     $name_trunc=str_replace(UTF8toCP1251("межкомнатная "),"",$name_trunc);
@@ -611,7 +615,7 @@ function seo_detskaj()
                     mysqli_query($db_connect,$query);
                     echo $query."<br>";
                     //break;
-                }
+                }*/
                 //детские кровати
                 if ($tcharter==33)
                 {
@@ -627,7 +631,7 @@ function seo_detskaj()
                     echo $query."<br>";
                 }
                 //детские шкафы
-                if ($tcharter=74)
+                if ($tcharter==74)
                 {
                     $name_trunc=str_replace(UTF8toCP1251("Шкаф "),"",$name);
                     $name_trunc=str_replace(UTF8toCP1251("угловой "),"",$name_trunc);
@@ -647,9 +651,14 @@ function seo_detskaj()
         }
         else
         {
-            echo "No array to work with!";
+            echo "No array to work with!<br>";
         }
     }
+	else
+	{
+		echo "error in SQL<br>";
+	}
+	mysqli_close($db_connect);
 }
 function seo_ent_door()
 {
@@ -761,7 +770,8 @@ $time_start = microtime(true);
 //seo_brw();
 //seo_mej_dveri();
 //seo_ent_door();
-seo_dalio();
+//seo_dalio();
+seo_detskaj();
 $time_end = microtime(true);
 $time = $time_end - $time_start;
 echo "Runtime: $time sec\n";
