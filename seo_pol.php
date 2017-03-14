@@ -612,6 +612,37 @@ function seo_detskaj()
                     echo $query."<br>";
                     //break;
                 }
+                //детские кровати
+                if ($tcharter==33)
+                {
+                    $name_trunc=str_replace(UTF8toCP1251("Детская "),"",$name);
+                    $name_trunc=str_replace(UTF8toCP1251("кровать "),"",$name_trunc);
+                    $title=$name_trunc.UTF8toCP1251(" кровать детская. Купить детскую кровать со склада в Киеве");
+                    $keywords=UTF8toCP1251("детские кровати, ").$name.UTF8toCP1251(", склад мебели, купить кровать детскую, интернет магазин мебели, недорогие детские кровати, цены, фото, отзывы.");
+                    $key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                    $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в КДоставка по Україні.");
+                    $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                    $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                    mysqli_query($db_connect,$query);
+                    echo $query."<br>";
+                }
+                //детские шкафы
+                if ($tcharter=74)
+                {
+                    $name_trunc=str_replace(UTF8toCP1251("Шкаф "),"",$name);
+                    $name_trunc=str_replace(UTF8toCP1251("угловой "),"",$name_trunc);
+                    $name_trunc=str_replace(UTF8toCP1251("детский "),"",$name_trunc);
+                    $name_trunc=str_replace(UTF8toCP1251("Детский "),"",$name_trunc);
+                    $name_trunc=str_replace(UTF8toCP1251("детский "),"",$name_trunc);
+                    $title=$name_trunc.UTF8toCP1251(" детский шкаф. Купить детский шкаф со склада в Киеве");
+                    $keywords=UTF8toCP1251("детские шкафы, ").$name.UTF8toCP1251(", склад мебели, купить детский шкаф, интернет магазин мебели, недорогие детские шкафы, цены, фото, отзывы.");
+                    $key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                    $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в К
+                    $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                    $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                    mysqli_query($db_connect,$query);
+                    echo $query."<br>";
+                }
             }
         }
         else
