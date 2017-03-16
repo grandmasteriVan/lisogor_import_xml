@@ -9,31 +9,31 @@
 /**
  * Class Domini
  */
-class Domini
+class Domini extends Universal
 {
     /**
      * @var \$file1 xml файл с прайсом
      */
-    private $file1;
+    //private $file1;
     /**
      * @var \$data ассоциативный массив, в котором хранится информация о названии товара из прайса и его цене
      */
-    protected $data;
+    //protected $data;
     /**
      * Domini constructor.
      * @param \$f передаем файл с прайсом в конструктор
      */
-    function __construct($f)
+    /* __construct($f)
     {
         if ($f)
             $this->file1=$f;
-    }
+    }*/
     /**
      * @param $name string[] название (код) товара
      * @param $price int цена товара
      * записывает в поле $data наименование товара и его цену
      */
-    private function add_price ($name, $price)
+    /*private function add_price ($name, $price)
     {
         if (intval($name)&&$price==0)
 		{
@@ -44,13 +44,13 @@ class Domini
             'price'=>$price);
         //var_dump($this->data);
         //echo "test!";
-    }
+    }*/
 
     /**
      * вынимаем из прайса наименование товара и его цену
      * и записываем их в поле $data
      */
-    public function parce_price_domini()
+    public function parse_price()
     {
         if ($this->file1)
         {

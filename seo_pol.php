@@ -759,6 +759,41 @@ function seo_dalio()
     }
     mysqli_close($db_connect);
 }
+
+function seo_bekker()
+{
+    $db_connect=mysqli_connect(host,user,pass,db);
+    $query="SELECT * FROM goods WHERE factory_id=152";
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            $goods[]=$row;
+        }
+        foreach ($goods as $good)
+        {
+            $id=$good['goods_id'];
+            $name=$good['goods_name'];
+            $header=$good['goods_name'];
+            $tcharter=$good['goods_maintcharter'];
+            if ($tcharter==124)
+            {
+                $name_trunc=str_replace(UTF8toCP1251("Тумба "),"",$name);
+                $title=$name_trunc.UTF8toCP1251(" тумба под тв. Купить тумбу под тв со склада в Киеве");
+                $keywords=UTF8toCP1251("тумбы под тв, ").$name.UTF8toCP1251(", склад мебели, купить тумбу под тв, интернет магазин мебели, недорогие тумбы под тв, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика ")."Bekker. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика ")."Bekker. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc', goods_active=1 WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+
+        }
+    }
+    mysqli_close($db_connect);
+}
+
 $time_start = microtime(true);
 //seo_kupe_dom();
 //seo_mks();
@@ -771,7 +806,8 @@ $time_start = microtime(true);
 //seo_mej_dveri();
 //seo_ent_door();
 //seo_dalio();
-seo_detskaj();
+//seo_detskaj();
+seo_bekker();
 $time_end = microtime(true);
 $time = $time_end - $time_start;
 echo "Runtime: $time sec\n";
