@@ -760,6 +760,65 @@ function seo_dalio()
     mysqli_close($db_connect);
 }
 
+function seo_vesta()
+{
+    $db_connect=mysqli_connect(host,user,pass,db);
+    $query="SELECT * FROM goods WHERE factory_id=156";
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            $goods[]=$row;
+        }
+        foreach ($goods as $good)
+        {
+            $id=$good['goods_id'];
+            $name=$good['goods_name'];
+            $header=$good['goods_name'];
+            $tcharter=$good['goods_maintcharter'];
+            if ($tcharter==1||$tcharter==38)
+            {
+                $name_trunc=str_replace(UTF8toCP1251("Диван "),"",$name);
+                $name_trunc=str_replace(UTF8toCP1251(" угловой"),"",$name_trunc);
+                $title=$name_trunc.UTF8toCP1251(" диван. Купить диван со склада в Киеве");
+                $keywords=UTF8toCP1251("диваны, ").$name.UTF8toCP1251(", склад мебели, купить диван, интернет магазин мебели, недорогие диваны, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика Веста ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика Веста ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+            if ($tcharter==2)
+            {
+                $name_trunc=str_replace(UTF8toCP1251("Кресло "),"",$name);
+                $title=$name_trunc.UTF8toCP1251(" кресло. Купить кресло со склада в Киеве");
+                $keywords=UTF8toCP1251("кресла, ").$name.UTF8toCP1251(", склад мебели, купить кресло, интернет магазин мебели, недорогие кресла, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика Веста ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика Веста ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+            if ($tcharter==13)
+            {
+                $name_trunc=str_replace(UTF8toCP1251("Кровать "),"",$name);
+                $title=$name_trunc.UTF8toCP1251(" кровать. Купить кровать со склада в Киеве");
+                $keywords=UTF8toCP1251("кровати, ").$name.UTF8toCP1251(", склад мебели, купить кровати, интернет магазин мебели, недорогие кровати, цены, фото, отзывы.");
+                $key_h=UTF8toCP1251("Фабрика Веста ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+                $key_f=UTF8toCP1251("Фабрика Веста ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+                $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+                $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo $query."<br>";
+            }
+
+        }
+    }
+    mysqli_close($db_connect);
+}
+
 function seo_bekker()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
@@ -807,7 +866,7 @@ $time_start = microtime(true);
 //seo_ent_door();
 //seo_dalio();
 //seo_detskaj();
-seo_bekker();
+//seo_bekker();
 $time_end = microtime(true);
 $time = $time_end - $time_start;
 echo "Runtime: $time sec\n";
