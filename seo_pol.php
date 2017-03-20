@@ -867,6 +867,7 @@ $time_start = microtime(true);
 //seo_dalio();
 //seo_detskaj();
 //seo_bekker();
+seo_vesta();
 $time_end = microtime(true);
 $time = $time_end - $time_start;
 echo "Runtime: $time sec\n";
