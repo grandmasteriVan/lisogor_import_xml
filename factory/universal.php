@@ -52,7 +52,7 @@ Class Universal
      * @param $kat11 integer цена за 11 категорию в долларах
      * @param $kat12 integer цена за 12 категорию в долларах
      */
-    public function add_price($name, $kat0, $kat1, $kat2, $kat3, $kat4, $kat5, $kat6, $kat7, $kat8, $kat9, $kat10, $kat11, $kat12)
+    public function add_price($name, $kat0=0, $kat1=0, $kat2=0, $kat3=0, $kat4=0, $kat5=0, $kat6=0, $kat7=0, $kat8=0, $kat9=0, $kat10=0, $kat11=0, $kat12=0)
     {
         $this->data[]=array(
             'name'=>$name,
