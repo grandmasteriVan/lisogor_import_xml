@@ -5,7 +5,6 @@
  * Date: 26.01.17
  * Time: 15:46
  */
-
 Class Universal
 {
     /**
@@ -70,7 +69,6 @@ Class Universal
             'kat11'=>$kat11,
             'kat12'=>$kat12);
     }
-
     /**
      * парсит прайс
      * @param $params array -  именнованный массив с параметрами, содержить поля:
@@ -101,7 +99,6 @@ Class Universal
             {
                 if ($row_num>=$params['begin'])
                 {
-
                     $cells=$row->getElementsByTagName('Cell');
                     $cell_num=1;
                     foreach ($cells as $cell)
@@ -152,7 +149,6 @@ Class Universal
                             case $params['pos_12']:
                                 $kat[12]=$elem;
                                 break;
-
                         }
                         $cell_num++;
                     }
@@ -160,7 +156,6 @@ Class Universal
                     {
                         $this->add_price($name,$kat[0],$kat[1],$kat[2],$kat[3],$kat[4],$kat[5],$kat[6],$kat[7],$kat[8],$kat[9],$kat[10],$kat[11],$kat[12]);
                     }
-
                 }
                 $row_num++;
             }
@@ -170,7 +165,6 @@ Class Universal
             echo "No file!";
         }
     }
-
     /**
      * записывает данные, которые получили при разборке прайса в базу данных
      * @param $pId array массив, содержащий category_id для каждой из цен в прайсе
@@ -197,7 +191,6 @@ Class Universal
                         $diff=$this->priceDif($d[$i],$oldPrice);
                         echo "$diff <br>";
                     }
-
                     $strSQL = "UPDATE goodshascategory " .
                         "SET goodshascategory_pricecur=$d[$i] " .
                         "WHERE goodshascategory.goods_id= " .
@@ -228,7 +221,6 @@ Class Universal
                         $diff=$this->priceDif($d[$i],$oldPrice);
                         echo "$diff <br>";
                     }
-
                     $strSQL = "UPDATE goodshascategory " .
                         "SET goodshascategory_price=$d[$i] " .
                         "WHERE goodshascategory.goods_id= " .
@@ -248,7 +240,6 @@ Class Universal
             }
         }
     }
-
     /**
      * выбираем старую цену товара из таблицы товара
      * @param $name string название товара в прайсе
@@ -296,9 +287,7 @@ Class Universal
             mysqli_close($db_connect);
             return $oldPrice;
         }
-
     }
-
     /**
      * выбираем старую цену товара из категории
      * @param $name string название товара в прайсе
@@ -350,11 +339,8 @@ Class Universal
             }
             mysqli_close($db_connect);
             return $oldPrice;
-
         }
-
     }
-
     /**
      * находим разницу между новой и старой ценами
      * @param $newPrice int новая цена товара, олученная из прайса
@@ -377,7 +363,6 @@ Class Universal
         }
         return $diff;
     }
-
     /**
      * записываем лог на диск
      */
@@ -394,13 +379,9 @@ Class Universal
                 $newPrice=$logRec['newPrice'];
                 $str="$goods_id;$cat_id;$oldPrice;$newPrice".PHP_EOL;
                 file_put_contents($filename,$str,FILE_APPEND);
-
             }
         }
-
     }
-
-
     /**
      * записываем изменения в таблицу с логами
      * @param $goods_id int id товара
@@ -416,9 +397,7 @@ Class Universal
             'oldPrice'=>$oldPrice,
             'newPrice'=>$newPrice
         );
-
     }
-
     /**
      * получаем имя фабрики
      * @param $factory_id int id фабрики
@@ -448,9 +427,7 @@ Class Universal
             mysqli_close($db_connect);
             return null;
         }
-
     }
-
     /**
      * получаем имя файла для записи лога
      * @return array|null|string имя файла в формате название фабрики_дата_время.csv
@@ -463,7 +440,6 @@ Class Universal
         $name.="_$date.csv";
         return $name;
     }
-
     /**
      * @return array список имен позиций, которые есть в прайсе, но нет на сайте
      */
@@ -474,6 +450,7 @@ Class Universal
         {
             //выбираем все названия товаров в прайсе для фабрики
             $factory_id = $this->factory_id;
+			//echo "factory=".$factory_id."<br>";
             $query = "SELECT goods_article_link FROM goods WHERE factory_id=$factory_id";
             if ($res = mysqli_query($db_connect, $query))
             {
@@ -481,7 +458,7 @@ Class Universal
                 while ($row = mysqli_fetch_assoc($res))
                 {
                     //массив со всеми названиями товара в прайсе
-                    $site_names[] = $row;
+                    $site_names[] = $row['goods_article_link'];
                 }
                 //дальше просто сравниваем наши загруженные названия и те, что уже есть на сайте и получаем разницу
                 //выбираем в отдельный массив только полученные названия с прайса
@@ -491,14 +468,27 @@ Class Universal
                     //те названия, что мы прочитали в прайсе
                     $price_names[] = $d['name'];
                 }
+				//echo "<b>names</b><pre>";
+				//print_r ($site_names);
+				//echo "</pre>";
                 //сравниваем 2 массива и получаем массив, в котором есть названия товаров, которые есть в прайсе, но нет на сайте
                 $result = array_diff($price_names, $site_names);
+				
+				//сравниваем 2 массива и получаем массив, в котором есть названия товаров, которые есть на сайте, но нет в прайсе
+				$result2 = array_diff($site_names, $price_names);
             }
         }
-        if ($result)
+        if ($result||$result2)
         {
-            echo "<pre>";
+            echo "<p><b>in price but not on site</b></p>";
+			echo "<pre>";
             print_r($result);
+            echo "</pre>";
+			
+			
+			echo "<p><b>on site but not in price</b></p>";
+			echo "<pre>";
+            print_r($result2);
             echo "</pre>";
             mysqli_close($db_connect);
             return $result;
