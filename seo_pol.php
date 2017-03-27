@@ -847,7 +847,6 @@ function seo_bekker()
                 mysqli_query($db_connect,$query);
                 echo $query."<br>";
             }
-
         }
     }
     mysqli_close($db_connect);

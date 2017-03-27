@@ -127,6 +127,15 @@ switch ($selectedFactory)
     case "Agat-M":
         break;
 
+    case "Oris":
+        //new untested!!!
+        include_once "/factory/oris.php";
+        $test= new Oris($_FILES['file']['tmp_name']);
+        $test->parse_price();
+        $test->test_data();
+        //$test->add_db();
+        break;
+
 
     default:
         echo "Выберите фабрику и повторите";

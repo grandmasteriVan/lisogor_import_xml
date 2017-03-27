@@ -2,36 +2,13 @@
 /**
  * Created by PhpStorm.
  * User: ivan
- * Date: 06.06.16
- * Time: 16:38
+ * Date: 27.03.17
+ * Time: 09:49
  */
 
-class ComeFor extends Universal
+class Oris extends Universal
 {
-
-    /**
-     * @param $name string[] код товара
-     * @param $price int цена товара
-     * записывает в поле $data наименование товара и его цену
-     */
-    /*public function add_price ($name, $price)
-    {
-        if ($name&&$price)
-        {
-            $this->data[]=array(
-                'name'=>$name,
-                'price'=>$price);
-            //var_dump($this->data);
-            //echo "test!";
-        }
-
-    }*/
-
-    /**
-     *вынимаем из прайса наименование товара и его цену
-     * и записываем их в поле $data
-     */
-    public function parse_price()
+    public function parse_price($params)
     {
         if ($this->file1)
         {
@@ -39,24 +16,25 @@ class ComeFor extends Universal
             $rows = $dom->getElementsByTagName('Row');
             //print_r($rows);
             $row_num = 1;
-            //полезная инфа начинается с 15 строки!
-            //артикул позиции находится в 3 ячейке
-            //цена - 6 ячейка
+            //полезная инфа начинается с 14 строки!
+            //артикул позиции находится в 2 ячейке
+            //цена - 10 ячейка
             foreach ($rows as $row)
             {
-                if ($row_num>=15)
+                if ($row_num>=14)
                 {
                     $cells=$row->getElementsByTagName('Cell');
                     $cell_num=1;
                     unset($name);
+                    unset($price);
                     foreach ($cells as $cell)
                     {
                         $elem=$cell->nodeValue;
-                        if ($cell_num==3)
+                        if ($cell_num==2)
                         {
                             $name=$elem;
                         }
-                        if ($cell_num==6)
+                        if ($cell_num==10)
                         {
                             $price=$elem;
                         }
@@ -69,13 +47,13 @@ class ComeFor extends Universal
                 }
                 $row_num++;
             }
+
         }
         else
         {
             echo "No file, no life!";
         }
     }
-
     /**
      *сохраняет информацию из поля $data в базу данных сайта
      */
@@ -100,7 +78,6 @@ class ComeFor extends Universal
         }
 
     }
-
 
     /**
      * для тестов
@@ -130,5 +107,4 @@ class ComeFor extends Universal
         </html> --> <?php
         $this->findDif();
     }
-
 }
