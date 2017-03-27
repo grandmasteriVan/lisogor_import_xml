@@ -5,7 +5,6 @@
  * Date: 27.03.17
  * Time: 09:49
  */
-
 class Oris extends Universal
 {
     public function parse_price($params)
@@ -33,12 +32,17 @@ class Oris extends Universal
                         if ($cell_num==2)
                         {
                             $name=$elem;
+							if (mb_stripos($name,"ttps:"))
+							{
+								$name=null;
+							}
                         }
                         if ($cell_num==10)
                         {
-                            $price=$elem;
+                            $price=round($elem);
                         }
                         $cell_num++;
+						//break;
                     }
                     if ($name)
                     {
@@ -47,7 +51,6 @@ class Oris extends Universal
                 }
                 $row_num++;
             }
-
         }
         else
         {
@@ -66,7 +69,6 @@ class Oris extends Universal
             //echo $d_name."<br>";
             $d_price=$d['kat0'];
             $factory_id=35;
-
             $strSQL="UPDATE goods ".
                 "SET goods_pricecur=$d_price ".
                 "WHERE goods.goods_article_link=$d_name AND factory_id=$factory_id";
@@ -74,11 +76,8 @@ class Oris extends Universal
             //break;
             //mysqli_query($db_connect, $strSQL);
             //break;
-
         }
-
     }
-
     /**
      * для тестов
      * "красиво" выводим поле $data в котором лежат наименование товара и его цена
@@ -97,7 +96,7 @@ class Oris extends Universal
             {?>
                 <tr>
                     <td><?php echo ($row['name']); ?></td>
-                    <td><?php echo ($row['price']); ?></td>
+                    <td><?php echo ($row['kat0']); ?></td>
                 </tr>
 
             <?php } ?>
