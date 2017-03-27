@@ -31,7 +31,7 @@ class ComeFor extends Universal
      *вынимаем из прайса наименование товара и его цену
      * и записываем их в поле $data
      */
-    public function parse_price()
+    public function parse_price($params)
     {
         if ($this->file1)
         {

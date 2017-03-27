@@ -130,8 +130,8 @@ switch ($selectedFactory)
     case "Oris":
         //new untested!!!
         include_once "/factory/oris.php";
-        $test= new Oris($_FILES['file']['tmp_name']);
-        $test->parse_price();
+        $test= new Oris($_FILES['file']['tmp_name'],151);
+        $test->parse_price(null);
         $test->test_data();
         //$test->add_db();
         break;
