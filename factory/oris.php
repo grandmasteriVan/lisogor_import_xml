@@ -32,7 +32,8 @@ class Oris extends Universal
                         if ($cell_num==2)
                         {
                             $name=$elem;
-							if (mb_stripos($name,"ttps:"))
+							//отбрасываем лишние имена
+                            if (mb_stripos($name,"ttps:"))
 							{
 								$name=null;
 							}
@@ -68,9 +69,9 @@ class Oris extends Universal
             $d_name=$d['name'];
             //echo $d_name."<br>";
             $d_price=$d['kat0'];
-            $factory_id=35;
+            $factory_id=151;
             $strSQL="UPDATE goods ".
-                "SET goods_pricecur=$d_price ".
+                "SET goods_price=$d_price ".
                 "WHERE goods.goods_article_link=$d_name AND factory_id=$factory_id";
             echo $strSQL."<br>";
             //break;

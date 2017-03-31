@@ -822,7 +822,7 @@ function seo_vesta()
 function seo_galichina()
 {
     $db_connect=mysqli_connect(host,user,pass,db);
-    $query="SELECT * FROM goods WHERE factory_id=156";
+    $query="SELECT * FROM goods WHERE factory_id=157";
     if ($res=mysqli_query($db_connect,$query))
     {
         while ($row = mysqli_fetch_assoc($res))
