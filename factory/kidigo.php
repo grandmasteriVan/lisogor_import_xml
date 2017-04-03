@@ -68,7 +68,7 @@ class Kidigo_1 extends Universal
             $factory_id=150;
             $strSQL="UPDATE goods ".
                 "SET goods_price=$d_price ".
-                "WHERE goods.goods_article_link=$d_name AND factory_id=$factory_id";
+                "WHERE goods.goods_article_link='$d_name' AND factory_id=$factory_id";
             echo $strSQL."<br>";
             //break;
             //mysqli_query($db_connect, $strSQL);
@@ -164,10 +164,10 @@ class Kidigo_2 extends Universal
             $d_name=$d['name'];
             //echo $d_name."<br>";
             $d_price=$d['kat0'];
-            $factory_id=150;
+            $factory_id=$this->factory_id;
             $strSQL="UPDATE goods ".
                 "SET goods_price=$d_price ".
-                "WHERE goods.goods_article_link=$d_name AND factory_id=$factory_id";
+                "WHERE goods.goods_article_link='$d_name' AND factory_id=$factory_id";
             echo $strSQL."<br>";
             //break;
             //mysqli_query($db_connect, $strSQL);

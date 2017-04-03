@@ -133,25 +133,25 @@ switch ($selectedFactory)
         $test= new Oris($_FILES['file']['tmp_name'],151);
         $test->parse_price(null);
         $test->test_data();
-        //$test->add_db();
+        $test->add_db();
         break;
 
     case "Kidigo_1":
-        //new untested!!!
+        //working
         include_once "/factory/kidigo.php";
-        $test= new Kidigo_1($_FILES['file']['tmp_name'],151);
+        $test= new Kidigo_1($_FILES['file']['tmp_name'],150);
         $test->parse_price(null);
         $test->test_data();
-        //$test->add_db();
+        $test->add_db();
         break;
 
     case "Kidigo_2":
-        //new untested!!!
+        //working
         include_once "/factory/kidigo.php";
-        $test= new Kidigo_2($_FILES['file']['tmp_name'],151);
+        $test= new Kidigo_2($_FILES['file']['tmp_name'],150);
         $test->parse_price(null);
         $test->test_data();
-        //$test->add_db();
+        $test->add_db();
         break;
 
 
