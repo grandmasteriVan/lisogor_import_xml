@@ -5,6 +5,26 @@
  * Date: 27.03.17
  * Time: 09:49
  */
+/**
+ * database host
+ */
+define ("host","localhost");
+//define ("host","10.0.0.2");
+/**
+ * database username
+ */
+define ("user", "root");
+//define ("user", "uh333660_mebli");
+/**
+ * database password
+ */
+define ("pass", "");
+//define ("pass", "Z7A8JqUh");
+/**
+ * database name
+ */
+define ("db", "mebli");
+require 'autoload.php';
 class Oris extends Universal
 {
     public function parse_price($params)
@@ -20,7 +40,7 @@ class Oris extends Universal
             //цена - 10 ячейка
             foreach ($rows as $row)
             {
-                if ($row_num>=14)
+                if ($row_num>=14&&$row_num<=242)
                 {
                     $cells=$row->getElementsByTagName('Cell');
                     $cell_num=1;
@@ -38,7 +58,7 @@ class Oris extends Universal
 								$name=null;
 							}
                         }
-                        if ($cell_num==10)
+                        if ($cell_num==9)
                         {
                             $price=round($elem);
                         }
@@ -63,19 +83,27 @@ class Oris extends Universal
      */
     public function add_db()
     {
+        $db = DB::getInstance();
+        $db->debug = true;
         $db_connect=mysqli_connect(host,user,pass,db);
         foreach ($this->data as $d)
         {
             $d_name=$d['name'];
             //echo $d_name."<br>";
             $d_price=$d['kat0'];
-            $factory_id=$this->factory_id;
-            $strSQL="UPDATE goods ".
-                "SET goods_price=$d_price ".
-                "WHERE goods.goods_article_link='$d_name' AND factory_id=$factory_id";
-            echo $strSQL."<br>";
+            //$factory_id=$this->factory_id;
+            $strSQL="UPDATE goods SET goods_price=$d_price ".
+                "WHERE goods_article_link='$d_name'";
+            // echo $strSQL."<br>";
             //break;
-            //mysqli_query($db_connect, $strSQL);
+            if ($db->query($strSQL))
+			{
+				echo "OK!<br>";
+			}
+			else
+			{
+				echo "not OK ".mysqli_error()."<br>";
+			}
             //break;
         }
     }
@@ -105,6 +133,6 @@ class Oris extends Universal
         </table>
         <!-- </body>
         </html> --> <?php
-        $this->findDif();
+        //$this->findDif();
     }
 }
