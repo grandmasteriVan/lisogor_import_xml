@@ -1,5 +1,5 @@
 <?php
-$factoryList=array("AMF","Poparada","BRW","Gerbor","Lisogor","Vika","Domini","SidiM","Come-for","Livs","Nova", "FunDesk", "Agat-M", "Oris", "Kidigo_1", "Kidigo_2");
+$factoryList=array("AMF","Poparada","BRW","Gerbor","Lisogor","Vika","Domini","SidiM","Come-for","Livs","Nova", "FunDesk", "Agat-M", "Oris", "Kidigo_1", "Kidigo_2", "Sportbaby");
 
 function CreateSelect($factoryList,$name,$selectedVal="")
 {

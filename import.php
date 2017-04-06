@@ -154,6 +154,15 @@ switch ($selectedFactory)
         $test->add_db();
         break;
 
+    case "Sportbaby":
+        //working
+        include_once "/factory/sportbaby.php";
+        $test= new Kidigo_2($_FILES['file']['tmp_name'],150);
+        $test->parse_price(null);
+        $test->test_data();
+        //$test->add_db();
+        break;
+
 
     default:
         echo "Выберите фабрику и повторите";

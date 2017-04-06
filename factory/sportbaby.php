@@ -2,12 +2,13 @@
 /**
  * Created by PhpStorm.
  * User: ivan
- * Date: 27.03.17
- * Time: 09:49
+ * Date: 06.04.17
+ * Time: 15:16
  */
 
 require 'autoload.php';
-class Oris extends Universal
+
+class Sportbaby
 {
     public function parse_price($params)
     {
@@ -18,11 +19,11 @@ class Oris extends Universal
             //print_r($rows);
             $row_num = 1;
             //полезная инфа начинается с 14 строки!
-            //артикул позиции находится в 2 ячейке
-            //цена - 10 ячейка
+            //артикул позиции находится в 4 ячейке
+            //цена - 8 ячейка
             foreach ($rows as $row)
             {
-                if ($row_num>=14&&$row_num<=242)
+                if ($row_num>=4)
                 {
                     $cells=$row->getElementsByTagName('Cell');
                     $cell_num=1;
@@ -31,21 +32,21 @@ class Oris extends Universal
                     foreach ($cells as $cell)
                     {
                         $elem=$cell->nodeValue;
-                        if ($cell_num==2)
+                        if ($cell_num==4)
                         {
                             $name=$elem;
-							//отбрасываем лишние имена
+                            //отбрасываем лишние имена
                             if (mb_stripos($name,"ttps:"))
-							{
-								$name=null;
-							}
+                            {
+                                $name=null;
+                            }
                         }
-                        if ($cell_num==9)
+                        if ($cell_num==8)
                         {
                             $price=round($elem);
                         }
                         $cell_num++;
-						//break;
+                        //break;
                     }
                     if ($name)
                     {
@@ -73,19 +74,19 @@ class Oris extends Universal
             $d_name=$d['name'];
             //echo $d_name."<br>";
             $d_price=$d['kat0'];
-            //$factory_id=$this->factory_id;
+            $factory_id=$this->factory_id;
             $strSQL="UPDATE goods SET goods_price=$d_price ".
-                "WHERE goods_article_link='$d_name'";
+                "WHERE goods_article_link='$d_name' AND factory_id=$factory_id";
             // echo $strSQL."<br>";
             //break;
             if ($db->query($strSQL))
-			{
-				echo "OK!<br>";
-			}
-			else
-			{
-				echo "not OK ".mysqli_error()."<br>";
-			}
+            {
+                echo "OK!<br>";
+            }
+            else
+            {
+                echo "not OK ".mysqli_error()."<br>";
+            }
             //break;
         }
     }
