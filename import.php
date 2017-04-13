@@ -157,12 +157,20 @@ switch ($selectedFactory)
     case "Sportbaby":
         //working
         include_once "/factory/sportbaby.php";
-        $test= new Kidigo_2($_FILES['file']['tmp_name'],150);
+        $test= new Sportbaby($_FILES['file']['tmp_name'],155);
+        $test->parse_price(null);
+        $test->test_data();
+        $test->add_db();
+        break;
+
+    case "Veres":
+        //working
+        include_once "/factory/sportbaby.php";
+        $test= new Sportbaby($_FILES['file']['tmp_name'],158);
         $test->parse_price(null);
         $test->test_data();
         //$test->add_db();
         break;
-
 
     default:
         echo "Выберите фабрику и повторите";

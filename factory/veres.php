@@ -2,13 +2,13 @@
 /**
  * Created by PhpStorm.
  * User: ivan
- * Date: 06.04.17
- * Time: 15:16
+ * Date: 13.04.17
+ * Time: 10:34
  */
 
 require 'autoload.php';
 
-class Sportbaby extends Universal
+class Veres extends Universal
 {
     public function parse_price($params)
     {
@@ -18,12 +18,12 @@ class Sportbaby extends Universal
             $rows = $dom->getElementsByTagName('Row');
             //print_r($rows);
             $row_num = 1;
-            //полезная инфа начинается с 14 строки!
-            //артикул позиции находится в 4 ячейке
-            //цена - 8 ячейка
+            //полезная инфа начинается с 2 строки!
+            //артикул позиции находится в 2 ячейке
+            //цена - 9 ячейка
             foreach ($rows as $row)
             {
-                if ($row_num>=4)
+                if ($row_num>=2)
                 {
                     $cells=$row->getElementsByTagName('Cell');
                     $cell_num=1;
@@ -35,20 +35,10 @@ class Sportbaby extends Universal
                         if ($cell_num==2)
                         {
                             $name=$elem;
-                            //отбрасываем лишние имена
-                            if (mb_stripos($name,"!!!!"))
-                            {
-                                $name=null;
-                            }
                         }
-                        if ($cell_num==6)
+                        if ($cell_num==9)
                         {
                             $price=round($elem);
-                            //товары с ценой меньше 2 на самом деле сняты с производства, их не записываем
-                            if ($price<2)
-                            {
-                                $name=null;
-                            }
                         }
                         $cell_num++;
                         //break;
