@@ -19,8 +19,8 @@ class Veres extends Universal
             //print_r($rows);
             $row_num = 1;
             //полезная инфа начинается с 14 строки!
-            //артикул позиции находится в 6 ячейке
-            //цена - 12 ячейка
+            //артикул позиции находится в 5 ячейке
+            //цена - 11 ячейка
             foreach ($rows as $row)
             {
                 if ($row_num>=14)
@@ -32,11 +32,11 @@ class Veres extends Universal
                     foreach ($cells as $cell)
                     {
                         $elem=$cell->nodeValue;
-                        if ($cell_num==6)
+                        if ($cell_num==5)
                         {
                             $name=$elem;
                         }
-                        if ($cell_num==12)
+                        if ($cell_num==11)
                         {
                             $price=round($elem);
                         }

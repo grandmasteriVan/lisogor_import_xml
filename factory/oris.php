@@ -19,7 +19,7 @@ class Oris extends Universal
             $row_num = 1;
             //полезная инфа начинается с 14 строки!
             //артикул позиции находится в 2 ячейке
-            //цена - 10 ячейка
+            //цена - 8 ячейка
             foreach ($rows as $row)
             {
                 if ($row_num>=14&&$row_num<=242)
@@ -40,7 +40,7 @@ class Oris extends Universal
 								$name=null;
 							}
                         }
-                        if ($cell_num==9)
+                        if ($cell_num==8)
                         {
                             $price=round($elem);
                         }
