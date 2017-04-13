@@ -165,8 +165,17 @@ switch ($selectedFactory)
 
     case "Veres":
         //working
-        include_once "/factory/sportbaby.php";
-        $test= new Sportbaby($_FILES['file']['tmp_name'],158);
+        include_once "/factory/veres.php";
+        $test= new Veres($_FILES['file']['tmp_name'],158);
+        $test->parse_price(null);
+        $test->test_data();
+        $test->add_db();
+        break;
+
+    case "Smoby":
+        //working
+        include_once "/factory/smoby.php";
+        $test= new Veres($_FILES['file']['tmp_name'],159);
         $test->parse_price(null);
         $test->test_data();
         //$test->add_db();

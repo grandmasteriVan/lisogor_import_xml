@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: ivan
  * Date: 13.04.17
- * Time: 10:34
+ * Time: 14:48
  */
 
 require 'autoload.php';
@@ -18,12 +18,12 @@ class Veres extends Universal
             $rows = $dom->getElementsByTagName('Row');
             //print_r($rows);
             $row_num = 1;
-            //полезная инфа начинается с 2 строки!
-            //артикул позиции находится в 1 ячейке
-            //цена - 8 ячейка
+            //полезная инфа начинается с 14 строки!
+            //артикул позиции находится в 6 ячейке
+            //цена - 12 ячейка
             foreach ($rows as $row)
             {
-                if ($row_num>=2)
+                if ($row_num>=14)
                 {
                     $cells=$row->getElementsByTagName('Cell');
                     $cell_num=1;
@@ -32,11 +32,11 @@ class Veres extends Universal
                     foreach ($cells as $cell)
                     {
                         $elem=$cell->nodeValue;
-                        if ($cell_num==1)
+                        if ($cell_num==6)
                         {
                             $name=$elem;
                         }
-                        if ($cell_num==8)
+                        if ($cell_num==12)
                         {
                             $price=round($elem);
                         }
