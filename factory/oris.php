@@ -5,7 +5,6 @@
  * Date: 27.03.17
  * Time: 09:49
  */
-
 require 'autoload.php';
 class Oris extends Universal
 {
