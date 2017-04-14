@@ -5,9 +5,7 @@
  * Date: 06.04.17
  * Time: 15:16
  */
-
 require 'autoload.php';
-
 class Sportbaby extends Universal
 {
     public function parse_price($params)
@@ -18,12 +16,12 @@ class Sportbaby extends Universal
             $rows = $dom->getElementsByTagName('Row');
             //print_r($rows);
             $row_num = 1;
-            //полезная инфа начинается с 14 строки!
-            //артикул позиции находится в 4 ячейке
-            //цена - 8 ячейка
+            //полезная инфа начинается с 4 строки!
+            //артикул позиции находится в 2 ячейке
+            //цена - 4 ячейка
             foreach ($rows as $row)
             {
-                if ($row_num>=4)
+                if ($row_num>=1)
                 {
                     $cells=$row->getElementsByTagName('Cell');
                     $cell_num=1;
@@ -41,14 +39,13 @@ class Sportbaby extends Universal
                                 $name=null;
                             }
                         }
-                        if ($cell_num==6)
+                        if ($cell_num==4)
                         {
                             $price=round($elem);
-                            //товары с ценой меньше 2 на самом деле сняты с производства, их не записываем
-                            if ($price<2)
-                            {
-                                $name=null;
-                            }
+							if ($price<2)
+							{
+								$name=null;
+							}
                         }
                         $cell_num++;
                         //break;
@@ -82,9 +79,10 @@ class Sportbaby extends Universal
             $factory_id=$this->factory_id;
             $strSQL="UPDATE goods SET goods_price=$d_price ".
                 "WHERE goods_article_link='$d_name' AND factory_id=$factory_id";
-            // echo $strSQL."<br>";
+            echo $strSQL."<br>";
             //break;
             if ($db->query($strSQL))
+			//if (mysqli_query($db_connect, $strSQL))
             {
                 echo "OK!<br>";
             }
