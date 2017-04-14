@@ -5,7 +5,8 @@
  * Date: 31.03.17
  * Time: 09:29
  */
-
+ 
+ require 'autoload.php';
 class Kidigo_1 extends Universal
 {
     public function parse_price($params)
@@ -41,7 +42,7 @@ class Kidigo_1 extends Universal
                         $cell_num++;
                         //break;
                     }
-                    if ($name)
+                    if ($name&&$price)
                     {
                         $this->add_price($name,$price);
                     }
@@ -59,19 +60,27 @@ class Kidigo_1 extends Universal
      */
     public function add_db()
     {
+        $db = DB::getInstance();
+        $db->debug = true;
         $db_connect=mysqli_connect(host,user,pass,db);
         foreach ($this->data as $d)
         {
             $d_name=$d['name'];
             //echo $d_name."<br>";
             $d_price=$d['kat0'];
-            $factory_id=150;
-            $strSQL="UPDATE goods ".
-                "SET goods_price=$d_price ".
-                "WHERE goods.goods_article_link='$d_name' AND factory_id=$factory_id";
-            echo $strSQL."<br>";
+            //$factory_id=$this->factory_id;
+            $strSQL="UPDATE goods SET goods_price=$d_price ".
+                "WHERE goods_article_link='$d_name'";
+            // echo $strSQL."<br>";
             //break;
-            //mysqli_query($db_connect, $strSQL);
+            if ($db->query($strSQL))
+			{
+				echo "OK!<br>";
+			}
+			else
+			{
+				echo "not OK ".mysqli_error()."<br>";
+			}
             //break;
         }
     }
@@ -101,10 +110,9 @@ class Kidigo_1 extends Universal
         </table>
         <!-- </body>
         </html> --> <?php
-        $this->findDif();
+        //$this->findDif();
     }
 }
-
 class Kidigo_2 extends Universal
 {
     public function parse_price($params)
@@ -117,7 +125,7 @@ class Kidigo_2 extends Universal
             $row_num = 1;
             //полезная инфа начинается с 9 строки!
             //артикул позиции находится в 1 ячейке
-            //цена - 7 ячейка
+            //цена - 3 ячейка
             foreach ($rows as $row)
             {
                 if ($row_num>=9)
@@ -133,14 +141,14 @@ class Kidigo_2 extends Universal
                         {
                             $name=$elem;
                         }
-                        if ($cell_num==7)
+                        if ($cell_num==3)
                         {
                             $price=round($elem);
                         }
                         $cell_num++;
                         //break;
                     }
-                    if ($name)
+                    if ($name&&$price)
                     {
                         $this->add_price($name,$price);
                     }
@@ -158,19 +166,42 @@ class Kidigo_2 extends Universal
      */
     public function add_db()
     {
-        $db_connect=mysqli_connect(host,user,pass,db);
-        foreach ($this->data as $d)
+        //echo "<br>GO!!!<br>";
+		$db = DB::getInstance();
+        $db->debug = true;
+		//echo "go less futher<br>";
+        //$db_connect=mysqli_connect(host,user,pass,db);
+        //echo "<pre>";
+		//print_r ($this->data);
+		//echo "</pre>";
+		//if (is_array ($this->data))
+		//{
+		//	echo "is array<br>";
+		//}
+		//else
+		//{
+		//	echo "No array!";
+		//	//return;
+		//}
+		//echo "go futher<br>";
+		foreach ($this->data as $d)
         {
             $d_name=$d['name'];
             //echo $d_name."<br>";
             $d_price=$d['kat0'];
-            $factory_id=$this->factory_id;
-            $strSQL="UPDATE goods ".
-                "SET goods_price=$d_price ".
-                "WHERE goods.goods_article_link='$d_name' AND factory_id=$factory_id";
-            echo $strSQL."<br>";
+            //$factory_id=$this->factory_id;
+            $strSQL="UPDATE goods SET goods_price=$d_price ".
+                "WHERE goods_article_link='$d_name'";
+            // echo $strSQL."<br>";
             //break;
-            //mysqli_query($db_connect, $strSQL);
+            if ($db->query($strSQL))
+			{
+				echo "OK!<br>";
+			}
+			else
+			{
+				echo "not OK ".mysqli_error()."<br>";
+			}
             //break;
         }
     }
@@ -200,6 +231,6 @@ class Kidigo_2 extends Universal
         </table>
         <!-- </body>
         </html> --> <?php
-        $this->findDif();
+        //$this->findDif();
     }
 }
