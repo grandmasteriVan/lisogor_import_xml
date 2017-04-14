@@ -6,7 +6,7 @@
  * Time: 09:29
  */
  
- require 'autoload.php';
+require 'autoload.php';
 class Kidigo_1 extends Universal
 {
     public function parse_price($params)
@@ -19,7 +19,7 @@ class Kidigo_1 extends Universal
             $row_num = 1;
             //полезная инфа начинается с 11 строки!
             //артикул позиции находится в 2 ячейке
-            //цена - 7 ячейка
+            //цена - 5 ячейка
             foreach ($rows as $row)
             {
                 if ($row_num>=11)
@@ -35,7 +35,8 @@ class Kidigo_1 extends Universal
                         {
                             $name=$elem;
                         }
-                        if ($cell_num==7)
+                        //if ($cell_num==5)
+                        if ($cell_num==6)
                         {
                             $price=round($elem);
                         }
@@ -166,24 +167,24 @@ class Kidigo_2 extends Universal
      */
     public function add_db()
     {
-        //echo "<br>GO!!!<br>";
+        echo "<br>GO!!!<br>";
 		$db = DB::getInstance();
         $db->debug = true;
-		//echo "go less futher<br>";
+		echo "go less futher<br>";
         //$db_connect=mysqli_connect(host,user,pass,db);
         //echo "<pre>";
 		//print_r ($this->data);
 		//echo "</pre>";
-		//if (is_array ($this->data))
-		//{
-		//	echo "is array<br>";
-		//}
-		//else
-		//{
-		//	echo "No array!";
-		//	//return;
-		//}
-		//echo "go futher<br>";
+		if (is_array ($this->data))
+		{
+			echo "is array<br>";
+		}
+		else
+		{
+			echo "No array!";
+			//return;
+		}
+		echo "go futher<br>";
 		foreach ($this->data as $d)
         {
             $d_name=$d['name'];
