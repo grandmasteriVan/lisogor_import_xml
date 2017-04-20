@@ -181,6 +181,15 @@ switch ($selectedFactory)
         //$test->add_db();
         break;
 
+    case "Ployana":
+        //working
+        include_once "/factory/polsk.php";
+        $test= new Plyana($_FILES['file']['tmp_name'],154);
+        $test->parse_price(null);
+        $test->test_data();
+        //$test->add_db();
+        break;
+
     default:
         echo "Выберите фабрику и повторите";
         break;
