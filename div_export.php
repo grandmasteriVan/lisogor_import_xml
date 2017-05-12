@@ -62,7 +62,7 @@ function export_filters()
                 }
                 foreach ($arr1 as $ar)
 				{
-					if ($arr['size_length']>2000||$arr['size_width']>2000||$arr['size_height']>2000)
+					if ($ar['size_length']>2000||$ar['size_width']>2000||$ar['size_height']>2000)
 					{
 						$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (108,$id,11)";
 						mysqli_query($db_connect,$query);
@@ -70,21 +70,21 @@ function export_filters()
 					}
 					//спальное место
 					//односпальные
-					if ($arr['size_width_sl']<=1200)
+					if ($ar['size_width_sl']<=1200)
 					{
 						$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (114,$id,10)";
 						mysqli_query($db_connect,$query);
 						echo $query."<br>";
 					}
 					//двуспальные
-					if ($arr['size_width_sl']>1200&&$arr['size_width_sl']<1800)
+					if ($ar['size_width_sl']>1200&&$arr['size_width_sl']<1800)
 					{
 						$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (71,$id,10)";
 						mysqli_query($db_connect,$query);
 						echo $query."<br>";
 					}
 					//трехспальные
-					if ($arr['size_width_sl']>=1800)
+					if ($ar['size_width_sl']>=1800)
 					{
 						$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (71,$id,10)";
 						mysqli_query($db_connect,$query);
