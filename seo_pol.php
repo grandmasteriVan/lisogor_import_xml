@@ -535,7 +535,7 @@ function seo_detskaj()
         "OR goods.goods_maintcharter=129 OR goods.goods_maintcharter=128 OR goods.goods_maintcharter=127 ".
         "OR goods.goods_maintcharter=33 OR goods.goods_maintcharter=74 OR goods.goods_maintcharter=16 ".
         "OR goods.goods_maintcharter=32 OR goods.goods_maintcharter=34 OR goods.goods_maintcharter=63 ".
-        "OR goods.goods_maintcharter=71 OR OR goods.goods_maintcharter=126 OR goods.goods_maintcharter=137 ".
+        "OR goods.goods_maintcharter=71 OR goods.goods_maintcharter=126 OR goods.goods_maintcharter=137 ".
         "OR goods.goods_maintcharter=138 OR goods.goods_maintcharter=140 OR goods.goods_maintcharter=142";
     
     if ($res=mysqli_query($db_connect,$query))

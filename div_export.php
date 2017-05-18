@@ -86,7 +86,7 @@ function export_filters()
 					//трехспальные
 					if ($ar['size_width_sl']>=1800)
 					{
-						$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (71,$id,10)";
+						$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id) VALUES (72,$id,10)";
 						mysqli_query($db_connect,$query);
 						echo $query."<br>";
 					}

@@ -460,6 +460,53 @@ function rename_tov ($goods_kind)
     }
     mysqli_close($db_connect);
 }
+
+function rename_bekker ($factory_id)
+{
+    $db_connect=mysqli_connect(host,user,pass,db);
+    $query="SELECT goods_id, goods_name FROM goods WHERE factory_id=$factory_id";
+    $i=1;
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        //формируем список имен позиций
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            $tovars[] = $row;
+        }
+        foreach ($tovars as $tovar)
+        {
+            $name=$tovar['goods_name'];
+            $id=$tovar['goods_id'];
+            //кровати
+            $name=str_replace(UTF8toCP1251("Тумба "),"",$name);
+            $name="Кровать Sonorous ".$name;
+            $name=UTF8toCP1251($name);
+            $query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
+            mysqli_query($db_connect,$query);
+            echo $i.". ".$query."<br>";
+            //return;
+
+            //seo поля тоже меняем
+            $header=$name;
+            $name_trunc=str_replace(UTF8toCP1251("Тумба "),"",$name);
+            $title=$name_trunc.UTF8toCP1251(" тумба. Купить тумбы со склада в Киеве");
+            $keywords=UTF8toCP1251("тумбы, ").$name.UTF8toCP1251(", склад мебели, купить тумбу, интернет магазин мебели, недорогие тумбы, цены, фото, отзывы.");
+            $key_h=UTF8toCP1251("Фабрика Sonorous. ").$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
+            $key_f=UTF8toCP1251("Фабрика Sonorous. ").$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
+            $desc=UTF8toCP1251("Купить ").$name.UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+            $query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
+            mysqli_query($db_connect,$query);
+            echo $query."<br>";
+
+            $i++;
+        }
+    }
+    else
+	{
+		echo "Error in SQL!<br>";
+	}
+    mysqli_close($db_connect);
+}
 /**
  * @param $goods_kind integer айди товара
  * печатает список всех товаров, которые имеют определенный тип
@@ -498,10 +545,10 @@ function print_names ($goods_kind)
 //rename_tov(64);//тумбы для обуви
 //rename_tov(80);//туалетные столики
 //rename_tov(65);//столы рабочие
-rename_tov(23);//диваны
-rename_tov(26);//угловык диваны
-rename_tov(28);//диваны для кафе
-rename_tov(57);//диваны для офиса
+//rename_tov(23);//диваны
+//rename_tov(26);//угловык диваны
+//rename_tov(28);//диваны для кафе
+//rename_tov(57);//диваны для офиса
 
 //переименование по разделу каталога
 //ren_tov_cat(2);//кресла 
@@ -516,6 +563,9 @@ rename_tov(57);//диваны для офиса
 //ren_tov_cat(74);//детский шкаф
 //ren_tov_cat(16);//детская комната
 //ren_tov_cat(32);//детский комод
+
+//переименовываем все тумбы Bekker в Sonorous
+rename_bekker(152);
 
 /**
  * функция преобразовывает строку в кодировке  UTF-8 в строку в кодировке CP1251
