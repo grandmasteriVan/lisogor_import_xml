@@ -5,7 +5,7 @@
  * Date: 07.12.16
  * Time: 09:54
  */
-
+header('Content-type: text/html; charset=UTF-8');
 //define ("host","localhost");
 define ("host","10.0.0.2");
 /**
@@ -23,13 +23,10 @@ define ("pass", "Z7A8JqUh");
  */
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
-
 class ContentCopy
 {
-
     var $factory;
     var $base;
-
     /**
      * ContentCopy constructor.
      * @param $factory
@@ -39,10 +36,10 @@ class ContentCopy
         $this->factory = $factory;
         $this->base = $base;
     }
-
     public function ContCopy()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
+		mysqli_query($db_connect,"SET NAMES 'utf8'");
         $query="SELECT * FROM goods WHERE goods_name LIKE '%Камелот%' and factory_id=$this->factory";
         if ($res=mysqli_query($db_connect,$query))
         {
@@ -63,10 +60,14 @@ class ContentCopy
             {
                 $id=$good['goods_id'];
                 $query="UPDATE goods SET goods_content='$sample_cont' WHERE goods_id=$id";
-                //mysqli_query($db_connect,$query);
+                mysqli_query($db_connect,$query);
                 echo "$query<br>";
             }
         }
+		else
+		{
+			echo "error in SQL!";
+		}
         mysqli_close($db_connect);
     }
 }
@@ -106,10 +107,9 @@ class Timer
         return $this->end_time-$this->start_time;
     }
 }
-
 $runtime = new Timer();
 $runtime->setStartTime();
-$test=new ContentCopy(141,25328);
+$test=new ContentCopy(47,10457);
 $test->ContCopy();
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
