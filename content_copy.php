@@ -43,7 +43,7 @@ class ContentCopy
     public function ContCopy()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT * FROM goods WHERE factory_id=$this->factory";
+        $query="SELECT * FROM goods WHERE goods_name LIKE '%Камелот%' and factory_id=$this->factory";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
