@@ -1,0 +1,182 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: ivan
+ * Date: 25.05.17
+ * Time: 14:53
+ */
+
+define ("host","localhost");
+//define ("host","10.0.0.2");
+/**
+ * database username
+ */
+define ("user", "root");
+//define ("user", "uh333660_mebli");
+/**
+ * database password
+ */
+define ("pass", "");
+//define ("pass", "Z7A8JqUh");
+/**
+ * database name
+ */
+define ("db", "mebli");
+//define ("db", "uh333660_mebli");
+
+class setFilters
+{
+    function all_matr($goods_maintcharter=13)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT * FROM goods WHERE goods_maintcharter=$goods_maintcharter AND goods_active=1 AND goods_noactual=0";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $arr[] = $row;
+                //print_r($arr);
+            }
+        }
+        else
+        {
+            echo "ERROR in SQL!";
+            return false;
+        }
+        mysqli_close($db_connect);
+        return $arr;
+    }
+
+    private function modBads($goods_maintcharter=13)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id, goods_parent, goods_width, goods_height FROM goods WHERE goods_maintcharter=$goods_maintcharter AND goods_parent<>0";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $arr[] = $row;
+            }
+        }
+        mysqli_close($db_connect);
+        return $arr;
+    }
+
+    private function parrentBads($goods_maintcharter=13)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id, goods_parent, goods_width, goods_height FROM goods WHERE goods_maintcharter=$goods_maintcharter and goods_parent=0";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $arr[] = $row;
+            }
+        }
+        mysqli_close($db_connect);
+        /*echo "<pre>";
+        print_r ($arr);
+        echo "</pre>";*/
+        return $arr;
+    }
+
+    public function copyFilters()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $parent_list=$this->parrentBads();
+        $mod_list=$this->modBads();
+        foreach ($parent_list as $parent)
+        {
+
+            $parrent_id=$parent['goods_id'];
+
+            //прописываем тип аровати для родительского товара
+            $query="DELETE FROM goodshasfeature WHERE goods_id=$parrent_id AND feature_id=47";
+            mysqli_query($db_connect,$query);
+            $size=$parent['goods_width'];
+            if ($size<=1199)
+            {
+                $goodshasfeature_valueint=1;
+            }
+            if ($size>1200&&$size<=1599)
+            {
+                $goodshasfeature_valueint=2;
+            }
+            if ($size>1600)
+            {
+                $goodshasfeature_valueint=4;
+            }
+            $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
+                "goodshasfeature_valuetext, goods_id, feature_id) ".
+                "VALUES ($goodshasfeature_valueint, 0, ".
+                "'', $parrent_id, 47)";
+            mysqli_query($db_connect,$query);
+            echo $query."<br>";
+
+
+            //выбираем список фич для родительского товара
+            $query="SELECT * FROM goodshasfeature WHERE goods_id=$parrent_id";
+            if ($res=mysqli_query($db_connect,$query))
+            {
+                //не забываем обнулять список перед заполнением!
+                $features=null;
+                while ($row=mysqli_fetch_assoc($res))
+                {
+                    $features[]=$row;
+                }
+            }
+            //print_r($features);
+            /*print_r($features);
+            */
+            foreach ($mod_list as $mod)
+            {
+                if ($parent['goods_id']==$mod['goods_parent'])
+                {
+                    $mod_id=$mod['goods_id'];
+                    $mod_size=$mod['goods_width'];
+                    echo "<br><b>$mod_size</b><br>";
+                    //дропаем старые записи
+                    $query="DELETE FROM goodshasfeature WHERE goods_id=$mod_id";
+                    mysqli_query($db_connect,$query);
+                    echo $query."<br>";
+                    //для каждой фичи записываем ее в БД
+                    foreach ($features as $feat)
+                    {
+                        $goodshasfeature_valueint=$feat['goodshasfeature_valueint'];
+                        $goodshasfeature_valuefloat=$feat['goodshasfeature_valuefloat'];
+                        $goodshasfeature_valuetext=$feat['goodshasfeature_valuetext'];
+                        $feature_id=$feat['feature_id'];
+                        //пишем размерность (одно/полтора/двуспальные)
+                        if ($feature_id==47)
+                        {
+                            if ($mod_size<=1199)
+                            {
+                                $goodshasfeature_valueint=1;
+                            }
+                            if ($mod_size>1200&&$mod_size<=1599)
+                            {
+                                $goodshasfeature_valueint=2;
+                            }
+                            if ($mod_size>1600)
+                            {
+                                $goodshasfeature_valueint=4;
+                            }
+                        }
+
+                        //не пишем ненужные значния
+                        if ($feature_id==47||$feature_id==50||$feature_id==120||$feature_id==49||$feature_id==121||$feature_id==81||$feature_id==48||$feature_id==51)
+                        {
+                            $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
+                                "goodshasfeature_valuetext, goods_id, feature_id) ".
+                                "VALUES ($goodshasfeature_valueint, $goodshasfeature_valuefloat, ".
+                                "'$goodshasfeature_valuetext', $mod_id, $feature_id)";
+                            mysqli_query($db_connect,$query);
+                            echo $query."<br>";
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+}

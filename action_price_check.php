@@ -115,6 +115,44 @@ class Check
         }
         mysqli_close($db_connect);
     }
+
+    private function getActionList()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id FROM goods WHERE goods_price<oods_oldprice AND goods_oldprice<>0";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+            mysqli_close($db_connect);
+            var_dump ($goods);
+            return $goods;
+        }
+        else
+        {
+            mysqli_close($db_connect);
+            return null;
+        }
+    }
+
+    public function setDisc()
+    {
+        $goods=$this->getActionList();
+        $db_connect=mysqli_connect(host,user,pass,db);
+        if (is_array($goods))
+        {
+            foreach ($goods as $good)
+            {
+                $id=$good['goods_id'];
+                $query="UPDATE goods SET goods_discount=round(((goods_oldprice/goods_price)-1)*100) WHERE goods_id=$id";
+                mysqli_query($db_connect,$query);
+                echo "$query<br>";
+            }
+        }
+
+    }
 }
 
 /**
@@ -206,7 +244,8 @@ class CheckDiv
 $runtime = new Timer();
 $runtime->setStartTime();
 $test=new Check();
-$test->checkActions();
+$test->setDisc();
+//$test->checkActions();
 //$testDiv=new CheckDiv();
 //$testDiv->checkActions();
 $runtime->setEndTime();

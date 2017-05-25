@@ -479,7 +479,7 @@ function rename_bekker ($factory_id)
             $id=$tovar['goods_id'];
             //кровати
             $name=str_replace(UTF8toCP1251("Тумба "),"",$name);
-            $name="Кровать Sonorous ".$name;
+            $name="Тумба Sonorous ".$name;
             $name=UTF8toCP1251($name);
             $query="UPDATE goods SET goods_name='$name' WHERE goods_id=$id";
             mysqli_query($db_connect,$query);
