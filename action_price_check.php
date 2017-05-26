@@ -5,7 +5,6 @@
  * Date: 09.01.17
  * Time: 10:56
  */
-
 //define ("host","localhost");
 define ("host","10.0.0.2");
 /**
@@ -23,7 +22,6 @@ define ("pass", "Z7A8JqUh");
  */
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
-
 /**
  * Class Timer
  */
@@ -60,7 +58,6 @@ class Timer
         return $this->end_time-$this->start_time;
     }
 }
-
 /**
  * Class Check
  * выбирает все товары, у которых старая цена меньше, чем новая. ставит старую цену равную 0
@@ -91,7 +88,6 @@ class Check
             return null;
         }
     }
-
     /**
      *выставляет товарам, у которых старая цена выше новой старую цену = 0
      */
@@ -115,11 +111,10 @@ class Check
         }
         mysqli_close($db_connect);
     }
-
     private function getActionList()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id FROM goods WHERE goods_price<oods_oldprice AND goods_oldprice<>0";
+        $query="SELECT goods_id FROM goods WHERE goods_price<goods_oldprice AND goods_oldprice<>0 AND goods_oldprice<>0";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -127,7 +122,7 @@ class Check
                 $goods[] = $row;
             }
             mysqli_close($db_connect);
-            var_dump ($goods);
+            //var_dump ($goods);
             return $goods;
         }
         else
@@ -136,7 +131,6 @@ class Check
             return null;
         }
     }
-
     public function setDisc()
     {
         $goods=$this->getActionList();
@@ -151,10 +145,12 @@ class Check
                 echo "$query<br>";
             }
         }
-
+		else
+		{
+			echo "don't recive goods!";
+		}
     }
 }
-
 /**
  * Class CheckDiv
  * проверяет акционные цены на ддн
@@ -183,7 +179,6 @@ class CheckDiv
             return null;
         }
     }
-
     /**
      * возвращает все цены дивана с определенным ид
      * @param $id int айди дивана
@@ -204,7 +199,6 @@ class CheckDiv
         return $prices;
         mysqli_close($db_connect);
     }
-
     /**
      * сбрасывает акционную цену дивану с определенным ид
      * @param $id int айди дивана
@@ -217,7 +211,6 @@ class CheckDiv
         echo "$query <br>";
         mysqli_close($db_connect);
     }
-
     /**
      * прверяет акционные цены диванов, если у кого-то акционная цена выше, чем обычная - исправляет
      */
@@ -240,7 +233,6 @@ class CheckDiv
         }
     }
 }
-
 $runtime = new Timer();
 $runtime->setStartTime();
 $test=new Check();
