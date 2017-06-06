@@ -6,6 +6,91 @@
  * Time: 09:49
  */
 require 'autoload.php';
+class OrisInStore extends Universal
+{
+	public function setNull()
+	{
+		$db = DB::getInstance();
+        $db->debug = true;
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$strSQL="UPDATE goods SET goods_aval=0 ".
+                "WHERE factory_id=151";
+		if ($db->query($strSQL))
+		{
+			echo "OK!<br>";
+		}
+		else
+		{
+			echo "not OK ".mysqli_error()."<br>";
+		}
+	}
+	public function parse_price($params)
+	{	
+        if ($this->file1)
+        {
+            $dom = DOMDocument::load($this->file1);
+            $rows = $dom->getElementsByTagName('Row');
+            //print_r($rows);
+            $row_num = 1;
+            //полезная инфа начинается с 8 строки!
+            //артикул позиции находится в 3 ячейке
+            foreach ($rows as $row)
+            {
+                if ($row_num>=8)
+                {
+                    $cells=$row->getElementsByTagName('Cell');
+                    $cell_num=1;
+                    unset($name);
+                    unset($price);
+                    foreach ($cells as $cell)
+                    {
+                        $elem=$cell->nodeValue;
+                        if ($cell_num==8)
+                        {
+                            $name=$elem;
+			            }
+                    }
+                    if ($name)
+                    {
+                        $this->add_price($name,$price);
+                    }
+                }
+                $row_num++;
+            }
+        }
+        else
+        {
+            echo "No file, no life!";
+        }
+	}
+	
+	public function add_db()
+    {
+        $db = DB::getInstance();
+        $db->debug = true;
+        $db_connect=mysqli_connect(host,user,pass,db);
+        foreach ($this->data as $d)
+        {
+            $d_name=$d['name'];
+            //echo $d_name."<br>";
+            //$factory_id=$this->factory_id;
+            $strSQL="UPDATE goods SET goods_aval=1 ".
+                "WHERE goods_article_link='$d_name'";
+            // echo $strSQL."<br>";
+            //break;
+            if ($db->query($strSQL))
+			{
+				echo "OK!<br>";
+			}
+			else
+			{
+				echo "not OK ".mysqli_error()."<br>";
+			}
+            //break;
+        }
+    }
+}
+
 class Oris extends Universal
 {
     public function parse_price($params)
