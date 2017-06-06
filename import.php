@@ -132,11 +132,10 @@ switch ($selectedFactory)
         $test->test_data();
         $test->add_db();
         break;
-		
 	case "OrisInStore":
         //new!!!
         include_once "oris.php";
-        $test= new Oris($_FILES['file']['tmp_name'],151);
+        $test= new OrisInStore($_FILES['file']['tmp_name'],151);
         $test->setNull();
 		$test->parse_price(null);
         $test->test_data();
