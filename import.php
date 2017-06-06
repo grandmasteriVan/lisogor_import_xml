@@ -135,6 +135,7 @@ switch ($selectedFactory)
 	case "OrisInStore":
         //new!!!
         include_once "oris.php";
+		echo "This!<br>";
         $test= new OrisInStore($_FILES['file']['tmp_name'],151);
         $test->setNull();
 		$test->parse_price(null);
