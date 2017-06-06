@@ -13,7 +13,7 @@ class OrisInStore extends Universal
 		$db = DB::getInstance();
         $db->debug = true;
         $db_connect=mysqli_connect(host,user,pass,db);
-		$strSQL="UPDATE goods SET goods_aval=0 ".
+		$strSQL="UPDATE goods SET goods_avail=0 ".
                 "WHERE factory_id=151";
 		if ($db->query($strSQL))
 		{
@@ -23,10 +23,12 @@ class OrisInStore extends Universal
 		{
 			echo "not OK ".mysqli_error()."<br>";
 		}
+		$db->debug = false;
 	}
 	public function parse_price($params)
 	{	
-        if ($this->file1)
+        //echo "Enter price!";
+		if ($this->file1)
         {
             $dom = DOMDocument::load($this->file1);
             $rows = $dom->getElementsByTagName('Row');
@@ -34,6 +36,7 @@ class OrisInStore extends Universal
             $row_num = 1;
             //полезная инфа начинается с 8 строки!
             //артикул позиции находится в 3 ячейке
+			
             foreach ($rows as $row)
             {
                 if ($row_num>=8)
@@ -41,18 +44,19 @@ class OrisInStore extends Universal
                     $cells=$row->getElementsByTagName('Cell');
                     $cell_num=1;
                     unset($name);
-                    unset($price);
                     foreach ($cells as $cell)
                     {
-                        $elem=$cell->nodeValue;
-                        if ($cell_num==8)
+                        //echo "$cell->nodeValue is $cell_num<br>";
+						$elem=$cell->nodeValue;
+                        if ($cell_num==3)
                         {
                             $name=$elem;
 			            }
+						$cell_num++;
                     }
                     if ($name)
                     {
-                        $this->add_price($name,$price);
+                        $this->add_price($name);
                     }
                 }
                 $row_num++;
@@ -66,28 +70,59 @@ class OrisInStore extends Universal
 	
 	public function add_db()
     {
-        $db = DB::getInstance();
-        $db->debug = true;
+        //$db = DB::getInstance();
+        //$db->debug = true;
         $db_connect=mysqli_connect(host,user,pass,db);
-        foreach ($this->data as $d)
-        {
-            $d_name=$d['name'];
-            //echo $d_name."<br>";
-            //$factory_id=$this->factory_id;
-            $strSQL="UPDATE goods SET goods_aval=1 ".
-                "WHERE goods_article_link='$d_name'";
-            // echo $strSQL."<br>";
-            //break;
-            if ($db->query($strSQL))
+        //echo "";
+		if (is_array($this->data))
+		{
+			foreach ($this->data as $d)
 			{
-				echo "OK!<br>";
+				$d_name=$d['name'];
+				//echo $d_name."<br>";
+				//$factory_id=$this->factory_id;
+				$strSQL="UPDATE goods SET goods_avail=1 WHERE goods_article_link='$d_name'";
+				// echo $strSQL."<br>";
+				//break;
+				if (mysqli_query($db_connect, $strSQL))
+				{
+					echo "$strSQL   OK!<br>";
+				}
+				else
+				{
+					echo "$strSQL    not OK ".mysqli_error()."<br>";
+				}
+				//break;
 			}
-			else
-			{
-				echo "not OK ".mysqli_error()."<br>";
-			}
-            //break;
-        }
+		}
+		else
+		{
+			echo "No data to write in BD!<br>";
+		}
+    }
+	public function test_data()
+    {
+        ?>
+        <!--<html>
+        <body> -->
+        <table>
+            <tr>
+                <th>Артикул</th>
+                <th>Цена</th>
+            </tr>
+            <?php foreach($this->data as $row)
+            {?>
+                <tr>
+                    <td><?php echo ($row['name']); ?></td>
+                    <td><?php echo ($row['kat0']); ?></td>
+                </tr>
+
+            <?php } ?>
+
+        </table>
+        <!-- </body>
+        </html> --> <?php
+        //$this->findDif();
     }
 }
 
