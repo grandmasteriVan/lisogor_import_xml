@@ -25,6 +25,10 @@ define ("pass", "Z7A8JqUh");
 define ("db", "uh333660_mebli");
 class setFilters
 {
+    /**
+     * @param int $goods_maintcharter
+     * @return array|bool
+     */
     function all_matr($goods_maintcharter=13)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -45,6 +49,11 @@ class setFilters
         mysqli_close($db_connect);
         return $arr;
     }
+
+    /**
+     * @param int $goods_maintcharter
+     * @return array
+     */
     private function modBads($goods_maintcharter=13)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -59,6 +68,11 @@ class setFilters
         mysqli_close($db_connect);
         return $arr;
     }
+
+    /**
+     * @param int $goods_maintcharter
+     * @return array
+     */
     private function parrentBads($goods_maintcharter=13)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -76,8 +90,12 @@ class setFilters
         echo "</pre>";*/
         return $arr;
     }
-	
-	private function filtersCheck($filters, $goods_id)
+
+    /**
+     * @param $filters
+     * @param $goods_id
+     */
+    private function filtersCheck($filters, $goods_id)
 	{
 		unset ($feature_id);
 		foreach ($filters as $filter)
@@ -122,6 +140,10 @@ class setFilters
 		}
 		return;
 	}
+
+    /**
+     *
+     */
     public function copyFilters()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
