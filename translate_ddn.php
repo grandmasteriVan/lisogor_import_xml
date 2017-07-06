@@ -177,4 +177,37 @@ class TranslateDdn
             }
         }
     }
+
+    public function test($test_id=null)
+    {
+        if ($test_id)
+        {
+            //если нам нужен перевод - то мы его получаем
+            if ($this->getInNeed($test_id))
+            {
+                $ru_text=$this->getText($test_id);
+                $ukr_text=$this->translatePos($ru_text);
+                $file="$test_id;$ru_text;$ukr_text".PHP_EOL;
+                echo $file;
+            }
+        }
+
+        else
+        {
+            $all_goods=$this->getGoodsIds();
+            foreach ($all_goods as $good)
+            {
+                $goods_id=$good['goods_id'];
+                //если нам нужен перевод - то мы его получаем
+                if ($this->getInNeed($goods_id))
+                {
+                    $ru_text=$this->getText($goods_id);
+                    $ukr_text=$this->translatePos($ru_text);
+                    $file="$goods_id;$ru_text;$ukr_text".PHP_EOL;
+                    file_put_contents("texts.csv",$file,FILE_APPEND);
+                }
+                break;
+            }
+        }
+    }
 }
