@@ -27,6 +27,10 @@ define ("pass", "");
 define ("db", "ddn_new");
 //define ("db", "uh333660_mebli");
 
+/**
+ * Class Timer
+ * подсчет времени выполнения скрипта
+ */
 class Timer
 {
     /**
@@ -85,8 +89,13 @@ class TranslateDdn
         //var_dump($result);
 		return $ukr_txt;
     }
-	
-	private function strip($txt)
+
+    /**
+     * Удаляем лишние символы перед тем, как скормить строку яндексу
+     * @param $txt string контент, полученный из базы данных
+     * @return mixed|string - строка, которую будем скармливать яндексу
+     */
+    private function strip($txt)
 	{
 		$txt=strip_tags($txt);
 		
@@ -105,8 +114,13 @@ class TranslateDdn
 		
 		return $txt;
 	}
-	
-	 private function getName($id)
+
+    /**
+     * получаем имя дивана
+     * @param $id integer - айди дивана
+     * @return mixed - имя дивана
+     */
+    private function getName($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="SELECT goodshaslang_name FROM goodshaslang WHERE goods_id=$id AND lang_id=1";
@@ -242,6 +256,11 @@ class TranslateDdn
         }
         mysqli_close($db_connect);
     }
+
+    /**
+     *рабочая лошадка, которая вызывает другие методы
+     * на выходе получаем файл с текстами и переводами
+     */
     public function getTranslate()
     {
         $all_goods=$this->getGoodsIds();
