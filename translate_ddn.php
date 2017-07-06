@@ -5,28 +5,62 @@
  * Date: 06.07.17
  * Time: 11:44
  */
-
 header('Content-Type: text/html; charset=utf-8');
 /**
  * database host
  */
-//define ("host","localhost");
-define ("host","10.0.0.2");
+define ("host","localhost");
+//define ("host","10.0.0.2");
 /**
  * database username
  */
-//define ("user", "root");
-define ("user", "uh333660_mebli");
+define ("user", "root");
+//define ("user", "uh333660_mebli");
 /**
  * database password
  */
-//define ("pass", "");
-define ("pass", "Z7A8JqUh");
+define ("pass", "");
+//define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
-//define ("db", "mebli");
-define ("db", "uh333660_mebli");
+define ("db", "ddn_new");
+//define ("db", "uh333660_mebli");
+
+class Timer
+{
+    /**
+     * @var время начала выпонения
+     */
+    private $start_time;
+    /**
+     * @var время конца выполнения
+     */
+    private $end_time;
+    /**
+     * встанавливаем время начала выполнения скрипта
+     */
+    public function setStartTime()
+    {
+        $this->start_time = microtime(true);
+    }
+    /**
+     * устанавливаем время конца выполнения скрипта
+     */
+    public function setEndTime()
+    {
+        $this->end_time = microtime(true);
+    }
+    /**
+     * @return mixed время выполения
+     * возвращаем время выполнения скрипта в секундах
+     */
+    public function getRunTime()
+    {
+        return $this->end_time-$this->start_time;
+    }
+}
+
 
 /**
  * Class TranslateDdn
@@ -40,15 +74,65 @@ class TranslateDdn
      */
     private function translatePos($txt)
     {
-        $api_key="";
-        $lang="ru-ua";
-        $link="https://translate.yandex.ru/api/v1.5/tr.json/translate?key=".$api_key."&text=".$txt."&lang=".$lang;
+        $api_key="trnsl.1.1.20170706T112229Z.752766fa973319f4.6dcbe2932c5e110da20ee3ce61c5986e7e492e7f";
+        $lang="ru-uk";
+		$txt=str_replace(" ","%20",$txt);
+		$link="https://translate.yandex.net/api/v1.5/tr.json/translate?key=".$api_key."&text=".$txt."&lang=".$lang;
+		//echo $link."<br>";
         $result=file_get_contents($link);
         $result=json_decode($result,true);
         $ukr_txt=$result['text'][0];
-        return $ukr_txt;
+        //var_dump($result);
+		return $ukr_txt;
     }
-
+	
+	private function strip($txt)
+	{
+		$txt=strip_tags($txt);
+		
+		$txt=str_replace("&laquo;","",$txt);
+		$txt=str_replace("&raquo;","",$txt);
+		$txt=str_replace("&amp;","",$txt);
+		$txt=str_replace("&nbsp;","",$txt);
+		$txt=str_replace("&quot","",$txt);
+		$txt=str_replace("&","",$txt);
+		$txt=str_replace(";","",$txt);
+		$txt=str_replace("/","",$txt);
+		//$txt=nl2br($txt);
+		$txt=str_replace(array('«', '»'),'',$txt);
+		$txt=trim($txt);
+		//$txt=addslashes($txt);
+		
+		return $txt;
+	}
+	
+	 private function getName($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goodshaslang_name FROM goodshaslang WHERE goods_id=$id AND lang_id=1";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $texts[] = $row;
+            }
+            if (is_array($texts))
+            {
+                foreach ($texts as $text)
+                {
+                    //получаем нужный текст
+                    $name=$text['goodshaslang_name'];
+                }
+            }
+        }
+        else
+        {
+            echo "Error in SQL: $query<br>";
+        }
+        mysqli_close($db_connect);
+        return $name;
+    }
+	
     /**
      * получаем текст определенного товара
      * @param $id integer - айди товара
@@ -80,7 +164,6 @@ class TranslateDdn
         mysqli_close($db_connect);
         return $txt;
     }
-
     /**
      *получаем список всех ид товаров
      */
@@ -111,7 +194,6 @@ class TranslateDdn
         mysqli_close($db_connect);
         return $ids;
     }
-
     /**
      * скармливаем айдишку товара и получаем ответ надо ли его переводить или нет
      * @param $goods_id integer - айди товара
@@ -142,7 +224,7 @@ class TranslateDdn
                         $ukr_cont=$good['goodshaslang_content'];
                     }
                 }
-                if (strnatcasecmp($ru_name,$ukr_name)!=00&&strnatcasecmp($ru_cont,$ukr_cont)!=0)
+                if (strnatcasecmp($ru_name,$ukr_name)==00&&strnatcasecmp($ru_cont,$ukr_cont)==0&&strnatcasecmp($ru_cont,""))
                 {
                     mysqli_close($db_connect);
                     return true;
@@ -160,54 +242,36 @@ class TranslateDdn
         }
         mysqli_close($db_connect);
     }
-
     public function getTranslate()
     {
         $all_goods=$this->getGoodsIds();
         foreach ($all_goods as $good)
         {
-            $goods_id=$good['goods_id'];
+            $goods_id=$good;
             //если нам нужен перевод - то мы его получаем
             if ($this->getInNeed($goods_id))
             {
-                $ru_text=$this->getText($goods_id);
+                $ru_name=$this->getName($goods_id);
+				$ukr_name=$this->translatePos($ru_name);
+				
+				
+				$ru_text=$this->getText($goods_id);
+				$ru_text=$this->strip($ru_text);
                 $ukr_text=$this->translatePos($ru_text);
-                $file="$goods_id;$ru_text;$ukr_text".PHP_EOL;
-                file_put_contents("texts.csv",$file,FILE_APPEND);
+				$ukr_text=str_replace("__","\n",$ukr_text);
+				$file="goods_id:$goods_id /goods_id".PHP_EOL."goods_name:$ru_name-$ukr_name goods_name/".PHP_EOL."ru_text: $ru_text /ru_text".PHP_EOL."ukr_text: $ukr_text /ukr_text".PHP_EOL.PHP_EOL.PHP_EOL;
+                file_put_contents("texts.txt",$file,FILE_APPEND);
             }
+			//break;
         }
     }
-
-    public function test($test_id=null)
-    {
-        if ($test_id)
-        {
-            //если нам нужен перевод - то мы его получаем
-            if ($this->getInNeed($test_id))
-            {
-                $ru_text=$this->getText($test_id);
-                $ukr_text=$this->translatePos($ru_text);
-                $file="$test_id;$ru_text;$ukr_text".PHP_EOL;
-                echo $file;
-            }
-        }
-
-        else
-        {
-            $all_goods=$this->getGoodsIds();
-            foreach ($all_goods as $good)
-            {
-                $goods_id=$good['goods_id'];
-                //если нам нужен перевод - то мы его получаем
-                if ($this->getInNeed($goods_id))
-                {
-                    $ru_text=$this->getText($goods_id);
-                    $ukr_text=$this->translatePos($ru_text);
-                    $file="$goods_id;$ru_text;$ukr_text".PHP_EOL;
-                    file_put_contents("texts.csv",$file,FILE_APPEND);
-                }
-                break;
-            }
-        }
-    }
+	
 }
+
+$runtime = new Timer();
+set_time_limit(9000);
+$runtime->setStartTime();
+$test=new TranslateDdn();
+$test->getTranslate();
+$runtime->setEndTime();
+echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
