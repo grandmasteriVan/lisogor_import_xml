@@ -120,7 +120,11 @@ class imgWorks
             {
                 $pict_ext=$pict['goods_pict'];
             }
-            $pict_file=$_SERVER['DOCUMENT_ROOT']."/content/goods/".$id."/$id"."_list.".$pict_ext;
+            $pict_file=$_SERVER['DOCUMENT_ROOT']."/content/goods/".$id."/$id"."_pictnewlist.".$pict_ext;
+            //вызываем функцию
+            $this->makeMirrorPict($pict_file,$pict_file, $pict_ext);
+			//меняем альтернативную картинку (старую)
+			$pict_file=$_SERVER['DOCUMENT_ROOT']."/content/goods/".$id."/$id"."_list.".$pict_ext;
             //вызываем функцию
             $this->makeMirrorPict($pict_file,$pict_file, $pict_ext);
         }
