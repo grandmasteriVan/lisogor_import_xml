@@ -49,7 +49,7 @@ class countTov
     public function countTov()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT factory_id, factory_name FROM factory WHERE factory_active=1";
+        $query="SELECT factory_id, factory_name FROM factory WHERE factory_active=1 factory_noactual=0";
         if ($res=mysqli_query($db_connect,$query))
         {
             unset($factoryes);

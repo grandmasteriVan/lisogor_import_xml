@@ -24,6 +24,87 @@ define ("pass", "Z7A8JqUh");
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
 //TODO: сделать универсальный скрипт, для этого в зависимости от типа товара надо копировать нужнные фильтры и сеополя
+
+class imgCopy
+{
+    private function parrentMatr($goods_maintcharter=14)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id, goods_parent, goods_width, goods_height FROM goods WHERE goods_maintcharter=$goods_maintcharter and goods_parent=goods_id AND goods_noactual=0 AND goods_active=1";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $arr[] = $row;
+            }
+        }
+        mysqli_close($db_connect);
+        /*echo "<pre>";
+        print_r ($arr);
+        echo "</pre>";*/
+        return $arr;
+    }
+
+    private function getMainPic($goods_id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_pict FROM goods WHERE goods_id=$goods_id";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $arr[] = $row;
+            }
+            if (is_array($arr))
+            {
+                foreach ($arr as $ar)
+                {
+                    $pict=$ar['goods_pict'];
+                }
+            }
+            else
+            {
+                echo "No array!";
+                $pict=null;
+            }
+
+        }
+        else
+        {
+            echo "Error in SQL in $query function getMainPic<br>";
+            $pict=null;
+        }
+        mysqli_close($db_connect);
+        return $pict;
+    }
+
+    private function getGaleryPicts($goods_id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT * FROM goodsfile WHERE goods_id=$goods_id";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $arr[] = $row;
+            }
+            $pict=$arr;
+        }
+        else
+        {
+            echo "Error in SQL in $query function getGaleryPicts<br>";
+            $pict=null;
+        }
+        mysqli_close($db_connect);
+        return $pict;
+    }
+
+    private function setMainPict($goods_id, $pict)
+    {
+
+    }
+}
+
 /**
  * Class setFilters
  */
