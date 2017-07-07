@@ -26,7 +26,6 @@ define ("pass", "");
  */
 define ("db", "ddn_new");
 //define ("db", "uh333660_mebli");
-
 /**
  * Class Timer
  * подсчет времени выполнения скрипта
@@ -64,8 +63,6 @@ class Timer
         return $this->end_time-$this->start_time;
     }
 }
-
-
 /**
  * Class TranslateDdn
  */
@@ -89,7 +86,6 @@ class TranslateDdn
         //var_dump($result);
 		return $ukr_txt;
     }
-
     /**
      * Удаляем лишние символы перед тем, как скормить строку яндексу
      * @param $txt string контент, полученный из базы данных
@@ -114,7 +110,6 @@ class TranslateDdn
 		
 		return $txt;
 	}
-
     /**
      * получаем имя дивана
      * @param $id integer - айди дивана
@@ -178,7 +173,36 @@ class TranslateDdn
         mysqli_close($db_connect);
         return $txt;
     }
-    /**
+    
+	 private function getGoods()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT DISTINCT goods.goods_id FROM goods join goodshasfeature on goods.goods_id=goodshasfeature.goods_id WHERE goodshasfeature.goods_id not in (select goodshasfeature.goods_id from goodshasfeature where feature_id=14 AND (goodshasfeature_valueid=125 OR goodshasfeature_valueid=91 OR goodshasfeature_valueid=96 OR goodshasfeature_valueid=89 OR goodshasfeature_valueid=90 OR goodshasfeature_valueid=134 OR goodshasfeature_valueid=83 OR goodshasfeature_valueid=86 OR goodshasfeature_valueid=123))";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+            if (is_array($goods))
+            {
+                unset ($ids);
+                foreach ($goods as $good)
+                {
+                    //получаем нужный текст
+                    $ids[]=$good['goods_id'];
+                }
+            }
+        }
+        else
+        {
+            echo "Error in SQL: $query<br>";
+        }
+        mysqli_close($db_connect);
+        return $ids;
+    }
+	
+	/**
      *получаем список всех ид товаров
      */
     private function getGoodsIds()
@@ -256,14 +280,13 @@ class TranslateDdn
         }
         mysqli_close($db_connect);
     }
-
     /**
      *рабочая лошадка, которая вызывает другие методы
      * на выходе получаем файл с текстами и переводами
      */
     public function getTranslate()
     {
-        $all_goods=$this->getGoodsIds();
+        $all_goods=$this->getGoods();
         foreach ($all_goods as $good)
         {
             $goods_id=$good;
@@ -281,12 +304,11 @@ class TranslateDdn
 				$file="goods_id:$goods_id /goods_id".PHP_EOL."goods_name:$ru_name-$ukr_name goods_name/".PHP_EOL."ru_text: $ru_text /ru_text".PHP_EOL."ukr_text: $ukr_text /ukr_text".PHP_EOL.PHP_EOL.PHP_EOL;
                 file_put_contents("texts.txt",$file,FILE_APPEND);
             }
-			//break;
+			break;
         }
     }
 	
 }
-
 $runtime = new Timer();
 set_time_limit(9000);
 $runtime->setStartTime();
