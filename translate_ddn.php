@@ -173,8 +173,13 @@ class TranslateDdn
         mysqli_close($db_connect);
         return $txt;
     }
-    
-	private function getGoodsFactory($factory_id)
+
+    /**
+     * возвращает список айди товаров по определенной фабрике
+     * @param $factory_id integer - id фабрики
+     * @return array - список айди позиций
+     */
+    private function getGoodsFactory($factory_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="SELECT DISTINCT goods.goods_id FROM goods join goodshasfeature on goods.goods_id=goodshasfeature.goods_id WHERE goodshasfeature.goods_id in (select goodshasfeature.goods_id from goodshasfeature where feature_id=14 AND goodshasfeature_valueid=$factory_id)";
@@ -201,8 +206,12 @@ class TranslateDdn
         mysqli_close($db_connect);
         return $ids;
     }
-	
-	private function getGoods()
+
+    /**
+     * получаем список товаров, которые не в работе
+     * @return array - список ид
+     */
+    private function getGoods()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="SELECT DISTINCT goods.goods_id FROM goods join goodshasfeature on goods.goods_id=goodshasfeature.goods_id WHERE goodshasfeature.goods_id not in (select goodshasfeature.goods_id from goodshasfeature where feature_id=14 AND (goodshasfeature_valueid=125 OR goodshasfeature_valueid=91 OR goodshasfeature_valueid=96 OR goodshasfeature_valueid=89 OR goodshasfeature_valueid=90 OR goodshasfeature_valueid=134 OR goodshasfeature_valueid=83 OR goodshasfeature_valueid=86 OR goodshasfeature_valueid=123 OR goodshasfeature_valueid=87))";
@@ -308,8 +317,12 @@ class TranslateDdn
         }
         mysqli_close($db_connect);
     }
-    
-	
+
+
+    /**
+     * создает файл с переводами текствов товаров для определенной фабрики
+     * @param $factory_id integer - ай-ди фабрики
+     */
     public function getTranslateFactory($factory_id)
     {
         $all_goods=$this->getGoodsFactory($factory_id);
