@@ -14,17 +14,17 @@ define ("host","localhost");
 /**
  * database username
  */
-define ("user", "root");
+define ("user", "u_divani_n");
 //define ("user", "uh333660_mebli");
 /**
  * database password
  */
-define ("pass", "");
+define ("pass", "EjcwKUYK");
 //define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
-define ("db", "ddn_new");
+define ("db", "divani_new");
 //define ("db", "uh333660_mebli");
 /**
  * Class Timer
@@ -174,10 +174,38 @@ class TranslateDdn
         return $txt;
     }
     
-	 private function getGoods()
+	private function getGoodsFactory($factory_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT DISTINCT goods.goods_id FROM goods join goodshasfeature on goods.goods_id=goodshasfeature.goods_id WHERE goodshasfeature.goods_id not in (select goodshasfeature.goods_id from goodshasfeature where feature_id=14 AND (goodshasfeature_valueid=125 OR goodshasfeature_valueid=91 OR goodshasfeature_valueid=96 OR goodshasfeature_valueid=89 OR goodshasfeature_valueid=90 OR goodshasfeature_valueid=134 OR goodshasfeature_valueid=83 OR goodshasfeature_valueid=86 OR goodshasfeature_valueid=123))";
+        $query="SELECT DISTINCT goods.goods_id FROM goods join goodshasfeature on goods.goods_id=goodshasfeature.goods_id WHERE goodshasfeature.goods_id in (select goodshasfeature.goods_id from goodshasfeature where feature_id=14 AND goodshasfeature_valueid=$factory_id)";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+            if (is_array($goods))
+            {
+                unset ($ids);
+                foreach ($goods as $good)
+                {
+                    //получаем нужный текст
+                    $ids[]=$good['goods_id'];
+                }
+            }
+        }
+        else
+        {
+            echo "Error in SQL: $query<br>";
+        }
+        mysqli_close($db_connect);
+        return $ids;
+    }
+	
+	private function getGoods()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT DISTINCT goods.goods_id FROM goods join goodshasfeature on goods.goods_id=goodshasfeature.goods_id WHERE goodshasfeature.goods_id not in (select goodshasfeature.goods_id from goodshasfeature where feature_id=14 AND (goodshasfeature_valueid=125 OR goodshasfeature_valueid=91 OR goodshasfeature_valueid=96 OR goodshasfeature_valueid=89 OR goodshasfeature_valueid=90 OR goodshasfeature_valueid=134 OR goodshasfeature_valueid=83 OR goodshasfeature_valueid=86 OR goodshasfeature_valueid=123 OR goodshasfeature_valueid=87))";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -280,7 +308,32 @@ class TranslateDdn
         }
         mysqli_close($db_connect);
     }
-    /**
+    
+	
+    public function getTranslateFactory($factory_id)
+    {
+        $all_goods=$this->getGoodsFactory($factory_id);
+        foreach ($all_goods as $good)
+        {
+            $goods_id=$good;
+            //если нам нужен перевод - то мы его получаем
+            if ($this->getInNeed($goods_id))
+            {
+                $ru_name=$this->getName($goods_id);
+				$ukr_name=$this->translatePos($ru_name);
+				
+				
+				$ru_text=$this->getText($goods_id);
+				$ru_text=$this->strip($ru_text);
+                $ukr_text=$this->translatePos($ru_text);
+				$ukr_text=str_replace("__","\n",$ukr_text);
+				$file="goods_id:$goods_id /goods_id".PHP_EOL."goods_name:$ru_name-$ukr_name goods_name/".PHP_EOL."ru_text: $ru_text /ru_text".PHP_EOL."ukr_text: $ukr_text /ukr_text".PHP_EOL.PHP_EOL.PHP_EOL;
+                file_put_contents("texts_$factory_id.txt",$file,FILE_APPEND);
+            }
+        }
+    }
+	
+	/**
      *рабочая лошадка, которая вызывает другие методы
      * на выходе получаем файл с текстами и переводами
      */
@@ -304,7 +357,6 @@ class TranslateDdn
 				$file="goods_id:$goods_id /goods_id".PHP_EOL."goods_name:$ru_name-$ukr_name goods_name/".PHP_EOL."ru_text: $ru_text /ru_text".PHP_EOL."ukr_text: $ukr_text /ukr_text".PHP_EOL.PHP_EOL.PHP_EOL;
                 file_put_contents("texts.txt",$file,FILE_APPEND);
             }
-			break;
         }
     }
 	
@@ -314,5 +366,6 @@ set_time_limit(9000);
 $runtime->setStartTime();
 $test=new TranslateDdn();
 $test->getTranslate();
+//$test->getTranslateFactory(87);
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
