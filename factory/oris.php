@@ -78,10 +78,12 @@ class OrisInStore extends Universal
 		{
 			foreach ($this->data as $d)
 			{
+				
 				$d_name=$d['name'];
+				if (strcasecmp ($d_name,"")!=0)
 				//echo $d_name."<br>";
 				//$factory_id=$this->factory_id;
-				$strSQL="UPDATE goods SET goods_avail=1 WHERE goods_article_link='$d_name'";
+				$strSQL="UPDATE goods SET goods_avail=1 WHERE goods_article_link='$d_name' AND factory_id=151";
 				// echo $strSQL."<br>";
 				//break;
 				if (mysqli_query($db_connect, $strSQL))
