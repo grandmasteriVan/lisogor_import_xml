@@ -282,7 +282,8 @@ class FM
     private function setMirror($goods_id_fm, $goods_article_ddn)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
-		if ($this->checkDublicate($goods_id_fm))
+		//проверяем естл ли уже щапись, если есть - обновляем ее, если нет - создаем
+		if ($this->checkDuplicate($goods_id_fm))
 		{
 			$query="UPDATE goodsmirror SET goodsmirror_article_ddn='$goods_article_ddn' WHERE goods_id=$goods_id_fm";
 		}
@@ -326,12 +327,17 @@ class FM
         mysqli_close($db_connect);
         return $art;
 	}
-	
-    private function checkDublicate($id)
+
+    /**
+     * проверяем есть ли в зазеркалье запись для данного дивана
+     * @param $id integer - айди дивана
+     * @return bool true - если запись есть, false - если нет
+     */
+    private function checkDuplicate($id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="SELECT goodsmirror_article_ddn FROM goodsmirror WHERE goods_id=$id";
-		echo $query."<br>";
+		//echo $query."<br>";
 		if ($res=mysqli_query($db_connect,$query))
 		{
 			while ($row = mysqli_fetch_assoc($res))
@@ -348,7 +354,7 @@ class FM
             }
 		}
 		mysqli_query($db_connect, $query);
-		var_dump ($art);
+		//var_dump ($art);
 		if ($art==null)
 		{
 			return false;
