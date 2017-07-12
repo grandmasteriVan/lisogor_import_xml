@@ -103,13 +103,8 @@ class FM
 	(fm=>164,ddn=>153),
 	(fm=>166,ddn=>173),
 	(fm=>168,ddn=>174));*/
-
-    /**
-     * выбираем список айди товаров с сайта ФМ по определенной фабрике
-     * @param $f_id integer - айди фабрики на ФМ
-     * @return array|null - массив айди товаров
-     */
-    private function getTovByFactoryFM ($f_id)
+	
+	private function getTovByFactoryFM ($f_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="SELECT goods_id FROM goods WHERE factory_id=$f_id";
@@ -136,13 +131,8 @@ class FM
             return null;
         }
     }
-
-    /**
-     * выбираем список айди товаров с сайта ДДН по определенной фабрике
-     * @param $f_id integer - айди фабрики на ДДН
-     * @return array|null - массив айди товаров
-     */
-    private function getTovByFactoryDDN ($f_id)
+	
+	private function getTovByFactoryDDN ($f_id)
     {
         $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
         $query="SELECT DISTINCT goods.goods_id FROM goods join goodshasfeature on goods.goods_id=goodshasfeature.goods_id WHERE goodshasfeature.goods_id in (select goodshasfeature.goods_id from goodshasfeature where feature_id=14 AND goodshasfeature_valueid=$f_id)";
@@ -169,17 +159,37 @@ class FM
             return null;
         }
     }
-
-    /**
-     * сравниваем 2 названия дивана.
-     * если они равны - возвращаем true, если нет - false
-     * @param $div_fm string - название дивана на ФМ
-     * @param $div_ddn string - название дивана на ДДН
-     * @return bool
-     */
-    private function getEqual($div_fm, $div_ddn)
+	
+    /*private function getFactoryListFM()
     {
-        if (strnatcasecmp($div_fm,$div_ddn)==0)
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT factory_id FROM factory WHERE factory_id=$f_id";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $tovByFactoty[]=$row;
+            }
+        }
+        else
+        {
+            echo "error in SQL $query<br>";
+        }
+        mysqli_close($db_connect);
+        if (is_array($tovByFactoty))
+        {
+            return $tovByFactoty;
+        }
+        else
+        {
+            return null;
+        }
+    }*/
+	
+		
+    private function getEqual($div_fm, $div_ddb)
+    {
+        if (strnatcasecmp($div_fm,$div_ddb)==0)
         {
             return true;
         }
@@ -188,12 +198,6 @@ class FM
             return false;
         }
     }
-
-    /**
-     * убираем лишние символы и слова из названия
-     * @param $div string - имя дивана
-     * @return string - обработанное имя дивана
-     */
     private function strip($div)
     {
         $div_new=str_replace("Диван","",$div);
@@ -203,13 +207,8 @@ class FM
 		$div_new=str_replace(" ","",$div_new);
         return $div_new;
     }
-
-    /**
-     * выбираем имя дивана по его айди на сайте ФМ
-     * @param $id integer - айди дивана
-     * @return bool - возвращаем имя дивана или false если не нашли
-     */
-    private function getNameByIdFM($id)
+	
+	private function getNameByIdFM($id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="SELECT goods_name FROM goods WHERE goods_id=$id";
@@ -241,13 +240,8 @@ class FM
 			return false;
 		}
 	}
-
-    /**
-     * выбираем имя дивана по его айди на сайте ДДН
-     * @param $id integer - айди дивана
-     * @return bool - возвращаем имя дивана или false если не нашли
-     */
-    private function getNameByIdDDN($id)
+	
+	private function getNameByIdDDN($id)
 	{
 		$db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
         $query="SELECT goodshaslang_name FROM goodshaslang WHERE goods_id=$id AND lang_id=1 AND goodshaslang_active=1";
@@ -273,16 +267,10 @@ class FM
         mysqli_close($db_connect);
         return $name;
 	}
-
-    /**
-     * записываем изменения в зазеркалье
-     * @param $goods_id_fm integer - айди товара на ФМ
-     * @param $goods_article_ddn string - артикул товара на ДДН
-     */
-    private function setMirror($goods_id_fm, $goods_article_ddn)
+	private function setMiror($goods_id_fm, $goods_article_ddn)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
-		$query="UPDATE goodsmirror SET goodsmirror_article_ddn=$goods_article_ddn WHERE goods_id=$goods_id_fm";
+		$query="UPDATE goodsmirror SET goodsmirror_article_ddn='$goods_article_ddn' WHERE goods_id=$goods_id_fm";
 		if (mysqli_query($db_connect, $query))
 		{
 			//echo "$query   OK!<br>";
@@ -293,13 +281,8 @@ class FM
 		}
 		mysqli_close($db_connect);
 	}
-
-    /**
-     * находим артикул товара на ДДН по его айди
-     * @param $id integer - айди товара на ДДН
-     * @return mixed - артикул товара на ДДН
-     */
-    private function getArticleByIdDDN($id)
+	
+	private function getArticleByIdDDN($id)
 	{
 		$db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
         $query="SELECT goods_article FROM goods WHERE goods_id=$id";
@@ -325,13 +308,8 @@ class FM
         mysqli_close($db_connect);
         return $art;
 	}
-
-    /**
-     * находит одинаково названные товары по фабрикам
-     * @param $f_fm integer - айди фабрики на сайте ФМ
-     * @param $f_ddn integer - айди фабрики на ДДН
-     */
-    public function getEqualFactory($f_fm, $f_ddn)
+	
+    public function getEqualFactory($f_fm,$f_ddn)
     {
         $div_fm=$this->getTovByFactoryFM($f_fm);
         $div_ddn=$this->getTovByFactoryDDN($f_ddn);
@@ -346,6 +324,8 @@ class FM
 			$find=false;
 			foreach ($div_ddn as $d_ddn)
 			{
+				
+
 				$id_ddn=$d_ddn['goods_id'];
 				$name_ddn=$this->getNameByIdDDN($id_ddn);
 				$name_ddn=$this->strip($name_ddn);
@@ -353,7 +333,7 @@ class FM
 				if ($this->getEqual($name_fm,$name_ddn))
 				{
 					$article_ddn=$this->getArticleByIdDDN($id_ddn);
-					$this->setMirror($id_fm,$article_ddn);
+					$this->setMiror($id_fm,$article_ddn);
 					//echo "$article_ddn<br>";
 					//echo "$name_fm ($id_fm) - $name_ddn ($id_ddn)<br>";
 					$find=true;
