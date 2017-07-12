@@ -325,7 +325,38 @@ class FM
         mysqli_close($db_connect);
         return $art;
 	}
-
+	
+    private function checkDublicate($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goodsmirror_article_ddn FROM goodsmirror WHERE goods_id=$id";
+		echo $query."<br>";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+			while ($row = mysqli_fetch_assoc($res))
+            {
+                $articles[] = $row;
+            }
+			if (is_array($articles))
+            {
+                foreach ($articles as $article)
+                {
+                    //получаем нужный текст
+                    $art=$article['goodsmirror_article_ddn'];
+                }
+            }
+		}
+		mysqli_query($db_connect, $query);
+		var_dump ($art);
+		if ($art==null)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}	
     /**
      * находит одинаково названные товары по фабрикам
      * @param $f_fm integer - айди фабрики на сайте ФМ
