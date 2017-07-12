@@ -282,15 +282,16 @@ class FM
     private function setMirror($goods_id_fm, $goods_article_ddn)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
-		$query="UPDATE goodsmirror SET goodsmirror_article_ddn=$goods_article_ddn WHERE goods_id=$goods_id_fm";
-		if (mysqli_query($db_connect, $query))
+		if ($this->checkDublicate($goods_id_fm))
 		{
-			//echo "$query   OK!<br>";
+			$query="UPDATE goodsmirror SET goodsmirror_article_ddn='$goods_article_ddn' WHERE goods_id=$goods_id_fm";
 		}
 		else
 		{
-					echo "$query    not OK ".mysqli_error()."<br>";
+			$query="INSERT INTO goodsmirror (goodsmirror_article_ddn,goods_id) VALUES ('$goods_article_ddn',$goods_id_fm)";
 		}
+		
+		mysqli_query($db_connect, $query);
 		mysqli_close($db_connect);
 	}
 
