@@ -152,7 +152,7 @@ function seo_kiev_sofievka()
             //$name=$good['goods_name'];
 			////echo "Goods name: $name<br>";
 			
-			$name=UTF8toCP1251("Диван ").$header;
+			//$name=UTF8toCP1251("Диван ").$header;
             //переименовываем диваны
             if ($goods_kind==23||$goods_kind==26)
             {

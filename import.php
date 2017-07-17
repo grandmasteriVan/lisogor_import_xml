@@ -194,7 +194,7 @@ switch ($selectedFactory)
     case "SleepAndFly":
         //working
         include_once "sleep_and_fly.php";
-        $test= new Plyana($_FILES['file']['tmp_name'],124);
+        $test= new SleepAndFly($_FILES['file']['tmp_name'],124);
         $test->parse_price(null);
         $test->test_data();
         //$test->add_db();
