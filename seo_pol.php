@@ -152,7 +152,7 @@ function seo_kiev_sofievka()
             //$name=$good['goods_name'];
 			////echo "Goods name: $name<br>";
 			
-			//$name=UTF8toCP1251("Диван ").$header;
+			$name=UTF8toCP1251("Диван ").$header;
             //переименовываем диваны
             if ($goods_kind==23||$goods_kind==26)
             {
@@ -1107,9 +1107,11 @@ function seo_all()
                 $header=$good['goods_name'];
                 $factory=$good['factory_name'];
                 $factory=str_replace(UTF8toCP1251("Фабрика "),"",$factory);
-				////echo "$name - $factory<br>";
+				
                 $tcharter=$good['goods_maintcharter'];
+				echo "$id - $name - $factory - $tcharter<br>";
                 //мягкая-диваны|угловой
+				
 				if ($tcharter==1||$tcharter==38||$tcharter==17)
 				{
 					$name_trunc=str_replace(UTF8toCP1251("Диван "),"",$name);
@@ -1171,12 +1173,12 @@ function seo_all()
 				//шкаф-купе
 				if ($tcharter==9)
 				{
-					$name_trunc = str_replace($this->UTF8toCP1251("Шкаф-купе "), "", $name);
-					$title = $name_trunc . $this->UTF8toCP1251(" шкаф-купе. Купить шкафы купе со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("шкафы-купе, ") . $name . $this->UTF8toCP1251(", склад мебели, купить шкаф-купе, интернет магазин мебели, недорогие шкафы-купе, цены, фото, отзывы.");
+					$name_trunc = str_replace(UTF8toCP1251("Шкаф-купе "), "", $name);
+					$title = $name_trunc . UTF8toCP1251(" шкаф-купе. Купить шкафы купе со склада в Киеве");
+					$keywords = UTF8toCP1251("шкафы-купе, ") . $name . UTF8toCP1251(", склад мебели, купить шкаф-купе, интернет магазин мебели, недорогие шкафы-купе, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1184,13 +1186,13 @@ function seo_all()
 				//стенки
 				if ($tcharter==5)
 				{
-					$name_trunc = str_replace($this->UTF8toCP1251("Стенка "), "", $name);
-					$name_trunc = str_replace($this->UTF8toCP1251("стенка "), "", $name_trunc);
-					$title = $name_trunc . $this->UTF8toCP1251(" стенка. Купить стенки со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("стенки, ") . $name . $this->UTF8toCP1251(", склад мебели, купить стенку, интернет магазин мебели, недорогие стенки, цены, фото, отзывы.");
+					$name_trunc = str_replace(UTF8toCP1251("Стенка "), "", $name);
+					$name_trunc = str_replace(UTF8toCP1251("стенка "), "", $name_trunc);
+					$title = $name_trunc . UTF8toCP1251(" стенка. Купить стенки со склада в Киеве");
+					$keywords = UTF8toCP1251("стенки, ") . $name . UTF8toCP1251(", склад мебели, купить стенку, интернет магазин мебели, недорогие стенки, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1198,12 +1200,12 @@ function seo_all()
 				//кровати
 				if ($tcharter==13)
 				{
-					$name_trunc = str_replace($this->UTF8toCP1251("Кровать "), "", $name);
-					$title = $name_trunc . $this->UTF8toCP1251(" кровать. Купить кровати со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("кровати, ") . $name . $this->UTF8toCP1251(", склад мебели, купить кровать, интернет магазин мебели, недорогие кровати, цены, фото, отзывы.");
+					$name_trunc = str_replace(UTF8toCP1251("Кровать "), "", $name);
+					$title = $name_trunc . UTF8toCP1251(" кровать. Купить кровати со склада в Киеве");
+					$keywords = UTF8toCP1251("кровати, ") . $name . UTF8toCP1251(", склад мебели, купить кровать, интернет магазин мебели, недорогие кровати, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1211,12 +1213,12 @@ function seo_all()
 				//комоды
 				if ($tcharter==12)
 				{
-					$name_trunc = str_replace($this->UTF8toCP1251("Комод "), "", $name);
-					$title = $name_trunc . $this->UTF8toCP1251(" комод. Купить комоды со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("комоды, ") . $name . $this->UTF8toCP1251(", склад мебели, купить комод, интернет магазин мебели, недорогие комоды, цены, фото, отзывы.");
+					$name_trunc = str_replace(UTF8toCP1251("Комод "), "", $name);
+					$title = $name_trunc . UTF8toCP1251(" комод. Купить комоды со склада в Киеве");
+					$keywords = UTF8toCP1251("комоды, ") . $name . UTF8toCP1251(", склад мебели, купить комод, интернет магазин мебели, недорогие комоды, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1224,12 +1226,12 @@ function seo_all()
 				//спальни
 				if ($tcharter==3)
 				{
-					$name_trunc = str_replace($this->UTF8toCP1251("Спальня "), "", $name);
-					$title = $name_trunc . $this->UTF8toCP1251(" спальня. Купить спальни со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("спальни, ") . $name . $this->UTF8toCP1251(", склад мебели, купить спальню, интернет магазин мебели, недорогие спальни, цены, фото, отзывы.");
+					$name_trunc = str_replace(UTF8toCP1251("Спальня "), "", $name);
+					$title = $name_trunc . UTF8toCP1251(" спальня. Купить спальни со склада в Киеве");
+					$keywords = UTF8toCP1251("спальни, ") . $name . UTF8toCP1251(", склад мебели, купить спальню, интернет магазин мебели, недорогие спальни, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1237,12 +1239,12 @@ function seo_all()
 				//модульные системы
 				if ($tcharter==40)
 				{
-					$name_trunc = str_replace($this->UTF8toCP1251("Модульная система "), "", $name);
-					$title = $name_trunc . $this->UTF8toCP1251(" модульная система. Купить модульную систему со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("модульные системы, ") . $name . $this->UTF8toCP1251(", склад мебели, купить модульную систему, интернет магазин мебели, недорогие модульные системы, цены, фото, отзывы.");
+					$name_trunc = str_replace(UTF8toCP1251("Модульная система "), "", $name);
+					$title = $name_trunc . UTF8toCP1251(" модульная система. Купить модульную систему со склада в Киеве");
+					$keywords = UTF8toCP1251("модульные системы, ") . $name . UTF8toCP1251(", склад мебели, купить модульную систему, интернет магазин мебели, недорогие модульные системы, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1250,14 +1252,14 @@ function seo_all()
 				//шкафы
 				if ($tcharter==10)
 				{
-					$name_trunc = str_replace($this->UTF8toCP1251("Витрина "), "", $name);
-					$name_trunc = str_replace($this->UTF8toCP1251(" для шкафа "), "", $name_trunc);
-					$name_trunc = str_replace($this->UTF8toCP1251("Шкаф "), "", $name_trunc);
-					$title = $name_trunc . $this->UTF8toCP1251(" шкаф. Купить шкаф со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("шкафы, ") . $name . $this->UTF8toCP1251(", склад мебели, купить шкаф, интернет магазин мебели, недорогие шкафы, цены, фото, отзывы.");
+					$name_trunc = str_replace(UTF8toCP1251("Витрина "), "", $name);
+					$name_trunc = str_replace(UTF8toCP1251(" для шкафа "), "", $name_trunc);
+					$name_trunc = str_replace(UTF8toCP1251("Шкаф "), "", $name_trunc);
+					$title = $name_trunc . UTF8toCP1251(" шкаф. Купить шкаф со склада в Киеве");
+					$keywords = UTF8toCP1251("шкафы, ") . $name . UTF8toCP1251(", склад мебели, купить шкаф, интернет магазин мебели, недорогие шкафы, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1265,13 +1267,13 @@ function seo_all()
 				//прихожие
 				if ($tcharter==4)
 				{
-					$name_trunc = str_replace($this->UTF8toCP1251("Прихожая "), "", $name);
-					$name_trunc = str_replace($this->UTF8toCP1251("Прихожая-купе "), "", $name_trunc);
-					$title = $name_trunc . $this->UTF8toCP1251(" прихожая. Купить прихожую со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("прихожие, ") . $name . $this->UTF8toCP1251(", склад мебели, купить прихожую, интернет магазин мебели, недорогие прихожие, цены, фото, отзывы.");
+					$name_trunc = str_replace(UTF8toCP1251("Прихожая "), "", $name);
+					$name_trunc = str_replace(UTF8toCP1251("Прихожая-купе "), "", $name_trunc);
+					$title = $name_trunc . UTF8toCP1251(" прихожая. Купить прихожую со склада в Киеве");
+					$keywords = UTF8toCP1251("прихожие, ") . $name . UTF8toCP1251(", склад мебели, купить прихожую, интернет магазин мебели, недорогие прихожие, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1279,13 +1281,13 @@ function seo_all()
 				//полки
 				if ($tcharter==11)
 				{
-					$name_trunc = str_replace($this->UTF8toCP1251("Полка "), "", $name);
-					$name_trunc = str_replace($this->UTF8toCP1251(" полка"), "", $name_trunc);
-					$title = $name_trunc . $this->UTF8toCP1251(" полка. Купить полку со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("полки, ") . $name . $this->UTF8toCP1251(", склад мебели, купить полку, интернет магазин мебели, недорогие полки, цены, фото, отзывы.");
+					$name_trunc = str_replace(UTF8toCP1251("Полка "), "", $name);
+					$name_trunc = str_replace(UTF8toCP1251(" полка"), "", $name_trunc);
+					$title = $name_trunc . UTF8toCP1251(" полка. Купить полку со склада в Киеве");
+					$keywords = UTF8toCP1251("полки, ") . $name . UTF8toCP1251(", склад мебели, купить полку, интернет магазин мебели, недорогие полки, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1293,12 +1295,12 @@ function seo_all()
 				//матрасы
 				if ($tcharter==14)
 				{
-					$name_trunc = str_replace($this->UTF8toCP1251("Матрас "), "", $name);
-					$title = $name_trunc . $this->UTF8toCP1251(" матрас. Купить матрас со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("матрасы, ") . $name . $this->UTF8toCP1251(", склад мебели, купить матрас, интернет магазин мебели, недорогие матрасы, цены, фото, отзывы.");
+					$name_trunc = str_replace(UTF8toCP1251("Матрас "), "", $name);
+					$title = $name_trunc . UTF8toCP1251(" матрас. Купить матрас со склада в Киеве");
+					$keywords = UTF8toCP1251("матрасы, ") . $name . UTF8toCP1251(", склад мебели, купить матрас, интернет магазин мебели, недорогие матрасы, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1306,14 +1308,14 @@ function seo_all()
 				//журнальные столики
 				if ($tcharter==7)
 				{
-					$name_trunc = str_replace($this->UTF8toCP1251("Журнальный столик "), "", $name);
-					$name_trunc = str_replace($this->UTF8toCP1251("Стол журнальный "), "", $name_trunc);
-					$name_trunc = str_replace($this->UTF8toCP1251("Стол журнальный "), "", $name_trunc);
-					$title = $name_trunc . $this->UTF8toCP1251(" матрас. Купить матрас со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("матрасы, ") . $name . $this->UTF8toCP1251(", склад мебели, купить матрас, интернет магазин мебели, недорогие матрасы, цены, фото, отзывы.");
+					$name_trunc = str_replace(UTF8toCP1251("Журнальный столик "), "", $name);
+					$name_trunc = str_replace(UTF8toCP1251("Стол журнальный "), "", $name_trunc);
+					$name_trunc = str_replace(UTF8toCP1251("Стол журнальный "), "", $name_trunc);
+					$title = $name_trunc . UTF8toCP1251(" матрас. Купить матрас со склада в Киеве");
+					$keywords = UTF8toCP1251("матрасы, ") . $name . UTF8toCP1251(", склад мебели, купить матрас, интернет магазин мебели, недорогие матрасы, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1321,15 +1323,15 @@ function seo_all()
 				//зеркала
 				if ($tcharter==59)
 				{
-					$name_trunc = str_replace($this->UTF8toCP1251("Зеркало "), "", $name);
-					$name_trunc = str_replace($this->UTF8toCP1251(" Зеркало"), "", $name_trunc);
-					$name_trunc = str_replace($this->UTF8toCP1251("Спальня "), "", $name_trunc);
-					$name_trunc = str_replace($this->UTF8toCP1251(" зеркало"), "", $name_trunc);
-					$title = $name_trunc . $this->UTF8toCP1251(" зеркало. Купить зеркало со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("зеркала, ") . $name . $this->UTF8toCP1251(", склад мебели, купить зеркало, интернет магазин мебели, недорогие зеркала, цены, фото, отзывы.");
+					$name_trunc = str_replace(UTF8toCP1251("Зеркало "), "", $name);
+					$name_trunc = str_replace(UTF8toCP1251(" Зеркало"), "", $name_trunc);
+					$name_trunc = str_replace(UTF8toCP1251("Спальня "), "", $name_trunc);
+					$name_trunc = str_replace(UTF8toCP1251(" зеркало"), "", $name_trunc);
+					$title = $name_trunc . UTF8toCP1251(" зеркало. Купить зеркало со склада в Киеве");
+					$keywords = UTF8toCP1251("зеркала, ") . $name . UTF8toCP1251(", склад мебели, купить зеркало, интернет магазин мебели, недорогие зеркала, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1337,13 +1339,13 @@ function seo_all()
 				//вешалки
 				if ($tcharter==75)
 				{
-					$name_trunc = str_replace($this->UTF8toCP1251("Вешалка "), "", $name);
-					$name_trunc = str_replace($this->UTF8toCP1251(" вешалка"), "", $name_trunc);
-					$title = $name_trunc . $this->UTF8toCP1251(" вешалка. Купить вешалку со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("вешалки, ") . $name . $this->UTF8toCP1251(", склад мебели, купить вешалку, интернет магазин мебели, недорогие вешалки, цены, фото, отзывы.");
+					$name_trunc = str_replace(UTF8toCP1251("Вешалка "), "", $name);
+					$name_trunc = str_replace(UTF8toCP1251(" вешалка"), "", $name_trunc);
+					$title = $name_trunc . UTF8toCP1251(" вешалка. Купить вешалку со склада в Киеве");
+					$keywords = UTF8toCP1251("вешалки, ") . $name . UTF8toCP1251(", склад мебели, купить вешалку, интернет магазин мебели, недорогие вешалки, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1351,12 +1353,12 @@ function seo_all()
 				//подушки и одеяла
 				if ($tcharter==83)
 				{
-					$name_trunc = str_replace($this->UTF8toCP1251("	Подушка "), "", $name);
-					$title = $name_trunc . $this->UTF8toCP1251(" постельные пренадлежности. Купить постельные пренадлежности со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("постельные пренадлежности, ") . $name . $this->UTF8toCP1251(", склад мебели, купить постельные пренадлежности, интернет магазин мебели, недорогие постельные пренадлежности, цены, фото, отзывы.");
+					$name_trunc = str_replace(UTF8toCP1251("	Подушка "), "", $name);
+					$title = $name_trunc . UTF8toCP1251(" постельные пренадлежности. Купить постельные пренадлежности со склада в Киеве");
+					$keywords = UTF8toCP1251("постельные пренадлежности, ") . $name . UTF8toCP1251(", склад мебели, купить постельные пренадлежности, интернет магазин мебели, недорогие постельные пренадлежности, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1364,13 +1366,13 @@ function seo_all()
 				//каркасы для кроватей
 				if ($tcharter==98)
 				{
-					$name_trunc = str_replace($this->UTF8toCP1251("Каркас "), "", $name);
-					$name_trunc = str_replace($this->UTF8toCP1251("Кровать "), "", $name_trunc);
-					$title = $name_trunc . $this->UTF8toCP1251(" каркас. Купить каркасы для кроватей со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("каркасы, ") . $name . $this->UTF8toCP1251(", склад мебели, купить каркасы для кроватей, интернет магазин мебели, недорогие каркасы для кроватей, цены, фото, отзывы.");
+					$name_trunc = str_replace(UTF8toCP1251("Каркас "), "", $name);
+					$name_trunc = str_replace(UTF8toCP1251("Кровать "), "", $name_trunc);
+					$title = $name_trunc . UTF8toCP1251(" каркас. Купить каркасы для кроватей со склада в Киеве");
+					$keywords = UTF8toCP1251("каркасы, ") . $name . UTF8toCP1251(", склад мебели, купить каркасы для кроватей, интернет магазин мебели, недорогие каркасы для кроватей, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1378,12 +1380,12 @@ function seo_all()
 				//тумбы
 				if ($tcharter==124)
 				{
-					$name_trunc = str_replace($this->UTF8toCP1251("Тумба "), "", $name);
-					$title = $name_trunc . $this->UTF8toCP1251(" тумба. Купить тумбы со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("тумбы, ") . $name . $this->UTF8toCP1251(", склад мебели, купить тумбы, интернет магазин мебели, недорогие тумбы, цены, фото, отзывы.");
+					$name_trunc = str_replace(UTF8toCP1251("Тумба "), "", $name);
+					$title = $name_trunc . UTF8toCP1251(" тумба. Купить тумбы со склада в Киеве");
+					$keywords = UTF8toCP1251("тумбы, ") . $name . UTF8toCP1251(", склад мебели, купить тумбы, интернет магазин мебели, недорогие тумбы, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1391,15 +1393,15 @@ function seo_all()
 				//столы
 				if ($tcharter==125)
 				{
-					$name_trunc = str_replace($this->UTF8toCP1251("Стол "), "", $name);
-					$name_trunc = str_replace($this->UTF8toCP1251("Столик "), "", $name_trunc);
-					$name_trunc = str_replace($this->UTF8toCP1251("Туалетка "), "", $name_trunc);
-					$name_trunc = str_replace($this->UTF8toCP1251("Туалетный столик "), "", $name_trunc);
-					$title = $name_trunc . $this->UTF8toCP1251(" стол. Купить столы со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("столы, ") . $name . $this->UTF8toCP1251(", склад мебели, купить столы, интернет магазин мебели, недорогие столы, цены, фото, отзывы.");
+					$name_trunc = str_replace(UTF8toCP1251("Стол "), "", $name);
+					$name_trunc = str_replace(UTF8toCP1251("Столик "), "", $name_trunc);
+					$name_trunc = str_replace(UTF8toCP1251("Туалетка "), "", $name_trunc);
+					$name_trunc = str_replace(UTF8toCP1251("Туалетный столик "), "", $name_trunc);
+					$title = $name_trunc . UTF8toCP1251(" стол. Купить столы со склада в Киеве");
+					$keywords = UTF8toCP1251("столы, ") . $name . UTF8toCP1251(", склад мебели, купить столы, интернет магазин мебели, недорогие столы, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1408,11 +1410,11 @@ function seo_all()
 				if ($tcharter==109)
 				{
 					$name_trunc = $name;
-					$title = $name_trunc . $this->UTF8toCP1251(" аксессуар. Купить аксессуары со склада в Киеве");
-					$keywords = $this->UTF8toCP1251("аксессуары, ") . $name . $this->UTF8toCP1251(", склад мебели, купить аксессуары, интернет магазин мебели, недорогие аксессуары, цены, фото, отзывы.");
+					$title = $name_trunc . UTF8toCP1251(" аксессуар. Купить аксессуары со склада в Киеве");
+					$keywords = UTF8toCP1251("аксессуары, ") . $name . UTF8toCP1251(", склад мебели, купить аксессуары, интернет магазин мебели, недорогие аксессуары, цены, фото, отзывы.");
 					$key_h=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(".  Характеристики, фото, цена, отзывы. Купить недорого со склада в Киеве. Доставка по Украине.");
                     $key_f=UTF8toCP1251("Фабрика")." $factory. ".$name.UTF8toCP1251(". Характеристики, фото, ціна, відгуки. Купити недорого зі складу в Києві. Доставка по Україні.");
-					$desc = $this->UTF8toCP1251("Купить ") . $name . $this->UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
+					$desc = UTF8toCP1251("Купить ") . $name . UTF8toCP1251(" в интернет магазине \"Файні-меблі\", Киев. Большой склад выставка в Киеве. Доставка по Украине, гарантия, лучшие цены.");
 					$query="UPDATE goods SET goods_header='$header', goods_title='$title', goods_keyw='$keywords', goods_hkeyw='$key_h', goods_fkeyw='$key_f', goods_desc='$desc' WHERE goods_id=$id";
 					mysqli_query($db_connect,$query);
 					//echo $query."<br>";
@@ -1748,12 +1750,12 @@ function seo_all()
         }
         else
         {
-            //echo "No array to work with!<br>";
+            echo "No array to work with!<br>";
         }
     }
 	else
 	{
-		//echo "error in SQL<br>";
+		echo "error in SQL<br>";
 	}
 	mysqli_close($db_connect);
 }
