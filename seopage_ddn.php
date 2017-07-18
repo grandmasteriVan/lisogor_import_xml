@@ -29,6 +29,9 @@ define ("db", "ddn_new");
 
 class SeoPage
 {
+    /**
+     * @return array
+     */
     private function getGoodsId()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -57,6 +60,10 @@ class SeoPage
         return $ids;
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     private function getSizeId($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -84,6 +91,10 @@ class SeoPage
         return $goodsSizeId;
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     private function getMainSizeLen($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -113,6 +124,10 @@ class SeoPage
 
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     private function getMainSizeSl($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -141,6 +156,10 @@ class SeoPage
         return $goodsLen;
     }
 
+    /**
+     * @param $id
+     * @return bool
+     */
     private function isCorner($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -164,6 +183,9 @@ class SeoPage
         return $isCorner;
     }
 
+    /**
+     *
+     */
     public function setSmallCorner()
     {
         $all_div=$this->getGoodsId();
