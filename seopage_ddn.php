@@ -9,23 +9,56 @@ header('Content-Type: text/html; charset=utf-8');
 /**
  * database host
  */
-define("host","localhost");
-//define ("host","localhost");
+//define("host","localhost");
+define ("host","localhost");
 /**
  * database username
  */
-define ("user", "root");
-//define ("user", "u_divani_n");
+//define ("user", "root");
+define ("user", "u_divani_n");
 /**
  * database password
  */
-define ("pass", "");
-//define ("pass", "EjcwKUYK");
+//define ("pass", "");
+define ("pass", "EjcwKUYK");
 /**
  * database name
  */
-define ("db", "ddn_new");
-//define ("db", "divani_new");
+//define ("db", "ddn_new");
+define ("db", "divani_new");
+class Timer
+{
+    /**
+     * @var время начала выпонения
+     */
+    private $start_time;
+    /**
+     * @var время конца выполнения
+     */
+    private $end_time;
+    /**
+     * встанавливаем время начала выполнения скрипта
+     */
+    public function setStartTime()
+    {
+        $this->start_time = microtime(true);
+    }
+    /**
+     * устанавливаем время конца выполнения скрипта
+     */
+    public function setEndTime()
+    {
+        $this->end_time = microtime(true);
+    }
+    /**
+     * @return mixed время выполения
+     * возвращаем время выполнения скрипта в секундах
+     */
+    public function getRunTime()
+    {
+        return $this->end_time-$this->start_time;
+    }
+}
 
 class SeoPage
 {
@@ -48,7 +81,7 @@ class SeoPage
                 foreach ($goods as $good)
                 {
                     //получаем нужный текст
-                    $ids[]=$good['goods_id'];
+                    $ids[]=$good;
                 }
             }
         }
@@ -59,7 +92,6 @@ class SeoPage
         mysqli_close($db_connect);
         return $ids;
     }
-
     /**
      * @param $id
      * @return mixed
@@ -90,7 +122,6 @@ class SeoPage
         mysqli_close($db_connect);
         return $goodsSizeId;
     }
-
     /**
      * @param $id
      * @return mixed
@@ -99,7 +130,8 @@ class SeoPage
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $sizeId=$this->getSizeId($id);
-        $query="SELECT size_len FROM size WHERE size_id=$sizeId";
+        $query="SELECT size_length FROM size WHERE size_id=$sizeId";
+		//echo "$query<br>";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -111,7 +143,7 @@ class SeoPage
                 unset ($goodsLen);
                 foreach ($sizes as $size)
                 {
-                    $goodsLen=$size['goods_mainsize'];
+                    $goodsLen=$size['size_length'];
                 }
             }
         }
@@ -121,9 +153,7 @@ class SeoPage
         }
         mysqli_close($db_connect);
         return $goodsLen;
-
     }
-
     /**
      * @param $id
      * @return mixed
@@ -132,7 +162,8 @@ class SeoPage
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $sizeId=$this->getSizeId($id);
-        $query="SELECT size_len FROM size WHERE size_id=$sizeId";
+        $query="SELECT size_width_sl FROM size WHERE size_id=$sizeId";
+		//echo "$query<br>";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -144,7 +175,7 @@ class SeoPage
                 unset ($goodsLen);
                 foreach ($sizes as $size)
                 {
-                    $goodsLen=$size['goods_mainsize'];
+                    $goodsLen=$size['size_width_sl'];
                 }
             }
         }
@@ -155,7 +186,6 @@ class SeoPage
         mysqli_close($db_connect);
         return $goodsLen;
     }
-
     /**
      * @param $id
      * @return bool
@@ -163,13 +193,14 @@ class SeoPage
     private function isCorner($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id FROM goodshasfeature WHERE feature_id=14 AND goodshasfeature_valueid=56 AND goods_id=$id";
+        $query="SELECT * FROM goodshasfeature WHERE feature_id=6 AND goodshasfeature_valueid=56 AND goods_id=$id";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
             {
                 $corners[] = $row;
             }
+			//var_dump ($corners);
             if (is_array($corners))
             {
                 $isCorner=true;
@@ -182,13 +213,78 @@ class SeoPage
         mysqli_close($db_connect);
         return $isCorner;
     }
-
+	
+	private function delFilterSleep($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="DELETE FROM goodshasfeature WHERE feature_id=10 AND goods_id=$id";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+	private function delFilterPrice($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="DELETE FROM goodshasfeature WHERE feature_id=4 AND goods_id=$id";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+	private function setTwoSleep($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="INSERT INTO goodshasfeature (feature_id, goodshasfeature_valueid, goods_id) VALUES (10,71,$id)";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+	private function setThreeSleep($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="INSERT INTO goodshasfeature (feature_id, goodshasfeature_valueid, goods_id) VALUES (10,72,$id)";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+	private function setPriceCheep($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="INSERT INTO goodshasfeature (feature_id, goodshasfeature_valueid, goods_id) VALUES (4,47,$id)";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+	private function getPrice($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT cachegoods_minprice FROM cachegoods WHERE goods_id=$id";
+		if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $prices[] = $row;
+            }
+            if (is_array($prices))
+            {
+                unset ($goodsPrice);
+                foreach ($prices as $price)
+                {
+                    $goodsPrice=$price['cachegoods_minprice'];
+                }
+            }
+        }
+        else
+        {
+            echo "Error in SQL: $query<br>";
+        }
+		mysqli_close($db_connect);
+		return $goodsPrice;
+	}
+	
     /**
      *
      */
     public function setSmallCorner()
     {
         $all_div=$this->getGoodsId();
+		//echo "<pre>";
+		//print_r($all_div);
+		//echo "</pre>";
         $smallCornerStr="";
         foreach ($all_div as $div)
         {
@@ -197,15 +293,82 @@ class SeoPage
             if ($this->isCorner($id))
             {
                 $len=$this->getMainSizeLen($id);
-                if ($len<2200)
+				//echo "$article - $len<br>";
+                if ($len<2200&&$len>0)
                 {
                     $smallCornerStr.=", $article";
                 }
             }
         }
-        echo $smallCornerStr."<br>";
+        $smallCornerStr=substr($smallCornerStr,2);
+		echo "str=".$smallCornerStr."<br>";
     }
+	
+	public function setSleepPlace()
+	{
+		$all_div=$this->getGoodsId();
+		foreach ($all_div as $div)
+		{
+			$id=$div['goods_id'];
+			$len_sl=$this->getMainSizeSl($id);
+			//echo "$id - ";
+			if ($len_sl>1400&&$len_sl<1600)
+			{
+				//двуспальные
+				$this->delFilterSleep($id);
+				$this->setTwoSleep($id);
+				echo "$id - $len_sl set Two<br>";
+				
+			}
+			if ($len_sl>1600)
+			{
+				//трехместніе
+				$this->delFilterSleep($id);
+				$this->setThreeSleep($id);
+				echo "$id - $len_sl set Three<br>";
+			}
+		}
+	}
+	
+	public function setPriceLevel()
+	{
+		$all_div=$this->getGoodsId();
+		foreach ($all_div as $div)
+		{
+			$id=$div['goods_id'];
+			if ($this->isCorner($id))
+			{
+				//
+				$price=$this->getPrice($id);
+				if ($price>0&&$price<9100)
+				{
+					//дешевіе
+					$this->delFilterPrice($id);
+					$this->setPriceCheep($id);
+					echo "$id - ugol - $price<br>";
+				}
+			}
+			else
+			{
+				$price=$this->getPrice($id);
+				if ($price>0&&$price<6500)
+				{
+					//дешевіе
+					$this->delFilterPrice($id);
+					$this->setPriceCheep($id);
+					echo "$id - not_ugol - $price<br>";
+				}
+			}
+		}
+	}
 }
-
+$runtime = new Timer();
+set_time_limit(9000);
+$runtime->setStartTime();
 $test=new SeoPage();
 $test->setSmallCorner();
+$test->setSleepPlace();
+$test->setPriceLevel();
+
+$runtime->setEndTime();
+echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
