@@ -367,10 +367,10 @@ class SeoPage
 			$id=$div['goods_id'];
 			$len_sl=$this->getMainSizeSl($id);
 			//echo "$id - ";
+			$this->delFilterSleep($id);
 			if ($len_sl>1400&&$len_sl<=1600)
 			{
 				//двуспальные
-				$this->delFilterSleep($id);
 				$this->setTwoSleep($id);
 				echo "$id - $len_sl set Two<br>";
 				
@@ -378,14 +378,12 @@ class SeoPage
 			if ($len_sl>1600)
 			{
 				//трехместніе
-				$this->delFilterSleep($id);
 				$this->setThreeSleep($id);
 				echo "$id - $len_sl set Three<br>";
 			}
-			if ($len_sl<=1400)
+			if ($len_sl<=1400&&$len_sl>0)
 			{
 				//одноместніе
-				$this->delFilterSleep($id);
 				$this->setOneSleep($id);
 				echo "$id - $len_sl set One<br>";
 			}
