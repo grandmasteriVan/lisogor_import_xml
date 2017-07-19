@@ -26,6 +26,11 @@ define ("pass", "EjcwKUYK");
  */
 //define ("db", "ddn_new");
 define ("db", "divani_new");
+
+/**
+ * Class Timer
+ * засекаем время выыполнения скрипта
+ */
 class Timer
 {
     /**
@@ -60,10 +65,15 @@ class Timer
     }
 }
 
+/**
+ * Class SeoPage
+ * заполняем нужное
+ */
 class SeoPage
 {
     /**
-     * @return array
+     * выбираем все товары на сайте
+     * @return array - возвращает массив ай-ди товаров и их артиклов
      */
     private function getGoodsId()
     {
@@ -93,8 +103,9 @@ class SeoPage
         return $ids;
     }
     /**
-     * @param $id
-     * @return mixed
+     * выбираем ай-ди основного разимера
+     * @param $id integer - ай-ди товара
+     * @return mixed - ай-ди основного размера
      */
     private function getSizeId($id)
     {
@@ -123,8 +134,9 @@ class SeoPage
         return $goodsSizeId;
     }
     /**
-     * @param $id
-     * @return mixed
+     * выбираем длинну товара
+     * @param $id integer - ай-ди товара
+     * @return mixed - его длина
      */
     private function getMainSizeLen($id)
     {
@@ -155,8 +167,9 @@ class SeoPage
         return $goodsLen;
     }
     /**
-     * @param $id
-     * @return mixed
+     * выбираем ширину спального места
+     * @param $id integer - ай-ди товара
+     * @return mixed - ширина спального места
      */
     private function getMainSizeSl($id)
     {
@@ -187,8 +200,9 @@ class SeoPage
         return $goodsLen;
     }
     /**
-     * @param $id
-     * @return bool
+     * проверяем, является ли товар угловым
+     * @param $id integer - ай-ди товара
+     * @return bool true - диван угловой, false - не угловой
      */
     private function isCorner($id)
     {
@@ -213,43 +227,73 @@ class SeoPage
         mysqli_close($db_connect);
         return $isCorner;
     }
-	
-	private function delFilterSleep($id)
+
+    /**
+     * удаляем ненужные фильтры по размеру спального места для определенного товара
+     * @param $id integer - ай-ди товра
+     */
+    private function delFilterSleep($id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="DELETE FROM goodshasfeature WHERE feature_id=10 AND goods_id=$id";
 		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
-	private function delFilterPrice($id)
+
+    /**
+     * удаляем ненужные фильтры по цене для определенного товара
+     * @param $id integer - фй-ди товара
+     */
+    private function delFilterPrice($id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="DELETE FROM goodshasfeature WHERE feature_id=4 AND goods_id=$id";
 		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
-	private function setTwoSleep($id)
+
+    /**
+     * устанавливаем вильтр "Двуспальный" для определенного товара
+     * @param $id integer - ай-ди товара
+     */
+    private function setTwoSleep($id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="INSERT INTO goodshasfeature (feature_id, goodshasfeature_valueid, goods_id) VALUES (10,71,$id)";
 		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
-	private function setThreeSleep($id)
+
+    /**
+     * устанавливаем вильтр "Трехспальный" для определенного товара
+     * @param $id integer - ай-ди товара
+     */
+    private function setThreeSleep($id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="INSERT INTO goodshasfeature (feature_id, goodshasfeature_valueid, goods_id) VALUES (10,72,$id)";
 		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
-	private function setPriceCheep($id)
+
+    /**
+     * устанавливаем фильтр "Дешевый" для определенного товара
+     * @param $id integer - ай-ди товара
+     */
+    private function setPriceCheep($id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="INSERT INTO goodshasfeature (feature_id, goodshasfeature_valueid, goods_id) VALUES (4,47,$id)";
 		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
-	private function getPrice($id)
+
+    /**
+     * узнаем цену конкретного товара
+     * @param $id integer - ай-ди товара
+     * @return mixed - цена конкретного товара
+     */
+    private function getPrice($id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="SELECT cachegoods_minprice FROM cachegoods WHERE goods_id=$id";
@@ -277,7 +321,7 @@ class SeoPage
 	}
 	
     /**
-     *
+     *выбираем список маленьких угловых товаров
      */
     public function setSmallCorner()
     {
@@ -303,8 +347,11 @@ class SeoPage
         $smallCornerStr=substr($smallCornerStr,2);
 		echo "str=".$smallCornerStr."<br>";
     }
-	
-	public function setSleepPlace()
+
+    /**
+     *устанавливаем размер дивана исходя из его реальных размеров
+     */
+    public function setSleepPlace()
 	{
 		$all_div=$this->getGoodsId();
 		foreach ($all_div as $div)
@@ -329,8 +376,11 @@ class SeoPage
 			}
 		}
 	}
-	
-	public function setPriceLevel()
+
+    /**
+     *устанавливаем ценовую категорию
+     */
+    public function setPriceLevel()
 	{
 		$all_div=$this->getGoodsId();
 		foreach ($all_div as $div)
