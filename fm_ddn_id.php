@@ -108,7 +108,7 @@ class FM
     private function getTovByFactoryFM ($f_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id FROM goods WHERE factory_id=$f_id";
+        $query="SELECT goods_id FROM goods WHERE factory_id=$f_id AND goods_active=1 AND goods_noactual=0";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -281,7 +281,7 @@ class FM
 		{
 			$query="INSERT INTO goodsmirror (goodsmirror_article_ddn,goods_id) VALUES ('$goods_article_ddn',$goods_id_fm)";
 		}
-		
+		echo "$query<br>";
 		mysqli_query($db_connect, $query);
 		mysqli_close($db_connect);
 	}
