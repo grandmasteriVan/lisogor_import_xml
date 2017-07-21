@@ -8,29 +8,29 @@
 header('Content-type: text/html; charset=UTF-8');
 //define ("host","localhost");
 //define ("host_ddn","localhost");
-define ("host_ddn","es835db.mirohost.net");
+define ("host_ddn","es835.mirohost.net");
 define ("host","10.0.0.2");
 /**
  * database username
  */
 //define ("user", "root");
 //define ("user_ddn", "root");
-define ("user_ddn", "u_fromfayni");
+define ("user_ddn", "u_fm_divani");
 define ("user", "uh333660_mebli");
 /**
  * database password
  */
 //define ("pass", "");
 //define ("pass_ddn", "");
-define ("pass_ddn", "");
-define ("pass", "ZID1c0eud3Dc");
+define ("pass_ddn", "hA9lVQvr821B");
+define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
 //define ("db", "mebli");
 //define ("db_ddn", "ddn_new");
-define ("db_ddn", "ddn_new");
-define ("db", "divaniE");
+define ("db_ddn", "divani_new");
+define ("db", "uh333660_mebli");
 /**
  * Class Timer
  * подсчет времени выполнения скрипта
@@ -108,7 +108,7 @@ class FM
     private function getTovByFactoryFM ($f_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id FROM goods WHERE factory_id=$f_id";
+        $query="SELECT goods_id FROM goods WHERE factory_id=$f_id AND goods_active=1 AND goods_noactual=0";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -120,7 +120,7 @@ class FM
         }
         else
         {
-            echo "error in SQL $query<br>";
+            echo "error in SQL fm $query<br>";
         }
         mysqli_close($db_connect);
         if (is_array($tovByFactoty))
@@ -152,7 +152,7 @@ class FM
         }
         else
         {
-            echo "error in SQL $query<br>";
+            echo "error in SQL ddn $query<br>";
         }
         mysqli_close($db_connect);
         if (is_array($idByFactoty))
@@ -221,7 +221,7 @@ class FM
         }
 		else
 		{
-			echo "Error in SQL $query<br>";
+			echo "Error in SQL fm $query<br>";
 		}
 		mysqli_close($db_connect);
 		if (is_string($div_name))
@@ -259,7 +259,7 @@ class FM
         }
         else
         {
-            echo "Error in SQL: $query<br>";
+            echo "Error in SQL ddn: $query<br>";
         }
         mysqli_close($db_connect);
         return $name;
@@ -281,7 +281,7 @@ class FM
 		{
 			$query="INSERT INTO goodsmirror (goodsmirror_article_ddn,goods_id) VALUES ('$goods_article_ddn',$goods_id_fm)";
 		}
-		
+		echo "$query<br>";
 		mysqli_query($db_connect, $query);
 		mysqli_close($db_connect);
 	}
@@ -311,7 +311,7 @@ class FM
         }
         else
         {
-            echo "Error in SQL: $query<br>";
+            echo "Error in SQL ddn: $query<br>";
         }
         mysqli_close($db_connect);
         return $art;
@@ -367,7 +367,9 @@ class FM
 		{
 			$id_fm=$d_fm['goods_id'];
 			$name_fm=$this->getNameByIdFM($id_fm);
+			$name_fm=iconv('windows-1251', 'utf-8', $name_fm);
 			$name_fm=$this->strip($name_fm);
+			
 			//echo $name_fm."<br>";
 			$find=false;
 			foreach ($div_ddn as $d_ddn)
@@ -381,7 +383,7 @@ class FM
 					$article_ddn=$this->getArticleByIdDDN($id_ddn);
 					$this->setMirror($id_fm,$article_ddn);
 					//echo "$article_ddn<br>";
-					//echo "$name_fm ($id_fm) - $name_ddn ($id_ddn)<br>";
+					echo "$name_fm ($id_fm) - $name_ddn ($id_ddn)<br>";
 					$find=true;
 				}
 				
