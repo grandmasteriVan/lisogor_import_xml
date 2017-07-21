@@ -126,7 +126,6 @@ class WriteTranslate
 		echo "$query<br>";
 		mysqli_close($db_connect);
 	}
-	
 	private function insertParagraph($txt)
 	{
 		//var_dump ($txt);
@@ -140,6 +139,39 @@ class WriteTranslate
 		
 		return $txt;
 	}
+	private function getVidId($content)
+	{
+		preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $content, $videoId);
+		$vidId=$videoId[1];
+		return $vidId;
+	}
+	private function searchVid($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goodshaslang_content FROM goodshaslang WHERE goods_id=$goods_id AND lang_id=1";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+			while ($row = mysqli_fetch_assoc($res))
+            {
+                $content[] = $row;
+            }
+            if (is_array($content))
+            {
+                foreach ($content as $cont)
+                {
+                    //получаем нужный текст
+                    $cont=$cont['goodshaslang_content'];
+                }
+            }
+		}
+		if (mb_strpos($content,'iframe')!=false)
+		{
+			//getVid;
+			echo "";
+		}
+		mysqli_close($db_connect);
+	}
+	
     public function test()
     {
         $this->ReadFile();
@@ -498,11 +530,11 @@ class TranslateDdn
 $runtime = new Timer();
 set_time_limit(9000);
 $runtime->setStartTime();
-//$test=new TranslateDdn();
+$test=new TranslateDdn();
 //$test->getTranslate();
-//$test->getTranslateFactory(82);
-$test2 = new WriteTranslate();
+$test->getTranslateFactory(134);
+//$test2 = new WriteTranslate();
 //$test2->test();
-$test2->fromTxtToDb();
+//$test2->fromTxtToDb();
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
