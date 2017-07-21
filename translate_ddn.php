@@ -63,6 +63,38 @@ class Timer
         return $this->end_time-$this->start_time;
     }
 }
+
+class WriteTranslate
+{
+    private $all_txt;
+    private function findUkrText($txt)
+    {
+        if (preg_match("/ukrtext(.*?)\/ukrtext",$txt,$matches))
+        {
+            $ukr_txt=$matches[0];
+        }
+        return $ukr_txt;
+    }
+
+    private function parceAllText($txt)
+    {
+        if (preg_match("goods_id\:(.*?)\/ukrtext",$txt,$matches))
+        {
+            $parce_texts=$matches;
+        }
+    }
+    private function ReadFile()
+    {
+        $this->all_txt=file_get_contents("texts.txt");
+    }
+
+    public function test()
+    {
+        $this->ReadFile();
+        var_dump($this->all_txt);
+    }
+}
+
 /**
  * Class TranslateDdn
  */
@@ -372,13 +404,19 @@ class TranslateDdn
             }
         }
     }
+
+
 	
 }
 $runtime = new Timer();
 set_time_limit(9000);
 $runtime->setStartTime();
-$test=new TranslateDdn();
-$test->getTranslate();
+//$test=new TranslateDdn();
+//$test->getTranslate();
 //$test->getTranslateFactory(87);
+
+$test2 = new WriteTranslate();
+$test2->test();
+
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
