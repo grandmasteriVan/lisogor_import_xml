@@ -9,23 +9,24 @@ header('Content-Type: text/html; charset=utf-8');
 /**
  * database host
  */
+
+//define ("host","localhost");
 define ("host","localhost");
-//define ("host","10.0.0.2");
 /**
  * database username
  */
-define ("user", "u_divani_n");
-//define ("user", "uh333660_mebli");
+//define ("user", "u_divani_n");
+define ("user", "root");
 /**
  * database password
  */
-define ("pass", "EjcwKUYK");
-//define ("pass", "Z7A8JqUh");
+//define ("pass", "EjcwKUYK");
+define ("pass", "");
 /**
  * database name
  */
-define ("db", "divani_new");
-//define ("db", "uh333660_mebli");
+//define ("db", "divani_new");
+define ("db", "ddn_new");
 /**
  * Class Timer
  * подсчет времени выполнения скрипта
@@ -63,38 +64,126 @@ class Timer
         return $this->end_time-$this->start_time;
     }
 }
-
 class WriteTranslate
 {
     private $all_txt;
-    private function findUkrText($txt)
+    private function findId($txt)
     {
-        if (preg_match("/ukrtext(.*?)\/ukrtext",$txt,$matches))
+        if (preg_match("#goods_id\:(.+?)\/goods_id#is",$txt,$matches))
         {
-            $ukr_txt=$matches[0];
+            //var_dump($matches);
+			$ukr_txt=$matches[0];
+			$ukr_text_s=str_replace("goods_id:","",$ukr_txt);
+			$ukr_text_s=str_replace("/goods_id","",$ukr_text_s);
+			$ukr_text_s=str_replace(" ","",$ukr_text_s);
         }
-        return $ukr_txt;
+		else
+		{
+			echo "Not find text<br>";
+		}
+        return $ukr_text_s;
+		
     }
-
+	private function findUkrText($txt)
+	{
+		if (preg_match("#ukr_text\:(.+?)\/ukr_text#is",$txt,$matches))
+        {
+            //var_dump($matches);
+			$id=$matches[0];
+			$id_s=str_replace("ukr_text:","",$id);
+			$id_s=str_replace("/ukr_text","",$id_s);
+        }
+		else
+		{
+			echo "Not find text<br>";
+		}
+        return $id_s;
+	}
     private function parceAllText($txt)
     {
-        if (preg_match("goods_id\:(.*?)\/ukrtext",$txt,$matches))
-        {
-            $parce_texts=$matches;
-        }
+        //echo "txt=$txt<br>";
+		$expl=explode("/ukr_text",$txt);
+		
+		foreach ($expl as $str)
+		{
+			$str=trim ($str);
+			$expl1[]=$str." /ukr_text";
+		}
+		
+		return $expl1;
+		
+		
     }
     private function ReadFile()
     {
-        $this->all_txt=file_get_contents("texts.txt");
+        $this->all_txt=file_get_contents("texts_all.txt");
     }
-
+	private function writeTrnan($id,$text)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goodshaslang SET goodshaslang_content='$text' WHERE goods_id=$id AND lang_id=3";
+		mysqli_query($db_connect,$query);
+		echo "$query<br>";
+		mysqli_close($db_connect);
+	}
+	
+	private function insertParagraph($txt)
+	{
+		//var_dump ($txt);
+		//echo "<br><br>";
+		$txt="<p>".$txt;
+		//var_dump ($txt);
+		$txt=str_replace("<br />","</p>\n<p>",$txt);
+		$txt=$txt."</p>";
+		//echo "<br><br>";
+		//var_dump ($txt);
+		
+		return $txt;
+	}
     public function test()
     {
         $this->ReadFile();
-        var_dump($this->all_txt);
+        //var_dump($this->all_txt);
+		$txt=$this->all_txt;
+		$txt=nl2br($txt);
+		//echo"$txt<br>";
+		$parce=$this->parceAllText($txt);
+		//echo "<pre>";
+		//print_r ($parce);
+		//echo "</pre>";
+		//var_dump($parce);
+		foreach ($parce as $div)
+		{
+			//echo "$div<br>";
+			$ukr_text=$this->findUkrText($div);
+			$id=$this->findId($div);
+			echo "id=$id<br>";
+			echo "ukrtext= $ukr_text<br><br>";
+			
+			//break;
+		}
     }
+	public function fromTxtToDb()
+	{
+		$this->ReadFile();
+		$txt=$this->all_txt;
+		$txt=nl2br($txt);
+		$parce=$this->parceAllText($txt);
+		foreach ($parce as $div)
+		{
+			//echo "$div<br>";
+			$ukr_text=$this->findUkrText($div);
+			$ukr_text=str_replace("'","\'",$ukr_text);
+			//echo "$ukr_text<br>";
+			$ukr_text=$this->insertParagraph($ukr_text);
+			$id=$this->findId($div);
+			$this->writeTrnan($id,$ukr_text);
+			
+			//break;
+		}
+		
+	}
 }
-
 /**
  * Class TranslateDdn
  */
@@ -112,7 +201,7 @@ class TranslateDdn
 		$txt=str_replace(" ","%20",$txt);
 		$link="https://translate.yandex.net/api/v1.5/tr.json/translate?key=".$api_key."&text=".$txt."&lang=".$lang;
 		//echo $link."<br>";
-        $result=file_get_contents($link);
+       	$result=file_get_contents($link);
         $result=json_decode($result,true);
         $ukr_txt=$result['text'][0];
         //var_dump($result);
@@ -205,7 +294,6 @@ class TranslateDdn
         mysqli_close($db_connect);
         return $txt;
     }
-
     /**
      * возвращает список айди товаров по определенной фабрике
      * @param $factory_id integer - id фабрики
@@ -214,7 +302,7 @@ class TranslateDdn
     private function getGoodsFactory($factory_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT DISTINCT goods.goods_id FROM goods join goodshasfeature on goods.goods_id=goodshasfeature.goods_id WHERE goodshasfeature.goods_id in (select goodshasfeature.goods_id from goodshasfeature where feature_id=14 AND goodshasfeature_valueid=$factory_id)";
+        $query="SELECT DISTINCT goodshaslang.goods_id, goodshaslang.goodshaslang_name FROM goodshaslang join goodshasfeature on goodshaslang.goods_id=goodshasfeature.goods_id WHERE lang_id=1 AND goodshaslang_active=1 AND  goodshasfeature.goods_id in (select goodshasfeature.goods_id from goodshasfeature where feature_id=14 AND goodshasfeature_valueid=$factory_id) ORDER BY goodshaslang.goodshaslang_name ASC";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -238,7 +326,6 @@ class TranslateDdn
         mysqli_close($db_connect);
         return $ids;
     }
-
     /**
      * получаем список товаров, которые не в работе
      * @return array - список ид
@@ -349,8 +436,6 @@ class TranslateDdn
         }
         mysqli_close($db_connect);
     }
-
-
     /**
      * создает файл с переводами текствов товаров для определенной фабрики
      * @param $factory_id integer - ай-ди фабрики
@@ -370,10 +455,14 @@ class TranslateDdn
 				
 				$ru_text=$this->getText($goods_id);
 				$ru_text=$this->strip($ru_text);
-                $ukr_text=$this->translatePos($ru_text);
-				$ukr_text=str_replace("__","\n",$ukr_text);
-				$file="goods_id:$goods_id /goods_id".PHP_EOL."goods_name:$ru_name-$ukr_name goods_name/".PHP_EOL."ru_text: $ru_text /ru_text".PHP_EOL."ukr_text: $ukr_text /ukr_text".PHP_EOL.PHP_EOL.PHP_EOL;
-                file_put_contents("texts_$factory_id.txt",$file,FILE_APPEND);
+				if (strnatcasecmp($ru_text,"")!=0)
+				{
+					$ukr_text=$this->translatePos($ru_text);
+					$ukr_text=str_replace("__","\n",$ukr_text);
+					$file="goods_id:$goods_id /goods_id".PHP_EOL."goods_name:$ru_name-$ukr_name goods_name/".PHP_EOL."ru_text: $ru_text /ru_text".PHP_EOL."ukr_text: $ukr_text /ukr_text".PHP_EOL.PHP_EOL.PHP_EOL;
+					file_put_contents("texts_$factory_id.txt",$file,FILE_APPEND);
+				}	
+        
             }
         }
     }
@@ -404,8 +493,6 @@ class TranslateDdn
             }
         }
     }
-
-
 	
 }
 $runtime = new Timer();
@@ -413,11 +500,9 @@ set_time_limit(9000);
 $runtime->setStartTime();
 //$test=new TranslateDdn();
 //$test->getTranslate();
-//$test->getTranslateFactory(87);
-
+//$test->getTranslateFactory(82);
 $test2 = new WriteTranslate();
-$test2->test();
-
-
+//$test2->test();
+$test2->fromTxtToDb();
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
