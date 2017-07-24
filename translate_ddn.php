@@ -145,10 +145,16 @@ class WriteTranslate
 		$vidId=$videoId[1];
 		return $vidId;
 	}
+	private function getVidString($vid_id)
+	{
+		$vid_str="<p><iframe allowfullscreen=\"\" frameborder=\"0\" height=\"315\" src=\"https://www.youtube.com/embed/$vid_id?rel=0\" width=\"560\"></iframe></p>";
+		return $vid_str;
+	}
 	private function searchVid($id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
-		$query="SELECT goodshaslang_content FROM goodshaslang WHERE goods_id=$goods_id AND lang_id=1";
+		$query="SELECT goodshaslang_content FROM goodshaslang WHERE goods_id=$id AND lang_id=1";
+		//echo "$query<br>";
 		if ($res=mysqli_query($db_connect,$query))
 		{
 			while ($row = mysqli_fetch_assoc($res))
@@ -164,33 +170,43 @@ class WriteTranslate
                 }
             }
 		}
-		if (mb_strpos($content,'iframe')!=false)
+		mysqli_close($db_connect);
+		if (mb_strpos($cont,'iframe')!=false)
 		{
-			//getVid;
-			echo "";
+			$vid_id=$this->getVidId($cont);
+			$vid_str=$this->getVidString($vid_id);
+			//echo "";
+			return $vid_str;
 		}
+		else
+		{
+			return false;
+		}
+		
 		mysqli_close($db_connect);
 	}
 	
     public function test()
     {
         $this->ReadFile();
-        //var_dump($this->all_txt);
 		$txt=$this->all_txt;
 		$txt=nl2br($txt);
-		//echo"$txt<br>";
 		$parce=$this->parceAllText($txt);
-		//echo "<pre>";
-		//print_r ($parce);
-		//echo "</pre>";
-		//var_dump($parce);
 		foreach ($parce as $div)
 		{
 			//echo "$div<br>";
 			$ukr_text=$this->findUkrText($div);
+			$ukr_text=str_replace("'","\'",$ukr_text);
+			$ukr_text=$this->insertParagraph($ukr_text);
+			
 			$id=$this->findId($div);
-			echo "id=$id<br>";
-			echo "ukrtext= $ukr_text<br><br>";
+			//echo "id=$id<br>";
+			//echo "ukrtext= $ukr_text<br><br>";
+			if ($id==908)
+			{
+				$vid=$this->searchVid($id);
+				echo "$vid<br>";
+			}
 			
 			//break;
 		}
@@ -208,7 +224,13 @@ class WriteTranslate
 			$ukr_text=str_replace("'","\'",$ukr_text);
 			//echo "$ukr_text<br>";
 			$ukr_text=$this->insertParagraph($ukr_text);
+			
 			$id=$this->findId($div);
+			$isVid=$this->searchVid($id);
+			if ($isVid)
+			{
+				$ukr_text=$isVid.$ukr_text;
+			}
 			$this->writeTrnan($id,$ukr_text);
 			
 			//break;
@@ -530,11 +552,11 @@ class TranslateDdn
 $runtime = new Timer();
 set_time_limit(9000);
 $runtime->setStartTime();
-$test=new TranslateDdn();
+//$test=new TranslateDdn();
 //$test->getTranslate();
-$test->getTranslateFactory(134);
-//$test2 = new WriteTranslate();
+//$test->getTranslateFactory(134);
+$test2 = new WriteTranslate();
 //$test2->test();
-//$test2->fromTxtToDb();
-$runtime->setEndTime();
+$test2->fromTxtToDb();
+//$runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
