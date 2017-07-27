@@ -398,7 +398,7 @@ class WriteTranslate
     }
     private function ReadFile()
     {
-        $this->all_txt=file_get_contents("texts_names.txt");
+        $this->all_txt=file_get_contents("texts_all.txt");
     }
 	private function writeNames($id,$text)
 	{
@@ -899,8 +899,8 @@ $runtime->setStartTime();
 //$test->getTranslateFactory(134);
 $test2 = new WriteTranslate();
 //$test2->test();
-//$test2->fromTxtToDb();
-$test2->fromNamesToDb();
+$test2->fromTxtToDb();
+//$test2->fromNamesToDb();
 
 //$test3=new TestTranslate();
 //$test3->test();
