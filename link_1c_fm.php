@@ -28,7 +28,7 @@ class Link
     private $data;
     private function ReadFile()
     {
-        $handle=fopen("sleep_and_fly.txt","r");
+        $handle=fopen("valam.txt","r");
         while (!feof($handle))
         {
             $str=fgets($handle);
@@ -64,21 +64,24 @@ class Link
         {
             echo "Not find name <br>";
         }
+        //отсекаем первую двойную кавычку в тексте
+        $str=mb_substr($str,1);
         if (preg_match("#\"(.+?)\;#is",$str,$matches))
         {
             //var_dump($matches);
             $sizes=$matches[1];
+            $sizes=explode("x",$sizes);
         }
         else
         {
             echo "Not find sizes <br>";
         }
-        echo "Name=$name sizes=$sizes <br>";
+        echo "Name=$name size_len=$sizes[0], size_width=$sizes[1] <br>";
 
     }
 	public function doLink($f_id)
 	{
-		$db_connect=mysqli_connect(host,user,pass,db);
+		//$db_connect=mysqli_connect(host,user,pass,db);
 		$this->ReadFile();
 		foreach ($this->data as $d)
 		{
