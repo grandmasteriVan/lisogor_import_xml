@@ -33,6 +33,8 @@ class Link
         {
             $str=fgets($handle);
 			$str=explode(";",$str);
+			//для парсинга Велам, закоментить при обычном файлке!
+			$str[0].=";";
 			$arr[]=$str;
         }
         if (!empty($arr))
@@ -49,7 +51,31 @@ class Link
 		print_r($this->data);
 		echo "</pre>";
     }
-	
+	private function parceVelam($str)
+    {
+        //название
+        if (preg_match("#\"(.+?)\"#is",$str,$matches))
+        {
+            //var_dump($matches);
+            $name=$matches[1];
+            $name=strtolower($name);
+        }
+        else
+        {
+            echo "Not find name <br>";
+        }
+        if (preg_match("#\"(.+?)\;#is",$str,$matches))
+        {
+            //var_dump($matches);
+            $sizes=$matches[1];
+        }
+        else
+        {
+            echo "Not find sizes <br>";
+        }
+        echo "Name=$name sizes=$sizes <br>";
+
+    }
 	public function doLink($f_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -58,14 +84,11 @@ class Link
 		{
 			
 			$code1c=$d[0];
-			//$codePrice=$d[1];
-			//$code1c=trim(iconv('windows-1251', 'utf-8', $d[0]));
-			$codePrice=trim(iconv('windows-1251', 'utf-8', $d[1]));
-			//$code1c=$this->UTF8toCP1251($code1c);
-			//echo "$code1c - $codePrice<br>";
-			$query="UPDATE goods SET goods_article_1c='$code1c' WHERE goods_article_link='$codePrice' AND factory_id=$f_id";
-			mysqli_query($db_connect,$query);
-            echo $query."<br>";
+			$codePrice=$d[1];
+			$this->parceVelam($code1c);
+			//$query="UPDATE goods SET goods_article_1c='$code1c' WHERE goods_article_link='$codePrice' AND factory_id=$f_id";
+			//mysqli_query($db_connect,$query);
+            //echo $query."<br>";
 		}
 		mysqli_close($db_connect);
 	}
