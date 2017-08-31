@@ -199,6 +199,13 @@ switch ($selectedFactory)
         $test->test_data();
         //$test->add_db();
         break;
+
+    case "InStore":
+        include_once "in_store.php";
+        $test=new InStoreFm($_FILES['file']['tmp_name']);
+        $test->setInSore();
+        $test=new SetInStoreDDN($_FILES['file']['tmp_name']);
+        $test->setInSore();
     default:
         echo "Выберите фабрику и повторите";
         break;
