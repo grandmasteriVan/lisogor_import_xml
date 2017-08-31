@@ -190,7 +190,6 @@ switch ($selectedFactory)
         $test->test_data();
         $test->add_db();
         break;
-
     case "SleepAndFly":
         //working
         include_once "sleep_and_fly.php";
@@ -199,13 +198,13 @@ switch ($selectedFactory)
         $test->test_data();
         //$test->add_db();
         break;
-
     case "InStore":
         include_once "in_store.php";
         $test=new InStoreFm($_FILES['file']['tmp_name']);
         $test->setInSore();
-        $test=new SetInStoreDDN($_FILES['file']['tmp_name']);
-        $test->setInSore();
+        $test2=new InStoreDDN($_FILES['file']['tmp_name']);
+        $test2->setInSore();
+		break;
     default:
         echo "Выберите фабрику и повторите";
         break;
