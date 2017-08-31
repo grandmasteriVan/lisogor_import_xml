@@ -23,23 +23,66 @@ define ("pass", "Z7A8JqUh");
  */
 //define ("db", "mebli");
 define ("db", "uh333660_mebli");
+
+class Rokko extends Link
+{
+    private function makeName($str)
+    {
+        $name=$str;
+        //$name="Шкаф-купе ".$name;
+        $name=str_replace("*"," (",$name);
+        //$name.=")";
+
+        return $name;
+    }
+    public function parseRoko()
+    {
+        $f_id=141;
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $this->ReadFile();
+        //$this->printData();
+
+        foreach ($this->data as $d)
+        {
+            $code1c=$d[0];
+            $name=$d[1];
+            $name=$this->makeName($name);
+            //echo "$name<br>";
+            $code1c=$this->UTF8toCP1251($code1c);
+            //$name=$this->UTF8toCP1251($name);
+
+            $query = "UPDATE goods SET goods_article_1c='$code1c' WHERE goods_name like '%$name%' AND factory_id=$f_id";
+            mysqli_query($db_connect,$query);
+            echo "$query<br>";
+        }
+        mysqli_close($db_connect);
+
+    }
+}
+
 class Link
 {
-    private $data;
-    private function ReadFile()
+    public $data;
+    public function ReadFile()
     {
-        $handle=fopen("valam.txt","r");
+        $handle=fopen("roko.txt","r");
         while (!feof($handle))
         {
             $str=fgets($handle);
 			$str=explode(";",$str);
 			//для парсинга Велам, закоментить при обычном файлке!
-			$str[0].=";";
+			//$str[0].=";";
 			$arr[]=$str;
+
+            //echo "$str<br>";
         }
         if (!empty($arr))
         {
             $this->data = $arr;
+        }
+        else
+        {
+            echo "array is empty in ReadFile";
         }
     }
     
@@ -51,7 +94,7 @@ class Link
 		print_r($this->data);
 		echo "</pre>";
     }
-	private function parceVelam($str)
+	private function parseVelam($str)
     {
         //название
         if (preg_match("#\"(.+?)\"#is",$str,$matches))
@@ -85,7 +128,7 @@ class Link
 		return $arr;
 		
     }
-	private function UTF8toCP1251($str)
+	public function UTF8toCP1251($str)
 	{ // by SiMM, $table from http://ru.wikipedia.org/wiki/CP1251
 		static $table = array("\xD0\x81" => "\xA8", // Ё
 			"\xD1\x91" => "\xB8", // ё
@@ -128,7 +171,7 @@ class Link
 			
 			$code1c=$d[0];
 			$codePrice=$d[1];
-			$arr=$this->parceVelam($code1c);
+			$arr=$this->parseVelam($code1c);
 			$name=$arr['name'];
 			$len=$arr['len'];
 			$len.=0;
@@ -146,5 +189,7 @@ class Link
 		//mysqli_close($db_connect);
 	}
 }
-$test=new Link();
-$test->doLink(137);
+//$test=new Link();
+//$test->doLink(137);
+$test=new Rokko();
+$test->parseRoko();
