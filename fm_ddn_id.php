@@ -8,28 +8,28 @@
 header('Content-type: text/html; charset=UTF-8');
 //define ("host","localhost");
 //define ("host_ddn","localhost");
-define ("host_ddn","es835.mirohost.net");
+define ("host_ddn","es835db.mirohost.net");
 define ("host","10.0.0.2");
 /**
  * database username
  */
 //define ("user", "root");
 //define ("user_ddn", "root");
-define ("user_ddn", "u_fm_divani");
+define ("user_ddn", "u_fayni");
 define ("user", "uh333660_mebli");
 /**
  * database password
  */
 //define ("pass", "");
 //define ("pass_ddn", "");
-define ("pass_ddn", "hA9lVQvr821B");
+define ("pass_ddn", "ZID1c0eud3Dc");
 define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
 //define ("db", "mebli");
 //define ("db_ddn", "ddn_new");
-define ("db_ddn", "divani_new");
+define ("db_ddn", "ddnPZS");
 define ("db", "uh333660_mebli");
 /**
  * Class Timer
