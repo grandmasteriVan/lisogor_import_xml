@@ -386,6 +386,10 @@ class FM
 					echo "$name_fm ($id_fm) - $name_ddn ($id_ddn)<br>";
 					$find=true;
 				}
+				if ($find)
+                {
+                    break;
+                }
 				
 			}
 			if (!$find)
