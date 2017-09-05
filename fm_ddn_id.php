@@ -402,6 +402,10 @@ $runtime = new Timer();
 set_time_limit(9000);
 $runtime->setStartTime();
 $test=new FM();
-$test->getEqualFactory(88,83);
+//fm, ddn
+//$test->getEqualFactory(88,83);
+//katun
+$test->getEqualFactory(2,89);
+
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
