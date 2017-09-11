@@ -343,7 +343,7 @@ class Link
 
 class Sonline extends Link
 {
-    public function parseSonline($name1c)
+    private function parseSonline($name1c)
     {
         if (preg_match("#\'(.+?)\'#is",$name1c,$matches))
         {
@@ -368,6 +368,16 @@ class Sonline extends Link
             echo "Not find sizes <br>";
         }
         echo "mane=$name size=$size";
+    }
+
+    public function doLinkSonline()
+    {
+        $this->ReadFile();
+        foreach ($this->data as $d)
+        {
+            $name1c=$d[1];
+            $this->parseSonline($name1c);
+        }
     }
 }
 //$test=new Link();
