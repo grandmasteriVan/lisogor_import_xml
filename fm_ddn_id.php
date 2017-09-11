@@ -7,25 +7,44 @@
  */
 header('Content-Type: text/html; charset=utf-8');
 //define ("host","localhost");
+/**
+ *
+ */
 define ("host","10.0.0.2");
 /**
  * database username
  */
 //define ("user", "root");
+/**
+ *
+ */
 define ("user", "uh333660_mebli");
 /**
  * database password
  */
 //define ("pass", "");
+/**
+ *
+ */
 define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
 //define ("db", "mebli");
+/**
+ *
+ */
 define ("db", "uh333660_mebli");
 
+/**
+ * Class Rokko
+ */
 class Rokko extends Link
 {
+    /**
+     * @param $str
+     * @return mixed
+     */
     private function makeName($str)
     {
         $name=$str;
@@ -35,6 +54,10 @@ class Rokko extends Link
 
         return $name;
     }
+
+    /**
+     *
+     */
     public function parseRoko()
     {
         $f_id=141;
@@ -60,9 +83,128 @@ class Rokko extends Link
     }
 }
 
+/**
+ * Class KomfMebSK
+ */
+class KomfMebSK extends Link
+{
+    /**
+     * @return array|null
+     */
+    private function getAllBaseSK ()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id, goods_article_link FROM goods WHERE goods_id=goods_parent AND factory_id=122 AND goods_maintcharter=9 AND goods_active=1 AND goods_noactual=0";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row=mysqli_fetch_assoc($res))
+            {
+                $goods[]=$row;
+            }
+        }
+        mysqli_close($db_connect);
+        if (is_array($goods))
+        {
+            return $goods;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /**
+     * @param $id
+     * @return array|null
+     */
+    private function getChildrenByParent($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id FROM goods WHERE goods_id=$id AND factory_id=122 AND goods_maintcharter=9 AND goods_active=1 AND goods_noactual=0";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row=mysqli_fetch_assoc($res))
+            {
+                $goods[]=$row;
+            }
+        }
+        mysqli_close($db_connect);
+        if (is_array($goods))
+        {
+            return $goods;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    /**
+     * @param $id
+     * @param $code
+     */
+    private function writeCode1c ($id, $code)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query = "UPDATE goods SET goods_article_1c='$code' WHERE goods_id=$id";
+        mysqli_query($db_connect,$query);
+        echo $query."<br>";
+        mysqli_close($db_connect);
+    }
+
+    /**
+     *
+     */
+    public function parseMeb()
+    {
+        $basic=$this->getAllBaseSK();
+        $this->readFile();
+        if (is_array($basic))
+        {
+            foreach ($basic as $item)
+            {
+                $id=$item['goods_id'];
+                $article_link=$item['goods_article_link'];
+                foreach ($this->data as $d)
+                {
+                    $code1c=$d[0];
+                    $codePrice=$d[1];
+                    if ($article_link=$codePrice)
+                    {
+                        //пишем в базовую позицию
+                        $this->writeCode1c($d,$code1c);
+                        //теперь пишем и для детей тот же код
+                        $childrens=$this->getChildrenByParent($id);
+                        if (is_array($childrens))
+                        {
+                            foreach ($childrens as $child)
+                            {
+                                $child_id=$child['goods_id'];
+                                $this->writeCode1c($child_id,$code1c);
+
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Class Link
+ */
 class Link
 {
+    /**
+     * @var
+     */
     public $data;
+
+    /**
+     *
+     */
     public function ReadFile()
     {
         $handle=fopen("roko.txt","r");
@@ -85,8 +227,11 @@ class Link
             echo "array is empty in ReadFile";
         }
     }
-    
-	public function printData()
+
+    /**
+     *
+     */
+    public function printData()
     {
         $this->ReadFile();
 		//var_dump($this->data);
@@ -94,7 +239,12 @@ class Link
 		print_r($this->data);
 		echo "</pre>";
     }
-	private function parseVelam($str)
+
+    /**
+     * @param $str
+     * @return mixed
+     */
+    private function parseVelam($str)
     {
         //название
         if (preg_match("#\"(.+?)\"#is",$str,$matches))
@@ -128,7 +278,12 @@ class Link
 		return $arr;
 		
     }
-	public function UTF8toCP1251($str)
+
+    /**
+     * @param $str
+     * @return mixed
+     */
+    public function UTF8toCP1251($str)
 	{ // by SiMM, $table from http://ru.wikipedia.org/wiki/CP1251
 		static $table = array("\xD0\x81" => "\xA8", // Ё
 			"\xD1\x91" => "\xB8", // ё
@@ -162,7 +317,11 @@ class Link
 		$str = str_replace("I", "І", $str);
 		return $str;
 	}
-	public function doLink($f_id)
+
+    /**
+     * @param $f_id
+     */
+    public function doLink($f_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$this->ReadFile();
@@ -191,5 +350,7 @@ class Link
 }
 //$test=new Link();
 //$test->doLink(137);
-$test=new Rokko();
-$test->parseRoko();
+//$test=new Rokko();
+//$test->parseRoko();
+$test=new KomfMebSK();
+$test->parseMeb();
