@@ -35,7 +35,6 @@ define ("pass", "Z7A8JqUh");
  *
  */
 define ("db", "uh333660_mebli");
-
 /**
  * Class Rokko
  */
@@ -51,10 +50,8 @@ class Rokko extends Link
         //$name="Шкаф-купе ".$name;
         $name=str_replace("*"," (",$name);
         //$name.=")";
-
         return $name;
     }
-
     /**
      *
      */
@@ -64,7 +61,6 @@ class Rokko extends Link
         $db_connect=mysqli_connect(host,user,pass,db);
         $this->ReadFile();
         //$this->printData();
-
         foreach ($this->data as $d)
         {
             $code1c=$d[0];
@@ -73,16 +69,13 @@ class Rokko extends Link
             //echo "$name<br>";
             $code1c=$this->UTF8toCP1251($code1c);
             //$name=$this->UTF8toCP1251($name);
-
             $query = "UPDATE goods SET goods_article_1c='$code1c' WHERE goods_name like '%$name%' AND factory_id=$f_id";
             mysqli_query($db_connect,$query);
             echo "$query<br>";
         }
         mysqli_close($db_connect);
-
     }
 }
-
 /**
  * Class KomfMebSK
  */
@@ -112,7 +105,6 @@ class KomfMebSK extends Link
             return null;
         }
     }
-
     /**
      * @param $id
      * @return array|null
@@ -120,7 +112,8 @@ class KomfMebSK extends Link
     private function getChildrenByParent($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id FROM goods WHERE goods_id=$id AND factory_id=122 AND goods_maintcharter=9 AND goods_active=1 AND goods_noactual=0";
+        $query="SELECT goods_id FROM goods WHERE goods_parent=$id AND factory_id=122 AND goods_maintcharter=9 AND goods_active=1 AND goods_noactual=0";
+		//echo "$query<br>";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row=mysqli_fetch_assoc($res))
@@ -138,7 +131,6 @@ class KomfMebSK extends Link
             return null;
         }
     }
-
     /**
      * @param $id
      * @param $code
@@ -146,12 +138,12 @@ class KomfMebSK extends Link
     private function writeCode1c ($id, $code)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
+		$code=$this->UTF8toCP1251($code);
         $query = "UPDATE goods SET goods_article_1c='$code' WHERE goods_id=$id";
         mysqli_query($db_connect,$query);
         echo $query."<br>";
         mysqli_close($db_connect);
     }
-
     /**
      *
      */
@@ -163,35 +155,41 @@ class KomfMebSK extends Link
         {
             foreach ($basic as $item)
             {
-                $id=$item['goods_id'];
-                $article_link=$item['goods_article_link'];
+                //var_dump($item);
+				$id=$item['goods_id'];
+                $article_link1=$item['goods_article_link'];
+				$article_link1=mb_substr($article_link1,1);
+				$article_link1="Ф-".$article_link1;
+				echo "article_link=$article_link1<br>";
+				
                 foreach ($this->data as $d)
                 {
                     $code1c=$d[0];
                     $codePrice=$d[1];
-                    if ($article_link=$codePrice)
+                    if ($article_link1==$codePrice AND $id<>19294)
                     {
-                        //пишем в базовую позицию
-                        $this->writeCode1c($d,$code1c);
+                        echo "$article_link1 - $codePrice<br>";
+						//пишем в базовую позицию
+                        //$this->writeCode1c($id,$code1c);
                         //теперь пишем и для детей тот же код
                         $childrens=$this->getChildrenByParent($id);
+						//var_dump;
                         if (is_array($childrens))
                         {
                             foreach ($childrens as $child)
                             {
                                 $child_id=$child['goods_id'];
                                 $this->writeCode1c($child_id,$code1c);
-
                             }
                         }
-                        break;
+						break;
                     }
                 }
+				//break 2;
             }
         }
     }
 }
-
 /**
  * Class Link
  */
@@ -201,13 +199,12 @@ class Link
      * @var
      */
     public $data;
-
     /**
      *
      */
     public function ReadFile()
     {
-        $handle=fopen("roko.txt","r");
+        $handle=fopen("komfort_sk.txt","r");
         while (!feof($handle))
         {
             $str=fgets($handle);
@@ -215,7 +212,6 @@ class Link
 			//для парсинга Велам, закоментить при обычном файлке!
 			//$str[0].=";";
 			$arr[]=$str;
-
             //echo "$str<br>";
         }
         if (!empty($arr))
@@ -227,7 +223,6 @@ class Link
             echo "array is empty in ReadFile";
         }
     }
-
     /**
      *
      */
@@ -239,7 +234,6 @@ class Link
 		print_r($this->data);
 		echo "</pre>";
     }
-
     /**
      * @param $str
      * @return mixed
@@ -278,7 +272,6 @@ class Link
 		return $arr;
 		
     }
-
     /**
      * @param $str
      * @return mixed
@@ -317,7 +310,6 @@ class Link
 		$str = str_replace("I", "І", $str);
 		return $str;
 	}
-
     /**
      * @param $f_id
      */
