@@ -204,7 +204,7 @@ class Link
      */
     public function ReadFile()
     {
-        $handle=fopen("komfort_sk.txt","r");
+        $handle=fopen("sonline.txt","r");
         while (!feof($handle))
         {
             $str=fgets($handle);
@@ -344,7 +344,8 @@ class Sonline extends Link
 {
     private function parseSonline($name1c)
     {
-        if (preg_match("#\'(.+?)\'#is",$name1c,$matches))
+        $name1c.=";";
+		if (preg_match("#\'(.+?)\'#is",$name1c,$matches))
         {
             //var_dump($matches);
             $name=$matches[1];
@@ -356,8 +357,8 @@ class Sonline extends Link
         {
             echo "Not find name <br>";
         }
-        $str1=mb_substr($str,2);
-        if (preg_match("#\'(.+?)\;#is",$name1c,$matches))
+        $str1=mb_substr($name1c,2);
+        if (preg_match("#\'(.+?)\;#is",$str1,$matches))
         {
             //var_dump($matches);
             $size=$matches[1];
@@ -366,7 +367,13 @@ class Sonline extends Link
         {
             echo "Not find sizes <br>";
         }
-        echo "mane=$name size=$size";
+        //echo "mane=$name size=$size<br>";
+		$return['name']=$name;
+		$return['size']=$size;
+		//echo "<pre>";
+		//print_r($return);
+		//echo "</pre>";
+		return $return;
     }
     public function doLinkSonline()
     {
@@ -374,9 +381,97 @@ class Sonline extends Link
         foreach ($this->data as $d)
         {
             $name1c=$d[1];
-            $this->parseSonline($name1c);
+			$code=$d[0];
+            $pos=$this->parseSonline($name1c);
+			//echo "<pre>";
+			//print_r($pos);
+			//echo "</pre>";
+			$name=$pos['name'];
+			//$code=$d[0];
+			$size=$pos['size'];
+			$this->setLink($name,$code,$size);
+			
         }
     }
+	private function setLink($name,$code1c,$size)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$code1c=$this->UTF8toCP1251($code1c);
+		$name=$this->UTF8toCP1251($name);
+		echo "size in link=$size<br>";
+		if ($size==190)
+		{
+			$query = "UPDATE goods SET goods_article_1c='$code1c/70' WHERE goods_name like '%$name%' AND factory_id=63 AND goods_length=1900 AND goods_width=700";
+			mysqli_query($db_connect,$query);
+			echo $query."<br>";
+			
+			$query = "UPDATE goods SET goods_article_1c='$code1c/80' WHERE goods_name like '%$name%' AND factory_id=63 AND goods_length=1900 AND goods_width=800";
+			mysqli_query($db_connect,$query);
+			echo $query."<br>";
+			
+			$query = "UPDATE goods SET goods_article_1c='$code1c/90' WHERE goods_name like '%$name%' AND factory_id=63 AND goods_length=1900 AND goods_width=900";
+			mysqli_query($db_connect,$query);
+			echo $query."<br>";
+			
+			$query = "UPDATE goods SET goods_article_1c='$code1c/120' WHERE goods_name like '%$name%' AND factory_id=63 AND goods_length=1900 AND goods_width=1200";
+			mysqli_query($db_connect,$query);
+			echo $query."<br>";
+			
+			$query = "UPDATE goods SET goods_article_1c='$code1c/140' WHERE goods_name like '%$name%' AND factory_id=63 AND goods_length=1900 AND goods_width=1400";
+			mysqli_query($db_connect,$query);
+			echo $query."<br>";
+			
+			$query = "UPDATE goods SET goods_article_1c='$code1c/150' WHERE goods_name like '%$name%' AND factory_id=63 AND goods_length=1900 AND goods_width=1500";
+			mysqli_query($db_connect,$query);
+			echo $query."<br>";
+			
+			$query = "UPDATE goods SET goods_article_1c='$code1c/160' WHERE goods_name like '%$name%' AND factory_id=63 AND goods_length=1900 AND goods_width=1600";
+			mysqli_query($db_connect,$query);
+			echo $query."<br>";
+			
+			$query = "UPDATE goods SET goods_article_1c='$code1c/180' WHERE goods_name like '%$name%' AND factory_id=63 AND goods_length=1900 AND goods_width=1800";
+			mysqli_query($db_connect,$query);
+			echo $query."<br>";
+		}
+		if ($size==200)
+		{
+			$query = "UPDATE goods SET goods_article_1c='$code1c/70' WHERE goods_name like '%$name%' AND factory_id=63 AND goods_length=2000 AND goods_width=700";
+			mysqli_query($db_connect,$query);
+			echo $query."<br>";
+			
+			$query = "UPDATE goods SET goods_article_1c='$code1c/80' WHERE goods_name like '%$name%' AND factory_id=63 AND goods_length=2000 AND goods_width=800";
+			mysqli_query($db_connect,$query);
+			echo $query."<br>";
+			
+			$query = "UPDATE goods SET goods_article_1c='$code1c/90' WHERE goods_name like '%$name%' AND factory_id=63 AND goods_length=2000 AND goods_width=900";
+			mysqli_query($db_connect,$query);
+			echo $query."<br>";
+			
+			$query = "UPDATE goods SET goods_article_1c='$code1c/120' WHERE goods_name like '%$name%' AND factory_id=63 AND goods_length=2000 AND goods_width=1200";
+			mysqli_query($db_connect,$query);
+			echo $query."<br>";
+			
+			$query = "UPDATE goods SET goods_article_1c='$code1c/140' WHERE goods_name like '%$name%' AND factory_id=63 AND goods_length=2000 AND goods_width=1400";
+			mysqli_query($db_connect,$query);
+			echo $query."<br>";
+			
+			$query = "UPDATE goods SET goods_article_1c='$code1c/150' WHERE goods_name like '%$name%' AND factory_id=63 AND goods_length=2000 AND goods_width=1500";
+			mysqli_query($db_connect,$query);
+			echo $query."<br>";
+			
+			$query = "UPDATE goods SET goods_article_1c='$code1c/160' WHERE goods_name like '%$name%' AND factory_id=63 AND goods_length=2000 AND goods_width=1600";
+			mysqli_query($db_connect,$query);
+			echo $query."<br>";
+			
+			$query = "UPDATE goods SET goods_article_1c='$code1c/180' WHERE goods_name like '%$name%' AND factory_id=63 AND goods_length=2000 AND goods_width=1800";
+			mysqli_query($db_connect,$query);
+			echo $query."<br>";
+		}
+        
+        mysqli_query($db_connect,$query);
+        echo $query."<br>";
+        mysqli_close($db_connect);
+	}
 }
 //$test=new Link();
 //$test->doLink(137);
@@ -384,3 +479,5 @@ class Sonline extends Link
 //$test->parseRoko();
 //$test=new KomfMebSK();
 //$test->parseMeb();
+$test=new Sonline();
+$test->doLinkSonline();
