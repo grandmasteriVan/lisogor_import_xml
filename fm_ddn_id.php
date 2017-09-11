@@ -340,9 +340,39 @@ class Link
 		//mysqli_close($db_connect);
 	}
 }
+
+class Sonline extends Link
+{
+    public function parseSonline($name1c)
+    {
+        if (preg_match("#\'(.+?)\'#is",$name1c,$matches))
+        {
+            //var_dump($matches);
+            $name=$matches[1];
+            $name=mb_strtolower($name);
+            //$name=ucfirst($name);
+            $name=mb_convert_case($name,MB_CASE_TITLE);
+        }
+        else
+        {
+            echo "Not find name <br>";
+        }
+        $str1=mb_substr($str,2);
+        if (preg_match("#\'(.+?)\;#is",$name1c,$matches))
+        {
+            //var_dump($matches);
+            $size=$matches[1];
+        }
+        else
+        {
+            echo "Not find sizes <br>";
+        }
+        echo "mane=$name size=$size";
+    }
+}
 //$test=new Link();
 //$test->doLink(137);
 //$test=new Rokko();
 //$test->parseRoko();
-$test=new KomfMebSK();
-$test->parseMeb();
+//$test=new KomfMebSK();
+//$test->parseMeb();
