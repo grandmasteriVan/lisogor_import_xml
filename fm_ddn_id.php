@@ -2,103 +2,130 @@
 /**
  * Created by PhpStorm.
  * User: ivan
- * Date: 18.07.17
- * Time: 16:42
+ * Date: 29.06.17
+ * Time: 12:36
  */
-header('Content-Type: text/html; charset=utf-8');
+header('Content-type: text/html; charset=UTF-8');
 //define ("host","localhost");
-/**
- *
- */
+//define ("host_ddn","localhost");
+define ("host_ddn","es835db.mirohost.net");
 define ("host","10.0.0.2");
 /**
  * database username
  */
 //define ("user", "root");
-/**
- *
- */
+//define ("user_ddn", "root");
+define ("user_ddn", "u_fayni");
 define ("user", "uh333660_mebli");
 /**
  * database password
  */
 //define ("pass", "");
-/**
- *
- */
+//define ("pass_ddn", "");
+define ("pass_ddn", "ZID1c0eud3Dc");
 define ("pass", "Z7A8JqUh");
 /**
  * database name
  */
 //define ("db", "mebli");
-/**
- *
- */
+//define ("db_ddn", "ddn_new");
+define ("db_ddn", "ddnPZS");
 define ("db", "uh333660_mebli");
 /**
- * Class Rokko
+ * Class Timer
+ * подсчет времени выполнения скрипта
  */
-class Rokko extends Link
+class Timer
 {
     /**
-     * @param $str
-     * @return mixed
+     * @var время начала выпонения
      */
-    private function makeName($str)
+    private $start_time;
+    /**
+     * @var время конца выполнения
+     */
+    private $end_time;
+    /**
+     * встанавливаем время начала выполнения скрипта
+     */
+    public function setStartTime()
     {
-        $name=$str;
-        //$name="Шкаф-купе ".$name;
-        $name=str_replace("*"," (",$name);
-        //$name.=")";
-        return $name;
+        $this->start_time = microtime(true);
     }
     /**
-     *
+     * устанавливаем время конца выполнения скрипта
      */
-    public function parseRoko()
+    public function setEndTime()
     {
-        $f_id=141;
-        $db_connect=mysqli_connect(host,user,pass,db);
-        $this->ReadFile();
-        //$this->printData();
-        foreach ($this->data as $d)
-        {
-            $code1c=$d[0];
-            $name=$d[1];
-            $name=$this->makeName($name);
-            //echo "$name<br>";
-            $code1c=$this->UTF8toCP1251($code1c);
-            //$name=$this->UTF8toCP1251($name);
-            $query = "UPDATE goods SET goods_article_1c='$code1c' WHERE goods_name like '%$name%' AND factory_id=$f_id";
-            mysqli_query($db_connect,$query);
-            echo "$query<br>";
-        }
-        mysqli_close($db_connect);
+        $this->end_time = microtime(true);
+    }
+    /**
+     * @return mixed время выполения
+     * возвращаем время выполнения скрипта в секундах
+     */
+    public function getRunTime()
+    {
+        return $this->end_time-$this->start_time;
     }
 }
-/**
- * Class KomfMebSK
- */
-class KomfMebSK extends Link
+class FM
 {
+    /*private $factory_equal = array(
+	(fm=>82,ddn=>7),
+	(fm=>83,ddn=>88),
+	(fm=>84,ddn=>66),
+	(fm=>85,ddn=>4),
+	(fm=>86,ddn=>52),
+	(fm=>87,ddn=>6),
+	(fm=>88,ddn=>5),
+	(fm=>89,ddn=>2),
+	(fm=>90,ddn=>1),
+	(fm=>91,ddn=>25),
+	(fm=>92,ddn=>19),
+	(fm=>94,ddn=>12),
+	(fm=>95,ddn=>17),
+	(fm=>96,ddn=>33),
+	(fm=>97,ddn=>16),
+	(fm=>98,ddn=>95),
+	(fm=>123,ddn=>125),
+	(fm=>124,ddn=>26),
+	(fm=>125,ddn=>123),
+	(fm=>134,ddn=>136),
+	(fm=>145,ddn=>138),
+	(fm=>153,ddn=>8),
+	(fm=>157,ddn=>114),
+	(fm=>161,ddn=>134),
+	(fm=>162,ddn=>157),
+	(fm=>163,ddn=>156),
+	(fm=>164,ddn=>153),
+	(fm=>166,ddn=>173),
+	(fm=>168,ddn=>174));*/
     /**
-     * @return array|null
+     * выбираем список айди товаров с сайта ФМ по определенной фабрике
+     * @param $f_id integer - айди фабрики на ФМ
+     * @return array|null - массив айди товаров
      */
-    private function getAllBaseSK ()
+    private function getTovByFactoryFM ($f_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id, goods_article_link FROM goods WHERE goods_id=goods_parent AND factory_id=122 AND goods_maintcharter=9 AND goods_active=1 AND goods_noactual=0";
+        $query="SELECT goods_id FROM goods WHERE factory_id=$f_id AND goods_active=1 AND goods_noactual=0";
         if ($res=mysqli_query($db_connect,$query))
         {
-            while ($row=mysqli_fetch_assoc($res))
+            while ($row = mysqli_fetch_assoc($res))
             {
-                $goods[]=$row;
+                $tovByFactoty[]=$row;
             }
+			//var_dump ($query);
+			//var_dump ($tovByFactoty);
+        }
+        else
+        {
+            echo "error in SQL fm $query<br>";
         }
         mysqli_close($db_connect);
-        if (is_array($goods))
+        if (is_array($tovByFactoty))
         {
-            return $goods;
+            return $tovByFactoty;
         }
         else
         {
@@ -106,25 +133,31 @@ class KomfMebSK extends Link
         }
     }
     /**
-     * @param $id
-     * @return array|null
+     * выбираем список айди товаров с сайта ДДН по определенной фабрике
+     * @param $f_id integer - айди фабрики на ДДН
+     * @return array|null - массив айди товаров
      */
-    private function getChildrenByParent($id)
+    private function getTovByFactoryDDN ($f_id)
     {
-        $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id FROM goods WHERE goods_parent=$id AND factory_id=122 AND goods_maintcharter=9 AND goods_active=1 AND goods_noactual=0";
-		//echo "$query<br>";
+        $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+        $query="SELECT DISTINCT goods.goods_id FROM goods join goodshasfeature on goods.goods_id=goodshasfeature.goods_id WHERE goodshasfeature.goods_id in (select goodshasfeature.goods_id from goodshasfeature where feature_id=14 AND goodshasfeature_valueid=$f_id)";
         if ($res=mysqli_query($db_connect,$query))
         {
-            while ($row=mysqli_fetch_assoc($res))
+            //var_dump ($query);
+			while ($row = mysqli_fetch_assoc($res))
             {
-                $goods[]=$row;
+                $idByFactoty[]=$row;
             }
+			
+        }
+        else
+        {
+            echo "error in SQL ddn $query<br>";
         }
         mysqli_close($db_connect);
-        if (is_array($goods))
+        if (is_array($idByFactoty))
         {
-            return $goods;
+            return $idByFactoty;
         }
         else
         {
@@ -132,257 +165,250 @@ class KomfMebSK extends Link
         }
     }
     /**
-     * @param $id
-     * @param $code
+     * сравниваем 2 названия дивана.
+     * если они равны - возвращаем true, если нет - false
+     * @param $div_fm string - название дивана на ФМ
+     * @param $div_ddn string - название дивана на ДДН
+     * @return bool
      */
-    private function writeCode1c ($id, $code)
+    private function getEqual($div_fm, $div_ddn)
     {
-        $db_connect=mysqli_connect(host,user,pass,db);
-		$code=$this->UTF8toCP1251($code);
-        $query = "UPDATE goods SET goods_article_1c='$code' WHERE goods_id=$id";
-        mysqli_query($db_connect,$query);
-        echo $query."<br>";
-        mysqli_close($db_connect);
-    }
-    /**
-     *
-     */
-    public function parseMeb()
-    {
-        $basic=$this->getAllBaseSK();
-        $this->readFile();
-        if (is_array($basic))
+        if (strnatcasecmp($div_fm,$div_ddn)==0)
         {
-            foreach ($basic as $item)
-            {
-                //var_dump($item);
-				$id=$item['goods_id'];
-                $article_link1=$item['goods_article_link'];
-				$article_link1=mb_substr($article_link1,1);
-				$article_link1="Ф-".$article_link1;
-				echo "article_link=$article_link1<br>";
-				
-                foreach ($this->data as $d)
-                {
-                    $code1c=$d[0];
-                    $codePrice=$d[1];
-                    if ($article_link1==$codePrice AND $id<>19294)
-                    {
-                        echo "$article_link1 - $codePrice<br>";
-						//пишем в базовую позицию
-                        //$this->writeCode1c($id,$code1c);
-                        //теперь пишем и для детей тот же код
-                        $childrens=$this->getChildrenByParent($id);
-						//var_dump;
-                        if (is_array($childrens))
-                        {
-                            foreach ($childrens as $child)
-                            {
-                                $child_id=$child['goods_id'];
-                                $this->writeCode1c($child_id,$code1c);
-                            }
-                        }
-						break;
-                    }
-                }
-				//break 2;
-            }
-        }
-    }
-}
-/**
- * Class Link
- */
-class Link
-{
-    /**
-     * @var
-     */
-    public $data;
-    /**
-     *
-     */
-    public function ReadFile()
-    {
-        $handle=fopen("komfort_sk.txt","r");
-        while (!feof($handle))
-        {
-            $str=fgets($handle);
-			$str=explode(";",$str);
-			//для парсинга Велам, закоментить при обычном файлке!
-			//$str[0].=";";
-			$arr[]=$str;
-            //echo "$str<br>";
-        }
-        if (!empty($arr))
-        {
-            $this->data = $arr;
+            return true;
         }
         else
         {
-            echo "array is empty in ReadFile";
+            return false;
         }
     }
     /**
-     *
+     * убираем лишние символы и слова из названия
+     * @param $div string - имя дивана
+     * @return string - обработанное имя дивана
      */
-    public function printData()
+    private function strip($div)
     {
-        $this->ReadFile();
-		//var_dump($this->data);
-		echo "<pre>";
-		print_r($this->data);
-		echo "</pre>";
+        $div_new=str_replace("Диван","",$div);
+        $div_new=str_replace("Угловой","",$div_new);
+        //$div_new=str_replace("угловой","",$div_new);
+        $div_new=str_replace("диван","",$div_new);
+		$div_new=str_replace(" ","",$div_new);
+        return $div_new;
     }
     /**
-     * @param $str
-     * @return mixed
+     * выбираем имя дивана по его айди на сайте ФМ
+     * @param $id integer - айди дивана
+     * @return bool - возвращаем имя дивана или false если не нашли
      */
-    private function parseVelam($str)
-    {
-        //название
-        if (preg_match("#\"(.+?)\"#is",$str,$matches))
-        {
-            //var_dump($matches);
-            $name=$matches[1];
-            $name=mb_strtolower($name);
-			//$name=ucfirst($name);
-			$name=mb_convert_case($name,MB_CASE_TITLE);
-        }
-        else
-        {
-            echo "Not find name <br>";
-        }
-        //отсекаем первую двойную кавычку в тексте
-        $str1=mb_substr($str,2);
-        if (preg_match("#\"(.+?)\;#is",$str1,$matches))
-        {
-            //var_dump($matches);
-            $sizes=$matches[1];
-            $sizes=explode("х",$sizes);
-        }
-        else
-        {
-            echo "Not find sizes <br>";
-        }
-        echo "Name=$name size_len=$sizes[0], size_width=$sizes[1] <br>";
-		$arr['name']=$name;
-		$arr['len']=$sizes[0];
-		$arr['width']=$sizes[1];
-		return $arr;
-		
-    }
-    /**
-     * @param $str
-     * @return mixed
-     */
-    public function UTF8toCP1251($str)
-	{ // by SiMM, $table from http://ru.wikipedia.org/wiki/CP1251
-		static $table = array("\xD0\x81" => "\xA8", // Ё
-			"\xD1\x91" => "\xB8", // ё
-			// украинские символы
-			"\xD0\x8E" => "\xA1", // Ў (У)
-			"\xD1\x9E" => "\xA2", // ў (у)
-			"\xD0\x84" => "\xAA", // Є (Э)
-			"\xD0\x87" => "\xAF", // Ї (I..)
-			"\xD0\x86" => "\xB2", // I (I)
-			"\xD1\x96" => "\xB3", // i (i)
-			"\xD1\x94" => "\xBA", // є (э)
-			"\xD1\x97" => "\xBF", // ї (i..)
-			// чувашские символы
-			"\xD3\x90" => "\x8C", // &#1232; (А)
-			"\xD3\x96" => "\x8D", // &#1238; (Е)
-			"\xD2\xAA" => "\x8E", // &#1194; (С)
-			"\xD3\xB2" => "\x8F", // &#1266; (У)
-			"\xD3\x91" => "\x9C", // &#1233; (а)
-			"\xD3\x97" => "\x9D", // &#1239; (е)
-			"\xD2\xAB" => "\x9E", // &#1195; (с)
-			"\xD3\xB3" => "\x9F", // &#1267; (у)
-		);
-		//цифровая магия
-		$str = preg_replace('#([\xD0-\xD1])([\x80-\xBF])#se',
-			'isset($table["$0"]) ? $table["$0"] :
-							 chr(ord("$2")+("$1" == "\xD0" ? 0x30 : 0x70))
-							',
-			$str
-		);
-		$str = str_replace("i", "і", $str);
-		$str = str_replace("I", "І", $str);
-		return $str;
-	}
-    /**
-     * @param $f_id
-     */
-    public function doLink($f_id)
+    private function getNameByIdFM($id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
-		$this->ReadFile();
-		foreach ($this->data as $d)
+		$query="SELECT goods_name FROM goods WHERE goods_id=$id";
+		if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $names[]=$row;
+            }
+			if (is_array($names))
+			{
+				foreach ($names as $name)
+				{
+					$div_name=$name['goods_name'];
+				}
+			}
+        }
+		else
 		{
+			echo "Error in SQL fm $query<br>";
+		}
+		mysqli_close($db_connect);
+		if (is_string($div_name))
+		{
+			return $div_name;
+		}
+		else
+		{
+			return false;
+		}
+	}
+    /**
+     * выбираем имя дивана по его айди на сайте ДДН
+     * @param $id integer - айди дивана
+     * @return bool - возвращаем имя дивана или false если не нашли
+     */
+    private function getNameByIdDDN($id)
+	{
+		$db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+        $query="SELECT goodshaslang_name FROM goodshaslang WHERE goods_id=$id AND lang_id=1 AND goodshaslang_active=1";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $texts[] = $row;
+            }
+            if (is_array($texts))
+            {
+                foreach ($texts as $text)
+                {
+                    //получаем нужный текст
+                    $name=$text['goodshaslang_name'];
+                }
+            }
+        }
+        else
+        {
+            echo "Error in SQL ddn: $query<br>";
+        }
+        mysqli_close($db_connect);
+        return $name;
+	}
+    /**
+     * записываем изменения в зазеркалье
+     * @param $goods_id_fm integer - айди товара на ФМ
+     * @param $goods_article_ddn string - артикул товара на ДДН
+     */
+    private function setMirror($goods_id_fm, $goods_article_ddn)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		//проверяем естл ли уже щапись, если есть - обновляем ее, если нет - создаем
+		if ($this->checkDuplicate($goods_id_fm))
+		{
+			$query="UPDATE goodsmirror SET goodsmirror_article_ddn='$goods_article_ddn' WHERE goods_id=$goods_id_fm";
+		}
+		else
+		{
+			$query="INSERT INTO goodsmirror (goodsmirror_article_ddn,goods_id) VALUES ('$goods_article_ddn',$goods_id_fm)";
+		}
+		echo "$query<br>";
+		mysqli_query($db_connect, $query);
+		mysqli_close($db_connect);
+	}
+    /**
+     * находим артикул товара на ДДН по его айди
+     * @param $id integer - айди товара на ДДН
+     * @return mixed - артикул товара на ДДН
+     */
+    private function getArticleByIdDDN($id)
+	{
+		$db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+        $query="SELECT goods_article FROM goods WHERE goods_id=$id";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $articles[] = $row;
+            }
+            if (is_array($articles))
+            {
+                foreach ($articles as $article)
+                {
+                    //получаем нужный текст
+                    $art=$article['goods_article'];
+                }
+            }
+        }
+        else
+        {
+            echo "Error in SQL ddn: $query<br>";
+        }
+        mysqli_close($db_connect);
+        return $art;
+	}
+    /**
+     * проверяем есть ли в зазеркалье запись для данного дивана
+     * @param $id integer - айди дивана
+     * @return bool true - если запись есть, false - если нет
+     */
+    private function checkDuplicate($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goodsmirror_article_ddn FROM goodsmirror WHERE goods_id=$id";
+		//echo $query."<br>";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+			while ($row = mysqli_fetch_assoc($res))
+            {
+                $articles[] = $row;
+            }
+			if (is_array($articles))
+            {
+                foreach ($articles as $article)
+                {
+                    //получаем нужный текст
+                    $art=$article['goodsmirror_article_ddn'];
+                }
+            }
+		}
+		mysqli_query($db_connect, $query);
+		//var_dump ($art);
+		if ($art==null)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}	
+    /**
+     * находит одинаково названные товары по фабрикам
+     * @param $f_fm integer - айди фабрики на сайте ФМ
+     * @param $f_ddn integer - айди фабрики на ДДН
+     */
+    public function getEqualFactory($f_fm, $f_ddn)
+    {
+        $div_fm=$this->getTovByFactoryFM($f_fm);
+        $div_ddn=$this->getTovByFactoryDDN($f_ddn);
+		//var_dump ($div_ddn);
+		//var_dump ($div_fm);
+		foreach ($div_fm as $d_fm)
+		{
+			$id_fm=$d_fm['goods_id'];
+			$name_fm=$this->getNameByIdFM($id_fm);
+			$name_fm=iconv('windows-1251', 'utf-8', $name_fm);
+			$name_fm=$this->strip($name_fm);
 			
-			$code1c=$d[0];
-			$codePrice=$d[1];
-			$arr=$this->parseVelam($code1c);
-			$name=$arr['name'];
-			$len=$arr['len'];
-			$len.=0;
-			$width=$arr['width'];
-			$width.=0;
-			//$name=iconv("UTF-8","CP-1251",$name);
-			$name=$this->UTF8toCP1251($name);
-			$codePrice=$this->UTF8toCP1251($codePrice);
-			$query = "UPDATE goods SET goods_article_1c='$codePrice' WHERE goods_name like '%$name%' AND goods_length=$len AND goods_width=$width AND factory_id=$f_id";
-			//$query="UPDATE goods SET goods_article_1c='$code1c' WHERE goods_article_link='$codePrice' AND factory_id=$f_id";
-			mysqli_query($db_connect,$query);
-            echo $query."<br>";
+			//echo $name_fm."<br>";
+			$find=false;
+			foreach ($div_ddn as $d_ddn)
+			{
+				$id_ddn=$d_ddn['goods_id'];
+				$name_ddn=$this->getNameByIdDDN($id_ddn);
+				$name_ddn=$this->strip($name_ddn);
+				//echo "$name_fm -> $name_ddn<br>";
+				if ($this->getEqual($name_fm,$name_ddn))
+				{
+					$article_ddn=$this->getArticleByIdDDN($id_ddn);
+					$this->setMirror($id_fm,$article_ddn);
+					//echo "$article_ddn<br>";
+					echo "$name_fm ($id_fm) - $name_ddn ($id_ddn)<br>";
+					$find=true;
+				}
+				if ($find)
+                {
+                    break;
+                }
+				
+			}
+			if (!$find)
+			{
+				echo "Диван $name_fm ($id_fm) не найден на диванах!<br>";
+			}
 			//break;
 		}
-		//mysqli_close($db_connect);
-	}
-}
-
-class Sonline extends Link
-{
-    private function parseSonline($name1c)
-    {
-        if (preg_match("#\'(.+?)\'#is",$name1c,$matches))
-        {
-            //var_dump($matches);
-            $name=$matches[1];
-            $name=mb_strtolower($name);
-            //$name=ucfirst($name);
-            $name=mb_convert_case($name,MB_CASE_TITLE);
-        }
-        else
-        {
-            echo "Not find name <br>";
-        }
-        $str1=mb_substr($str,2);
-        if (preg_match("#\'(.+?)\;#is",$name1c,$matches))
-        {
-            //var_dump($matches);
-            $size=$matches[1];
-        }
-        else
-        {
-            echo "Not find sizes <br>";
-        }
-        echo "mane=$name size=$size";
-    }
-
-    public function doLinkSonline()
-    {
-        $this->ReadFile();
-        foreach ($this->data as $d)
-        {
-            $name1c=$d[1];
-            $this->parseSonline($name1c);
-        }
+		
     }
 }
-//$test=new Link();
-//$test->doLink(137);
-//$test=new Rokko();
-//$test->parseRoko();
-//$test=new KomfMebSK();
-//$test->parseMeb();
+//ррр
+$runtime = new Timer();
+set_time_limit(9000);
+$runtime->setStartTime();
+$test=new FM();
+//fm, ddn
+//$test->getEqualFactory(88,83);
+//katun
+$test->getEqualFactory(2,89);
+$runtime->setEndTime();
+echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
