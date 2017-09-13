@@ -198,6 +198,14 @@ switch ($selectedFactory)
         $test->test_data();
         //$test->add_db();
         break;
+
+    case "A_Class":
+        include_once "a-class.php";
+        $test= new A_Class($_FILES['file']['tmp_name'],58);
+        $test->parse_price(null);
+        $test->test_data();
+        //$test->add_db();
+        break;
     case "InStore":
         include_once "in_store.php";
         $test=new InStoreFm($_FILES['file']['tmp_name']);
