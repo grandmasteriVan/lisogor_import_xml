@@ -202,9 +202,23 @@ class Link
     /**
      *
      */
+
+    public $filename;
+
+    /**
+     * Link constructor.
+     * @param $filename
+     */
+    public function __construct($filename)
+    {
+        $this->filename = $filename;
+    }
+
+
     public function ReadFile()
     {
-        $handle=fopen("sonline.txt","r");
+        $file=$this->filename."txt";
+        $handle=fopen($file,"r");
         while (!feof($handle))
         {
             $str=fgets($handle);
@@ -479,5 +493,5 @@ class Sonline extends Link
 //$test->parseRoko();
 //$test=new KomfMebSK();
 //$test->parseMeb();
-$test=new Sonline();
+$test=new Sonline("sonline");
 $test->doLinkSonline();
