@@ -5,7 +5,6 @@
  * Date: 30.08.16
  * Time: 14:45
  */
-
 class A_Class extends Universal
 {
     /**
@@ -31,11 +30,11 @@ class A_Class extends Universal
                     foreach ($cells as $cell)
                     {
                         $elem=$cell->nodeValue;
-                        if ($cell_num==1)
+                        if ($cell_num==2)
                         {
                             $name=$elem;
                         }
-                        if ($cell_num==4)
+                        if ($cell_num==5)
                         {
                             $price=$elem;
                         }
@@ -56,7 +55,6 @@ class A_Class extends Universal
             return;
         }
     }
-
     /**
      *записываем распарсеный прайс в БД
      */
@@ -67,7 +65,7 @@ class A_Class extends Universal
         {
             $d_name=$d['name'];
             //echo $d_name."<br>";
-            $d_price=$d['price'];
+            $d_price=round($d['kat0']);
             $factory_id=$this->factory_id;
             $strSQL="UPDATE goods ".
                 "SET goods_price=$d_price ".
@@ -79,7 +77,6 @@ class A_Class extends Universal
         }
         mysqli_close($db_connect);
     }
-
     /**
      * для тестов
      * "красиво" выводим поле $data в котором лежат наименование товара и его цена
@@ -108,5 +105,4 @@ class A_Class extends Universal
         </html> --> <?php
     }
 }
-
 ?>
