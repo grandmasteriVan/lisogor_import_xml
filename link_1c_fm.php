@@ -202,9 +202,22 @@ class Link
     /**
      *
      */
+
+    public $filename;
+
+    /**
+     * Link constructor.
+     * @param $filename
+     */
+    public function __construct($filename)
+    {
+        $this->filename = $filename;
+    }
+
+
     public function ReadFile()
     {
-        $handle=fopen("sonline.txt","r");
+        $handle=fopen($this->filename,"r");
         while (!feof($handle))
         {
             $str=fgets($handle);
@@ -340,6 +353,71 @@ class Link
 		//mysqli_close($db_connect);
 	}
 }
+
+class MebelStar extends Link
+{
+    private function parseNameSite($name)
+    {
+        $name=str_replace("Шкаф-купе ","",$name);
+        $name=str_replace("Угловой шкаф-купе ","",$name);
+        if (mb_stripos($name," Уни"))
+        {
+            $name=str_replace(" Уни","",$name);
+            $uni=true;
+        }
+        $name.="*";
+        $sizes=explode("*",$name);
+        if ($uni)
+        {
+            $sizes[3]=true;
+        }
+        return $sizes;
+    }
+
+    private function generateNameSite($arr)
+    {
+        $name=$arr[0]."*".$arr[1]."*".$arr[2];
+        if ($arr[3]==true)
+        {
+            $name.=" Уни";
+        }
+        return $name;
+    }
+
+    private function parseName1C($name)
+    {
+        $name.="*";
+        if (mb_stripos($name," Уни"))
+        {
+            $name=str_replace(" Уни","",$name);
+            $uni=true;
+        }
+        $sizes=explode("*",$name);
+        if ($uni)
+        {
+            $sizes[3]=true;
+        }
+        return $sizes;
+    }
+    public function doLinkStar()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $this->ReadFile();
+        foreach ($this->data as $pos)
+        {
+            $code1c=$pos[1];
+            $name1c=$pos[0];
+            $name1c_arr=$this->parseName1C($name1c);
+            $name_site=$this->generateNameSite($name1c_arr);
+            $query="UPDATE goods SET goods_article_1c='$code1c' WHERE goods_name like '%$name_site%' AND factory_id=184";
+            //mysqli_query($db_connect,$query);
+            echo $query."<br>";
+
+        }
+        mysqli_close($db_connect);
+    }
+
+}
 class Sonline extends Link
 {
     private function parseSonline($name1c)
@@ -377,6 +455,7 @@ class Sonline extends Link
     }
     public function doLinkSonline()
     {
+        $db_connect=mysqli_connect(host,user,pass,db);
         $this->ReadFile();
         foreach ($this->data as $d)
         {
@@ -390,8 +469,10 @@ class Sonline extends Link
 			//$code=$d[0];
 			$size=$pos['size'];
 			$this->setLink($name,$code,$size);
+
 			
         }
+        mysqli_close($db_connect);
     }
 	private function setLink($name,$code1c,$size)
 	{
@@ -479,5 +560,7 @@ class Sonline extends Link
 //$test->parseRoko();
 //$test=new KomfMebSK();
 //$test->parseMeb();
-$test=new Sonline();
-$test->doLinkSonline();
+//$test=new Sonline("sonline.txt");
+//$test->doLinkSonline();
+$test=new MebelStar("star.txt");
+$test->doLinkStar();
