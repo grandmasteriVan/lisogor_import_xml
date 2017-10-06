@@ -35,6 +35,30 @@ define ("pass", "Z7A8JqUh");
  *
  */
 define ("db", "uh333660_mebli");
+class Green extends Link
+{
+	public function parseGreen()
+    {
+        $f_id=176;
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $this->ReadFile();
+        //$this->printData();
+        foreach ($this->data as $d)
+        {
+            $code1c=$d[1];
+            $name=$d[0];
+            $name=$this->UTF8toCP1251($name);
+            //echo "$name<br>";
+            $code1c=$this->UTF8toCP1251($code1c);
+            //$name=$this->UTF8toCP1251($name);
+            $query = "UPDATE goods SET goods_article_1c='$code1c' WHERE goods_name like '%$name' AND factory_id=$f_id";
+            mysqli_query($db_connect,$query);
+            echo "$query<br>";
+        }
+        mysqli_close($db_connect);
+    }
+}
+
 /**
  * Class Rokko
  */
@@ -202,9 +226,7 @@ class Link
     /**
      *
      */
-
     public $filename;
-
     /**
      * Link constructor.
      * @param $filename
@@ -213,8 +235,6 @@ class Link
     {
         $this->filename = $filename;
     }
-
-
     public function ReadFile()
     {
         $handle=fopen($this->filename,"r");
@@ -353,7 +373,6 @@ class Link
 		//mysqli_close($db_connect);
 	}
 }
-
 class MebelStar extends Link
 {
     private function parseNameSite($name)
@@ -373,7 +392,6 @@ class MebelStar extends Link
         }
         return $sizes;
     }
-
     private function generateNameSite($arr)
     {
         $name=$arr[0]."*".$arr[1]."*".$arr[2];
@@ -383,7 +401,6 @@ class MebelStar extends Link
         }
         return $name;
     }
-
     private function parseName1C($name)
     {
         $name.="*";
@@ -409,14 +426,15 @@ class MebelStar extends Link
             $name1c=$pos[0];
             $name1c_arr=$this->parseName1C($name1c);
             $name_site=$this->generateNameSite($name1c_arr);
+			$code1c=$this->UTF8toCP1251($code1c);
+			$name_site=$this->UTF8toCP1251($name_site);
+			
             $query="UPDATE goods SET goods_article_1c='$code1c' WHERE goods_name like '%$name_site%' AND factory_id=184";
-            //mysqli_query($db_connect,$query);
+            mysqli_query($db_connect,$query);
             echo $query."<br>";
-
         }
         mysqli_close($db_connect);
     }
-
 }
 class Sonline extends Link
 {
@@ -469,7 +487,6 @@ class Sonline extends Link
 			//$code=$d[0];
 			$size=$pos['size'];
 			$this->setLink($name,$code,$size);
-
 			
         }
         mysqli_close($db_connect);
@@ -562,5 +579,7 @@ class Sonline extends Link
 //$test->parseMeb();
 //$test=new Sonline("sonline.txt");
 //$test->doLinkSonline();
-$test=new MebelStar("star.txt");
-$test->doLinkStar();
+//$test=new MebelStar("star.txt");
+//$test->doLinkStar();
+$test=new Green("green-1.txt");
+$test->parseGreen();
