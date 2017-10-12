@@ -35,6 +35,32 @@ define ("pass", "Z7A8JqUh");
  *
  */
 define ("db", "uh333660_mebli");
+
+class Novelty extends Link
+{
+	public function parseNovelty()
+    {
+        $f_id=185;
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $this->ReadFile();
+        //$this->printData();
+        foreach ($this->data as $d)
+        {
+            $code1c=$d[0];
+            $name=$d[1];
+            //$name=$this->UTF8toCP1251($name);
+            echo "$name<br>";
+            $code1c=$this->UTF8toCP1251($code1c);
+            $name=$this->UTF8toCP1251($name);
+            $query = "UPDATE goods SET goods_article_1c='$code1c' WHERE goods_article_link like '$name' AND factory_id=$f_id";
+            mysqli_query($db_connect,$query);
+            echo "$query<br>";
+			//break;
+        }
+        mysqli_close($db_connect);
+    }
+}
+
 class Green extends Link
 {
 	public function parseGreen()
@@ -581,5 +607,7 @@ class Sonline extends Link
 //$test->doLinkSonline();
 //$test=new MebelStar("star.txt");
 //$test->doLinkStar();
-$test=new Green("green-1.txt");
-$test->parseGreen();
+//$test=new Green("green-1.txt");
+//$test->parseGreen();
+$test = new Novelty("novelty.txt");
+$test->parseNovelty();
