@@ -99,7 +99,6 @@ class MakeActive
             return true;
         }
     }
-
     /** Вставляем категрию в товары
      * @param $issue_id  int  айди категории
      */
@@ -122,10 +121,11 @@ class MakeActive
 			else
 			{
 				echo "Find Cat $issue_id in good $div!<br>";
+				$query="UPDATE goodshastissue SET goodshastissue_active=1 WHERE goods_id=$div AND tissue_id=$issue_id";
+                mysqli_query($db_connect, $query);
 			}
         }
     }
-
     /**
      * @param $goods_id
      * @param $tissue_id
@@ -165,7 +165,6 @@ class MakeActive
             return null;
         }
     }
-
     /**
      * @param $goods_id
      * @param $maincat_id
@@ -178,7 +177,6 @@ class MakeActive
         echo "$query<br>";
         mysqli_close($db_connect);
     }
-
     /**
      * @param $issue_id
      */
@@ -193,9 +191,31 @@ class MakeActive
 			$goods_maincategory=$this->getGoodsHasTissueId($div,$issue_id);
 			//var_dump($goods_maincategory);
             $this->setGoodsMainCat($div,$goods_maincategory);
+			//break;
         }
     }
 }
 //
-$test=new MakeActive(82);
-$test->makeA(299);
+//$test=new MakeActive(82);
+//$test->makeA(299);
+//Киев (софиевка)
+$test=new MakeActive(134);
+$test->makeA(293);
+//daniro
+$test=new MakeActive(87);
+$test->makeA(109);
+//sidi-m
+$test=new MakeActive(83);
+$test->makeA(278);
+//катунь
+$test=new MakeActive(89);
+$test->makeA(127);
+//лисогор
+$test=new MakeActive(84);
+$test->makeA(294);
+//вика
+$test=new MakeActive(96);
+$test->makeA(121);
+//рата
+$test=new MakeActive(90);
+$test->makeA(122);
