@@ -15,10 +15,13 @@ define ("db", "ddnPZS");
 //define ("db", "ddn_new");
 class MakeActive
 {
+    /**
+     * @var int фа-ди фабрики
+     */
     private $f_id;
     /**
      * MakeActive constructor.
-     * @param $f_id
+     * @param $f_id int фйди фабрики
      */
     public function __construct($f_id)
     {
@@ -57,7 +60,8 @@ class MakeActive
     }
     /**
      * проверяем есть ли запись для данной категории
-     * @param $id - айди категории
+     * @param $id int - айди категории
+     * @param $t_id int фйди категории
      * @return bool true - если запись есть, false - если нет
      */
     private function checkDuplicate($id,$t_id)
@@ -95,6 +99,10 @@ class MakeActive
             return true;
         }
     }
+
+    /** Вставляем категрию в товары
+     * @param $issue_id  int  айди категории
+     */
     private function insertGoodsHasTissue($issue_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -117,6 +125,12 @@ class MakeActive
 			}
         }
     }
+
+    /**
+     * @param $goods_id
+     * @param $tissue_id
+     * @return null
+     */
     private function getGoodsHasTissueId($goods_id, $tissue_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -151,7 +165,12 @@ class MakeActive
             return null;
         }
     }
-    private function setGoodsMainCat($goods_id,$maincat_id)
+
+    /**
+     * @param $goods_id
+     * @param $maincat_id
+     */
+    private function setGoodsMainCat($goods_id, $maincat_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="UPDATE goods SET goods_maincategory=$maincat_id WHERE goods_id=$goods_id";
@@ -159,6 +178,10 @@ class MakeActive
         echo "$query<br>";
         mysqli_close($db_connect);
     }
+
+    /**
+     * @param $issue_id
+     */
     public function makeA($issue_id)
     {
         //добавляем в каждый диван нужную категорию
@@ -173,5 +196,6 @@ class MakeActive
         }
     }
 }
+//
 $test=new MakeActive(82);
 $test->makeA(299);
