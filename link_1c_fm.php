@@ -113,7 +113,7 @@ class Tis extends Link
         {
             //$code1c=$d[0];
             $name=$d[1];
-            $code1c=$d[2].$this->getCat($d[3]);
+            $code1c=$d[2]."/".$this->getCat($d[3]);
             $name=$this->getTranslate($name);
             //$name=$this->UTF8toCP1251($name);
             echo "$name<br>";
