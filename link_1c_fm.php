@@ -36,9 +36,107 @@ define ("pass", "Z7A8JqUh");
  */
 define ("db", "uh333660_mebli");
 
+/**
+ * Class Tis
+ */
+class Tis extends Link
+{
+    /**
+     * @param $name
+     * @return string
+     */
+    private function getNameFM($name)
+    {
+        $name_new=ucfirst(mb_strtolower($name));
+        return $name_new;
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    private function getTranslate($name)
+    {
+        $api_key="trnsl.1.1.20170706T112229Z.752766fa973319f4.6dcbe2932c5e110da20ee3ce61c5986e7e492e7f";
+        $lang="uk-ru";
+        $txt=str_replace(" ","%20",$name);
+        $link="https://translate.yandex.net/api/v1.5/tr.json/translate?key=".$api_key."&text=".$txt."&lang=".$lang;
+        //echo $link."<br>";
+        $result=file_get_contents($link);
+        $result=json_decode($result,true);
+        $txt=$result['text'][0];
+        //var_dump($result);
+        return $txt;
+    }
+
+    /**
+     * @param $cat
+     */
+    private function getCatId($cat)
+    {
+        $cat=explode("-",$cat);
+        $cat=$cat[0];
+        switch ($cat)
+        {
+            case "Бук":
+                $cat_id=728;
+                break;
+            case "Дуб":
+                $cat_id=729;
+                break;
+            case "":
+                $cat_id=727;
+                break;
+        }
+    }
+
+    /**
+     * @param $cat
+     * @return array
+     */
+    private function getCat($cat)
+    {
+        $cat=explode("-",$cat);
+        return $cat;
+    }
+
+    /**
+     *
+     */
+    public function parseTis()
+    {
+        $f_id=185;
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $this->ReadFile();
+        //$this->printData();
+        foreach ($this->data as $d)
+        {
+            //$code1c=$d[0];
+            $name=$d[1];
+            $code1c=$d[2].$this->getCat($d[3]);
+            $name=$this->getTranslate($name);
+            //$name=$this->UTF8toCP1251($name);
+            echo "$name<br>";
+            $code1c=$this->UTF8toCP1251($code1c);
+            $name=$this->UTF8toCP1251($name);
+            $query = "UPDATE goods SET goods_article_1c='$code1c' WHERE goods_article_link like '$name' AND factory_id=$f_id";
+            //mysqli_query($db_connect,$query);
+            echo "$query<br>";
+            //break;
+        }
+        mysqli_close($db_connect);
+    }
+}
+
+/**
+ * Class Novelty
+ */
 class Novelty extends Link
 {
-	public function parseNovelty()
+    /**
+     *
+     */
+    public function parseNovelty()
     {
         $f_id=185;
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -61,9 +159,15 @@ class Novelty extends Link
     }
 }
 
+/**
+ * Class Green
+ */
 class Green extends Link
 {
-	public function parseGreen()
+    /**
+     *
+     */
+    public function parseGreen()
     {
         $f_id=176;
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -261,6 +365,10 @@ class Link
     {
         $this->filename = $filename;
     }
+
+    /**
+     *
+     */
     public function ReadFile()
     {
         $handle=fopen($this->filename,"r");
@@ -399,8 +507,16 @@ class Link
 		//mysqli_close($db_connect);
 	}
 }
+
+/**
+ * Class MebelStar
+ */
 class MebelStar extends Link
 {
+    /**
+     * @param $name
+     * @return array
+     */
     private function parseNameSite($name)
     {
         $name=str_replace("Шкаф-купе ","",$name);
@@ -418,6 +534,11 @@ class MebelStar extends Link
         }
         return $sizes;
     }
+
+    /**
+     * @param $arr
+     * @return string
+     */
     private function generateNameSite($arr)
     {
         $name=$arr[0]."*".$arr[1]."*".$arr[2];
@@ -427,6 +548,11 @@ class MebelStar extends Link
         }
         return $name;
     }
+
+    /**
+     * @param $name
+     * @return array
+     */
     private function parseName1C($name)
     {
         $name.="*";
@@ -442,6 +568,10 @@ class MebelStar extends Link
         }
         return $sizes;
     }
+
+    /**
+     *
+     */
     public function doLinkStar()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -462,8 +592,16 @@ class MebelStar extends Link
         mysqli_close($db_connect);
     }
 }
+
+/**
+ * Class Sonline
+ */
 class Sonline extends Link
 {
+    /**
+     * @param $name1c
+     * @return mixed
+     */
     private function parseSonline($name1c)
     {
         $name1c.=";";
@@ -497,6 +635,10 @@ class Sonline extends Link
 		//echo "</pre>";
 		return $return;
     }
+
+    /**
+     *
+     */
     public function doLinkSonline()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -517,7 +659,13 @@ class Sonline extends Link
         }
         mysqli_close($db_connect);
     }
-	private function setLink($name,$code1c,$size)
+
+    /**
+     * @param $name
+     * @param $code1c
+     * @param $size
+     */
+    private function setLink($name, $code1c, $size)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$code1c=$this->UTF8toCP1251($code1c);
