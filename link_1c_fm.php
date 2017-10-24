@@ -36,9 +36,34 @@ define ("pass", "Z7A8JqUh");
  */
 define ("db", "uh333660_mebli");
 
+class Nova extends Link
+{
+	public function parseNova()
+    {
+        $f_id=14;
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $this->ReadFile();
+        //$this->printData();
+        foreach ($this->data as $d)
+        {
+            $code1c=$d[0];
+            $name=$d[1];
+            //$name=$this->UTF8toCP1251($name);
+            echo "$name-$code1c<br>";
+            $code1c=$this->UTF8toCP1251($code1c);
+            $name=$this->UTF8toCP1251($name);
+            $query = "UPDATE goods SET goods_article_1c='$code1c' WHERE goods_article_link = '$name' AND factory_id=$f_id";
+            mysqli_query($db_connect,$query);
+            echo "$query<br>";
+			//break;
+        }
+        mysqli_close($db_connect);
+    }
+}
+
 /**
- * Class Tis
- */
+* Class Tis1
+*/
 class Tis extends Link
 {
     /**
@@ -47,10 +72,10 @@ class Tis extends Link
      */
     private function getNameFM($name)
     {
-        $name_new=ucfirst(mb_strtolower($name));
+        $name=mb_strtolower($name);
+		$name_new=mb_strtoupper(mb_substr($name, 0, 1,'UTF-8'),'UTF-8').mb_substr($name, 1, mb_strlen($name,'UTF-8'),'UTF-8');
         return $name_new;
     }
-
     /**
      * @param $name
      * @return mixed
@@ -68,28 +93,6 @@ class Tis extends Link
         //var_dump($result);
         return $txt;
     }
-
-    /**
-     * @param $cat
-     */
-    private function getCatId($cat)
-    {
-        $cat=explode("-",$cat);
-        $cat=$cat[0];
-        switch ($cat)
-        {
-            case "Бук":
-                $cat_id=728;
-                break;
-            case "Дуб":
-                $cat_id=729;
-                break;
-            case "":
-                $cat_id=727;
-                break;
-        }
-    }
-
     /**
      * @param $cat
      * @return array
@@ -97,15 +100,14 @@ class Tis extends Link
     private function getCat($cat)
     {
         $cat=explode("-",$cat);
-        return $cat;
+        return $cat[1];
     }
-
     /**
      *
      */
     public function parseTis()
     {
-        $f_id=185;
+        $f_id=37;
         $db_connect=mysqli_connect(host,user,pass,db);
         $this->ReadFile();
         //$this->printData();
@@ -113,21 +115,33 @@ class Tis extends Link
         {
             //$code1c=$d[0];
             $name=$d[1];
-            $code1c=$d[2]."/".$this->getCat($d[3]);
+			$name=$this->getNameFM($name);
+            //если имя заканчивается на цифру, то делаем пробел между именем и размером
+			if (is_numeric(substr($name, -1)))
+			{
+				$name.=" ";
+			}
+			//формируем нужный код 1С
+			$code1c=$d[2]."/".$this->getCat($d[3]);
+			$size=$this->getCat($d[3]);
             $name=$this->getTranslate($name);
+			$name="Кровать ".$name;
+			if ($size!="90")
+			{
+				$name.="$size"."х200";
+			}
             //$name=$this->UTF8toCP1251($name);
-            echo "$name<br>";
+            echo "$name - $code1c<br>";
             $code1c=$this->UTF8toCP1251($code1c);
             $name=$this->UTF8toCP1251($name);
-            $query = "UPDATE goods SET goods_article_1c='$code1c' WHERE goods_article_link like '$name' AND factory_id=$f_id";
-            //mysqli_query($db_connect,$query);
+            $query = "UPDATE goods SET goods_article_1c='$code1c' WHERE goods_name = '$name' AND factory_id=$f_id";
+            mysqli_query($db_connect,$query);
             echo "$query<br>";
             //break;
         }
         mysqli_close($db_connect);
     }
 }
-
 /**
  * Class Novelty
  */
@@ -158,7 +172,6 @@ class Novelty extends Link
         mysqli_close($db_connect);
     }
 }
-
 /**
  * Class Green
  */
@@ -188,7 +201,6 @@ class Green extends Link
         mysqli_close($db_connect);
     }
 }
-
 /**
  * Class Rokko
  */
@@ -365,7 +377,6 @@ class Link
     {
         $this->filename = $filename;
     }
-
     /**
      *
      */
@@ -507,7 +518,6 @@ class Link
 		//mysqli_close($db_connect);
 	}
 }
-
 /**
  * Class MebelStar
  */
@@ -534,7 +544,6 @@ class MebelStar extends Link
         }
         return $sizes;
     }
-
     /**
      * @param $arr
      * @return string
@@ -548,7 +557,6 @@ class MebelStar extends Link
         }
         return $name;
     }
-
     /**
      * @param $name
      * @return array
@@ -568,7 +576,6 @@ class MebelStar extends Link
         }
         return $sizes;
     }
-
     /**
      *
      */
@@ -592,7 +599,6 @@ class MebelStar extends Link
         mysqli_close($db_connect);
     }
 }
-
 /**
  * Class Sonline
  */
@@ -635,7 +641,6 @@ class Sonline extends Link
 		//echo "</pre>";
 		return $return;
     }
-
     /**
      *
      */
@@ -659,7 +664,6 @@ class Sonline extends Link
         }
         mysqli_close($db_connect);
     }
-
     /**
      * @param $name
      * @param $code1c
@@ -745,6 +749,8 @@ class Sonline extends Link
         mysqli_close($db_connect);
 	}
 }
+set_time_limit(9000);
+$time_start = microtime(true);
 //$test=new Link();
 //$test->doLink(137);
 //$test=new Rokko();
@@ -757,5 +763,15 @@ class Sonline extends Link
 //$test->doLinkStar();
 //$test=new Green("green-1.txt");
 //$test->parseGreen();
-$test = new Novelty("novelty.txt");
-$test->parseNovelty();
+//$test = new Novelty("novelty.txt");
+//$test->parseNovelty();
+
+//$test=new Tis("tis.txt");
+//$test->parseTis();
+
+$test=new Nova("nova-2.txt");
+$test->parseNova();
+
+$time_end = microtime(true);
+$time = $time_end - $time_start;
+echo "Runtime: $time sec<br>";
