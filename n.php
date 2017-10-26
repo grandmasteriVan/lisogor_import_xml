@@ -207,11 +207,12 @@ if ($res=mysqli_query($db_connect,$query))
 			foreach ($articles as $article)
 			{
 				$id=$article['article_id'];
-				$text=$article['article_content'].$add;
+				//$text=$article['article_content'].$add;
+				$text=str_replace("style=\"width: 150px; height: 36px;\"","style=\"width: 107px; height: 34px;\"",$text=$article['article_content']);
 				$query="update article SET article_content='$text' where article_id=$id";
 				echo "$query<br>";
-				mysqli_query($db_connect,$query);
-				//break;
+				//mysqli_query($db_connect,$query);
+				break;
 			}
 		}
 		else
