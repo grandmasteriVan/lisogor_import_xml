@@ -194,7 +194,7 @@ if ($res=mysqli_query($db_connect,$query))
 	$txt=iconv("UTF-8","Windows-1251","У нас есть ещё акции! Интересно? Тогда нажимайте");
 	$add="<hr /><p style=\"text-align: center;\">".$txt."</p><p style=\"text-align: center;\"><a href=\"http://fayni-mebli.com/%D0%B2%D1%81%D0%B5-%D1%82%D0%B5%D0%BA%D1%83%D1%89%D0%B8%D0%B5-%D0%B0%D0%BA%D1%86%D0%B8%D0%B8.html\" target=\"_blank\"><img alt=\"\" src=\"http://fayni-mebli.com/admin/upload/file/akcija/button_akcii.png\" style=\"width: 150px; height: 36px;\" /></a></p>";
 	
-	$query="SELECT article_id, article_content FROM article WHERE article_content not like '%akcija/button_akcii.png%'";
+	$query="SELECT article_id, article_content FROM article WHERE article_content like '%akcija/button_akcii.png%'";
 	
 	if ($res=mysqli_query($db_connect,$query))
 	{
