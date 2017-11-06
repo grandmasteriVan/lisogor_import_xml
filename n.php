@@ -4,22 +4,22 @@
  * database host
  */
 //define ("host","localhost");
-define ("host","10.0.0.2");
+define("host", "10.0.0.2");
 /**
  * database username
  */
 //define ("user", "root");
-define ("user", "uh333660_mebli");
+define("user", "uh333660_mebli");
 /**
  * database password
  */
 //define ("pass", "");
-define ("pass", "Z7A8JqUh");
+define("pass", "Z7A8JqUh");
 /**
  * database name
  */
 //define ("db", "mebli");
-define ("db", "uh333660_mebli");
+define("db", "uh333660_mebli");
 /*
 $db_connect=mysqli_connect(host,user,pass,db);
 $query="SELECT factory_name, factory_id FROM factory WHERE factory_soft=0 AND factory_noactual=0";
@@ -72,157 +72,149 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 	mysqli_close($db_connect);
 	*/
-	/*
-	function checkDuplicate($id)
-	{
-		$db_connect=mysqli_connect(host,user,pass,db);
-		$query="SELECT 	goodshascategory_id FROM goodshascategory WHERE goods_id=$id AND category_id=1056";
-		//echo $query."<br>";
-		if ($res=mysqli_query($db_connect,$query))
-		{
-			while ($row = mysqli_fetch_assoc($res))
-            {
-                $articles[] = $row;
-            }
-			$art=null;
-			if (is_array($articles))
-            {
-                foreach ($articles as $article)
-                {
-                    //получаем нужный текст
-                    $art=$article['goodshascategory_id'];
-                }
-            }
-		}
-		mysqli_query($db_connect, $query);
-		//var_dump ($art);
-		if ($art==null)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}
-	
-	
-	$db_connect=mysqli_connect(host,user,pass,db);
-	$query="select goods_id from goods where factory_id=7";
-	if ($res=mysqli_query($db_connect,$query))
+/*
+function checkDuplicate($id)
+{
+    $db_connect=mysqli_connect(host,user,pass,db);
+    $query="SELECT 	goodshascategory_id FROM goodshascategory WHERE goods_id=$id AND category_id=1056";
+    //echo $query."<br>";
+    if ($res=mysqli_query($db_connect,$query))
     {
-            while ($row = mysqli_fetch_assoc($res))
-            {
-                $goods[] = $row;
-            }
-            //var_dump($goods);
-			echo "<pre>";
-			print_r ($goods);
-			echo "</pre>";
-			foreach ($goods as $good)
-			{
-				$id=$good['goods_id'];
-				$query="delete from goodshascategory where goods_id=$id AND category_id=39";
-				echo "$query<br>";
-				mysqli_query($db_connect,$query);
-				if (checkDuplicate($id))
-				{
-					echo "good $id has A category<br>";
-					$query="update goodshascategory SET goodshascategory_active=1 where category_id=39 and goods_id=$id";
-					
-					echo "$query<br>";
-					mysqli_query($db_connect,$query);
-						
-				}
-				else
-				{
-					$query="insert into goodshascategory (category_id, goods_id, goodshascategory_price, goodshascategory_active, goodshascategory_pricecur) VALUES (39,$id,0,1,0)";
-					echo "$query<br>";
-					mysqli_query($db_connect,$query);
-				}
-			}
-    }
-	else
-	{
-		echo "error in SQL $query";
-	}
-	
-	mysqli_close($db_connect);
-	
-	/*
-	$db_connect=mysqli_connect(host,user,pass,db);
-	$query="SELECT goods_article FROM goods WHERE factory_id=176 AND goods_maintcharter=125";
-	if ($res=mysqli_query($db_connect,$query))
-    {
-            while ($row = mysqli_fetch_assoc($res))
-            {
-                $factories[] = $row;
-            }
-            var_dump($goods);
-			echo "<pre>";
-			print_r ($factories);
-			echo "</pre>";
-			foreach ($factories as $f)
-			{
-				echo $f['goods_article']."<br>";
-			}
-    }
-	*/
-	/*
-	$db_connect=mysqli_connect(host,user,pass,db);
-	$query="update goods set goods_avail=0 where 1";
-	mysqli_query($db_connect,$query);
-	*/
-	/*$db_connect=mysqli_connect(host,user,pass,db);
-	$query="SELECT factory_name, factory_id FROM factory WHERE factory_noactual=0";
-	if ($res=mysqli_query($db_connect,$query))
-    {
-            while ($row = mysqli_fetch_assoc($res))
-            {
-                $factories[] = $row;
-            }
-            
-			//echo "<pre>";
-			//print_r ($factories);
-			//echo "</pre>";
-			foreach ($factories as $factory)
-			{
-				echo $factory['factory_name']."<br>";
-			}
-    }*/
-	$db_connect=mysqli_connect(host,user,pass,db);
-	$txt=iconv("UTF-8","Windows-1251","У нас есть ещё акции! Интересно? Тогда нажимайте");
-	$add="<hr /><p style=\"text-align: center;\">".$txt."</p><p style=\"text-align: center;\"><a href=\"http://fayni-mebli.com/%D0%B2%D1%81%D0%B5-%D1%82%D0%B5%D0%BA%D1%83%D1%89%D0%B8%D0%B5-%D0%B0%D0%BA%D1%86%D0%B8%D0%B8.html\" target=\"_blank\"><img alt=\"\" src=\"http://fayni-mebli.com/admin/upload/file/akcija/button_akcii.png\" style=\"width: 150px; height: 36px;\" /></a></p>";
-	
-	$query="SELECT article_id, article_content FROM article WHERE article_content like '%akcija/button_akcii.png%'";
-	
-	if ($res=mysqli_query($db_connect,$query))
-	{
-		while ($row = mysqli_fetch_assoc($res))
+        while ($row = mysqli_fetch_assoc($res))
         {
             $articles[] = $row;
         }
-		if (is_array($articles))
-		{
-			foreach ($articles as $article)
-			{
-				$id=$article['article_id'];
-				//$text=$article['article_content'].$add;
-				$text=str_replace("style=\"width: 150px; height: 36px;\"","style=\"width: 107px; height: 34px;\"",$text=$article['article_content']);
-				$query="update article SET article_content='$text' where article_id=$id";
-				echo "$query<br>";
-				//mysqli_query($db_connect,$query);
-				break;
-			}
-		}
-		else
-		{
-			echo "not array!<br>";
-		}
-	}
-	else
-	{
-		echo "error in SQL $query<br>";
-	}
-	mysqli_close($db_connect);
+        $art=null;
+        if (is_array($articles))
+        {
+            foreach ($articles as $article)
+            {
+                //получаем нужный текст
+                $art=$article['goodshascategory_id'];
+            }
+        }
+    }
+    mysqli_query($db_connect, $query);
+    //var_dump ($art);
+    if ($art==null)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+
+$db_connect=mysqli_connect(host,user,pass,db);
+$query="select goods_id from goods where factory_id=7";
+if ($res=mysqli_query($db_connect,$query))
+{
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            $goods[] = $row;
+        }
+        //var_dump($goods);
+        echo "<pre>";
+        print_r ($goods);
+        echo "</pre>";
+        foreach ($goods as $good)
+        {
+            $id=$good['goods_id'];
+            $query="delete from goodshascategory where goods_id=$id AND category_id=39";
+            echo "$query<br>";
+            mysqli_query($db_connect,$query);
+            if (checkDuplicate($id))
+            {
+                echo "good $id has A category<br>";
+                $query="update goodshascategory SET goodshascategory_active=1 where category_id=39 and goods_id=$id";
+
+                echo "$query<br>";
+                mysqli_query($db_connect,$query);
+
+            }
+            else
+            {
+                $query="insert into goodshascategory (category_id, goods_id, goodshascategory_price, goodshascategory_active, goodshascategory_pricecur) VALUES (39,$id,0,1,0)";
+                echo "$query<br>";
+                mysqli_query($db_connect,$query);
+            }
+        }
+}
+else
+{
+    echo "error in SQL $query";
+}
+
+mysqli_close($db_connect);
+
+/*
+$db_connect=mysqli_connect(host,user,pass,db);
+$query="SELECT goods_article FROM goods WHERE factory_id=176 AND goods_maintcharter=125";
+if ($res=mysqli_query($db_connect,$query))
+{
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            $factories[] = $row;
+        }
+        var_dump($goods);
+        echo "<pre>";
+        print_r ($factories);
+        echo "</pre>";
+        foreach ($factories as $f)
+        {
+            echo $f['goods_article']."<br>";
+        }
+}
+*/
+/*
+$db_connect=mysqli_connect(host,user,pass,db);
+$query="update goods set goods_avail=0 where 1";
+mysqli_query($db_connect,$query);
+*/
+/*$db_connect=mysqli_connect(host,user,pass,db);
+$query="SELECT factory_name, factory_id FROM factory WHERE factory_noactual=0";
+if ($res=mysqli_query($db_connect,$query))
+{
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            $factories[] = $row;
+        }
+
+        //echo "<pre>";
+        //print_r ($factories);
+        //echo "</pre>";
+        foreach ($factories as $factory)
+        {
+            echo $factory['factory_name']."<br>";
+        }
+}*/
+$db_connect = mysqli_connect(host, user, pass, db);
+$txt = iconv("UTF-8", "Windows-1251", "У нас есть ещё акции! Интересно? Тогда нажимайте");
+$add = "<hr /><p style=\"text-align: center;\">" . $txt . "</p><p style=\"text-align: center;\"><a href=\"http://fayni-mebli.com/%D0%B2%D1%81%D0%B5-%D1%82%D0%B5%D0%BA%D1%83%D1%89%D0%B8%D0%B5-%D0%B0%D0%BA%D1%86%D0%B8%D0%B8.html\" target=\"_blank\"><img alt=\"\" src=\"http://fayni-mebli.com/admin/upload/file/akcija/button_akcii.png\" style=\"width: 150px; height: 36px;\" /></a></p>";
+
+$query = "SELECT article_id, article_content FROM article WHERE article_content like '%akcija/button_akcii.png%'";
+
+if ($res = mysqli_query($db_connect, $query)) {
+    while ($row = mysqli_fetch_assoc($res)) {
+        $articles[] = $row;
+    }
+    if (is_array($articles)) {
+        foreach ($articles as $article) {
+            $id = $article['article_id'];
+            //$text=$article['article_content'].$add;
+            $text = str_replace("style=\"width: 150px; height: 36px;\"", "style=\"width: 107px; height: 34px;\"", $text = $article['article_content']);
+            $query = "update article SET article_content='$text' where article_id=$id";
+            echo "$query<br>";
+            //mysqli_query($db_connect,$query);
+            break;
+        }
+    } else {
+        echo "not array!<br>";
+    }
+} else {
+    echo "error in SQL $query<br>";
+}
+mysqli_close($db_connect);
 ?>
