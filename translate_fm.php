@@ -5,12 +5,10 @@
  * Date: 06.11.2017
  * Time: 10:21
  */
-
 /**
  * Class Timer
  * подсчет времени выполнения скрипта
  */
-
 /**
  * database host
  */
@@ -18,23 +16,22 @@
 /**
  *
  */
-define ("host","10.0.0.2");
+define ("host","localhost");
 /**
  * database username
  */
 //define ("user", "root");
-define ("user", "uh333660_mebli");
+define ("user", "fm");
 /**
  * database password
  */
 //define ("pass", "");
-define ("pass", "Z7A8JqUh");
+define ("pass", "T6n7C8r1");
 /**
  * database name
  */
 //define ("db", "mebli");
-define ("db", "uh333660_mebli");
-
+define ("db", "fm");
 /**
  * Class Timer
  */
@@ -71,7 +68,6 @@ class Timer
         return $this->end_time-$this->start_time;
     }
 }
-
 /**
  * Class BaseTranslate
  */
@@ -103,7 +99,6 @@ class BaseTranslate
     public function strip($txt)
     {
         $txt=strip_tags($txt);
-
         $txt=str_replace("&laquo;","",$txt);
         $txt=str_replace("&raquo;","",$txt);
         $txt=str_replace("&amp;","",$txt);
@@ -116,11 +111,9 @@ class BaseTranslate
         $txt=str_replace(array('«', '»'),'',$txt);
         $txt=trim($txt);
         //$txt=addslashes($txt);
-
         return $txt;
     }
 }
-
 /**
  * Class GoodsTranslate
  */
@@ -154,7 +147,6 @@ class GoodsTranslate extends BaseTranslate
             return null;
         }
     }
-
     /**
      *
      */
@@ -185,7 +177,6 @@ class GoodsTranslate extends BaseTranslate
         }
     }
 }
-
 class ArticleTranslate extends BaseTranslate
 {
     private function getArticles()
@@ -213,7 +204,6 @@ class ArticleTranslate extends BaseTranslate
             return null;
         }
     }
-
     public function translate()
     {
         $articles=$this->getArticles();
@@ -225,18 +215,17 @@ class ArticleTranslate extends BaseTranslate
                 $content=$article['article_content'];
                 $preview=$article['article_preview'];
                 $id=$article['article_id'];
-                $url=$article['article_url'];
                 $content=$this->strip($content);
                 $preview=$this->strip($preview);
                 $content=$this->translateText($content);
                 $preview=$this->translateText($preview);
                 $name=$this->translateText($name);
-                $url="http://fayni-mebli.com/".$article['goods_url'].".html";
+                $url="http://fayni-mebli.com/".$article['article_url'].".html";
                 $file_string="[id]".$id."[/id]".PHP_EOL.$url.PHP_EOL."[name_ukr]".$name."[/name_ukr]".PHP_EOL.
                     "[prev_ukr]".$preview."[/prev_ukr]".PHP_EOL."[text_ukr]".$content."[/text_ukr]".PHP_EOL.PHP_EOL;
-                //file_put_contents("goods.txt",$file_string,FILE_APPEND);
-                echo $file_string;
-                break;
+                file_put_contents("articles.txt",$file_string,FILE_APPEND);
+                //echo $file_string;
+                //break;
             }
         }
         else
@@ -246,7 +235,13 @@ class ArticleTranslate extends BaseTranslate
     }
 }
 
+$runtime = new Timer();
+set_time_limit(9000);
+$runtime->setStartTime();
 //$test=new GoodsTranslate();
 //$test->translate();
 $test=new ArticleTranslate();
 $test->translate();
+
+$runtime->setEndTime();
+echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
