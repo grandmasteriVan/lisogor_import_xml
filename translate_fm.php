@@ -167,18 +167,86 @@ class GoodsTranslate extends BaseTranslate
             {
                 $name=$good['goods_name'];
                 $text=$good['goods_content'];
+                $id=$good['goods_id'];
                 $text=$this->strip($text);
                 $name_ukr=$this->translateText($name);
                 $text_ukr=$this->translateText($text);
                 $url="http://fayni-mebli.com/".$good['goods_url'].".html";
-                $file_string=$url.PHP_EOL."[goods_name_ukr]".$name_ukr."[/goods_name_ukr]".PHP_EOL.
+                $file_string="[id]".$id."[/id]".PHP_EOL.$url.PHP_EOL."[goods_name_ukr]".$name_ukr."[/goods_name_ukr]".PHP_EOL.
                     "[goods_text_ukr]".$text_ukr."[/goods_text_ukr]".PHP_EOL.PHP_EOL;
-                file_put_contents("goods.txt",$file_string,FILE_APPEND);
+                //file_put_contents("goods.txt",$file_string,FILE_APPEND);
+                echo $file_string;
                 break;
             }
+        }
+        else
+        {
+            echo "No array of goods!!";
         }
     }
 }
 
-$test=new GoodsTranslate();
+class ArticleTranslate extends BaseTranslate
+{
+    private function getArticles()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT article_id, article_url, article_content, article_preview, article_name FROM article WHERE article_active=1";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $articles[] = $row;
+            }
+        }
+        else
+        {
+            echo "Error in SQL: $query<br>";
+        }
+        mysqli_close($db_connect);
+        if (is_array($articles))
+        {
+            return $articles;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public function translate()
+    {
+        $articles=$this->getArticles();
+        if (!is_null($articles))
+        {
+            foreach ($articles as $article)
+            {
+                $name=$article['article_name'];
+                $content=$article['article_content'];
+                $preview=$article['article_preview'];
+                $id=$article['article_id'];
+                $url=$article['article_url'];
+                $content=$this->strip($content);
+                $preview=$this->strip($preview);
+                $content=$this->translateText($content);
+                $preview=$this->translateText($preview);
+                $name=$this->translateText($name);
+                $url="http://fayni-mebli.com/".$article['goods_url'].".html";
+                $file_string="[id]".$id."[/id]".PHP_EOL.$url.PHP_EOL."[name_ukr]".$name."[/name_ukr]".PHP_EOL.
+                    "[prev_ukr]".$preview."[/prev_ukr]".PHP_EOL."[text_ukr]".$content."[/text_ukr]".PHP_EOL.PHP_EOL;
+                //file_put_contents("goods.txt",$file_string,FILE_APPEND);
+                echo $file_string;
+                break;
+            }
+        }
+        else
+        {
+            echo "No array of articles";
+        }
+    }
+}
+
+//$test=new GoodsTranslate();
+//$test->translate();
+$test=new ArticleTranslate();
 $test->translate();
