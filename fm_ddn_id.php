@@ -9,28 +9,28 @@ header('Content-type: text/html; charset=UTF-8');
 //define ("host","localhost");
 //define ("host_ddn","localhost");
 define ("host_ddn","es835db.mirohost.net");
-define ("host","10.0.0.2");
+define ("host","localhost");
 /**
  * database username
  */
 //define ("user", "root");
 //define ("user_ddn", "root");
 define ("user_ddn", "u_fayni");
-define ("user", "uh333660_mebli");
+define ("user", "fm");
 /**
  * database password
  */
 //define ("pass", "");
 //define ("pass_ddn", "");
 define ("pass_ddn", "ZID1c0eud3Dc");
-define ("pass", "Z7A8JqUh");
+define ("pass", "T6n7C8r1");
 /**
  * database name
  */
 //define ("db", "mebli");
 //define ("db_ddn", "ddn_new");
 define ("db_ddn", "ddnPZS");
-define ("db", "uh333660_mebli");
+define ("db", "fm");
 /**
  * Class Timer
  * подсчет времени выполнения скрипта
@@ -190,7 +190,7 @@ class FM
     private function strip($div)
     {
         $div_new=str_replace("Диван","",$div);
-        $div_new=str_replace("Угловой","",$div_new);
+        //$div_new=str_replace("Угловой","",$div_new);
         //$div_new=str_replace("угловой","",$div_new);
         $div_new=str_replace("диван","",$div_new);
 		$div_new=str_replace(" ","",$div_new);
@@ -304,7 +304,7 @@ class FM
             {
                 foreach ($articles as $article)
                 {
-                    //получаем нужный текст
+                    //получаем нужный артикул
                     $art=$article['goods_article'];
                 }
             }
@@ -377,6 +377,7 @@ class FM
 				$id_ddn=$d_ddn['goods_id'];
 				$name_ddn=$this->getNameByIdDDN($id_ddn);
 				$name_ddn=$this->strip($name_ddn);
+				//echo "$name_fm-$name_ddn<br>";
 				//echo "$name_fm -> $name_ddn<br>";
 				if ($this->getEqual($name_fm,$name_ddn))
 				{
@@ -409,6 +410,27 @@ $test=new FM();
 //fm, ddn
 //$test->getEqualFactory(88,83);
 //katun
-$test->getEqualFactory(2,89);
+//$test->getEqualFactory(2,89);
+//sofievka
+//$test->getEqualFactory(136,134);
+//daniro
+//$test->getEqualFactory(6,87);
+//лисогор
+//$test->getEqualFactory(66,84);
+//рата
+//$test->getEqualFactory(1,90);
+//арман
+//$test->getEqualFactory(125,123);
+//шик галичина
+//$test->getEqualFactory(157,162);
+//ливс
+//$test->getEqualFactory(7,82);
+//еврософ
+//$test->getEqualFactory(173,166);
+//bis-m
+//$test->getEqualFactory(25,91);
+//веста
+$test->getEqualFactory(156,163);
+
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
