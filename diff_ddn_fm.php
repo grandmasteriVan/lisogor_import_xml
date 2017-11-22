@@ -38,15 +38,15 @@ define ("db", "fm");
 class Timer
 {
     /**
-     * @var время начала выпонения
+     * @var int время начала выпонения
      */
     private $start_time;
     /**
-     * @var время конца выполнения
+     * @var int время конца выполнения
      */
     private $end_time;
     /**
-     * встанавливаем время начала выполнения скрипта
+     * устанавливаем время начала выполнения скрипта
      */
     public function setStartTime()
     {
@@ -79,7 +79,7 @@ class FindDiff
             //var_dump ($query);
             while ($row = mysqli_fetch_assoc($res))
             {
-                $idByFactoty[]=$row;
+                $idByFactory[]=$row;
             }
         }
         else
@@ -87,9 +87,9 @@ class FindDiff
             echo "error in SQL ddn $query<br>";
         }
         mysqli_close($db_connect);
-        if (is_array($idByFactoty))
+        if (is_array($idByFactory))
         {
-            return $idByFactoty;
+            return $idByFactory;
         }
         else
         {
