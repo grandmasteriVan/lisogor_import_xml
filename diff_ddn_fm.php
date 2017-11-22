@@ -68,7 +68,6 @@ class Timer
         return $this->end_time-$this->start_time;
     }
 }
-
 class FindDiff
 {
     private function getDDN($f_id)
@@ -82,7 +81,6 @@ class FindDiff
             {
                 $idByFactoty[]=$row;
             }
-
         }
         else
         {
@@ -98,7 +96,6 @@ class FindDiff
             return null;
         }
     }
-
     private function getFM($f_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -127,28 +124,37 @@ class FindDiff
             return null;
         }
     }
-
     public function findDif($fm_id, $ddn_id)
     {
         $ddn=$this->getDDN($ddn_id);
         $fm=$this->getFM($fm_id);
+		//var_dump($ddn);
+		//var_dump($fm);
+		
         if (is_array($ddn))
         {
             foreach ($ddn as $div)
             {
-                $ddn_articles[]=$div['goods.goods_id'];
+                $ddn_articles[]=$div['goods_article'];
             }
         }
         if (is_array($fm))
         {
             foreach ($fm as $item)
             {
-                $fm_articles[]=$item['goodsmirror.goodsmirror_article_ddn'];
+                $fm_articles[]=$item['goodsmirror_article_ddn'];
             }
         }
+		//var_dump ($ddn_articles);
+		
         $diff_ddn=array_diff($ddn_articles,$fm_articles);
+		
         $diff_fm=array_diff($fm_articles,$ddn_articles);
-        var_dump($diff_ddn);
+        echo "Диваны на ДДН которых нет на ФМ:<br>";
+		var_dump($diff_ddn);
+		echo "<br>";
+		echo "Диваны на FM которых нет на DDN:<br>";
+		var_dump($diff_fm);
     }
 }
 $runtime = new Timer();
