@@ -28,14 +28,12 @@ define ("pass", "T6n7C8r1");
  */
 //define ("db", "mebli");
 define ("db", "fm");
-
 class ComponentList
 {
     /**
      * @var
      */
     private $factory_id;
-
     /**
      * ComponentList constructor.
      * @param $factory_id
@@ -44,7 +42,6 @@ class ComponentList
     {
         $this->factory_id = $factory_id;
     }
-
     /** выбираем все активные, включенные товары по фабрике
      * @param $f_id
      * @return mixed
@@ -81,7 +78,8 @@ class ComponentList
         $query="SELECT component_child FROM component WHERE goods_id=$id";
         if ($res=mysqli_query($db_connect,$query))
         {
-            while ($row = mysqli_fetch_assoc($res))
+            unset($components);
+			while ($row = mysqli_fetch_assoc($res))
             {
                 $components[]=$row;
             }
@@ -101,7 +99,6 @@ class ComponentList
             return null;
         }
     }
-
     private function getArticleById($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -128,7 +125,6 @@ class ComponentList
             return null;
         }
     }
-
     public function getCompList()
     {
         $all_tov=$this->getAllTov($this->factory_id);
@@ -144,14 +140,18 @@ class ComponentList
                 foreach ($comp_list as $comp)
                 {
                     $comp_article=$this->getArticleById($comp['component_child']);
-                    $str.=$comp_article['goods_article']." ";
+					//var_dump ($comp_article);
+                    $str.=$comp_article[0]['goods_article']." ";
                 }
                 $str.=";".PHP_EOL;
                 echo $str."<br>";
+				//break;
             }
-
-
+			
+			
         }
     }
-
 }
+
+$test=new ComponentList(7);
+$test->getCompList();
