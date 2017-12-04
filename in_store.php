@@ -123,7 +123,8 @@ class InStoreFm
      */
     public function setInSore()
     {
-        $db_connect=mysqli_connect(host,user,pass,db);
+        $this->remove_instore();
+		$db_connect=mysqli_connect(host,user,pass,db);
 		//var_dump($this->file);
 		$this->readFile1();
         if ($this->data)
@@ -132,7 +133,7 @@ class InStoreFm
             {
                 $article=$d['article'];
                 $in_store=$d['in_store'];
-                $query="UPDATE goods SET goods_avail=$in_store WHERE goods_article='$article'";
+                $query="UPDATE goods SET goods_avail=$in_store WHERE goods_article  = '$article'";
 				//echo "$query<br>";
                 if (mysqli_query($db_connect,$query))
                 {
@@ -172,6 +173,25 @@ class InStoreDDN
         if ($f)
             $this->file1=$f;
     }
+	/**
+     *удаляет все отметки на складе для мягкой мебели
+     */
+    private function remove_instore()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="UPDATE goodshasfeature SET goodshasfeature_valueid=2 where feature_id=16";
+        if (mysqli_query($db_connect,$query))
+        {
+            echo "In Store removed<br>";
+        }
+        else
+        {
+            echo "Error ".mysqli_error($db_connect)."<br>";
+        }
+        mysqli_close($db_connect);
+    }
+	
+	
 	/**
      * @param $article
      * @param $in_store
@@ -214,7 +234,7 @@ class InStoreDDN
     }
     public function readFile1()
     {
-        //var_dump ($this->file1);
+		//var_dump ($this->file1);
 		if ($this->file1)
         {
             $dom=DOMDocument::load($this->file1);
@@ -254,7 +274,8 @@ class InStoreDDN
     }
     public function setInSore()
     {
-        echo "begin DDN<br>";
+        $this->remove_instore();
+		echo "begin DDN<br>";
 		$db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
         $this->readFile1();
 		//var_dump ($this->data);
