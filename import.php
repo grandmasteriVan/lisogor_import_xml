@@ -10,22 +10,26 @@ header('Content-Type: text/html; charset=utf-8');
  * database host
  */
 //define ("host","localhost");
-define ("host","10.0.0.2");
+/**
+ *
+ */
+define ("host","localhost");
 /**
  * database username
  */
 //define ("user", "root");
-define ("user", "uh333660_mebli");
+define ("user", "fm");
 /**
  * database password
  */
 //define ("pass", "");
-define ("pass", "Z7A8JqUh");
+define ("pass", "T6n7C8r1");
 /**
  * database name
  */
 //define ("db", "mebli");
-define ("db", "uh333660_mebli");
+define ("db", "fm");
+
 include_once "universal.php";
 $selectedFactory=$_POST["factory"];
 $runtime = new Timer();
