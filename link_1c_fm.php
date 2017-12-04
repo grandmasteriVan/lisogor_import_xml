@@ -6,35 +6,48 @@
  * Time: 16:42
  */
 header('Content-Type: text/html; charset=utf-8');
+/**
+ * database host
+ */
 //define ("host","localhost");
 /**
  *
  */
-define ("host","10.0.0.2");
+define ("host","localhost");
 /**
  * database username
  */
 //define ("user", "root");
-/**
- *
- */
-define ("user", "uh333660_mebli");
+define ("user", "fm");
 /**
  * database password
  */
 //define ("pass", "");
-/**
- *
- */
-define ("pass", "Z7A8JqUh");
+define ("pass", "T6n7C8r1");
 /**
  * database name
  */
 //define ("db", "mebli");
-/**
- *
- */
-define ("db", "uh333660_mebli");
+define ("db", "fm");
+
+class Greid extends Link
+{
+    public function parseGreid()
+    {
+        $f_id=30;
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $this->ReadFile();
+        foreach ($this->data as $d)
+        {
+            $code1c=$d[0];
+            $name=$d[1];
+            $query = "UPDATE goods SET goods_article_1c='$code1c' WHERE goods_article_link = '$name' AND factory_id=$f_id";
+            //mysqli_query($db_connect,$query);
+            echo "$query<br>";
+        }
+        mysqli_close($db_connect);
+    }
+}
 
 class Nova extends Link
 {
@@ -769,8 +782,11 @@ $time_start = microtime(true);
 //$test=new Tis("tis.txt");
 //$test->parseTis();
 
-$test=new Nova("nova-2.txt");
-$test->parseNova();
+//$test=new Nova("nova-2.txt");
+//$test->parseNova();
+
+$test=new Greid("greid-1.txt");
+$test->parseGreid();
 
 $time_end = microtime(true);
 $time = $time_end - $time_start;
