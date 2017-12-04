@@ -173,6 +173,49 @@ class InStoreDDN
         if ($f)
             $this->file1=$f;
     }
+	
+	/**
+     * проверяем есть ли запись для данной категории
+     * @param $id int - айди категории
+     * @param $t_id int фйди категории
+     * @return bool true - если запись есть, false - если нет
+     */
+    private function checkDuplicate($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goodshasfeature_id FROM goodshasfeature WHERE goods_id=$id AND feature_id=16";
+        //echo $query."<br>";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $f_ids[] = $row;
+            }
+            if (is_array($f_ids))
+            {
+                foreach ($f_ids as $article)
+                {
+                    //получаем нужный текст
+                    $art=$article['goodshasfeature_id'];
+                }
+            }
+        }
+		else
+		{
+			echo "error in SQL $query<br>";
+		}
+        //mysqli_query($db_connect, $query);
+        //var_dump ($art);
+        if ($art==null)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+	
 	/**
      *удаляет все отметки на складе для мягкой мебели
      */
@@ -294,6 +337,13 @@ class InStoreDDN
                 {
                     $in_store=1;
                 }
+				if ($this->checkDuplicate($id))
+				{
+					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id)".
+                    " VALUES (2,$id,16)";
+					mysqli_query($db_connect, $query);
+					echo "$query<br>";
+				}
                 $query="UPDATE goodshasfeature SET goodshasfeature_valueid=$in_store WHERE goods_id=$id AND feature_id=16";
 				//echo "$query<br>";
                 if (mysqli_query($db_connect,$query))
