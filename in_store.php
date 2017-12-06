@@ -52,8 +52,8 @@ class InStoreFm
             $this->file=$f;
     }
     /**
-     * @param $article
-     * @param $in_store
+     * @param $article string - артикул товара
+     * @param $in_store int - состояние наличия
      */
     public function add_data($article, $in_store)
     {
@@ -175,9 +175,8 @@ class InStoreDDN
     }
 	
 	/**
-     * проверяем есть ли запись для данной категории
-     * @param $id int - айди категории
-     * @param $t_id int фйди категории
+     * проверяем есть ли запись для данной фичи (наличие)
+     * @param $id int - айди товара
      * @return bool true - если запись есть, false - если нет
      */
     private function checkDuplicate($id)
@@ -236,13 +235,19 @@ class InStoreDDN
 	
 	
 	/**
-     * @param $article
-     * @param $in_store
+     * @param $article string - артикул овара
+     * @param $in_store int - признак наличия
      */
     public function add_data($article, $in_store)
     {
         $this->data[]=array('article'=>$article, 'in_store'=>$in_store);
     }
+
+    /**
+     * Находим ай ди товара по его артикулу
+     * @param $article string - артикул товара
+     * @return null|int - ай-ди товара
+     */
     private function getIdByArticle($article)
     {
         $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
@@ -275,6 +280,10 @@ class InStoreDDN
         mysqli_close($db_connect);
         return $goods_id;
     }
+
+    /**
+     *
+     */
     public function readFile1()
     {
 		//var_dump ($this->file1);
@@ -315,6 +324,10 @@ class InStoreDDN
 			echo "no file in DDN<br>";
 		}
     }
+
+    /**
+     *
+     */
     public function setInSore()
     {
         $this->remove_instore();
@@ -329,6 +342,7 @@ class InStoreDDN
                 $article=$d['article'];
                 $id=$this->getIdByArticle($article);
                 $in_store=$d['in_store'];
+                //2-нет 1-да
                 if ($in_store==0)
                 {
                     $in_store=2;
@@ -337,7 +351,8 @@ class InStoreDDN
                 {
                     $in_store=1;
                 }
-				if ($this->checkDuplicate($id))
+				//если нет фичи - создаем
+                if ($this->checkDuplicate($id))
 				{
 					$query="INSERT INTO goodshasfeature (goodshasfeature_valueid, goods_id, feature_id)".
                     " VALUES (2,$id,16)";

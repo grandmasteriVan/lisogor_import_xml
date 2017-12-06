@@ -30,6 +30,65 @@ define ("pass", "T6n7C8r1");
 //define ("db", "mebli");
 define ("db", "fm");
 
+class Estella extends Link
+{
+    /**Возвращает строку с первой Прописной буквой
+     * @param $name string
+     * @return string
+     */
+    private function getNameFM($name)
+    {
+        $name=mb_strtolower($name);
+        $name_new=mb_strtoupper(mb_substr($name, 0, 1,'UTF-8'),'UTF-8').mb_substr($name, 1, mb_strlen($name,'UTF-8'),'UTF-8');
+        return $name_new;
+    }
+
+
+    /**
+     * @param $cat
+     * @return array
+     */
+    private function getCat($cat)
+    {
+        $cat=explode("-",$cat);
+        return $cat[1];
+    }
+    /**
+     *
+     */
+    public function parseEstella()
+    {
+        $f_id=37;
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $this->ReadFile();
+        //$this->printData();
+        foreach ($this->data as $d)
+        {
+            //$code1c=$d[0];
+            $name=$d[1];
+            $name=$this->getNameFM($name);
+            //формируем нужный код 1С
+            $code1c=$d[2]."/".$this->getCat($d[3]);
+            $size=$this->getCat($d[3]);
+            $name="Кровать ".$name;
+            if ($size!="80")
+            {
+                $name.="$size"."х200";
+            }
+            //$name=$this->UTF8toCP1251($name);
+            echo "$name - $code1c<br>";
+            $code1c=$this->UTF8toCP1251($code1c);
+            $name=$this->UTF8toCP1251($name);
+            $query = "UPDATE goods SET goods_article_1c='$code1c' WHERE goods_name = '$name' AND factory_id=$f_id";
+            mysqli_query($db_connect,$query);
+            echo "$query<br>";
+            //break;
+        }
+        mysqli_close($db_connect);
+    }
+
+}
+
 class Greid extends Link
 {
     public function parseGreid()
