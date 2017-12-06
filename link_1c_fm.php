@@ -29,7 +29,6 @@ define ("pass", "T6n7C8r1");
  */
 //define ("db", "mebli");
 define ("db", "fm");
-
 class Estella extends Link
 {
     /**Возвращает строку с первой Прописной буквой
@@ -42,8 +41,6 @@ class Estella extends Link
         $name_new=mb_strtoupper(mb_substr($name, 0, 1,'UTF-8'),'UTF-8').mb_substr($name, 1, mb_strlen($name,'UTF-8'),'UTF-8');
         return $name_new;
     }
-
-
     /**
      * @param $cat
      * @return array
@@ -73,22 +70,20 @@ class Estella extends Link
             $name="Кровать ".$name;
             if ($size!="80")
             {
-                $name.="$size"."х200";
+                $name.=" $size"."х200";
             }
             //$name=$this->UTF8toCP1251($name);
             echo "$name - $code1c<br>";
-            $code1c=$this->UTF8toCP1251($code1c);
-            $name=$this->UTF8toCP1251($name);
+            //$code1c=$this->UTF8toCP1251($code1c);
+            //$name=$this->UTF8toCP1251($name);
             $query = "UPDATE goods SET goods_article_1c='$code1c' WHERE goods_name = '$name' AND factory_id=$f_id";
-            mysqli_query($db_connect,$query);
+            //mysqli_query($db_connect,$query);
             echo "$query<br>";
             //break;
         }
         mysqli_close($db_connect);
     }
-
 }
-
 class Greid extends Link
 {
     public function parseGreid()
@@ -107,7 +102,6 @@ class Greid extends Link
         mysqli_close($db_connect);
     }
 }
-
 class Nova extends Link
 {
 	public function parseNova()
@@ -132,7 +126,6 @@ class Nova extends Link
         mysqli_close($db_connect);
     }
 }
-
 /**
 * Class Tis1
 */
@@ -837,16 +830,16 @@ $time_start = microtime(true);
 //$test->parseGreen();
 //$test = new Novelty("novelty.txt");
 //$test->parseNovelty();
-
 //$test=new Tis("tis.txt");
 //$test->parseTis();
-
 //$test=new Nova("nova-2.txt");
 //$test->parseNova();
 
-$test=new Greid("greid-1.txt");
-$test->parseGreid();
 
+//$test=new Greid("greid-1.txt");
+//$test->parseGreid();
+$test=new Estella("estela.txt");
+$test->parseEstella();
 $time_end = microtime(true);
 $time = $time_end - $time_start;
 echo "Runtime: $time sec<br>";
