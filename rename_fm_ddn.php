@@ -5,7 +5,6 @@
  * Date: 12.12.2017
  * Time: 14:25
  */
-
 header('Content-type: text/html; charset=UTF-8');
 /**
  * database host
@@ -65,7 +64,6 @@ class rename
         mysqli_close($db_connect);
         return $goods;
     }
-
     /**
      * @param $id
      * @return null
@@ -89,9 +87,7 @@ class rename
         }
         mysqli_close($db_connect);
         return $name;
-
     }
-
     /**
      * @param $feature_id
      * @param $val_id
@@ -100,7 +96,7 @@ class rename
     private function getAllGoodsByFilterDDN($feature_id, $val_id)
     {
         $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
-        $query="SELECT goods_id FROM goodshasfeatuer WHERE feature_id=$feature_id AND goodshasfeature_valueid=$val_id";
+        $query="SELECT goods_id FROM goodshasfeature WHERE feature_id=$feature_id AND goodshasfeature_valueid=$val_id";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row=mysqli_fetch_assoc($res))
@@ -110,14 +106,14 @@ class rename
         }
         else
         {
-            echo "Error in SQL in getAlltovByTypeFM<br>";
+            echo "Error in SQL in getAlltovByTypeDDN<br>";
+			echo "$query<br>";
             mysqli_close($db_connect);
             return null;
         }
         mysqli_close($db_connect);
         return $goods;
     }
-
     /**
      * @param $id
      * @param $name
@@ -130,7 +126,6 @@ class rename
         //mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
-
     /**
      * @param $id
      * @return array|null
@@ -155,7 +150,6 @@ class rename
         mysqli_close($db_connect);
         return $goods_names;
     }
-
     /**
      * @param $type
      */
@@ -178,8 +172,6 @@ class rename
                 $name=str_replace(" углол","",$name);
                 $name=str_replace(" Угловой","",$name);
                 $name=str_replace("Угловой ","",$name);
-
-
                 $name="Угловой диван ".$name;
                 $this->writeNameFM($id,$name);
             }
@@ -195,14 +187,11 @@ class rename
                 $name=str_replace(" Уголок","",$name);
                 $name=str_replace(" угол","",$name);
                 $name=str_replace("угол ","",$name);
-
-
                 $name=$name." кухонный уголок";
                 $this->writeNameFM($id,$name);
             }
         }
     }
-
     /**
      * @param $goodshaslang_id
      * @param $name
@@ -215,7 +204,6 @@ class rename
         //mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
-
     /**
      * @param $feature_id
      * @param $val_id
@@ -223,17 +211,24 @@ class rename
     public function renameDDN($feature_id,$val_id)
     {
         $goods=$this->getAllGoodsByFilterDDN($feature_id,$val_id);
+		//echo "<pre>";
+		//print_r ($goods);
+		//echo "</pre>";
         foreach ($goods as $good)
         {
-
             $id=$good['goods_id'];
             $names=$this->getGoodsNamesByIdDDN($id);
+			//echo "<pre>";
+			//print_r ($names);
+			//echo "</pre>";
+			//break;
             //у каждого товара два имени!
             foreach ($names as $good_name)
             {
-                $name=$good['goodshaslang_name'];
-                $lang_id=$good['lang_id'];
-                $goodshaslang_id=$good['goodshaslang_id'];
+                $name=$good_name['goodshaslang_name'];
+                $lang_id=$good_name['lang_id'];
+                $goodshaslang_id=$good_name['goodshaslang_id'];
+				echo "$lang_id<br>";
                 //украинский
                 if ($lang_id==3)
                 {
@@ -247,8 +242,20 @@ class rename
                     $name=str_replace(" диван","",$name);
                     $name=str_replace("Диван ","",$name);
                     $name=str_replace(" Диван","",$name);
-
-                    $name=$name." угловой";
+                    $name=str_replace(" Кут","",$name);
+                    $name=str_replace(" кут","",$name);
+                    $name=str_replace("Кут ","",$name);
+                    $name=str_replace("кут ","",$name);
+					
+					$name=str_replace(" угловой","",$name);
+                    $name=str_replace("угловой ","",$name);
+                    $name=str_replace("угол ","",$name);
+                    $name=str_replace(" угол","",$name);
+                    $name=str_replace(" Угловой","",$name);
+                    $name=str_replace("Угловой ","",$name);
+					
+					
+                    $name=$name." кутовий";
                     $this->writeNameDDN($goodshaslang_id,$name);
                 }
                 //русский
@@ -260,16 +267,22 @@ class rename
                     $name=str_replace(" диван","",$name);
                     $name=str_replace(" угловой","",$name);
                     $name=str_replace("угловой ","",$name);
-                    $name=str_replace("углол ","",$name);
-                    $name=str_replace(" углол","",$name);
+                    $name=str_replace("угол ","",$name);
+                    $name=str_replace(" угол","",$name);
                     $name=str_replace(" Угловой","",$name);
                     $name=str_replace("Угловой ","",$name);
-
-                    $name=$name." кутовий";
+                    $name=$name." угловой";
                     $this->writeNameDDN($goodshaslang_id,$name);
-
                 }
+				//break;
             }
+			//break;
         }
     }
 }
+
+$test=new rename();
+//$test->renameFM(26);
+//$test->renameFM(53);
+echo "<b>DDN:</b><br>";
+$test->renameDDN(6,56);
