@@ -5,7 +5,10 @@
  * Date: 06.11.2017
  * Time: 10:21
  */
-
+/**
+ * Class Timer
+ * подсчет времени выполнения скрипта
+ */
 /**
  * database host
  */
@@ -122,7 +125,7 @@ class GoodsTranslate extends BaseTranslate
     private function selectGoods()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id, goods_name, goods_url, goods_content FROM goods WHERE goods_active=1";
+        $query="SELECT goods_id, goods_name, goods_url, goods_content FROM goods WHERE goods_active=1 AND (goods_id>30996 AND goods_id<34000) order by goods_id";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -163,9 +166,9 @@ class GoodsTranslate extends BaseTranslate
                 $url="http://fayni-mebli.com/".$good['goods_url'].".html";
                 $file_string="[id]".$id."[/id]".PHP_EOL.$url.PHP_EOL."[goods_name_ukr]".$name_ukr."[/goods_name_ukr]".PHP_EOL.
                     "[goods_text_ukr]".$text_ukr."[/goods_text_ukr]".PHP_EOL.PHP_EOL;
-                //file_put_contents("goods.txt",$file_string,FILE_APPEND);
-                echo $file_string;
-                break;
+                file_put_contents("goods-20.txt",$file_string,FILE_APPEND);
+                //echo $file_string;
+                //break;
             }
         }
         else
@@ -235,10 +238,10 @@ class ArticleTranslate extends BaseTranslate
 $runtime = new Timer();
 set_time_limit(9000);
 $runtime->setStartTime();
-//$test=new GoodsTranslate();
-//$test->translate();
-$test=new ArticleTranslate();
+$test=new GoodsTranslate();
 $test->translate();
+//$test=new ArticleTranslate();
+//$test->translate();
 
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
