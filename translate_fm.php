@@ -20,18 +20,18 @@ define ("host","localhost");
 /**
  * database username
  */
-//define ("user", "root");
-define ("user", "fm");
+define ("user", "root");
+//define ("user", "fm");
 /**
  * database password
  */
-//define ("pass", "");
-define ("pass", "T6n7C8r1");
+define ("pass", "");
+//define ("pass", "T6n7C8r1");
 /**
  * database name
  */
-//define ("db", "mebli");
-define ("db", "fm");
+define ("db", "mebli");
+//define ("db", "fm");
 /**
  * Class Timer
  */
@@ -234,16 +234,13 @@ class ArticleTranslate extends BaseTranslate
         }
     }
 }
-
 class cleanFile
 {
     private $all_txt;
-
     private function readFile()
     {
-        $this->all_txt=file_get_contents("texts_all.txt");
+        $this->all_txt=file_get_contents("Output_Packer.txt");
     }
-
     private function modGoods($goods_maintcharter=14)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -258,49 +255,106 @@ class cleanFile
         mysqli_close($db_connect);
         return $arr;
     }
-
-
-
+	
+	private function getIdList($goods)
+	{
+		foreach ($goods as $good)
+		{
+			$id[]=$goods['goods_id'];
+		}
+		return $id;
+	}
+	
     private function findId($txt)
     {
-        if (preg_match("#[id](.+?)[\/id]#is",$txt,$matches))
+        if (preg_match("#id(.+?)\/id#is",$txt,$matches))
         {
             //var_dump($matches);
-            $ig=$matches[0];
-            $id=str_replace("[id]","",$id);
-            $id=str_replace("[/id]","",$id);
-            $id=str_replace(" ","",$id);
+            $id=$matches[1];
+            $id=str_replace("]","",$id);
+            $id=str_replace("[","",$id);
+            //$id=str_replace(" ","",$id);
         }
         else
         {
             echo "Not find text<br>";
         }
         return $id;
-
     }
-
     private function parseAllText($txt)
     {
         //echo "txt=$txt<br>";
         $expl=explode("[/goods_text_ukr]",$txt);
-
         foreach ($expl as $str)
         {
             $str=trim ($str);
             $expl1[]=$str."[/goods_text_ukr]";
         }
-
         return $expl1;
     }
+	
+	public function getDiff()
+	{
+		$this->readFile();
+		//var_dump($this->all_txt);
+		$txt=$this->parseAllText($this->all_txt);
+		//var_dump($txt);
+		$matr=$this->modGoods(14);
+		$shk=$this->modGoods(9);
+		//var_dump($matr);
+		$dell_goods=array_merge($matr,$shk);
+		//var_dump($dell_goods);
+		
+		if (is_array($txt))
+		{
+			foreach ($txt as $good)
+			{
+				//var_dump($good);
+				$id=$this->findId($good);
+				//var_dump($id);
+				$ids[]=$id;
+				//break;
+			}
+			//var_dump($ids);
+			$new_list=array_diff($ids,$dell_goods);
+			//var_dump($new_list);
+			foreach ($txt as $good)
+			{
+				$id=$this->findId($good);
+				if (array_search($id,$new_list))
+				{
+					$new_txt[]=$good;
+					//break;
+				}
+			}
+			//var_dump($new_txt);
+			foreach ($new_txt as $txt)
+			{
+				//var_dump ($txt);
+				$text=$txt;
+				//$temp="[/id]"."\r\n";
+				//$text=str_replace("[/id]",$temp,$text);
+				//$temp=".html"."\r\n";
+				//$text=str_replace(".html",$temp,$text);
+				//$temp="[/goods_name_ukr]"."\r\n";
+				//$text=str_replace("/goods_name_ukr]",$temp,$text);
+				$temp="[/goods_text_ukr]"."\r\n"."\r\n"."\r\n";
+				$text=str_replace("[/goods_text_ukr]",$temp,$text);
+				file_put_contents("goods_clean.txt",$text,FILE_APPEND);
+			}
+		}
+	}
 }
-
 $runtime = new Timer();
 set_time_limit(9000);
 $runtime->setStartTime();
+$test= new cleanFile();
+$test->getDiff();
+
+
 //$test=new GoodsTranslate();
 //$test->translate();
 //$test=new ArticleTranslate();
 //$test->translate();
-
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
