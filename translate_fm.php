@@ -235,11 +235,70 @@ class ArticleTranslate extends BaseTranslate
     }
 }
 
+class cleanFile
+{
+    private $all_txt;
+
+    private function readFile()
+    {
+        $this->all_txt=file_get_contents("texts_all.txt");
+    }
+
+    private function modGoods($goods_maintcharter=14)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id FROM goods WHERE goods_maintcharter=$goods_maintcharter AND goods_parent<>goods_id AND goods_noactual=0";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $arr[] = $row['goods_id'];
+            }
+        }
+        mysqli_close($db_connect);
+        return $arr;
+    }
+
+
+
+    private function findId($txt)
+    {
+        if (preg_match("#[id](.+?)[\/id]#is",$txt,$matches))
+        {
+            //var_dump($matches);
+            $ig=$matches[0];
+            $id=str_replace("[id]","",$id);
+            $id=str_replace("[/id]","",$id);
+            $id=str_replace(" ","",$id);
+        }
+        else
+        {
+            echo "Not find text<br>";
+        }
+        return $id;
+
+    }
+
+    private function parseAllText($txt)
+    {
+        //echo "txt=$txt<br>";
+        $expl=explode("[/goods_text_ukr]",$txt);
+
+        foreach ($expl as $str)
+        {
+            $str=trim ($str);
+            $expl1[]=$str."[/goods_text_ukr]";
+        }
+
+        return $expl1;
+    }
+}
+
 $runtime = new Timer();
 set_time_limit(9000);
 $runtime->setStartTime();
-$test=new GoodsTranslate();
-$test->translate();
+//$test=new GoodsTranslate();
+//$test->translate();
 //$test=new ArticleTranslate();
 //$test->translate();
 
