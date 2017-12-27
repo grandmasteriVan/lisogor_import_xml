@@ -72,7 +72,7 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 	mysqli_close($db_connect);
 	*/
-	
+	/*
 	function checkDuplicate($id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -226,4 +226,111 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 	mysqli_close($db_connect);
 	*/
+	//$db_connect=mysqli_connect(host,user,pass,db);
+	//$query="UPDATE goods SET goods_article_1c='' WHERE factory_id=30 AND goods_article_link=''";
+	//mysqli_query($db_connect,$query);
+	
+	
+	
+	/*$db_connect=mysqli_connect(host,user,pass,db);
+	$query="SELECT  goods_id, goods_article, goods_name FROM goods WHERE goods_lidermain=1";
+	
+	if ($res=mysqli_query($db_connect,$query))
+	{
+		while ($row = mysqli_fetch_assoc($res))
+        {
+            $goods[] = $row;
+        }
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$name=$good['goods_name'];
+				$id=$good['goods_id'];
+				$art=$good['goods_article'];
+				echo "$id  $name<br>";
+			}
+		}
+		else
+		{
+			echo "not array!<br>";
+		}
+	}
+	else
+	{
+		echo "error in SQL $query<br>";
+	}
+	mysqli_close($db_connect);
+	
+	//echo " Популярности:<br>";
+	$db_connect=mysqli_connect(host,user,pass,db);
+	unset($goods);
+	$query="SELECT goods_id, goods_name, goods_popular FROM goods WHERE goods_stock=1 or factory_id=114";
+	if ($res=mysqli_query($db_connect,$query))
+	{
+		while ($row = mysqli_fetch_assoc($res))
+        {
+            $goods[] = $row;
+        }
+		//var_dump($goods);
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$name=$good['goods_name'];
+				$id=$good['goods_id'];
+				$popular=$good['goods_popular'];
+				//var_dump($good);
+				//echo "$id  $name:  $popular<br>";
+				$str="$id;$name;$popular;".PHP_EOL;
+				//file_put_contents("pop.csv",$str,FILE_APPEND);
+				//break;
+			}
+		}
+		else
+		{
+			echo "not array!<br>";
+		}
+	}
+	else
+	{
+		echo "error in SQL $query<br>";
+	}
+	
+	mysqli_close($db_connect);
+	*/
+	//$db_connect=mysqli_connect(host,user,pass,db);
+	//$query="update goods SET goods_lider=1 where goods_lidermain=1";
+	//mysqli_query($db_connect,$query);
+	//$query="update goods SET goods_lidermain=0 where 1";
+	//mysqli_query($db_connect,$query);
+	//mysqli_close($db_connect);
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="SELECT goods_id, goods_name FROM goods WHERE goods_avail=1";
+	if ($res=mysqli_query($db_connect,$query))
+	{
+		while ($row = mysqli_fetch_assoc($res))
+        {
+            $goods[] = $row;
+        }
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$name=$good['goods_name'];
+				$id=$good['goods_id'];
+				//var_dump($good);
+				echo "$id  $name<br>";
+				$str="$id;$name;".PHP_EOL;
+				//file_put_contents("avail.csv",$str,FILE_APPEND);
+				//break;
+			}
+		}
+	}
+	else
+	{
+		echo "error in SQL";
+	}
+	mysqli_close($db_connect);
 ?>
+
