@@ -217,6 +217,13 @@ switch ($selectedFactory)
         $test2=new InStoreDDN($_FILES['file']['tmp_name']);
         $test2->setInSore();
 		break;
+
+		case "BabyMarket_instore":
+        include_once "babymarket_instore.php";
+        $test=new BabymarketInStore($_FILES['file']['tmp_name'],null);
+        $test->parse_price(null);
+        $test->findDif();
+		break;
     default:
         echo "Выберите фабрику и повторите";
         break;
