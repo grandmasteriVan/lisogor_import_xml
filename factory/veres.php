@@ -5,9 +5,7 @@
  * Date: 13.04.17
  * Time: 10:34
  */
-
 require 'autoload.php';
-
 class VeresActive extends Universal
 {
     public function setActual($arr)
@@ -28,9 +26,7 @@ class VeresActive extends Universal
         }
         mysqli_close($db_connect);
         //$db->debug = false;
-
     }
-
     public function parse_price($params)
     {
         //echo "Enter price!";
@@ -80,8 +76,7 @@ class VeresActive extends Universal
             //выбираем все названия товаров в прайсе для фабрики
             $factory_id = $this->factory_id;
             //echo "factory=".$factory_id."<br>";
-            $query = "SELECT goods_article_link FROM goods WHERE factory_id=161 or factory_id=163 or factory_id=164 or factory_id=165 or factory_id=166 or factory_id=167" .
-                " or factory_id=168 or factory_id=169 or factory_id=170 or factory_id=171";
+            $query = "SELECT goods_article_link FROM goods WHERE factory_id=$this->factory_id";
             if ($res = mysqli_query($db_connect, $query)) {
                 unset($site_names);
                 while ($row = mysqli_fetch_assoc($res)) {
@@ -122,7 +117,6 @@ class VeresActive extends Universal
         }
     }
 }
-
 class Veres extends Universal
 {
     public function parse_price($params)
