@@ -70,5 +70,61 @@ class BabymarketInStore
         var_dump($this->data);
     }
 
+    public function findDiff1()
+    {
+        $db_connect = mysqli_connect(host, user, pass, db);
+        if ($this->data)
+        {
+            //выбираем все названия товаров в прайсе для фабрики
+            $factory_id = $this->factory_id;
+            //echo "factory=".$factory_id."<br>";
+            $query = "SELECT goods_article_link FROM goods WHERE factory_id=$factory_id";
+            if ($res = mysqli_query($db_connect, $query))
+            {
+                unset($site_names);
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    //массив со всеми названиями товара в прайсе
+                    $site_names[] = $row['goods_article_link'];
+                }
+                //дальше просто сравниваем наши загруженные названия и те, что уже есть на сайте и получаем разницу
+                //выбираем в отдельный массив только полученные названия с прайса
+                unset($price_names);
+                foreach ($this->data as $d)
+                {
+                    //те названия, что мы прочитали в прайсе
+                    $price_names[] = $d['name'];
+                }
+                //echo "<b>names</b><pre>";
+                //print_r ($site_names);
+                //echo "</pre>";
+                //сравниваем 2 массива и получаем массив, в котором есть названия товаров, которые есть в прайсе, но нет на сайте
+                $result = array_diff($price_names, $site_names);
+
+                //сравниваем 2 массива и получаем массив, в котором есть названия товаров, которые есть на сайте, но нет в прайсе
+                $result2 = array_diff($site_names, $price_names);
+            }
+        }
+        if ($result||$result2)
+        {
+            echo "<p><b>in price but not on site</b></p>";
+            echo "<pre>";
+            print_r($result);
+            echo "</pre>";
+
+
+            echo "<p><b>on site but not in price</b></p>";
+            echo "<pre>";
+            print_r($result2);
+            echo "</pre>";
+            mysqli_close($db_connect);
+            return $result;
+        }
+        else
+        {
+            mysqli_close($db_connect);
+            return null;
+        }
+    }
 
 }

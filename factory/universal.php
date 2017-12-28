@@ -451,7 +451,8 @@ Class Universal
             //выбираем все названия товаров в прайсе для фабрики
             $factory_id = $this->factory_id;
 			//echo "factory=".$factory_id."<br>";
-            $query = "SELECT goods_article_link FROM goods WHERE factory_id=$factory_id";
+            $query = "SELECT goods_article_link FROM goods WHERE factory_id=161 or factory_id=163 or factory_id=164 or factory_id=165 or factory_id=166 or factory_id=167".
+                " or factory_id=168 or factory_id=169 or factory_id=170 or factory_id=171";
             if ($res = mysqli_query($db_connect, $query))
             {
                 unset($site_names);

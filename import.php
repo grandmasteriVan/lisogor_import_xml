@@ -222,7 +222,7 @@ switch ($selectedFactory)
         include_once "babymarket_instore.php";
         $test=new BabymarketInStore($_FILES['file']['tmp_name'],null);
         $test->parse_price(null);
-        $test->findDif();
+        $test->findDiff1();
 		break;
     default:
         echo "Выберите фабрику и повторите";
