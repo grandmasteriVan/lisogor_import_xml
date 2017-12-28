@@ -224,6 +224,13 @@ switch ($selectedFactory)
         $test->parse_price(null);
         $test->findDiff1();
 		break;
+
+		case "Veres_instore":
+        include_once "veres.php";
+        $test=new VeresActive($_FILES['file']['tmp_name'],158);
+        $test->parse_price(null);
+        $test->findDiff1();
+		break;
     default:
         echo "Выберите фабрику и повторите";
         break;
