@@ -68,17 +68,15 @@ function add_text_tis()
         foreach ($arr as $row)
         {
             $id=$row['goods_id'];
-            $desc=$row['goods_content'].PHP_EOL."<p>&nbsp;</p><p style='align-text: center;'>Видеообзор двуспальных, односпальных и тетских кроватей ТИС:<p>".
-            "<p style='align-text: center;'><iframe allow=''></iframe></p>";
+            $desc=$row['goods_content'].PHP_EOL."<p>&nbsp;</p><p style=\"text-align: center;\">Видеообзор двуспальных, односпальных и тетских кроватей ТИС:<p>".
+            "<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/1wLfpxyyIgI\" style=\"text-align: center;\" width=\"380\"></iframe></p>";
             $query="UPDATE goods SET goods_content='$desc' WHERE goods_id=$id";
             mysqli_query($db_connect,$query);
-            echo "$id";
-            break;
+            echo "$id<br>";
+            //break;
         }
     }
 }
-
-
-
 //set_info();
+add_text_tis();
 ?>
