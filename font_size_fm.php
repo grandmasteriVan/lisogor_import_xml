@@ -30,12 +30,19 @@ define ("pass", "T6n7C8r1");
  */
 //define ("db", "mebli");
 define ("db", "fm");
+
+/**
+ * Class FontSize
+ */
 class FontSize
 {
+    /**
+     * @return array|null
+     */
     private function getGoods()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id, goods_content FROM goods WHERE goods_contrnt!=''";
+        $query="SELECT goods_id, goods_content FROM goods WHERE goods_content<>''";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row=mysqli_fetch_assoc($res))
@@ -54,19 +61,31 @@ class FontSize
         }
     }
 
+    /**
+     * @param $text
+     * @return null|string|string[]
+     */
     private function replaceSize($text)
     {
-        $text=preg_replace("font-size/:\d\dpt;","font-size:12pt;",$text);
+        $text=preg_replace("/font-size\:(\d+)pt;/","font-size:12pt;",$text);
         return $text;
     }
 
+    /**
+     * @param $text
+     * @return mixed
+     */
     private function insertSize($text)
     {
-        $text=str_replace("<p>","<p font-size:12pt>",$text);
-
+        $text=str_replace("<p>","<p><span style='font-size: 12pt'>",$text);
+        $text=str_replace("</p>","</span></p>",$text);
         return $text;
     }
 
+    /**
+     * @param $text
+     * @return bool
+     */
     private function checkType($text)
     {
         if (mb_strpos("font-size",$text))
@@ -76,6 +95,32 @@ class FontSize
         else
         {
             return false;
+        }
+    }
+
+    /**
+     *
+     */
+    public function changeSize()
+    {
+        $allGoods=$this->getGoods();
+        if (is_array($allGoods))
+        {
+            foreach ($allGoods as $good)
+            {
+                $id=$good['goods_id'];
+                $cont=$good['goods_content'];
+                if ($this->checkType($cont))
+                {
+                    $cont_new=$this->replaceSize($cont);
+                }
+                else
+                {
+                    $cont_new=$this->insertSize($cont);
+                }
+
+
+            }
         }
     }
 
