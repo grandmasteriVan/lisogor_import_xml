@@ -5,23 +5,30 @@
  * Date: 06.04.16
  * Time: 09:20
  */
+header('Content-Type: text/html; charset=utf-8');
+/**
+ * database host
+ */
 //define ("host","localhost");
-define ("host","10.0.0.2");
+/**
+ *
+ */
+define ("host","localhost");
 /**
  * database username
  */
 //define ("user", "root");
-define ("user", "uh333660_mebli");
+define ("user", "fm");
 /**
  * database password
  */
 //define ("pass", "");
-define ("pass", "Z7A8JqUh");
+define ("pass", "T6n7C8r1");
 /**
  * database name
  */
 //define ("db", "mebli");
-define ("db", "uh333660_mebli");
+define ("db", "fm");
 function set_info()
 {
     $query="SELECT goods_id, goods_content, goods_hkeyw, goods_fkeyw, goods_article FROM goods WHERE factory_id=124";
@@ -48,5 +55,30 @@ function set_info()
         }
     }
 }
-set_info();
+function add_text_tis()
+{
+    $query="SELECT goods_id, goods_content FROM goods WHERE factory_id=37 AND goods_id<>13071 AND (goodskind_id=39 OR goodskind_id=47)";
+    $db_connect=mysqli_connect(host,user,pass,db);
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row=mysqli_fetch_assoc($res))
+        {
+            $arr[]=$row;
+        }
+        foreach ($arr as $row)
+        {
+            $id=$row['goods_id'];
+            $desc=$row['goods_content'].PHP_EOL."<p>&nbsp;</p><p style='align-text: center;'>Видеообзор двуспальных, односпальных и тетских кроватей ТИС:<p>".
+            "<p style='align-text: center;'><iframe allow=''></iframe></p>";
+            $query="UPDATE goods SET goods_content='$desc' WHERE goods_id=$id";
+            mysqli_query($db_connect,$query);
+            echo "$id";
+            break;
+        }
+    }
+}
+
+
+
+//set_info();
 ?>
