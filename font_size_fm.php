@@ -5,7 +5,6 @@
  * Date: 18.01.2018
  * Time: 09:26
  */
-
 header('Content-Type: text/html; charset=utf-8');
 /**
  * database host
@@ -30,7 +29,6 @@ define ("pass", "T6n7C8r1");
  */
 //define ("db", "mebli");
 define ("db", "fm");
-
 /**
  * Class FontSize
  */
@@ -42,7 +40,7 @@ class FontSize
     private function getGoods()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id, goods_content FROM goods WHERE goods_content<>''";
+        $query="SELECT goods_id, goods_content FROM goods WHERE goods_noactual=0 AND goods_active=1 AND goods_content<>''";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row=mysqli_fetch_assoc($res))
@@ -60,17 +58,15 @@ class FontSize
             return null;
         }
     }
-
     /**
      * @param $text
      * @return null|string|string[]
      */
     private function replaceSize($text)
     {
-        $text=preg_replace("/font-size\:(\d+)pt;/","font-size:12pt;",$text);
+        $text=preg_replace("/font-size\:(\s?)(\d+)px;/","font-size:12pt;",$text);
         return $text;
     }
-
     /**
      * @param $text
      * @return mixed
@@ -81,14 +77,13 @@ class FontSize
         $text=str_replace("</p>","</span></p>",$text);
         return $text;
     }
-
     /**
      * @param $text
      * @return bool
      */
     private function checkType($text)
     {
-        if (mb_strpos("font-size",$text))
+        if (mb_strpos($text,"font-size")!=false)
         {
             return true;
         }
@@ -97,7 +92,6 @@ class FontSize
             return false;
         }
     }
-
     /**
      *
      */
@@ -110,18 +104,33 @@ class FontSize
             {
                 $id=$good['goods_id'];
                 $cont=$good['goods_content'];
+				//echo "old:".$cont."<br>";
                 if ($this->checkType($cont))
                 {
-                    $cont_new=$this->replaceSize($cont);
+                    //echo "old:".$cont."<br>";
+					$cont_new=$this->replaceSize($cont);
+					//echo "new:".$cont_new;
+					//break;
                 }
                 else
                 {
                     $cont_new=$this->insertSize($cont);
+					//echo "$id<br>";
                 }
-
-
+				//echo "new:".$cont_new;
+				//break;
+				$query="UPDATE goods SET goods_content='$cont_new' WHERE goods_id=$id"
+				
             }
+			
+			
         }
+		else
+		{
+			echo "No array to work with";
+		}
     }
-
 }
+
+$test=new FontSize();
+$test->changeSize();
