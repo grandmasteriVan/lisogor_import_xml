@@ -305,10 +305,11 @@ if ($res=mysqli_query($db_connect,$query))
 	//$query="update goods SET goods_lidermain=0 where 1";
 	//mysqli_query($db_connect,$query);
 	//mysqli_close($db_connect);
-	$db_connect=mysqli_connect(host,user,pass,db);
-	$query="SELECT goods_id, goods_name FROM goods WHERE goods_avail=1";
+	/*$db_connect=mysqli_connect(host,user,pass,db);
+	$query="SELECT goods_id, goods_name FROM goods WHERE goods_avail=1 AND factory_id!=58";
 	if ($res=mysqli_query($db_connect,$query))
 	{
+		//все в наличии не а-офис, кроме шк акция
 		while ($row = mysqli_fetch_assoc($res))
         {
             $goods[] = $row;
@@ -325,12 +326,67 @@ if ($res=mysqli_query($db_connect,$query))
 				//file_put_contents("avail.csv",$str,FILE_APPEND);
 				//break;
 			}
+			//var_dump($goods);
 		}
+		//все распрадажные шк в наличии
+		$query="SELECT goods_id, goods_name FROM goods WHERE goods_avail=1 AND factory_id=114 AND goods_maintcharter=9";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+			while ($row = mysqli_fetch_assoc($res))
+			{
+				$goods_sk[] = $row;
+			}
+			foreach ($goods_sk as $good)
+			{
+				$name=$good['goods_name'];
+				$id=$good['goods_id'];
+				//var_dump($good);
+				echo "$id  $name<br>";
+				$str="$id;$name;".PHP_EOL;
+				//file_put_contents("avail.csv",$str,FILE_APPEND);
+				//break;
+			}
+		}
+		//var_dump($goods);
+		//var_dump();
+		$diff=array_diff_assoc($goods,$goods_sk);
+		//var_dump($diff);
+		foreach ($diff as $good)
+			{
+				$name=$good['goods_name'];
+				$id=$good['goods_id'];
+				//var_dump($good);
+				//echo "$id  $name<br>";
+				$str="$id;$name;".PHP_EOL;
+				//file_put_contents("avail.csv",$str,FILE_APPEND);
+				//break;
+			}
 	}
 	else
 	{
 		echo "error in SQL";
 	}
 	mysqli_close($db_connect);
+	*/
+	/*$db_connect=mysqli_connect(host,user,pass,db);
+	$query="SELECT goods_id, goods_name, goods_avail FROM goods WHERE factory_id=161 or factory_id=163 or factory_id=164 or factory_id=165 or factory_id=166 or factory_id=167 or factory_id=168 or factory_id=169 or factory_id=170 or factory_id=171";
+	if ($res=mysqli_query($db_connect,$query))
+	{
+		while ($row = mysqli_fetch_assoc($res))
+        {
+            $goods[] = $row;
+        }
+		//var_dump ($goods);
+		echo "<pre>";
+		print_r($goods);
+		echo "</pre>";
+	}
+	mysqli_close($db_connect);
+	*/
+	//для товаров, у которых фабрика не распродажа и товар находится в разделе прямые или угловые или кресла снять галочку лидер
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="update goods SET goods_lider=0 where factory_id!=114 AND (goods_maintcharter=1 OR goods_maintcharter=2 OR goods_maintcharter=38)";
+	mysqli_close($db_connect);
+	;
 ?>
 
