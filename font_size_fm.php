@@ -35,6 +35,7 @@ define ("db", "fm");
 class FontSize
 {
     /**
+     * выбираем все активные включенные товары, в которых есть описание
      * @return array|null
      */
     private function getGoods()
@@ -92,6 +93,17 @@ class FontSize
             return false;
         }
     }
+
+    /**
+     * @param $text
+     * @param $id
+     */
+    private function writeNewCont($text, $id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="UPDATE goods SET goods_content='$text' WHERE goods_id=$id";
+        mysqli_query($db_connect,$query);
+    }
     /**
      *
      */
@@ -111,8 +123,8 @@ class FontSize
 					$cont_new=$this->replaceSize($cont);
 					//echo "new:".$cont_new;
 					//break;
-					$query="UPDATE goods SET goods_content='$cont_new' WHERE goods_id=$id";
-					mysqli_query($db_connect,$query);
+					$this->writeNewCont($cont_new,$id);
+					echo "$id is changed<br>";
 					
                 }
                 //else
