@@ -111,15 +111,19 @@ class FontSize
 					$cont_new=$this->replaceSize($cont);
 					//echo "new:".$cont_new;
 					//break;
+					$query="UPDATE goods SET goods_content='$cont_new' WHERE goods_id=$id";
+					mysqli_query($db_connect,$query);
+					
                 }
-                else
-                {
-                    $cont_new=$this->insertSize($cont);
+                //else
+                //{
+                    //$cont_new=$this->insertSize($cont);
 					//echo "$id<br>";
-                }
+                //}
 				//echo "new:".$cont_new;
 				//break;
-				$query="UPDATE goods SET goods_content='$cont_new' WHERE goods_id=$id"
+				
+				
 				
             }
 			
