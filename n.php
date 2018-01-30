@@ -384,9 +384,38 @@ if ($res=mysqli_query($db_connect,$query))
 	mysqli_close($db_connect);
 	*/
 	//для товаров, у которых фабрика не распродажа и товар находится в разделе прямые или угловые или кресла снять галочку лидер
+	//$db_connect=mysqli_connect(host,user,pass,db);
+	//$query="update goods SET goods_noactual=1 where factory_id=137";
+	//mysqli_query($db_connect,$query);
+	//mysqli_close($db_connect);
+	
+	//снять все акции и проценты с матролюкса
+	//$db_connect=mysqli_connect(host,user,pass,db);
+	//$query="update goods SET goods_stock=0, goods_discount=0 where factory_id=46";
+	//mysqli_query($db_connect,$query);
+	//mysqli_close($db_connect);
+	
+	//найти угловые диваны которых нет в прямых
 	$db_connect=mysqli_connect(host,user,pass,db);
-	$query="update goods SET goods_lider=0 where factory_id!=114 AND (goods_maintcharter=1 OR goods_maintcharter=2 OR goods_maintcharter=38)";
-	mysqli_close($db_connect);
-	;
+	$query="SELECT goods_id FROM goodshastcharter WHERE tcharter_id=38";
+	if ($res=mysqli_query($db_connect,$query))
+	{		while ($row = mysqli_fetch_assoc($res))
+		{				
+			$goods_ugl[] = $row['goods_id'];
+		}
+	}
+	$query="SELECT goods_id FROM goodshastcharter WHERE tcharter_id=1";
+	if ($res=mysqli_query($db_connect,$query))
+	{		while ($row = mysqli_fetch_assoc($res))
+		{				
+			$goods_str[] = $row['goods_id'];
+		}
+	}
+	$dif=array_diff($goods_ugl,$goods_str);
+	//var_dump($dif);
+	echo "<pre>";
+	print_r($dif);
+	echo "</pre>";
+
 ?>
 
