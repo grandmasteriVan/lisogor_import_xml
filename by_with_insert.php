@@ -62,6 +62,10 @@ class BWInsert
     private function insertMatr($text, $with, $height)
     {
         $rnd=rand(1,3);
+        if ($with==700 AND $height==1900)
+        {
+            $text.=",1404342";
+        }
         if ($with==800 AND $height==1900)
         {
             if ($rnd==1)
@@ -77,6 +81,8 @@ class BWInsert
                 $text.=",";
             }
         }
+
+        return $text;
     }
     /**
      * @return array|null
@@ -139,7 +145,8 @@ class BWInsert
     {
         $goods=$this->getGoods();
 		$goods=$this->uniteGoods($goods);
-        var_dump($goods);
+        //var_dump($goods);
+
     }
 }
 $test=new BWInsert();
