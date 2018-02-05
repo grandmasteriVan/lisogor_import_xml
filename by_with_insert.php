@@ -40,18 +40,7 @@ class BWInsert
      */
     private function insertTumb($text)
     {
-        if (!mb_strpos($text,"7216121"))
-        {
-            $text.=",7216121";
-        }
-        if (!mb_strpos($text,"7216122"))
-        {
-            $text.=",7216122";
-        }
-        if (!mb_strpos($text,"7216123"))
-        {
-            $text.=",7216123";
-        }
+        $text="7216121,7216122,7216123";
         return $text;
     }
     /**
