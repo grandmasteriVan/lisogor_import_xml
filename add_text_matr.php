@@ -77,6 +77,30 @@ function add_text_tis()
         }
     }
 }
+
+function add_text_skif()
+{
+$query="SELECT goods_id, goods_content FROM goods WHERE factory_id=36 AND goods_id<>3284 AND (goodskind_id=39 OR goodskind_id=50)";
+    $db_connect=mysqli_connect(host,user,pass,db);
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row=mysqli_fetch_assoc($res))
+        {
+            $arr[]=$row;
+        }
+        foreach ($arr as $row)
+        {
+            $id=$row['goods_id'];
+            $desc=$row['goods_content'].PHP_EOL."<p>&nbsp;</p><p style=\"text-align: center;\">Видео-презинтация кроватей Скиф:<p>".
+                "<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/1wLfpxyyIgI\" style=\"text-align: center;\" width=\"380\"></iframe></p>";
+            $query="UPDATE goods SET goods_content='$desc' WHERE goods_id=$id";
+            mysqli_query($db_connect,$query);
+            echo "$id<br>";
+            //break;
+        }
+    }
+}
 //set_info();
-add_text_tis();
+//add_text_tis();
+add_text_skif()
 ?>
