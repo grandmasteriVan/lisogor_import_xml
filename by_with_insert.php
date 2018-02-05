@@ -5,7 +5,6 @@
  * Date: 05.02.2018
  * Time: 10:12
  */
-
 header('Content-Type: text/html; charset=utf-8');
 /**
  * database host
@@ -30,7 +29,6 @@ define ("pass", "T6n7C8r1");
  */
 //define ("db", "mebli");
 define ("db", "fm");
-
 /**
  * Class BWInsert
  */
@@ -56,7 +54,6 @@ class BWInsert
         }
         return $text;
     }
-
     /**
      * @param $text
      * @param $with
@@ -81,15 +78,14 @@ class BWInsert
             }
         }
     }
-
     /**
      * @return array|null
      */
     private function getGoods()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods.goods_id,goods.goods_buywith,goodshasfeature.goodshasfeature_valueint FROM goods join goodshasfeature ON goods.goods_id=goodshasfeatures.goods_id ".
-            "WHERE goods.factory_id=37 AND (goods.goodskind_id=39 OR goods.goodskind_id=50)";
+        $query="SELECT goods.goods_id,goods.goods_buywith,goodshasfeature.goodshasfeature_valuefloat, goodshasfeature.feature_id FROM goods join goodshasfeature ON goods.goods_id=goodshasfeature.goods_id ".
+            "WHERE goods.factory_id=37 AND (goods.goodskind_id=39 OR goods.goodskind_id=50) AND (goodshasfeature.feature_id=85 OR goodshasfeature.feature_id=84)";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -97,6 +93,11 @@ class BWInsert
                 $arr[] = $row;
             }
         }
+		else
+		{
+			echo "Error in SQL<br>";
+			var_dump(mysqli_error($db_connect));
+		}
         mysqli_close($db_connect);
         if (is_array($arr))
         {
@@ -107,16 +108,39 @@ class BWInsert
             return null;
         }
     }
-
     /**
      *
      */
+	private function uniteGoods($goods)
+	{
+		if (is_array($goods))
+		{
+			echo count($goods);
+			for ($i=0;$i<=count($goods)-1;$i=$i+2)
+			{
+				$id=$goods[$i]['goods_id'];
+				$buywith=$goods[$i]['goods_buywith'];
+				$whidth=$goods[$i+1]['goodshasfeature_valuefloat'];
+				$len=$goods[$i]['goodshasfeature_valuefloat'];
+				$new_goods[]=array('id'=>$id,'buywith'=>$buywith, 'len'=>$len, 'whidth'=>$whidth);
+				//break;
+				echo "$i<br>";
+			}
+			return ($new_goods);
+			
+		}
+		else
+		{
+			return null;
+		}
+	}	
+	 
     public function insertBw()
     {
         $goods=$this->getGoods();
+		$goods=$this->uniteGoods($goods);
         var_dump($goods);
     }
 }
-
 $test=new BWInsert();
 $test->insertBw();
