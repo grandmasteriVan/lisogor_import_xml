@@ -84,6 +84,7 @@ $query="SELECT goods_id, goods_content FROM goods WHERE factory_id=36 AND goods_
     $db_connect=mysqli_connect(host,user,pass,db);
     if ($res=mysqli_query($db_connect,$query))
     {
+        //
         while ($row=mysqli_fetch_assoc($res))
         {
             $arr[]=$row;
