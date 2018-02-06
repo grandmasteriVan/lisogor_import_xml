@@ -100,7 +100,6 @@ $query="SELECT goods_id, goods_content FROM goods WHERE factory_id=36 AND goods_
         }
     }
 }
-
 function add_text_estela()
 {
     $query="SELECT goods_id, goods_content FROM goods WHERE factory_id=32 AND goods_id<>2709 AND (goodskind_id=39 OR goodskind_id=50)";
@@ -115,12 +114,12 @@ function add_text_estela()
         foreach ($arr as $row)
         {
             $id=$row['goods_id'];
-            $desc=$row['goods_content'].PHP_EOL."<p>&nbsp;</p><p style=\"text-align: center;\">Видео-презинтация кроватей Скиф:<p>".
-                "<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/jgUQFKlXI-k\" style=\"text-align: center;\" width=\"380\"></iframe></p>";
+            $desc=$row['goods_content'].PHP_EOL."<p>&nbsp;</p><p style=\"text-align: center;\">Видео-каталог кроватей Эстелла:<p>".
+                "<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/dbXD77JFrlk\" style=\"text-align: center;\" width=\"380\"></iframe></p>";
             $query="UPDATE goods SET goods_content='$desc' WHERE goods_id=$id";
-            mysqli_query($db_connect,$query);
+            //mysqli_query($db_connect,$query);
             echo "$id<br>";
-            //break;
+            break;
         }
     }
 }
