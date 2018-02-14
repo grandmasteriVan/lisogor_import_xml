@@ -29,7 +29,6 @@ define ("pass", "T6n7C8r1");
  */
 //define ("db", "mebli");
 define ("db", "fm");
-
 class FiltersSHK
 {
     private function getAllSHK()
@@ -41,6 +40,7 @@ class FiltersSHK
             while ($row = mysqli_fetch_assoc($res))
             {
                 $arr[] = $row;
+				//break;
             }
         }
         else
@@ -57,7 +57,6 @@ class FiltersSHK
             return null;
         }
     }
-
     private function getFilterForGood($goods_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -71,7 +70,7 @@ class FiltersSHK
         }
         else
         {
-            echo "Error in SQL".mysqli_error($db_connect)."<br>";
+            echo "Error in SQL: ".mysqli_error($db_connect)."<br>";
         }
         mysqli_close($db_connect);
         if (is_array($filters))
@@ -83,18 +82,18 @@ class FiltersSHK
             return null;
         }
     }
-
     private function writeLog($goods_id, $feature_id, $feature_val, $operation)
     {
         $file_string="ID: $goods_id FEATURE: $feature_id VALUE: $feature_val ACTION: $operation".PHP_EOL;
-        file_put_contents("filtersSHK_log.txt",$file_string,FILE_APPEND);
+        echo "$file_string<br>";
+		file_put_contents("filtersSHK_log.txt",$file_string,FILE_APPEND);
     }
-
     private function checkDuplicate($id,$feature_id,$val_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="SELECT goodshasfeature_id FROM goodshasfeature WHERE goods_id=$id AND feature_id=$feature_id AND goodshasfeature_valueint=$val_id";
         //echo $query."<br>";
+		unset($art);
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -116,7 +115,9 @@ class FiltersSHK
         }
         //mysqli_query($db_connect, $query);
         //var_dump ($art);
-        if ($art==null)
+		//var_dump ($art);
+		//echo "<br>";
+        if (is_null($art))
         {
             return false;
         }
@@ -125,7 +126,6 @@ class FiltersSHK
             return true;
         }
     }
-
     private function remFilter($goods_id,$feature_id,$val_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -134,30 +134,28 @@ class FiltersSHK
         mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
-
     private function setFilter($goods_id,$feature_id,$val_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
             "goodshasfeature_valuetext, goods_id, feature_id) ".
-            "VALUES ($val_id,0,'',$id,$feature_id)";
+            "VALUES ($val_id,0,'',$goods_id,$feature_id)";
         //проверка нет ли уже такого фильтра
-        if ($this->checkDuplicate($id,$feature_id,$val_id))
+        if ($this->checkDuplicate($goods_id,$feature_id,$val_id))
         {
-            $this->writeLog($goods_id,$feature_id,$val_id,"create");
-            mysqli_query($db_connect,$query);
+            echo "goods_id: $goods_id Already has feature: $feature_id and value: $val_id<br>";
         }
         else
         {
-            echo "goods_id: $goods_id Already has feature: $feature_id and value: $val_id";
+			$this->writeLog($goods_id,$feature_id,$val_id,"create");
+            mysqli_query($db_connect,$query);
         }
-
         mysqli_close($db_connect);
     }
-
     public function setFiltersSHL()
     {
         $goods=$this->getAllSHK();
+		//var_dump($goods);
         if (!is_null($goods))
         {
             foreach ($goods as $good)
@@ -182,6 +180,12 @@ class FiltersSHK
                             $this->remFilter($id,16,12);
                             $this->setFilter($id,16,3);
                         }
+						//ламинир дсп-дсп
+                        if ($feature_id==16&&$val_id==6)
+                        {
+                            $this->remFilter($id,16,6);
+                            $this->setFilter($id,16,3);
+                        }
                         //стиль современный
                         if ($feature_id==18&&$val_id==14)
                         {
@@ -199,8 +203,9 @@ class FiltersSHK
                 else
                 {
                     echo "No filters for id=$id<br>";
+					
                 }
-                break;
+                //break;
             }
         }
         else
@@ -209,3 +214,6 @@ class FiltersSHK
         }
     }
 }
+
+$test=new FiltersSHK();
+$test->setFiltersSHL();
