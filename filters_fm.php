@@ -29,8 +29,15 @@ define ("pass", "T6n7C8r1");
  */
 //define ("db", "mebli");
 define ("db", "fm");
+
+/**
+ * Class FiltersSHK
+ */
 class FiltersSHK
 {
+    /**
+     * @return array|null
+     */
     private function getAllSHK()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -57,6 +64,11 @@ class FiltersSHK
             return null;
         }
     }
+
+    /**
+     * @param $goods_id
+     * @return array|null
+     */
     private function getFilterForGood($goods_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -82,13 +94,27 @@ class FiltersSHK
             return null;
         }
     }
+
+    /**
+     * @param $goods_id
+     * @param $feature_id
+     * @param $feature_val
+     * @param $operation
+     */
     private function writeLog($goods_id, $feature_id, $feature_val, $operation)
     {
         $file_string="ID: $goods_id FEATURE: $feature_id VALUE: $feature_val ACTION: $operation".PHP_EOL;
         echo "$file_string<br>";
 		file_put_contents("filtersSHK_log.txt",$file_string,FILE_APPEND);
     }
-    private function checkDuplicate($id,$feature_id,$val_id)
+
+    /**
+     * @param $id
+     * @param $feature_id
+     * @param $val_id
+     * @return bool
+     */
+    private function checkDuplicate($id, $feature_id, $val_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="SELECT goodshasfeature_id FROM goodshasfeature WHERE goods_id=$id AND feature_id=$feature_id AND goodshasfeature_valueint=$val_id";
@@ -126,7 +152,13 @@ class FiltersSHK
             return true;
         }
     }
-    private function remFilter($goods_id,$feature_id,$val_id)
+
+    /**
+     * @param $goods_id
+     * @param $feature_id
+     * @param $val_id
+     */
+    private function remFilter($goods_id, $feature_id, $val_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="DELETE FROM goodshasfeature WHERE goods_id=$goods_id AND feature_id=$feature_id AND goodshasfeature_valueint=$val_id";
@@ -134,7 +166,13 @@ class FiltersSHK
         mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
-    private function setFilter($goods_id,$feature_id,$val_id)
+
+    /**
+     * @param $goods_id
+     * @param $feature_id
+     * @param $val_id
+     */
+    private function setFilter($goods_id, $feature_id, $val_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
@@ -152,6 +190,10 @@ class FiltersSHK
         }
         mysqli_close($db_connect);
     }
+
+    /**
+     *
+     */
     public function setFiltersSHL()
     {
         $goods=$this->getAllSHK();
@@ -215,12 +257,18 @@ class FiltersSHK
     }
 }
 
+/**
+ * Class FiltersVardrobe
+ */
 class FiltersVardrobe
 {
+    /**
+     * @return array|null
+     */
     private function getAllSHK()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id FROM goods WHERE goodskind_id=36 OR goodskind_id=63";
+        $query="SELECT goods_id FROM goods WHERE goodskind_id=36 OR goodskind_id=63 OR goodskind_id=79";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -243,6 +291,11 @@ class FiltersVardrobe
             return null;
         }
     }
+
+    /**
+     * @param $goods_id
+     * @return array|null
+     */
     private function getFilterForGood($goods_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -268,13 +321,27 @@ class FiltersVardrobe
             return null;
         }
     }
+
+    /**
+     * @param $goods_id
+     * @param $feature_id
+     * @param $feature_val
+     * @param $operation
+     */
     private function writeLog($goods_id, $feature_id, $feature_val, $operation)
     {
         $file_string="ID: $goods_id FEATURE: $feature_id VALUE: $feature_val ACTION: $operation".PHP_EOL;
         echo "$file_string<br>";
         file_put_contents("filtersVardrope_log.txt",$file_string,FILE_APPEND);
     }
-    private function checkDuplicate($id,$feature_id,$val_id)
+
+    /**
+     * @param $id
+     * @param $feature_id
+     * @param $val_id
+     * @return bool
+     */
+    private function checkDuplicate($id, $feature_id, $val_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="SELECT goodshasfeature_id FROM goodshasfeature WHERE goods_id=$id AND feature_id=$feature_id AND goodshasfeature_valueint=$val_id";
@@ -312,7 +379,13 @@ class FiltersVardrobe
             return true;
         }
     }
-    private function remFilter($goods_id,$feature_id,$val_id)
+
+    /**
+     * @param $goods_id
+     * @param $feature_id
+     * @param $val_id
+     */
+    private function remFilter($goods_id, $feature_id, $val_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="DELETE FROM goodshasfeature WHERE goods_id=$goods_id AND feature_id=$feature_id AND goodshasfeature_valueint=$val_id";
@@ -320,7 +393,13 @@ class FiltersVardrobe
         mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
-    private function setFilter($goods_id,$feature_id,$val_id)
+
+    /**
+     * @param $goods_id
+     * @param $feature_id
+     * @param $val_id
+     */
+    private function setFilter($goods_id, $feature_id, $val_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
@@ -338,6 +417,10 @@ class FiltersVardrobe
         }
         mysqli_close($db_connect);
     }
+
+    /**
+     *
+     */
     public function setFiltersSHL()
     {
         $goods=$this->getAllSHK();

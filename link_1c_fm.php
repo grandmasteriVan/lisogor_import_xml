@@ -55,7 +55,7 @@ class Estella extends Link
      */
     public function parseEstella()
     {
-        $f_id=37;
+        $f_id=32;
         $db_connect=mysqli_connect(host,user,pass,db);
         $this->ReadFile();
         //$this->printData();

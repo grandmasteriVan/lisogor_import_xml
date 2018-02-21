@@ -5,23 +5,30 @@
  * Date: 15.12.16
  * Time: 12:32
  */
+header('Content-Type: text/html; charset=utf-8');
+/**
+ * database host
+ */
 //define ("host","localhost");
-define ("host","10.0.0.2");
+/**
+ *
+ */
+define ("host","localhost");
 /**
  * database username
  */
 //define ("user", "root");
-define ("user", "uh333660_mebli");
+define ("user", "fm");
 /**
  * database password
  */
 //define ("pass", "");
-define ("pass", "Z7A8JqUh");
+define ("pass", "T6n7C8r1");
 /**
  * database name
  */
 //define ("db", "mebli");
-define ("db", "uh333660_mebli");
+define ("db", "fm");
 /**
  * Class Timer
  */
@@ -139,6 +146,61 @@ class CopyVid
         mysqli_close($db_connect);
     }
 }
+
+class insertVid extends CopyVid
+{
+    private function getGoodsWithVid()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id, goods_content FROM goods WHERE goods_active=1 AND goods_noactual=0 AND goods_content LIKE '%iframe%' AND (goodskind_id=40 OR goodskind_id=45 OR goodskind_id=88)";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+        }
+        mysqli_close($db_connect);
+        if (!is_array($goods))
+        {
+            return $goods;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private function getGoodsWithNoVid()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id, goods_content FROM goods WHERE goods_active=1 AND goods_noactual=0 AND goods_content NOT LIKE '%iframe%' AND (goodskind_id=40 OR goodskind_id=45 OR goodskind_id=88)";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+        }
+        mysqli_close($db_connect);
+        if (!is_array($goods))
+        {
+            return $goods;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private function insertOneVideo($id, $content)
+    {
+        $content="";
+    }
+
+
+}
+
 $runtime = new Timer();
 $runtime->setStartTime();
 $test=new CopyVid();
