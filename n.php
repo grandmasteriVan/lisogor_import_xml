@@ -504,7 +504,7 @@ if ($res=mysqli_query($db_connect,$query))
 	
 	mysqli_close($db_connect);
 	*/
-	$db_connect=mysqli_connect(host,user,pass,db);
+	/*$db_connect=mysqli_connect(host,user,pass,db);
     $query="SELECT goods_id, goods_article FROM goods WHERE goods_active=1 AND goods_noactual=0 AND goods_maintcharter=1 AND goodskind_id=26";
 	if ($res=mysqli_query($db_connect,$query))
     {
@@ -527,6 +527,48 @@ if ($res=mysqli_query($db_connect,$query))
 	{
 		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
 	}
+	*/
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="SELECT goods_id  FROM goods WHERE goods_active=1 AND goods_noactual=0 AND goods_maintcharter=76";
+	if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row = mysqli_fetch_assoc($res))
+        {
+                $goods[] = $row;
+        }
+		//echo "<pre>";
+		//print_r($goods);
+		//echo "</pre>";
+		if (is_array($goods))
+		{
+			foreach($goods as $good)
+			{
+				$id=$good['goods_id'];
+				$query="SELECT goodshasfeature_id FROM goodshasfeature WHERE feature_id=206 AND goodshasfeature_valueint=2 AND goods_id=$id";
+				if ($res=mysqli_query($db_connect,$query))
+				{
+					unset($arr);
+					while ($row = mysqli_fetch_assoc($res))
+					{
+							$arr[] = $row;
+					}
+					if (!is_array($arr))
+					{
+						echo "$id<br>";
+					}
+				}
+				else
+				{
+					echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+				}
+			}
+		}
+    }
+	else
+	{
+		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+	}
+	mysqli_close($db_connect);
 	
 ?>
 
