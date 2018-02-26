@@ -471,8 +471,152 @@ class FiltersVardrobe
     }
 }
 
+class FiltersDoors
+{
+    /**
+     * @return array|null
+     */
+    private function getAllDoors()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id FROM goods WHERE goods_maintcharter=76";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $arr[] = $row;
+                //break;
+            }
+        }
+        else
+        {
+            echo "Error in SQL".mysqli_error($db_connect)."<br>";
+        }
+        mysqli_close($db_connect);
+        if (is_array($arr))
+        {
+            return $arr;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+
+    /**
+     * @param $goods_id
+     * @param $feature_id
+     * @param $feature_val
+     * @param $operation
+     */
+    private function writeLog($goods_id, $feature_id, $feature_val, $operation)
+    {
+        $file_string="ID: $goods_id FEATURE: $feature_id VALUE: $feature_val ACTION: $operation".PHP_EOL;
+        echo "$file_string<br>";
+        //file_put_contents("filtersVardrope_log.txt",$file_string,FILE_APPEND);
+    }
+
+    /**
+     * @param $id
+     * @param $feature_id
+     * @param $val_id
+     * @return bool
+     */
+    private function checkDuplicate($id, $feature_id, $val_id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goodshasfeature_id FROM goodshasfeature WHERE goods_id=$id AND feature_id=$feature_id AND goodshasfeature_valueint=$val_id";
+        //echo $query."<br>";
+        unset($art);
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $f_ids[] = $row;
+            }
+            if (is_array($f_ids))
+            {
+                foreach ($f_ids as $article)
+                {
+                    //получаем нужный текст
+                    $art=$article['goodshasfeature_id'];
+                }
+            }
+        }
+        else
+        {
+            echo "error in SQL $query<br>";
+        }
+        //mysqli_query($db_connect, $query);
+        //var_dump ($art);
+        //var_dump ($art);
+        //echo "<br>";
+        if (is_null($art))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+
+    /**
+     * @param $goods_id
+     * @param $feature_id
+     * @param $val_id
+     */
+    private function setFilter($goods_id, $feature_id, $val_id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
+            "goodshasfeature_valuetext, goods_id, feature_id) ".
+            "VALUES ($val_id,0,'',$goods_id,$feature_id)";
+        //проверка нет ли уже такого фильтра
+        if ($this->checkDuplicate($goods_id,$feature_id,$val_id))
+        {
+            echo "goods_id: $goods_id Already has feature: $feature_id and value: $val_id<br>";
+        }
+        else
+        {
+            $this->writeLog($goods_id,$feature_id,$val_id,"create");
+            mysqli_query($db_connect,$query);
+        }
+        mysqli_close($db_connect);
+    }
+
+    /**
+     *
+     */
+    public function setFiltersDoors()
+    {
+        $goods=$this->getAllDoors();
+        //var_dump($goods);
+        if (!is_null($goods))
+        {
+            foreach ($goods as $good)
+            {
+                $id=$good['goods_id'];
+                $this->setFilter($id,139,6);
+                $this->setFilter($id,154,9);
+
+                //break;
+            }
+        }
+        else
+        {
+            echo "No goods to work with<br>";
+        }
+    }
+}
+
 //$test=new FiltersSHK();
 //$test->setFiltersSHL();
 
-$test=new FiltersVardrobe();
-$test->setFiltersSHL();
+//$test=new FiltersVardrobe();
+//$test->setFiltersSHL();
+
+$test=new FiltersDoors();
+$test->setFiltersDoors();
