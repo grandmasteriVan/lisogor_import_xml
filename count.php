@@ -6,28 +6,30 @@
  * Time: 09:55
  */
 header('Content-Type: text/html; charset=utf-8');
-/**
- * database host
- */
 //define ("host","localhost");
-/**
- *
- */
+//define ("host_ddn","localhost");
+define ("host_ddn","es835db.mirohost.net");
 define ("host","localhost");
 /**
  * database username
  */
 //define ("user", "root");
+//define ("user_ddn", "root");
+define ("user_ddn", "u_fayni");
 define ("user", "fm");
 /**
  * database password
  */
 //define ("pass", "");
+//define ("pass_ddn", "");
+define ("pass_ddn", "ZID1c0eud3Dc");
 define ("pass", "T6n7C8r1");
 /**
  * database name
  */
 //define ("db", "mebli");
+//define ("db_ddn", "ddn_new");
+define ("db_ddn", "ddnPZS");
 define ("db", "fm");
 class countTov
 {
@@ -110,6 +112,73 @@ class countTov
 		echo "<br><br><br>";
     }
 }
+class CountDDN
+{
+    private function getFactoryisId()
+    {
+        $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+        $query="SELECT fvalue_id, fvalue_nameru FROM fvalue WHERE fkind_id=17";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $factoryes[]=$row;
+            }
+        }
+        else
+        {
+            echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+        }
+        mysqli_close($db_connect);
+        if (is_array($factoryes))
+        {
+            return $factoryes;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private function getCountByFactory($f_id)
+    {
+        $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+        $query="SELECT count(goodshasfeature_id) FROM goodshasfeature WHERE feature_id=17 AND goodshasfeature_valuenum=$f_id";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[]=$row;
+            }
+        }
+        else
+        {
+            echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+        }
+        return $goods['count(goodshasfeature_id)'];
+    }
+
+    public function getCount()
+    {
+        echo "<b>На ДДН:</b><>";
+        $factoryes=$this->getFactoryisId();
+        if(is_array($factoryes))
+        {
+            foreach ($factoryes as $factory)
+            {
+                $id=$factory['fvalue_id'];
+                $name=$factory['fvalue_nameru'];
+                $count=$this->getCountByFactory($id);
+                echo "$name всего товаров: $count<br>";
+            }
+        }
+        else
+        {
+            echo "No factory array";
+        }
+    }
+}
+
 class Timer
 {
     /**
