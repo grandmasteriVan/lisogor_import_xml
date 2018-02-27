@@ -78,7 +78,7 @@ class countTov
             return null;
         }
     }
-    public function countTov()
+    public function countTovFM()
     {
         echo "<b>На ФМ:</b><br>";
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -139,28 +139,53 @@ class CountDDN
             return null;
         }
     }
-
-    private function getCountByFactory($f_id)
+    private function getCountByFactoryAll($f_id)
     {
         $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
-        $query="SELECT count(goodshasfeature_id) FROM goodshasfeature WHERE feature_id=17 AND goodshasfeature_valuenum=$f_id";
+        $query="select count(goods_id) FROM goodshasfeature WHERE feature_id=14 AND goodshasfeature_valueid=$f_id";
+		//echo "$query<br>";
         if ($res=mysqli_query($db_connect,$query))
         {
-            while ($row = mysqli_fetch_assoc($res))
+            unset ($good);
+			while ($row = mysqli_fetch_assoc($res))
             {
-                $goods[]=$row;
+                //var_dump($row);
+				$good=$row['count(goods_id)'];
+				//var_dump($good);
             }
         }
+		
         else
         {
             echo "Error in SQL ".mysqli_error($db_connect)."<br>";
         }
-        return $goods['count(goodshasfeature_id)'];
+        return $good;
     }
-
+	private function getCountByFactoryActual($f_id)
+    {
+        $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+        $query="select count(goodshasfeature.goods_id) FROM goods join goodshasfeature on goods.goods_id=goodshasfeature.goods_id WHERE goodshasfeature.feature_id=14 AND goodshasfeature.goodshasfeature_valueid=$f_id AND goods.goods_noactual=0";
+		//echo "$query<br>";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            unset ($good);
+			while ($row = mysqli_fetch_assoc($res))
+            {
+                //var_dump($row);
+				$good=$row['count(goodshasfeature.goods_id)'];
+				//var_dump($good);
+            }
+        }
+		
+        else
+        {
+            echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+        }
+        return $good;
+    }
     public function getCount()
     {
-        echo "<b>На ДДН:</b><>";
+        echo "<b>На ДДН:</b><br>";
         $factoryes=$this->getFactoryisId();
         if(is_array($factoryes))
         {
@@ -168,8 +193,11 @@ class CountDDN
             {
                 $id=$factory['fvalue_id'];
                 $name=$factory['fvalue_nameru'];
-                $count=$this->getCountByFactory($id);
-                echo "$name всего товаров: $count<br>";
+                $countAll=$this->getCountByFactoryAll($id);
+                $countActual=$this->getCountByFactoryActual($id);
+				
+				
+                echo "Фабрика <b>$name</b> всего товаров: <b>$countAll</b>  из них актуальных: <b>$countActual</b><br>";
             }
         }
         else
@@ -178,7 +206,6 @@ class CountDDN
         }
     }
 }
-
 class Timer
 {
     /**
@@ -216,6 +243,9 @@ $runtime = new Timer();
 $runtime->setStartTime();
 //echo "test";
 $test=new countTov();
-$test->countTov();
+$test->countTovFM();
+
+$test1=new CountDDN();
+$test1->getCount();
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
