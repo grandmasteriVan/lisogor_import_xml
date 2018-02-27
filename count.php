@@ -29,13 +29,13 @@ define ("pass", "T6n7C8r1");
  */
 //define ("db", "mebli");
 define ("db", "fm");
-
 class countTov
 {
     private function countPerFactoryAll($factory_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="SELECT count(goods_id) FROM goods WHERE factory_id=$factory_id";
+		//echo "$q"
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -54,7 +54,6 @@ class countTov
             return null;
         }
     }
-
     private function countPerFactoryActive($factory_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -77,11 +76,11 @@ class countTov
             return null;
         }
     }
-
     public function countTov()
     {
-        $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT factory_id, factory_name FROM factory WHERE factory_active=1 factory_noactual=0";
+        echo "<b>На ФМ:</b><br>";
+		$db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT factory_id, factory_name FROM factory WHERE factory_active=1 AND factory_soft=1";
         if ($res=mysqli_query($db_connect,$query))
         {
             unset($factoryes);
@@ -89,7 +88,8 @@ class countTov
             {
                 $factoryes[]=$row;
             }
-            if (is_array($factoryes))
+            //var_dump($factoryes);
+			if (is_array($factoryes))
             {
                 foreach ($factoryes as $factory)
                 {
@@ -97,12 +97,17 @@ class countTov
                     $count_tov_all=$this->countPerFactoryAll($id);
                     $count_tov_active=$this->countPerFactoryActive($id);
                     $name=$factory['factory_name'];
-                    if (!is_null($count_tov))
-						echo "$name Всего товаров: $count_tov_all , Из них активых: $count_tov_active<br>";
+                    //if (!is_null($count_tov))
+						echo "Фабрика  <b>$name</b> Всего товаров: <b>$count_tov_all</b>, Из них активых: <b>$count_tov_active</b><br>";
                 }
             }
+			else
+			{
+				echo "No factory array";
+			}
         }
         mysqli_close($db_connect);
+		echo "<br><br><br>";
     }
 }
 class Timer
