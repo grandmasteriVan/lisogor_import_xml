@@ -38,15 +38,15 @@ define ("db", "fm");
 class Timer
 {
     /**
-     * @var int время начала выпонения
+     * @var время начала выпонения
      */
     private $start_time;
     /**
-     * @var int время конца выполнения
+     * @var время конца выполнения
      */
     private $end_time;
     /**
-     * устанавливаем время начала выполнения скрипта
+     * встанавливаем время начала выполнения скрипта
      */
     public function setStartTime()
     {
@@ -73,13 +73,13 @@ class FindDiff
     private function getDDN($f_id)
     {
         $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
-        $query="SELECT DISTINCT goods.goods_id, goods.goods_article FROM goods join goodshasfeature on goods.goods_id=goodshasfeature.goods_id WHERE goodshasfeature.goods_id in (select goodshasfeature.goods_id from goodshasfeature where feature_id=14 AND goodshasfeature_valueid=$f_id)";
+        $query="SELECT DISTINCT goods.goods_id, goods.goods_article FROM goods join goodshasfeature on goods.goods_id=goodshasfeature.goods_id WHERE goods.goods_noactual=0 AND goodshasfeature.goods_id in (select goodshasfeature.goods_id from goodshasfeature where feature_id=14 AND goodshasfeature_valueid=$f_id)";
         if ($res=mysqli_query($db_connect,$query))
         {
             //var_dump ($query);
             while ($row = mysqli_fetch_assoc($res))
             {
-                $idByFactory[]=$row;
+                $idByFactoty[]=$row;
             }
         }
         else
@@ -87,9 +87,9 @@ class FindDiff
             echo "error in SQL ddn $query<br>";
         }
         mysqli_close($db_connect);
-        if (is_array($idByFactory))
+        if (is_array($idByFactoty))
         {
-            return $idByFactory;
+            return $idByFactoty;
         }
         else
         {
@@ -146,12 +146,15 @@ class FindDiff
             }
         }
 		//var_dump ($ddn_articles);
+		//var_dump($fm_articles);
 		
         $diff_ddn=array_diff($ddn_articles,$fm_articles);
 		
         $diff_fm=array_diff($fm_articles,$ddn_articles);
         echo "Диваны на ДДН которых нет на ФМ:<br>";
 		var_dump($diff_ddn);
+		$del="";
+		$diff_fm=array_diff($diff_fm,$del);
 		echo "<br>";
 		echo "Диваны на FM которых нет на DDN:<br>";
 		var_dump($diff_fm);
@@ -161,6 +164,17 @@ $runtime = new Timer();
 //set_time_limit(9000);
 $runtime->setStartTime();
 $test = new FindDiff();
+//$test->findDif(6,87);
+//$test->findDif(125,123);
+//$test->findDif(156,163);
+//далио
+//$test->findDif(153,164);
+//даниро
 $test->findDif(6,87);
+//еврософ
+//$test->findDif(173,166);
+//попарада
+//$test->findDif(17,95);
+
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
