@@ -125,3 +125,100 @@ class BabymarketInStore extends Universal
         }
     }
 }
+
+class Babymarket extends Universal
+{
+    public function parse_price($params)
+    {
+        //echo "Enter price!";
+        if ($this->file1)
+        {
+            $dom = DOMDocument::load($this->file1);
+            $rows = $dom->getElementsByTagName('Row');
+            //print_r($rows);
+            $row_num = 1;
+            //полезная инфа начинается с 8 строки!
+            //артикул позиции находится в 3 ячейке
+            foreach ($rows as $row)
+            {
+                if ($row_num>=10)
+                {
+                    $cells=$row->getElementsByTagName('Cell');
+                    $cell_num=1;
+                    unset($name);
+                    foreach ($cells as $cell)
+                    {
+                        //echo "$cell->nodeValue is $cell_num<br>";
+                        $elem=$cell->nodeValue;
+                        if ($cell_num==2)
+                        {
+                            $name=$elem;
+                        }
+                        if ($cell_num==5)
+                        {
+                            $price=round($elem*1.35);
+                        }
+                        $cell_num++;
+                    }
+                    if ($name)
+                    {
+                        $this->add_price($name,$price);
+                    }
+                }
+                $row_num++;
+            }
+        }
+        else
+        {
+            echo "No file, no life!";
+        }
+        //var_dump($this->data);
+    }
+
+    public function add_db()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        foreach ($this->data as $d)
+        {
+            $d_name=$d['name'];
+            //echo $d_name."<br>";
+            $d_price=$d['kat0'];
+            $factory_id=35;
+
+            $strSQL="UPDATE goods ".
+                "SET goods_pricecur=$d_price ".
+                "WHERE goods.goods_article_link=$d_name AND (factory_id=161 or factory_id=163 or factory_id=164 or factory_id=165 or factory_id=166 or factory_id=167".
+                " or factory_id=168 or factory_id=169 or factory_id=170 or factory_id=171)";
+            echo $strSQL."<br>";
+            //break;
+            //mysqli_query($db_connect, $strSQL);
+            //break;
+
+        }
+
+    }
+    public function test_data()
+    {
+        ?>
+        <!--<html>
+        <body> -->
+        <table>
+            <tr>
+                <th>Артикул</th>
+                <th>Цена</th>
+            </tr>
+            <?php foreach($this->data as $row)
+            {?>
+                <tr>
+                    <td><?php echo ($row['name']); ?></td>
+                    <td><?php echo ($row['price']); ?></td>
+                </tr>
+
+            <?php } ?>
+
+        </table>
+        <!-- </body>
+        </html> --> <?php
+        $this->findDif();
+    }
+}

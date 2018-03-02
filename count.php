@@ -31,8 +31,16 @@ define ("pass", "T6n7C8r1");
 //define ("db_ddn", "ddn_new");
 define ("db_ddn", "ddnPZS");
 define ("db", "fm");
+
+/**
+ * Class countTov
+ */
 class countTov
 {
+    /**
+     * @param $factory_id
+     * @return null
+     */
     private function countPerFactoryAll($factory_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -56,6 +64,11 @@ class countTov
             return null;
         }
     }
+
+    /**
+     * @param $factory_id
+     * @return null
+     */
     private function countPerFactoryActive($factory_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -78,6 +91,10 @@ class countTov
             return null;
         }
     }
+
+    /**
+     *
+     */
     public function countTovFM()
     {
         echo "<b>На ФМ:</b><br>";
@@ -112,8 +129,15 @@ class countTov
 		echo "<br><br><br>";
     }
 }
+
+/**
+ * Class CountDDN
+ */
 class CountDDN
 {
+    /**
+     * @return array|null
+     */
     private function getFactoryisId()
     {
         $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
@@ -139,6 +163,11 @@ class CountDDN
             return null;
         }
     }
+
+    /**
+     * @param $f_id
+     * @return mixed
+     */
     private function getCountByFactoryAll($f_id)
     {
         $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
@@ -161,7 +190,12 @@ class CountDDN
         }
         return $good;
     }
-	private function getCountByFactoryActual($f_id)
+
+    /**
+     * @param $f_id
+     * @return mixed
+     */
+    private function getCountByFactoryActual($f_id)
     {
         $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
         $query="select count(goodshasfeature.goods_id) FROM goods join goodshasfeature on goods.goods_id=goodshasfeature.goods_id WHERE goodshasfeature.feature_id=14 AND goodshasfeature.goodshasfeature_valueid=$f_id AND goods.goods_noactual=0";
@@ -183,6 +217,10 @@ class CountDDN
         }
         return $good;
     }
+
+    /**
+     *
+     */
     public function getCount()
     {
         echo "<b>На ДДН:</b><br>";
@@ -206,6 +244,10 @@ class CountDDN
         }
     }
 }
+
+/**
+ * Class Timer
+ */
 class Timer
 {
     /**

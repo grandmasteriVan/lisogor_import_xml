@@ -225,6 +225,14 @@ switch ($selectedFactory)
         $test->findDiff1();
 		break;
 
+    case "BabyMarket":
+        include_once "babymarket_instore.php";
+        $test=new Babymarket($_FILES['file']['tmp_name'],null);
+        $test->parse_price(null);
+        //$test->findDiff1();
+        $test->test_data();
+        break;
+
 		case "Veres_instore":
         include_once "veres.php";
         $test=new VeresActive($_FILES['file']['tmp_name'],158);
