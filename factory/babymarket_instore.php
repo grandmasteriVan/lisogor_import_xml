@@ -125,7 +125,6 @@ class BabymarketInStore extends Universal
         }
     }
 }
-
 class Babymarket extends Universal
 {
     public function parse_price($params)
@@ -174,7 +173,6 @@ class Babymarket extends Universal
         }
         //var_dump($this->data);
     }
-
     public function add_db()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -183,19 +181,15 @@ class Babymarket extends Universal
             $d_name=$d['name'];
             //echo $d_name."<br>";
             $d_price=$d['kat0'];
-            $factory_id=35;
-
             $strSQL="UPDATE goods ".
                 "SET goods_pricecur=$d_price ".
-                "WHERE goods.goods_article_link=$d_name AND (factory_id=161 or factory_id=163 or factory_id=164 or factory_id=165 or factory_id=166 or factory_id=167".
+                "WHERE goods.goods_article_link='$d_name' AND (factory_id=161 or factory_id=163 or factory_id=164 or factory_id=165 or factory_id=166 or factory_id=167".
                 " or factory_id=168 or factory_id=169 or factory_id=170 or factory_id=171)";
             echo $strSQL."<br>";
             //break;
-            //mysqli_query($db_connect, $strSQL);
+            mysqli_query($db_connect, $strSQL);
             //break;
-
         }
-
     }
     public function test_data()
     {
@@ -211,7 +205,7 @@ class Babymarket extends Universal
             {?>
                 <tr>
                     <td><?php echo ($row['name']); ?></td>
-                    <td><?php echo ($row['price']); ?></td>
+                    <td><?php echo ($row['kat0']); ?></td>
                 </tr>
 
             <?php } ?>
