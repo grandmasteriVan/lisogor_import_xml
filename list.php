@@ -357,7 +357,7 @@ class listDDN
 					$factory=$this->getFactoryByFactoryId($f_id);
 					//echo ""
 					$name=$this->getNameById($id);
-					echo "$id $name $factory<br>";
+					echo "$id; $name; $factory<br>";
 					//break;
 				}
 			}
@@ -398,7 +398,7 @@ class listDDN
 					$factory=$this->getFactoryByFactoryId($f_id);
 					//echo ""
 					$name=$this->getNameById($id);
-					echo "$id $name $factory<br>";
+					echo "$id; $name; $factory;<br>";
 					//break;
 				}
 			}
@@ -411,8 +411,6 @@ class listDDN
         
     }
 }
-
-
 class listFM
 {
     private function countRewiev($url_id)
@@ -424,10 +422,10 @@ class listFM
             unset($goods);
             while ($row = mysqli_fetch_assoc($res))
             {
-                $goods[]=$row;
+                $goods=$row;
             }
             //var_dump ($query);
-            //var_dump ($tovByFactory);
+            //var_dump ($goods);
         }
         else
         {
@@ -442,13 +440,11 @@ class listFM
         {
             return null;
         }
-
     }
-
     private function getGoods()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id, goods_url, goods_name, factory_id FROM goods WHERE (goodskind_id=23 OR goodskind_id=26) AND goods_videoreview=1";
+        $query="SELECT goods_id, goods_url, goods_name, factory_id, goodskind_id FROM goods WHERE (goodskind_id=23 OR goodskind_id=26) AND goods_videoreview=1 AND goods_active=1 AND goods_noactual=0";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -472,7 +468,6 @@ class listFM
             return null;
         }
     }
-
     private function getUrlIdByUrl($url)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -482,7 +477,7 @@ class listFM
             unset($goods);
             while ($row = mysqli_fetch_assoc($res))
             {
-                $goods[]=$row;
+                $goods=$row;
             }
             //var_dump ($query);
             //var_dump ($tovByFactory);
@@ -494,36 +489,96 @@ class listFM
         mysqli_close($db_connect);
         if (!is_null($goods))
         {
-            return $goods;
+            return $goods['url_id'];
         }
         else
         {
             return null;
         }
     }
-
+	private function getFactory($f_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT factory_name FROM factory WHERE factory_id=$f_id";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods=$row;
+            }
+            //var_dump ($query);
+            //var_dump ($tovByFactory);
+        }
+        else
+        {
+            echo "error in SQL: $query<br>";
+        }
+        mysqli_close($db_connect);
+        if (is_array($goods))
+        {
+            return $goods['factory_name'];
+        }
+        else
+        {
+            return null;
+        }
+	}
+	
     public function getList()
     {
         $goods=$this->getGoods();
         if (is_array($goods))
         {
             foreach ($goods as $good)
-            {
-                $id=$good['goods_id'];
-                $name=$good['goods_name'];
-                $url=$good['goods_url'];
-
-                $url_id=$this->getUrlIdByUrl($url);
-                $count_rew=$this->countRewiev($url_id);
-                echo "$id $name $count_rew<b>";
-            }
+			{
+				if ($good['goodskind_id']==23)
+				{
+					$starit[]=$good;
+				}
+				if ($good['goodskind_id']==26)
+				{
+					$ugol[]=$good;
+				}
+			}	
         }
         else
         {
             echo "Not an array!";
         }
-
+		if (is_array($starit))
+		{
+			foreach ($starit as $good)
+            {
+                $id=$good['goods_id'];
+                $name=$good['goods_name'];
+                $url=$good['goods_url'];
+                $url_id=$this->getUrlIdByUrl($url);
+                $count_rew=$this->countRewiev($url_id);
+				$f_id=$good['factory_id'];
+				$factory=$this->getFactory($f_id);
+				echo "$id; $name; $factory; $count_rew;<br>";
+				
+            }
+		}
+		echo "<br><br>Угловые<br><br>";
+		if (is_array($ugol))
+		{
+			foreach ($ugol as $good)
+            {
+                $id=$good['goods_id'];
+                $name=$good['goods_name'];
+                $url=$good['goods_url'];
+                $url_id=$this->getUrlIdByUrl($url);
+                $count_rew=$this->countRewiev($url_id);
+				$f_id=$good['factory_id'];
+				$factory=$this->getFactory($f_id);
+				echo "$id; $name; $factory; $count_rew;<br>";
+				
+					
+            }
+		}
     }
 }
 $test=new listDDN();
+//$test=new listFM();
 $test->getList();
