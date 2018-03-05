@@ -411,5 +411,119 @@ class listDDN
         
     }
 }
+
+
+class listFM
+{
+    private function countRewiev($url_id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT count(review_id) FROM review WHERE url_id='$url_id'";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            unset($goods);
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[]=$row;
+            }
+            //var_dump ($query);
+            //var_dump ($tovByFactory);
+        }
+        else
+        {
+            echo "error in SQL: $query<br>";
+        }
+        mysqli_close($db_connect);
+        if (!is_null($goods))
+        {
+            return $goods['count(review_id)'];
+        }
+        else
+        {
+            return null;
+        }
+
+    }
+
+    private function getGoods()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id, goods_url, goods_name, factory_id FROM goods WHERE (goodskind_id=23 OR goodskind_id=26) AND goods_videoreview=1";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[]=$row;
+            }
+            //var_dump ($query);
+            //var_dump ($tovByFactory);
+        }
+        else
+        {
+            echo "error in SQL: $query<br>";
+        }
+        mysqli_close($db_connect);
+        if (is_array($goods))
+        {
+            return $goods;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private function getUrlIdByUrl($url)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT url_id FROM url WHERE url_name='$url'";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            unset($goods);
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[]=$row;
+            }
+            //var_dump ($query);
+            //var_dump ($tovByFactory);
+        }
+        else
+        {
+            echo "error in SQL: $query<br>";
+        }
+        mysqli_close($db_connect);
+        if (!is_null($goods))
+        {
+            return $goods;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public function getList()
+    {
+        $goods=$this->getGoods();
+        if (is_array($goods))
+        {
+            foreach ($goods as $good)
+            {
+                $id=$good['goods_id'];
+                $name=$good['goods_name'];
+                $url=$good['goods_url'];
+
+                $url_id=$this->getUrlIdByUrl($url);
+                $count_rew=$this->countRewiev($url_id);
+                echo "$id $name $count_rew<b>";
+            }
+        }
+        else
+        {
+            echo "Not an array!";
+        }
+
+    }
+}
 $test=new listDDN();
 $test->getList();
