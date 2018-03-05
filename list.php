@@ -5,34 +5,32 @@
  * Date: 02.03.2018
  * Time: 14:00
  */
-
 header('Content-type: text/html; charset=UTF-8');
 //define ("host","localhost");
-//define ("host_ddn","localhost");
-define ("host_ddn","es835db.mirohost.net");
+define ("host_ddn","localhost");
+//define ("host_ddn","es835db.mirohost.net");
 define ("host","localhost");
 /**
  * database username
  */
 //define ("user", "root");
-//define ("user_ddn", "root");
-define ("user_ddn", "u_fayni");
+define ("user_ddn", "root");
+//define ("user_ddn", "u_fayni");
 define ("user", "fm");
 /**
  * database password
  */
 //define ("pass", "");
-//define ("pass_ddn", "");
-define ("pass_ddn", "ZID1c0eud3Dc");
+define ("pass_ddn", "");
+//define ("pass_ddn", "ZID1c0eud3Dc");
 define ("pass", "T6n7C8r1");
 /**
  * database name
  */
 //define ("db", "mebli");
-//define ("db_ddn", "ddn_new");
-define ("db_ddn", "ddnPZS");
+define ("db_ddn", "ddn_new");
+//define ("db_ddn", "ddnPZS");
 define ("db", "fm");
-
 class listDDN
 {
     private function getAllGoods()
@@ -53,8 +51,15 @@ class listDDN
             echo "error in SQL: $query<br>";
         }
         mysqli_close($db_connect);
+		if (is_array($goods))
+		{
+			return $goods;
+		}
+		else
+		{
+			return null;
+		}
     }
-
     private function getUrlsById($id)
     {
         $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
@@ -83,7 +88,6 @@ class listDDN
             return null;
         }
     }
-
     private function getUrlidByUrl($url)
     {
         $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
@@ -112,8 +116,6 @@ class listDDN
             return null;
         }
     }
-
-
     private function findRewiev($id)
     {
         $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
@@ -142,11 +144,10 @@ class listDDN
             return null;
         }
     }
-
     private function isStraight($id)
     {
         $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
-        $query="SELECT goodshasfaeture_valueid FROM goodshasfaeture WHERE goods_id=$id AND faeture_id=55";
+        $query="SELECT goodshasfeature_valueid FROM goodshasfeature WHERE goods_id=$id AND feature_id=6 AND goodshasfeature_valueid=55";
         if ($res=mysqli_query($db_connect,$query))
         {
             unset($goods);
@@ -155,7 +156,7 @@ class listDDN
                 $goods=$row;
             }
             //var_dump ($query);
-            //var_dump ($tovByFactory);
+            //var_dump ($goods);
         }
         else
         {
@@ -171,11 +172,10 @@ class listDDN
             return null;
         }
     }
-
     private function isUgol($id)
     {
         $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
-        $query="SELECT goodshasfaeture_valueid FROM goodshasfaeture WHERE goods_id=$id AND faeture_id=56";
+        $query="SELECT goodshasfeature_valueid FROM goodshasfeature WHERE goods_id=$id AND feature_id=6 AND goodshasfeature_valueid=56";
         if ($res=mysqli_query($db_connect,$query))
         {
             unset($goods);
@@ -200,55 +200,105 @@ class listDDN
             return null;
         }
     }
-
-
     public function getList()
     {
         $goods=$this->getAllGoods();
-        foreach ($goods as $good)
-        {
-            $id=$good('goods_id');
-            $price=$good('cachegoods_minprice');
-            if ($this->isStraight($id)&&$price<=10000)
-            {
-                $straight[]=$good;
-                //break;
-            }
-            if ($this->isUgol($id)&&$price<=15000)
-            {
-                $ugol[]=$good;
-            }
-        }
-        if (is_array($straight))
-        {
-            foreach ($straight as $item)
-            {
-                $id=$item['goods_id'];
-                $url=$this->getUrlsById($id);
-                $urlId=$this->getUrlidByUrl($url);
-                if($this->findRewiev($urlId))
-                {
-                    $straigthWihtRew[]=$item;
-                }
-            }
-        }
-        var_dump($straigthWihtRew);
-        echo "<br><br>";
-
-        if (is_array($ugol))
-        {
-            foreach ($ugol as $item)
-            {
-                $id=$item['goods_id'];
-                $url=$this->getUrlsById($id);
-                $urlId=$this->getUrlidByUrl($url);
-                if($this->findRewiev($urlId))
-                {
-                    $ugolWihtRew[]=$item;
-                }
-            }
-        }
-        var_dump($ugolWihtRew);
+		//var_dump($goods);
+		//break;
+		if (is_array($goods))
+		{
+			$i=1;
+			foreach ($goods as $good)
+			{
+				//var_dump($good);
+				$id=$good['goods_id'];
+				$price=intval($good['cachegoods_minprice']);
+				//echo "$price <br>";
+				$i++;
+				//echo "$i";
+				
+				if ($this->isStraight($id)&&$price<=10000)
+				{
+					$straight[]=$good;
+					//break;
+				}
+				if ($this->isUgol($id)&&$price<=15000)
+				{
+					$ugol[]=$good;
+				}
+				
+				
+			}
+			//echo "i=$i";
+			
+			if (is_array($straight))
+			{
+				foreach ($straight as $item)
+				{
+					$id=$item['goods_id'];
+					$url=$this->getUrlsById($id);
+					$ulr_ua=$url[0]['goodshaslang_url'];
+					//echo "$ulr_ua<br>";
+					$ulr_ru=$url[1]['goodshaslang_url'];
+					//echo "$ulr_ru<br>";
+					$urlId_ua=$this->getUrlidByUrl($ulr_ua);
+					$urlId_ua=$urlId_ua[0]['url_id'];
+					$urlId_ru=$this->getUrlidByUrl($ulr_ru);
+					$urlId_ru=$urlId_ru[0]['url_id'];
+					//var_dump($url);
+					//var_dump($urlId_ua);
+					//var_dump($urlId_ru);
+					
+					
+					
+					if($this->findRewiev($urlId_ru)||$this->findRewiev($urlId_ua))
+					{
+						$straigthWihtRew[]=$item;
+					}
+					//break;
+				}
+			}
+			else
+			{
+				echo "No array straight";
+			}
+			var_dump($straigthWihtRew);
+			echo "<br>угловые<br>";
+			
+			if (is_array($ugol))
+			{
+				foreach ($ugol as $item)
+				{
+					$id=$item['goods_id'];
+					$url=$this->getUrlsById($id);
+					$ulr_ua=$url[0]['goodshaslang_url'];
+					//echo "$ulr_ua<br>";
+					$ulr_ru=$url[1]['goodshaslang_url'];
+					//echo "$ulr_ru<br>";
+					$urlId_ua=$this->getUrlidByUrl($ulr_ua);
+					$urlId_ua=$urlId_ua[0]['url_id'];
+					$urlId_ru=$this->getUrlidByUrl($ulr_ru);
+					$urlId_ru=$urlId_ru[0]['url_id'];
+					if($this->findRewiev($urlId_ru)||$this->findRewiev($urlId_ua))
+					{
+						$ugolWihtRew[]=$item;
+					}
+				}
+			}
+			else
+			{
+				echo "No array ugol";
+			}
+			var_dump($ugolWihtRew);
+			
+		}
+		else
+		{
+			echo "No goods array!";
+		}
+        
     }
-
 }
+
+$test=new listDDN();
+$test->getList();
