@@ -7,29 +7,29 @@
  */
 header('Content-type: text/html; charset=UTF-8');
 //define ("host","localhost");
-define ("host_ddn","localhost");
-//define ("host_ddn","es835db.mirohost.net");
+//define ("host_ddn","localhost");
+define ("host_ddn","es835db.mirohost.net");
 define ("host","localhost");
 /**
  * database username
  */
 //define ("user", "root");
-define ("user_ddn", "root");
-//define ("user_ddn", "u_fayni");
+//define ("user_ddn", "root");
+define ("user_ddn", "u_fayni");
 define ("user", "fm");
 /**
  * database password
  */
 //define ("pass", "");
-define ("pass_ddn", "");
-//define ("pass_ddn", "ZID1c0eud3Dc");
+//define ("pass_ddn", "");
+define ("pass_ddn", "ZID1c0eud3Dc");
 define ("pass", "T6n7C8r1");
 /**
  * database name
  */
 //define ("db", "mebli");
-define ("db_ddn", "ddn_new");
-//define ("db_ddn", "ddnPZS");
+//define ("db_ddn", "ddn_new");
+define ("db_ddn", "ddnPZS");
 define ("db", "fm");
 class listDDN
 {
@@ -200,11 +200,10 @@ class listDDN
             return null;
         }
     }
-
     private function getNameById($id)
     {
         $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
-        $query="SELECT goodhaslang_name FROM goodhaslang WHERE goods_id=$id AND lang_id=1";
+        $query="SELECT goodshaslang_name FROM goodshaslang WHERE goods_id=$id AND lang_id=1";
         if ($res=mysqli_query($db_connect,$query))
         {
             unset($goods);
@@ -222,18 +221,17 @@ class listDDN
         mysqli_close($db_connect);
         if (!is_null($goods))
         {
-            return $goods['goodhaslang_name'];
+            return $goods['goodshaslang_name'];
         }
         else
         {
             return null;
         }
     }
-
     private function getFactoryIdById($id)
     {
         $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
-        $query="SELECT goodshaffeature_valueid FROM goodshaffeature WHERE goods_id=$id AND feature_id=14";
+        $query="SELECT goodshasfeature_valueid FROM goodshasfeature WHERE goods_id=$id AND feature_id=14";
         if ($res=mysqli_query($db_connect,$query))
         {
             unset($goods);
@@ -251,7 +249,7 @@ class listDDN
         mysqli_close($db_connect);
         if (!is_null($goods))
         {
-            return $goods['goodshaffeature_valueid'];
+            return $goods['goodshasfeature_valueid'];
         }
         else
         {
@@ -286,7 +284,6 @@ class listDDN
             return null;
         }
     }
-
     public function getList()
     {
         $goods=$this->getAllGoods();
@@ -349,7 +346,21 @@ class listDDN
 			{
 				echo "No array straight";
 			}
-			var_dump($straigthWihtRew);
+			//var_dump($straigthWihtRew);
+			if (is_array($straigthWihtRew))
+			{
+				foreach ($straigthWihtRew as $good)
+				{
+					$id=$good['goods_id'];
+					$f_id=$this->getFactoryIdById($id);
+					//echo "$f_id<br>";
+					$factory=$this->getFactoryByFactoryId($f_id);
+					//echo ""
+					$name=$this->getNameById($id);
+					echo "$id $name $factory<br>";
+					//break;
+				}
+			}
 			echo "<br>угловые<br>";
 			
 			if (is_array($ugol))
@@ -376,7 +387,21 @@ class listDDN
 			{
 				echo "No array ugol";
 			}
-			var_dump($ugolWihtRew);
+			//var_dump($ugolWihtRew);
+			if (is_array($ugolWihtRew))
+			{
+				foreach ($ugolWihtRew as $good)
+				{
+					$id=$good['goods_id'];
+					$f_id=$this->getFactoryIdById($id);
+					//echo "$f_id<br>";
+					$factory=$this->getFactoryByFactoryId($f_id);
+					//echo ""
+					$name=$this->getNameById($id);
+					echo "$id $name $factory<br>";
+					//break;
+				}
+			}
 			
 		}
 		else
@@ -386,6 +411,5 @@ class listDDN
         
     }
 }
-
 $test=new listDDN();
 $test->getList();
