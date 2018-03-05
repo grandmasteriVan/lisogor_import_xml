@@ -200,6 +200,93 @@ class listDDN
             return null;
         }
     }
+
+    private function getNameById($id)
+    {
+        $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+        $query="SELECT goodhaslang_name FROM goodhaslang WHERE goods_id=$id AND lang_id=1";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            unset($goods);
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods=$row;
+            }
+            //var_dump ($query);
+            //var_dump ($tovByFactory);
+        }
+        else
+        {
+            echo "error in SQL: $query<br>";
+        }
+        mysqli_close($db_connect);
+        if (!is_null($goods))
+        {
+            return $goods['goodhaslang_name'];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private function getFactoryIdById($id)
+    {
+        $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+        $query="SELECT goodshaffeature_valueid FROM goodshaffeature WHERE goods_id=$id AND feature_id=14";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            unset($goods);
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods=$row;
+            }
+            //var_dump ($query);
+            //var_dump ($tovByFactory);
+        }
+        else
+        {
+            echo "error in SQL: $query<br>";
+        }
+        mysqli_close($db_connect);
+        if (!is_null($goods))
+        {
+            return $goods['goodshaffeature_valueid'];
+        }
+        else
+        {
+            return null;
+        }
+    }
+    private function getFactoryByFactoryId($id)
+    {
+        $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+        $query="SELECT fvalue_nameru FROM fvalue WHERE fvalue_id=$id";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            unset($goods);
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods=$row;
+            }
+            //var_dump ($query);
+            //var_dump ($tovByFactory);
+        }
+        else
+        {
+            echo "error in SQL: $query<br>";
+        }
+        mysqli_close($db_connect);
+        if (!is_null($goods))
+        {
+            return $goods['fvalue_nameru'];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     public function getList()
     {
         $goods=$this->getAllGoods();
