@@ -198,7 +198,75 @@ class insertVid extends CopyVid
         $content="";
     }
 
+}
 
+class insertVidBeds
+{
+    private function getTovFirst()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id, goods_content FROM goods WHERE goods_active=1 AND goods_noactual=0 AND (goodskind_id=39 OR goodskind_id=50 ORgoodskind_id=121) AND factory_id<>32";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+        }
+        else
+        {
+            echo "error in SQL: $query<br>";
+        }
+        mysqli_close($db_connect);
+        if (!empty($goods))
+        {
+            return $goods;
+        }
+        else
+        {
+            return null
+        }
+
+    }
+
+    private function getTovLast()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id, goods_content FROM goods WHERE goods_active=1 AND goods_noactual=0 AND (goodskind_id=39 OR goodskind_id=50 ORgoodskind_id=121) AND factory_id=32";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+        }
+        else
+        {
+            echo "error in SQL: $query<br>";
+        }
+        mysqli_close($db_connect);
+        if (!empty($goods))
+        {
+            return $goods;
+        }
+        else
+        {
+            return null
+        }
+    }
+
+    private function insertVidFirst()
+    {
+
+    }
+
+    private function insertVidLast($pos)
+    {
+        $id=$pos['goods_id'];
+        $cont=$pos['goods_content'];
+        $cont=substr($cont,0,-4);
+        $cont.="</p>";
+    }
 }
 
 $runtime = new Timer();
