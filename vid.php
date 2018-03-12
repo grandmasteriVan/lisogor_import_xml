@@ -189,6 +189,44 @@ class insertVid extends CopyVid
 }
 class insertVidBeds
 {
+    private function getTovNoVid()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id, goods_content FROM goods WHERE goods_active=1 AND goods_noactual=0 AND goods_content NOT LIKE '%iframe%' AND (goodskind_id=39 OR goodskind_id=50 ORgoodskind_id=121)";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+        }
+        else
+        {
+            echo "error in SQL: $query<br>";
+        }
+        mysqli_close($db_connect);
+        if (!is_array($goods))
+        {
+            return $goods;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private function insertSingleVid($id, $cont)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $cont="<p><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/EoGsmck1bZI\" style=\"text-align: center;\" width=\"380\"></iframe></p>".$cont;
+        $query="UPDATE goods SET goods_content='$cont' WHERE goods_id=$id";
+        //mysqli_query($db_connect,$query);
+        echo "$query <br>";
+        mysqli_close($db_connect);
+    }
+
+
+
     private function getTovFirst()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -249,7 +287,7 @@ class insertVidBeds
         $cont=$pos['goods_content'];
         $cont=substr($cont,0,-4);
         $cont.=" <iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/EoGsmck1bZI\" style=\"text-align: center;\" width=\"380\"></iframe></p>";
-		$query="UPDATE goods SET goods_content=$cont WHERE goods_id=$id";
+		$query="UPDATE goods SET goods_content='$cont' WHERE goods_id=$id";
 		mysqli_query($db_connect,$query);
 		//echo "$query <br>";
 		mysqli_close($db_connect);
@@ -269,6 +307,24 @@ class insertVidBeds
 			echo "No last array!!<br>";
 		}
 	}
+
+	public function goSingle()
+    {
+        $goods=$this->getTovNoVid();
+        if (is_array($goods))
+        {
+            foreach ($goods as $good)
+            {
+                $id=$good['goods_id'];
+                $cont=$good['goods_content'];
+                $this->insertSingleVid($id, $cont);
+            }
+        }
+        else
+        {
+            echo "No last array!!<br>";
+        }
+    }
 }
 $runtime = new Timer();
 $runtime->setStartTime();
