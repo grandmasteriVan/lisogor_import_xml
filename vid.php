@@ -5,14 +5,8 @@
  * Date: 15.12.16
  * Time: 12:32
  */
-header('Content-Type: text/html; charset=utf-8');
-/**
- * database host
- */
+header('Content-type: text/html; charset=UTF-8');
 //define ("host","localhost");
-/**
- *
- */
 define ("host","localhost");
 /**
  * database username
@@ -65,7 +59,6 @@ class Timer
         return $this->end_time-$this->start_time;
     }
 }
-
 /**
  * Class CopyVid
  * класс пробегается по всем товарам, ищет в контенте товары где есть ссылка на ютуб видео и
@@ -94,7 +87,6 @@ class CopyVid
         }
         return 0;
     }
-
     /**
      * пробегает по всем товарам, ищет вовары, у которых в контенте есть iframe вставка
      * дальше с помошью регулярки ищем id видео
@@ -146,7 +138,6 @@ class CopyVid
         mysqli_close($db_connect);
     }
 }
-
 class insertVid extends CopyVid
 {
     private function getGoodsWithVid()
@@ -170,7 +161,6 @@ class insertVid extends CopyVid
             return null;
         }
     }
-
     private function getGoodsWithNoVid()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -192,14 +182,11 @@ class insertVid extends CopyVid
             return null;
         }
     }
-
     private function insertOneVideo($id, $content)
     {
         $content="";
     }
-
 }
-
 class insertVidBeds
 {
     private function getTovFirst()
@@ -224,15 +211,13 @@ class insertVidBeds
         }
         else
         {
-            return null
+            return null;
         }
-
     }
-
     private function getTovLast()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id, goods_content FROM goods WHERE goods_active=1 AND goods_noactual=0 AND (goodskind_id=39 OR goodskind_id=50 ORgoodskind_id=121) AND factory_id=32";
+        $query="SELECT goods_id, goods_content FROM goods WHERE goods_active=1 AND goods_noactual=0 AND (goodskind_id=39 OR goodskind_id=50 OR goodskind_id=121) AND factory_id=32";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -251,27 +236,45 @@ class insertVidBeds
         }
         else
         {
-            return null
+            return null;
         }
     }
-
     private function insertVidFirst()
     {
-
     }
-
     private function insertVidLast($pos)
     {
-        $id=$pos['goods_id'];
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$id=$pos['goods_id'];
         $cont=$pos['goods_content'];
         $cont=substr($cont,0,-4);
-        $cont.="</p>";
+        $cont.=" <iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/EoGsmck1bZI\" style=\"text-align: center;\" width=\"380\"></iframe></p>";
+		$query="UPDATE goods SET goods_content=$cont WHERE goods_id=$id";
+		mysqli_query($db_connect,$query);
+		//echo "$query <br>";
+		mysqli_close($db_connect);
     }
+	public function goLast()
+	{
+		$goods=$this->getTovLast();
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$this->insertVidLast($good);
+			}
+		}
+		else
+		{
+			echo "No last array!!<br>";
+		}
+	}
 }
-
 $runtime = new Timer();
 $runtime->setStartTime();
-$test=new CopyVid();
-$test->FindVideo();
+$test=new insertVidBeds();
+//$test->goLast();
+//$test=new CopyVid();
+//$test->FindVideo();
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
