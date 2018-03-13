@@ -123,8 +123,39 @@ function add_text_estela()
         }
     }
 }
+
+function add_text_matroluxe()
+{
+    $query="SELECT goods_id, goods_content FROM goods WHERE factory_id=46 AND goods_id<>34207 AND (goodskind_id=40 OR goodskind_id=45 OR goodskind_id=88)";
+    $db_connect=mysqli_connect(host,user,pass,db);
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        //
+        while ($row=mysqli_fetch_assoc($res))
+        {
+            $arr[]=$row;
+        }
+        foreach ($arr as $row)
+        {
+            $id=$row['goods_id'];
+            $desc=$row['goods_content'].PHP_EOL."<p style=\"text-align: center;\">Видео-каталог матрасов Matroluxe:<p>".
+                "<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/KYTqssupjgg\" style=\"text-align: center;\" width=\"380\"></iframe></p>";
+            $query="UPDATE goods SET goods_content='$desc' WHERE goods_id=$id";
+            mysqli_query($db_connect,$query);
+            echo "$id<br>";
+            //break;
+        }
+    }
+	else
+	{
+		$errMsg=mysqli_error($db_connect);
+		echo "error in SQL: $query $errMsg<br>";
+	}
+	mysqli_close($db_connect);
+}
 //set_info();
 //add_text_tis();
 //add_text_skif();
-add_text_estela();
+//add_text_estela();
+add_text_matroluxe();
 ?>
