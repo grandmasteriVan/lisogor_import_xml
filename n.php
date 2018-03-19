@@ -528,6 +528,7 @@ if ($res=mysqli_query($db_connect,$query))
 		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
 	}
 	*/
+	/*
 	$db_connect=mysqli_connect(host,user,pass,db);
 	$query="SELECT goods_id  FROM goods WHERE goods_active=1 AND goods_noactual=0 AND goods_maintcharter=76";
 	if ($res=mysqli_query($db_connect,$query))
@@ -569,6 +570,108 @@ if ($res=mysqli_query($db_connect,$query))
 		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
 	}
 	mysqli_close($db_connect);
+	*/
+	//снять все акции и проценты с комфора
+	//$db_connect=mysqli_connect(host,user,pass,db);
+	//$query="update goods SET goods_stock=0, goods_discount=0 where factory_id=35";
+	//mysqli_query($db_connect,$query);
+	//mysqli_close($db_connect);
 	
+	//снять все акции и проценты с комфора
+	//$db_connect=mysqli_connect(host,user,pass,db);
+	//$query="update goods SET goods_ noactual=1 where factory_id=107";
+	//mysqli_query($db_connect,$query);
+	//mysqli_close($db_connect);
+	
+	
+	
+	function insSP($pos)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$id=$pos['goods_id'];
+        $cont=$pos['goods_content'];
+		$cont1=str_ireplace("Видео-презинтация","Видео-презентация",$cont);
+		$query="UPDATE goods SET goods_content='$cont1' WHERE goods_id=$id";
+		mysqli_query($db_connect,$query);
+		//echo mysqli_error($db_connect)."<br>";
+		//echo "$query <br>";
+		mysqli_close($db_connect);
+	}
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="SELECT goods_id, goods_content FROM goods WHERE goods_active=1 AND goods_noactual=0 AND factory_id=36";
+	if ($res=mysqli_query($db_connect,$query))
+    {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+            //var_dump($goods);
+			//echo "<pre>";
+			//print_r ($factories);
+			//echo "</pre>";
+			if (is_array($goods))
+			{
+				foreach ($goods as $good)
+				{
+					insSP($good);
+					//break;
+				}
+			}
+			else
+			{
+				echo "No array";
+			}
+			
+    }
+	else
+	{
+		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+	}
+	mysqli_close($db_connect);
+	
+	
+	///////////////////////////////////////
+	///////////////////////////////////////
+	/*$db_connect=mysqli_connect(host,user,pass,db);
+	$query="SELECT factory_name, factory_id, factory_soft FROM factory WHERE factory_noactual=0";
+	if ($res=mysqli_query($db_connect,$query))
+    {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $factories[] = $row;
+            }
+            //var_dump($goods);
+			//echo "<pre>";
+			//print_r ($factories);
+			//echo "</pre>";
+    }
+	else
+	{
+		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+	}
+	if (is_array($factories))
+	{
+		foreach ($factories as $factory)
+		{
+			//unset ($categories);
+			$f_id=$factory['factory_id'];
+			$f_name=$factory['factory_name'];
+			$f_soft=$factory['factory_soft'];
+			if ($f_soft==1)
+			{
+				echo "<b>$f_name</b> мягкая мебель<br>";
+			}
+			else
+			{
+				echo "<b>$f_name</b><br>";
+			}
+			
+		}
+	}
+	else
+	{
+		echo "No array";
+	}
+	mysqli_close($db_connect);
+	*/
 ?>
-
