@@ -295,13 +295,28 @@ class insertVidBeds
 		{
 			foreach ($goods as $good)
 			{
-				$this->insertVidLast($good);
+				//$this->insertVidLast($good);
+				$this->insSP($good);
+				break;
 			}
 		}
 		else
 		{
 			echo "No last array!!<br>";
 		}
+	}
+	
+	private function insSP($pos)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$id=$pos['goods_id'];
+        $cont=$pos['goods_content'];
+		$cont1=str_ireplace("</iframe><iframe","</iframe>&#160;<iframe",$cont);
+		$query="UPDATE goods SET goods_content='$cont1' WHERE goods_id=$id";
+		mysqli_query($db_connect,$query);
+		//echo mysqli_error($db_connect)."<br>";
+		echo "$query <br>";
+		mysqli_close($db_connect);
 	}
 	
 	public function getNoVid()
@@ -356,10 +371,120 @@ class insertVidBeds
         }
     }
 }
+
+class insertVidMatr
+{
+	private function getTovList()
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id, goods_content FROM goods WHERE goods_active=1 AND goods_noactual=0 AND factory_id=35 AND goods_maintcharter=14";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+        }
+		else
+		{
+			echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+		}
+        mysqli_close($db_connect);
+        if (is_array($goods))
+        {
+            return $goods;
+        }
+        else
+        {
+            return null;
+        }
+	}
+	
+	private function hasUpperVid($cont)
+	{
+		if (strripos ($cont,"JF1wYXFtPck")==false)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
+	private function hasDownVid($cont)
+	{
+		if (strripos ($cont,"5HEoT874niY")==false)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
+	private function insUpperVid($cont)
+	{
+		$cont="<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/JF1wYXFtPck\" style=\"text-align: center;\" width=\"380\"></iframe></p>".$cont;
+		return $cont;
+	}
+	
+	private function insDownVid($cont)
+	{
+		$cont=$cont."<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/5HEoT874niY\" style=\"text-align: center;\" width=\"380\"></iframe></p>";
+		return $cont;
+	}
+	
+	private function updCont($id, $cont)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goods SET goods_content='$cont' WHERE goods_id=$id";
+		mysqli_query($db_connect,$query);
+		//echo mysqli_error($db_connect)."<br>";
+		//echo "$query <br>";
+		mysqli_close($db_connect);
+	}
+	
+	public function insVids()
+	{
+		$goods=$this->getTovList();
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$id=$good['goods_id'];
+				$cont=$good['goods_content'];
+				//echo "$cont<br>";
+				if (!$this->hasDownVid($cont))
+				{
+					$cont=$this->insDownVid($cont);
+				}
+				//echo "$cont<br>";
+				if (!$this->hasUpperVid($cont))
+				{
+					$cont=$this->insUpperVid($cont);
+				}
+				echo "$id<br>";
+				$this->updCont($id, $cont);
+				//break;
+				
+			}
+		}
+		else
+		{
+			echo "No array!";
+		}
+	}
+}
 $runtime = new Timer();
 $runtime->setStartTime();
-$test=new insertVidBeds();
-$test->getNoVid();
+
+$test=new insertVidMatr();
+$test->insVids();
+
+//$test=new insertVidBeds();
+//$test->getNoVid();
 //$test->goSingle();
 //$test->goLast();
 //$test=new CopyVid();
