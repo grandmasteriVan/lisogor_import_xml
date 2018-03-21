@@ -374,10 +374,25 @@ class insertVidBeds
 
 class insertVidMatr
 {
+	private $f_id;
+	
+	function __construct($f_id)
+	{
+		$this->f_id=$f_id;
+	}
+	
+	private function delAllVid($cont)
+	{
+		$cont_new=preg_replace("'<iframe[^>]*?>.*?</iframe>'si","",$cont);
+		return $cont_new;
+	}
+	
 	private function getTovList()
 	{
+		//echo host.user.pass.db."<br>";
 		$db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id, goods_content FROM goods WHERE goods_active=1 AND goods_noactual=0 AND factory_id=35 AND goods_maintcharter=14";
+		$f_id=$this->f_id;
+        $query="SELECT goods_id, goods_content FROM goods WHERE goods_active=1 AND goods_noactual=0 AND factory_id=$f_id AND goods_maintcharter=14";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -424,6 +439,15 @@ class insertVidMatr
 		}
 	}
 	
+	private function insNewVid($cont)
+	{
+		//добавляем видео в начало
+		$cont="<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/JF1wYXFtPck\" style=\"text-align: center;\" width=\"380\"></iframe></p>".$cont;
+		//добавляем видео в конец
+		$cont=$cont."<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/KYTqssupjgg\" style=\"text-align: center;\" width=\"380\"></iframe>&nbsp;<iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/44DDXY4B7z4\" style=\"text-align: center;\" width=\"380\"></iframe></p>";
+		return $cont;
+	}
+	
 	private function insUpperVid($cont)
 	{
 		$cont="<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/JF1wYXFtPck\" style=\"text-align: center;\" width=\"380\"></iframe></p>".$cont;
@@ -446,7 +470,7 @@ class insertVidMatr
 		mysqli_close($db_connect);
 	}
 	
-	public function insVids()
+	public function insVidsComFor()
 	{
 		$goods=$this->getTovList();
 		if (is_array($goods))
@@ -476,12 +500,39 @@ class insertVidMatr
 			echo "No array!";
 		}
 	}
+	
+	public function insVidsMatrolux()
+	{
+		//echo db."<br>";
+		$goods=$this->getTovList();
+		if (is_array($goods))
+		{
+			foreach($goods as $good)
+			{
+				$id=$good['goods_id'];
+				$cont=$good['goods_content'];
+				$cont=$this->delAllVid($cont);
+				$cont=$this->insNewVid($cont);
+				echo "$id<br>";
+				$this->updCont($id, $cont);
+				//break;
+			}
+		}
+		else
+		{
+			echo "No array!";
+		}
+	}
 }
 $runtime = new Timer();
 $runtime->setStartTime();
 
-$test=new insertVidMatr();
-$test->insVids();
+//$test=new insertVidMatr(35);
+//$test->insVidsComFor();
+
+$test=new insertVidMatr(46);
+$test->insVidsMatrolux();
+
 
 //$test=new insertVidBeds();
 //$test->getNoVid();
