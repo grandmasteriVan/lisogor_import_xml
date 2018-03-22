@@ -387,6 +387,12 @@ class insertVidMatr
 		return $cont_new;
 	}
 	
+	private function delText($cont)
+	{
+		$cont_new=preg_replace("'<a[^>]*?>.*?</a>'si","",$cont);
+		return $cont_new;
+	}
+	
 	private function getTovList()
 	{
 		//echo host.user.pass.db."<br>";
@@ -438,6 +444,8 @@ class insertVidMatr
 			return true;
 		}
 	}
+	
+	
 	
 	private function insNewVid($cont)
 	{
@@ -523,6 +531,55 @@ class insertVidMatr
 			echo "No array!";
 		}
 	}
+	
+	public function insVidsAdormo()
+	{
+		//echo db."<br>";
+		$goods=$this->getTovList();
+		if (is_array($goods))
+		{
+			foreach($goods as $good)
+			{
+				$id=$good['goods_id'];
+				$cont=$good['goods_content'];
+				$cont=$this->delAllVid($cont);
+				$cont=$this->insUpperVid($cont);
+				echo "$id<br>";
+				$this->updCont($id, $cont);
+				//break;
+			}
+		}
+		else
+		{
+			echo "No array!";
+		}
+	}
+	
+	public function insVidsSL()
+	{
+		//echo db."<br>";
+		$goods=$this->getTovList();
+		if (is_array($goods))
+		{
+			foreach($goods as $good)
+			{
+				$id=$good['goods_id'];
+				$cont=$good['goods_content'];
+				$cont=$this->delAllVid($cont);
+				$cont=$this->delText($cont);
+				
+				$cont=$this->insUpperVid($cont);
+				
+				echo "$id<br>";
+				$this->updCont($id, $cont);
+				//break;
+			}
+		}
+		else
+		{
+			echo "No array!";
+		}
+	}
 }
 $runtime = new Timer();
 $runtime->setStartTime();
@@ -530,9 +587,16 @@ $runtime->setStartTime();
 //$test=new insertVidMatr(35);
 //$test->insVidsComFor();
 
-$test=new insertVidMatr(46);
-$test->insVidsMatrolux();
+//$test=new insertVidMatr(46);
+//$test->insVidsMatrolux();
+//$test=new insertVidMatr(189);
+//$test->insVidsAdormo();
 
+//$test=new insertVidMatr(63);
+//$test->insVidsAdormo();
+
+$test=new insertVidMatr(124);
+$test->insVidsSL();
 
 //$test=new insertVidBeds();
 //$test->getNoVid();
