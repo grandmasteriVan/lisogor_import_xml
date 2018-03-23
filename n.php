@@ -584,7 +584,7 @@ if ($res=mysqli_query($db_connect,$query))
 	//mysqli_close($db_connect);
 	
 	
-	
+	/*
 	function insSP($pos)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -628,7 +628,7 @@ if ($res=mysqli_query($db_connect,$query))
 		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
 	}
 	mysqli_close($db_connect);
-	
+	*/
 	
 	///////////////////////////////////////
 	///////////////////////////////////////
@@ -674,4 +674,27 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 	mysqli_close($db_connect);
 	*/
+	$db_connect=mysqli_connect(host,user,pass,db);
+	//как выбрать кровать
+	$query="SELECT count(goods_id) FROM goods WHERE goods_parent=goods_id AND goods_active=1 AND goods_noactual=0 AND goods_content LIKE '%VcNJvc7nrnE%'";
+	if ($res=mysqli_query($db_connect,$query))
+    {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods = $row;
+            }
+            echo "кровати родители<br>";
+			var_dump($goods);
+			//echo "<pre>";
+			//print_r ($factories);
+			//echo "</pre>";
+    }
+	//echo $goods['count(goods_id)'];
+	else
+	{
+		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+	}
+	mysqli_close($db_connect);
+	
 ?>
+
