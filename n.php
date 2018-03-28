@@ -674,6 +674,7 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 	mysqli_close($db_connect);
 	*/
+	/*
 	$db_connect=mysqli_connect(host,user,pass,db);
 	//как выбрать кровать
 	$query="SELECT count(goods_id) FROM goods WHERE goods_parent=goods_id AND goods_active=1 AND goods_noactual=0 AND goods_content LIKE '%VcNJvc7nrnE%'";
@@ -688,6 +689,39 @@ if ($res=mysqli_query($db_connect,$query))
 			//echo "<pre>";
 			//print_r ($factories);
 			//echo "</pre>";
+    }
+	//echo $goods['count(goods_id)'];
+	else
+	{
+		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+	}
+	mysqli_close($db_connect);
+	*/
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="SELECT goods_id, goods_name FROM goods WHERE goods_maintcharter=14";
+	if ($res=mysqli_query($db_connect,$query))
+    {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+			//var_dump($goods);
+			//echo "<pre>";
+			//print_r ($factories);
+			//echo "</pre>";
+			if (is_array($goods))
+			{
+				foreach ($goods as $good)
+				{
+					$name=$good['goods_name'];
+					$id=$good['goods_id'];
+					$name_new=str_ireplace("Матрас ","",$name);
+					echo "$id  $name-$name_new<br>";
+					$query="UPDATE goods SET goods_name='$name_new' WHERE goods_id=$id";
+					mysqli_query($db_connect,$query);
+					
+				}
+			}
     }
 	//echo $goods['count(goods_id)'];
 	else
