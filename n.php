@@ -731,4 +731,3 @@ if ($res=mysqli_query($db_connect,$query))
 	mysqli_close($db_connect);
 	
 ?>
-
