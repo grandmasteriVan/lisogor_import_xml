@@ -385,7 +385,7 @@ if ($res=mysqli_query($db_connect,$query))
 	*/
 	//для товаров, у которых фабрика не распродажа и товар находится в разделе прямые или угловые или кресла снять галочку лидер
 	//$db_connect=mysqli_connect(host,user,pass,db);
-	//$query="update goods SET goods_noactual=1 where factory_id=137";
+	//$query="update goods SET goods_noactual=1 where factory_id=184";
 	//mysqli_query($db_connect,$query);
 	//mysqli_close($db_connect);
 	
@@ -697,6 +697,7 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 	mysqli_close($db_connect);
 	*/
+	/*
 	$db_connect=mysqli_connect(host,user,pass,db);
 	$query="SELECT goods_id, goods_name FROM goods WHERE goods_maintcharter=14";
 	if ($res=mysqli_query($db_connect,$query))
@@ -729,5 +730,79 @@ if ($res=mysqli_query($db_connect,$query))
 		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
 	}
 	mysqli_close($db_connect);
+	*/
+	
+	function getNumTov($f_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT count(goods_id) FROM goods WHERE goods_active=1 AND goods_noactual=0 AND factory_id=$f_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$count = $row;
+				}
+				//var_dump($goods);
+				//echo "<pre>";
+				//print_r ($factories);
+				//echo "</pre>";
+				$count=$count['count(goods_id)'];
+		}
+		//echo $goods['count(goods_id)'];
+		else
+		{
+			echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+		}
+		mysqli_close($db_connect);
+		return $count;
+	}
+	
+	function getFactories()
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT factory_name, factory_id FROM factory WHERE factory_noactual=0";
+		if ($res=mysqli_query($db_connect,$query))
+			{
+					while ($row = mysqli_fetch_assoc($res))
+					{
+						$factories[] = $row;
+					}
+					//var_dump($goods);
+					//echo "<pre>";
+					//print_r ($factories);
+					//echo "</pre>";
+			}
+			else
+			{
+				echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+			}
+			if (is_array($factories))
+			{
+				return $factories;
+			}
+			else
+			{
+				return null;
+			}
+	}
+	
+	
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$factories=getFactories();
+	if (is_array($factories))
+	{
+		foreach ($factories as $factory)
+		{
+			$name=$factory['factory_name'];
+			$id=$factory['factory_id'];
+			$num=getNumTov($id);
+			if ($num<=5)
+			{
+				echo "<b>$name</b> имеет <b>$num</b> активных товаров!!!<br>";
+			}
+		}
+	}
+	mysqli_close($db_connect);
 	
 ?>
+
