@@ -100,12 +100,25 @@ class ListDDNNoUkr
 						{
 							$urk_active=0;
 						}
+						if (($lang_id==3)&&($active==1))
+						{
+							$urk_active=1;
+						}
 						if (($lang_id==1)&&($active==0))
 						{
 							$rus_active=0;
 						}
+						if (($lang_id==1)&&($active==1))
+						{
+							$rus_active=1;
+						}
+						
 					}
-					if ($urk_active==0&&$rus_active==1)
+					//if ($id==3540)
+					//{
+					//	var_dump($good_lang);
+					//}
+					if (($urk_active==0)&&($rus_active==1))
 					{
 						echo "$id отключена укр версия<br>";
 					}
