@@ -398,7 +398,7 @@ class insertVidMatr
 		//echo host.user.pass.db."<br>";
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$f_id=$this->f_id;
-        $query="SELECT goods_id, goods_content FROM goods WHERE goods_active=1 AND goods_noactual=0 AND factory_id=$f_id AND goods_maintcharter=14";
+        $query="SELECT goods_id, goods_content FROM goods WHERE goods_active=1 AND goods_noactual=0 AND factory_id=$f_id";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -458,7 +458,7 @@ class insertVidMatr
 	
 	private function insUpperVid($cont)
 	{
-		$cont="<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/JF1wYXFtPck\" style=\"text-align: center;\" width=\"380\"></iframe></p>".$cont;
+		$cont="<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/e99O0gDPkg8\" style=\"text-align: center;\" width=\"380\"></iframe></p>".$cont;
 		return $cont;
 	}
 	
@@ -555,6 +555,28 @@ class insertVidMatr
 		}
 	}
 	
+	public function insVidKH()
+	{
+		$goods=$this->getTovList();
+		if (is_array($goods))
+		{
+			foreach($goods as $good)
+			{
+				$id=$good['goods_id'];
+				$cont=$good['goods_content'];
+				$cont=$this->insUpperVid($cont);
+				
+				echo "$id<br>";
+				$this->updCont($id, $cont);
+				//break;
+			}
+		}
+		else
+		{
+			echo "No array!";
+		}
+	}
+	
 	public function insVidsSL()
 	{
 		//echo db."<br>";
@@ -595,9 +617,12 @@ $runtime->setStartTime();
 //$test=new insertVidMatr(63);
 //$test->insVidsAdormo();
 
-$test=new insertVidMatr(124);
-$test->insVidsSL();
+//$test=new insertVidMatr(192);
+//$test->insVidsSL();
+//$test->insVidsAdormo();
 
+$test=new insertVidMatr(97);
+$test->insVidKH();
 //$test=new insertVidBeds();
 //$test->getNoVid();
 //$test->goSingle();
