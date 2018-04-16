@@ -384,8 +384,10 @@ if ($res=mysqli_query($db_connect,$query))
 	mysqli_close($db_connect);
 	*/
 	//для товаров, у которых фабрика не распродажа и товар находится в разделе прямые или угловые или кресла снять галочку лидер
+	
+	
 	//$db_connect=mysqli_connect(host,user,pass,db);
-	//$query="update goods SET goods_noactual=1 where factory_id=184";
+	//$query="update goods SET goods_noactual=1 where factory_id=36";
 	//mysqli_query($db_connect,$query);
 	//mysqli_close($db_connect);
 	
@@ -731,7 +733,7 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 	mysqli_close($db_connect);
 	*/
-	
+	/*
 	function getNumTov($f_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -803,6 +805,10 @@ if ($res=mysqli_query($db_connect,$query))
 		}
 	}
 	mysqli_close($db_connect);
-	
+	*/
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="update goods SET country_id=11 where factory_id=189";
+	mysqli_query($db_connect,$query);
+	mysqli_close($db_connect);
 ?>
 
