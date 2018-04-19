@@ -117,7 +117,7 @@ class setFilters
     private function modMatr($goods_maintcharter=14)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id, goods_parent, goods_width, good_length, goods_height FROM goods WHERE goods_maintcharter=$goods_maintcharter AND goods_parent<>goods_id AND goods_noactual=0 AND goods_active=1";
+        $query="SELECT goods_id, goods_parent, goods_width, goods_length, goods_height FROM goods WHERE goods_maintcharter=$goods_maintcharter AND goods_parent<>goods_id AND goods_noactual=0 AND goods_active=1";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -135,7 +135,7 @@ class setFilters
     private function parrentMatr($goods_maintcharter=14)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id, goods_parent, goods_width, good_length, goods_height FROM goods WHERE goods_maintcharter=$goods_maintcharter and goods_parent=goods_id AND goods_noactual=0 AND goods_active=1";
+        $query="SELECT goods_id, goods_parent, goods_width, goods_length, goods_height FROM goods WHERE goods_maintcharter=$goods_maintcharter and goods_parent=goods_id AND goods_noactual=0 AND goods_active=1";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
