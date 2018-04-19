@@ -7,22 +7,22 @@
  */
  header('Content-type: text/html; charset=UTF-8');
 //define ("host","localhost");
-define ("host","10.0.0.2");
+define ("host","localhost");
 /**
  * database username
  */
 //define ("user", "root");
-define ("user", "uh333660_mebli");
+define ("user", "fm");
 /**
  * database password
  */
 //define ("pass", "");
-define ("pass", "Z7A8JqUh");
+define ("pass", "T6n7C8r1");
 /**
  * database name
  */
 //define ("db", "mebli");
-define ("db", "uh333660_mebli");
+define ("db", "fm");
 //TODO: сделать универсальный скрипт, для этого в зависимости от типа товара надо копировать нужнные фильтры и сеополя
 
 class imgCopy
