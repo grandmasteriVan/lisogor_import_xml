@@ -117,7 +117,7 @@ class setFilters
     private function modMatr($goods_maintcharter=14)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id, goods_parent, goods_width, goods_length, goods_height FROM goods WHERE goods_maintcharter=$goods_maintcharter AND goods_parent<>goods_id AND goods_noactual=0 AND goods_active=1";
+        $query="SELECT goods_id, goods_parent, goods_width, goods_length, goods_height FROM goods WHERE (goods_maintcharter=$goods_maintcharter OR goods_maintcharter=150) AND goods_parent<>goods_id AND goods_noactual=0 AND goods_active=1";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -135,7 +135,7 @@ class setFilters
     private function parrentMatr($goods_maintcharter=14)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id, goods_parent, goods_width, goods_length, goods_height FROM goods WHERE goods_maintcharter=$goods_maintcharter and goods_parent=goods_id AND goods_noactual=0 AND goods_active=1";
+        $query="SELECT goods_id, goods_parent, goods_width, goods_length, goods_height, goods_maintcharter FROM goods WHERE (goods_maintcharter=$goods_maintcharter OR goods_maintcharter=150) and goods_parent=goods_id AND goods_noactual=0 AND goods_active=1";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -163,7 +163,7 @@ class setFilters
         /*echo "<pre>";
         print_r ($feature_id);
         echo "</pre>";*/
-        if (!in_array(221,$feature_id))
+        if (!in_array(211,$feature_id))
         {
             echo "В товаре с ид=$goods_id не проставлен размер!<br>";
         }
@@ -213,6 +213,7 @@ class setFilters
             "VALUES ($goodshasfeature_valueint, 0, ".
             "'', $goods_id, $feature_id)";
         mysqli_query($db_connect,$query);
+		//echo "$query<br>";
         mysqli_close($db_connect);
     }
     /**
@@ -228,30 +229,31 @@ class setFilters
         foreach ($parent_list as $parent)
         {
             $parent_id=$parent['goods_id'];
+			//главный раздел каталога матраса
+			$maintcharter=$parent['goods_maintcharter'];
 
 
             //прописываем количество мест для родительского товара
             $query="DELETE FROM goodshasfeature WHERE goods_id=$parent_id AND feature_id=192";
+			mysqli_query($db_connect,$query);
+			$query="DELETE FROM goodshasfeature WHERE goods_id=$parent_id AND feature_id=131";
             mysqli_query($db_connect,$query);
             //echo $query."<br>";
             $size=$parent['goods_width'];
+			//echo "size $size<br>";
             if ($size<=900)
             {
-                $goodshasfeature_valueint=10;
+                $goodshasfeature_valueint=1;
             }
-            if ($size>900&&$size<=1200)
+            if ($size>900&&$size<=1500)
             {
-                $goodshasfeature_valueint=11;
+                $goodshasfeature_valueint=3;
             }
-            if ($size>1200&&$size<=1400)
+            if ($size>1500)
             {
-                $goodshasfeature_valueint=12;
+                $goodshasfeature_valueint=2;
             }
-            if ($size>1400)
-            {
-                $goodshasfeature_valueint=14;
-            }
-            $this->setFilter($parent_id,131,$goodshasfeature_valueint);
+            $this->setFilter($parent_id,192,$goodshasfeature_valueint);
             //echo "<br><br>установили размер родителя: ".$query."<br>";
             //выставляем фильтр тип матраса-тонкие
             //$query="DELETE FROM goodshasfeature WHERE goods_id=$parent_id AND feature_id=52 AND goodshasfeature_valueint=25";
@@ -291,7 +293,8 @@ class setFilters
             //устанавливем размеры матраса
             $query="DELETE FROM goodshasfeature WHERE goods_id=$parent_id AND feature_id=211";
             mysqli_query($db_connect,$query);
-            $size_l=$parent['good_length'];
+            $size_l=$parent['goods_length'];
+			//echo "Razmeri: $size * $size_l<br>";
             if ($size==600&&$size_l==1200)
             {
                 $this->setFilter($parent_id,211,1);
@@ -413,7 +416,7 @@ class setFilters
             //echo $query."<br>";
             //$this->setFilter($parent_id,52,22);
             //выбираем список фич для родительского товара
-            $query="SELECT * FROM goodshasfeature WHERE goods_id=$parent_id";
+            /*$query="SELECT * FROM goodshasfeature WHERE goods_id=$parent_id";
             if ($res=mysqli_query($db_connect,$query))
             {
                 //не забываем обнулять список перед заполнением!
@@ -454,6 +457,7 @@ class setFilters
                     $this->setFilter($parent_id,33,11);
                 }
             }
+			*/
 
             //проверяем заполнение фильтров
             $query="SELECT * FROM goodshasfeature WHERE goods_id=$parent_id";
@@ -471,6 +475,7 @@ class setFilters
                 }
             }
             $this->filtersCheck($features,$parent_id);
+			
             /*echo "Список фич родителя:<br>";
 			echo "<pre>";
 			print_r($features);
@@ -483,8 +488,12 @@ class setFilters
                 {
                     $mod_id = $mod['goods_id'];
                     $mod_size = $mod['goods_width'];
-                    $mod_size_l = $mod['good_length'];
-                    //echo "<br><b>$mod_size</b><br>";
+                    $mod_size_l = $mod['goods_length'];
+					//прописываем тот же главный раздел каталога дочке, что и родителю
+					$query="UPDATE goods SET goods_maintcharter=$maintcharter WHERE goods_id=$mod_id";
+					mysqli_query($db_connect, $query);
+					
+                    //echo "<br><b>$mod_size * $mod_size_l</b><br>";
                     //дропаем старые записи
                     $query = "DELETE FROM goodshasfeature WHERE goods_id=$mod_id";
                     mysqli_query($db_connect, $query);
@@ -511,7 +520,7 @@ class setFilters
                         }
                     }
                     //////////////////////
-                    ///пишем размеры
+                   ///пишем размеры
                     if ($mod_size <= 900)
                     {
                         //$goodshasfeature_valueint=1;
@@ -637,6 +646,7 @@ class setFilters
                     {
                         $this->setFilter($mod_id, 211, 27);
                     }
+					
                 }
 
             }
