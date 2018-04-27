@@ -4,22 +4,42 @@
  * database host
  */
 //define ("host","localhost");
-define ("host","localhost");
+//define ("host","localhost");
 /**
  * database username
  */
 //define ("user", "root");
-define ("user", "fm");
+//define ("user", "fm");
 /**
  * database password
  */
 //define ("pass", "");
-define ("pass", "T6n7C8r1");
+//define ("pass", "T6n7C8r1");
 /**
  * database name
  */
 //define ("db", "mebli");
-define ("db", "fm");
+//define ("db", "fm");
+
+
+define ("host","es835db.mirohost.net");
+/**
+ * database username
+ */
+//define ("user", "root");
+define ("user", "u_fayni");
+/**
+ * database password
+ */
+//define ("pass", "");
+define ("pass", "ZID1c0eud3Dc");
+/**
+ * database name
+ */
+//define ("db", "ddn_new");
+define ("db", "ddnPZS");
+
+
 /*
 $db_connect=mysqli_connect(host,user,pass,db);
 $query="SELECT factory_name, factory_id FROM factory WHERE factory_soft=0 AND factory_noactual=0";
@@ -806,9 +826,208 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 	mysqli_close($db_connect);
 	*/
+	/*
 	$db_connect=mysqli_connect(host,user,pass,db);
-	$query="update goods SET country_id=11 where factory_id=189";
-	mysqli_query($db_connect,$query);
+	$query="SELECT goods_id FROM goods WHERE factory_id=7";
+	if ($res=mysqli_query($db_connect,$query))
+    {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+            //var_dump($goods);
+			//echo "<pre>";
+			//print_r ($factories);
+			//echo "</pre>";
+			if (is_array($goods))
+			{
+				foreach ($goods as $good)
+				{
+					$id=$good['goods_id'];
+					$query="SELECT goodshasfeature_id, feature_id, goodshasfeature_valueint FROM goodshasfeature WHERE goods_id=$id";
+					unset($features);
+					if ($res=mysqli_query($db_connect,$query))
+					{
+						while ($row = mysqli_fetch_assoc($res))
+						{
+							$features[] = $row;
+						}
+						if (is_array($features))
+						{
+							foreach ($features as $feature)
+							{
+								$goodshasfeature_id=$feature['goodshasfeature_id'];
+								$f_val=$feature['goodshasfeature_valueint'];
+								$f_id=$feature['feature_id'];
+								//материал оббивки
+								if ($f_id==17&&$f_val==3)
+								{
+									$query="UPDATE goodshasfeature SET goodshasfeature_valueint=1 WHERE goodshasfeature_id=$goodshasfeature_id AND goods_id=$id";
+									mysqli_query($db_connect,$query);
+									echo "goods_id=$id $query<br>";
+								}
+								//удаляем материал
+								if ($f_id==60)
+								{
+									$query="DELETE FROM goodshasfeature WHERE goodshasfeature_id=$goodshasfeature_id AND goods_id=$id";
+									mysqli_query($db_connect,$query);
+									echo "goods_id=$id $query<br>";
+								}
+							}
+						}
+						else
+						{
+							echo "$id has no features<br>";
+						}
+					}	
+					else
+					{
+						echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+					}
+				}
+			}
+			else
+			{
+				echo "No array";
+			}
+			
+    }
+	else
+	{
+		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+	}
+	
+	//удаляем материал вообще из всех диванов
+	$query="SELECT goods_id FROM goods WHERE goods_maintcharter=1 OR goods_maintcharter=3 OR goods_maintcharter=2";
+	if ($res=mysqli_query($db_connect,$query))
+	{
+		unset($goods);
+		while ($row = mysqli_fetch_assoc($res))
+        {
+                $goods[] = $row;
+        }
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$id=$good['goods_id'];
+				$query="DELETE FROM goodshasfeature WHERE feature_id=60 AND goods_id=$id";
+				mysqli_query($db_connect,$query);
+				echo "goods_id=$id $query<br>";
+			}
+			
+		}
+	}
+	else
+	{
+		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+	}
+
+	mysqli_close($db_connect);
+*/
+/*
+	function modMatr($goods_maintcharter=14)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id, goods_parent, goods_content FROM goods WHERE (goods_maintcharter=$goods_maintcharter OR goods_maintcharter=150) AND goods_parent<>goods_id AND goods_noactual=0 AND goods_active=1 AND factory_id=124";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $arr[] = $row;
+            }
+        }
+        mysqli_close($db_connect);
+        return $arr;
+    }
+    /**
+     * @param int $goods_maintcharter
+     * @return array
+     *//*
+    function parrentMatr($goods_maintcharter=14)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id, goods_parent, goods_content FROM goods WHERE (goods_maintcharter=$goods_maintcharter OR goods_maintcharter=150) and goods_parent=goods_id AND goods_noactual=0 AND goods_active=1 AND factory_id=124";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $arr[] = $row;
+            }
+        }
+        mysqli_close($db_connect);
+        /*echo "<pre>";
+        print_r ($arr);
+        echo "</pre>";*//*
+        return $arr;
+    }
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$par=parrentMatr();
+	//var_dump($par);
+	$mod=modMatr();
+	//echo "<br><br>MOD<br>";
+	//var_dump($mod);
+	if (is_array($par))
+	{
+		foreach ($par as $parrent)
+		{
+			$par_id=$parrent['goods_id'];
+			$par_cont=$parrent['goods_content'];
+			if (is_array($mod))
+			{
+				foreach ($mod as $mod_mart)
+				{
+					if ($par_id==$mod_mart['goods_parent'])
+					{
+						$mod_id=$mod_mart['goods_id'];
+						$query="UPDATE goods SET goods_content='$par_cont' WHERE goods_id=$mod_id";
+						mysqli_query($db_connect,$query);
+						//echo "$query<br>";
+					}
+					
+					
+				}
+			}
+			else
+			{
+				echo "No mod matr!<br>";
+			}
+			//break;
+		}
+	}
+	else
+	{
+		echo "No parrent matr!<br>";
+	}
+	mysqli_close($db_connect);
+	*/
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="SELECT goods_id FROM goodshasfeature WHERE feature_id=14 and goodshasfeature_valueid=91";
+	if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            $goods[] = $row;
+        }
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$id=$good['goods_id'];
+				$query="UPDATE goods SET goods_popular=-200 WHERE goods_id=$id";
+				echo "$query <br>";
+				mysqli_query($db_connect,$query);
+			}
+		}
+		else
+		{
+			echo "No array!<br>";
+		}
+	}
+	else
+	{
+		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+	}
 	mysqli_close($db_connect);
 ?>
 
