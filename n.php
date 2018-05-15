@@ -4,22 +4,22 @@
  * database host
  */
 //define ("host","localhost");
-//define ("host","localhost");
+define ("host","localhost");
 /**
  * database username
  */
-//define ("user", "root");
-//define ("user", "fm");
+///define ("user", "root");
+define ("user", "fm");
 /**
  * database password
  */
 //define ("pass", "");
-//define ("pass", "T6n7C8r1");
+define ("pass", "T6n7C8r1");
 /**
  * database name
  */
 //define ("db", "mebli");
-//define ("db", "fm");
+define ("db", "fm");
 
 
 define ("host","es835db.mirohost.net");
@@ -27,17 +27,17 @@ define ("host","es835db.mirohost.net");
  * database username
  */
 //define ("user", "root");
-define ("user", "u_fayni");
+// ("user", "u_fayni");
 /**
  * database password
  */
 //define ("pass", "");
-define ("pass", "ZID1c0eud3Dc");
+//define ("pass", "ZID1c0eud3Dc");
 /**
  * database name
  */
 //define ("db", "ddn_new");
-define ("db", "ddnPZS");
+//define ("db", "ddnPZS");
 
 
 /*
@@ -413,7 +413,7 @@ if ($res=mysqli_query($db_connect,$query))
 	
 	//снять все акции и проценты с матролюкса
 	//$db_connect=mysqli_connect(host,user,pass,db);
-	//$query="update goods SET goods_stock=0, goods_discount=0 where factory_id=46";
+	//$query="update goods SET goods_stock=0, goods_discount=0, goods_oldprice=0 where factory_id=46";
 	//mysqli_query($db_connect,$query);
 	//mysqli_close($db_connect);
 	
@@ -1001,6 +1001,7 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 	mysqli_close($db_connect);
 	*/
+	/*
 	$db_connect=mysqli_connect(host,user,pass,db);
 	$query="SELECT goods_id FROM goodshasfeature WHERE feature_id=14 and goodshasfeature_valueid=91";
 	if ($res=mysqli_query($db_connect,$query))
@@ -1029,5 +1030,63 @@ if ($res=mysqli_query($db_connect,$query))
 		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
 	}
 	mysqli_close($db_connect);
+	*/
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="SELECT goods_id FROM goods WHERE factory_id=7 AND goods_article_1c=''";
+	if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            $goods[] = $row;
+        }
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$id=$good['goods_id'];
+				$query="SELECT component_child FROM component WHERE goods_id=$id";
+				unset ($components);
+				if ($res=mysqli_query($db_connect,$query))
+				{
+					while ($row = mysqli_fetch_assoc($res))
+					{
+						$components[] = $row;
+					}
+					if (is_array ($components))
+					{
+						foreach ($components as $component)
+						{
+							$comp_id=$component['component_child'];
+							$query="UPDATE goodshastcharter SET tcharter_id=147 WHERE goods_id=$comp_id";
+							echo "$query <br>";
+							mysqli_query($db_connect,$query);
+							$query="UPDATE goods SET goods_maintcharter=147 WHERE goods_id=$comp_id";
+							echo "$query <br>";
+							mysqli_query($db_connect,$query);
+						}
+					}
+					else
+					{
+						echo "No components for id=$id<br>";
+					}
+				}
+				else
+				{
+					echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+				}
+				//break;
+			}
+		}
+		else
+		{
+			echo "No array!<br>";
+		}
+	}
+	else
+	{
+		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+	}
+	mysqli_close($db_connect);
+	
 ?>
 
