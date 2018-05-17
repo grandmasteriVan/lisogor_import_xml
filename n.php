@@ -22,7 +22,7 @@ define ("pass", "T6n7C8r1");
 define ("db", "fm");
 
 
-define ("host","es835db.mirohost.net");
+//define ("host","es835db.mirohost.net");
 /**
  * database username
  */
@@ -1031,6 +1031,7 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 	mysqli_close($db_connect);
 	*/
+	/*
 	$db_connect=mysqli_connect(host,user,pass,db);
 	$query="SELECT goods_id FROM goods WHERE factory_id=7 AND goods_article_1c=''";
 	if ($res=mysqli_query($db_connect,$query))
@@ -1087,6 +1088,12 @@ if ($res=mysqli_query($db_connect,$query))
 		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
 	}
 	mysqli_close($db_connect);
+	*/
 	
+	//снять все акции и проценты с асат
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="update goods SET goods_stock=0, goods_discount=0, goods_oldprice=0 where factory_id=197";
+	mysqli_query($db_connect,$query);
+	mysqli_close($db_connect);
 ?>
 
