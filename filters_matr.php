@@ -110,14 +110,29 @@ class imgCopy
  */
 class setFilters
 {
-    /**
+    private function allMatr()
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id, goods_name, goods_maintcharter FROM goods WHERE (goods_maintcharter=14 OR goods_maintcharter=150) AND goods_noactual=0 AND goods_active=1";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $arr[] = $row;
+            }
+        }
+        mysqli_close($db_connect);
+        return $arr;
+	}
+	
+	/**
      * @param int $goods_maintcharter
      * @return array
      */
     private function modMatr($goods_maintcharter=14)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id, goods_parent, goods_width, goods_length, goods_height FROM goods WHERE (goods_maintcharter=$goods_maintcharter OR goods_maintcharter=150) AND goods_parent<>goods_id AND goods_noactual=0 AND goods_active=1";
+        $query="SELECT goods_id, goods_parent, goods_width, goods_length, goods_height, goods_maintcharter FROM goods WHERE (goods_maintcharter=$goods_maintcharter OR goods_maintcharter=150) AND goods_parent<>goods_id AND goods_noactual=0 AND goods_active=1";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -216,6 +231,191 @@ class setFilters
 		//echo "$query<br>";
         mysqli_close($db_connect);
     }
+	
+	
+	private function checkDuplicate($id,$f_id,$val_id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goodshasfeature_id FROM goodshasfeature WHERE goods_id=$id AND feature_id=$f_id AND goodshasfeature_valueint=$val_id";
+        //echo $query."<br>";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $f_ids[] = $row;
+            }
+            if (is_array($f_ids))
+            {
+                foreach ($f_ids as $article)
+                {
+                    //получаем нужный текст
+                    $art=$article['goodshasfeature_id'];
+                }
+            }
+        }
+		else
+		{
+			echo "error in SQL $query<br>";
+		}
+        //mysqli_query($db_connect, $query);
+        //var_dump ($art);
+        if ($art==null)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+	
+	/**
+     *
+     */
+	public function fixFilters()
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$allMatr=$this->allMatr();
+		foreach ($allMatr as $matr)
+		{
+			$id=$matr['goods_id'];
+			$name=$matr['goods_name'];
+			//фичи
+			$query="SELECT * FROM goodshasfeature WHERE goods_id=$id";
+			if ($res=mysqli_query($db_connect,$query))
+            {
+                //не забываем обнулять список перед заполнением!
+                $features=null;
+                while ($row=mysqli_fetch_assoc($res))
+                {
+                    $features[]=$row;
+                }
+				//var_dump($features);
+                if (is_array($features))
+                {
+					//
+					foreach ($features as $feature)
+					{
+						
+						$feature_id=$feature['feature_id'];
+						$val_id=$feature['goodshasfeature_valueint'];
+						if ($feature_id==54 && $val_id==30)
+						{
+							$query="DELETE FROM goodshasfeature WHERE goods_id=$id AND feature_id=54 AND goodshasfeature_valueint=30";
+							mysqli_query($db_connect,$query);
+							echo "$query<br>";
+							//проверить если ли фича=54 значение=36
+							//если нет - добавить
+							if ($this->checkDuplicate($id,54,36)==false)
+							{
+								$this->setFilter($id,54,36);
+								echo "Удачно!<br>";
+								//echo $query."<br>";
+							}
+						}
+						if ($feature_id==56 && $val_id==38)
+						{
+							$query="DELETE FROM goodshasfeature WHERE goods_id=$id AND feature_id=56 AND goodshasfeature_valueint=38";
+							mysqli_query($db_connect,$query);
+							echo "$query<br>";
+							//проверить если ли фича=56 значение=24
+							//если нет - добавить
+							if ($this->checkDuplicate($id,56,24)==false)
+							{
+								$this->setFilter($id,56,24);
+								echo "Удачно!<br>";
+								//echo $query."<br>";
+							}
+						}
+						if ($feature_id==53 && $val_id==9)
+						{
+							$query="DELETE FROM goodshasfeature WHERE goods_id=$id AND feature_id=56 AND goodshasfeature_valueint=38";
+							mysqli_query($db_connect,$query);
+							echo "$query<br>";
+						}
+					}
+				}
+				
+				else
+				{
+                    echo "Нет списка фич товара с ИД=$id<br>";
+				}
+				
+				
+            }
+			else
+			{
+				echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+			}
+			
+			//сео поля
+			$name_trunc = str_replace("Матрас ", "", $name);
+			$header="Матрас ".$name_trunc;
+			$query="UPDATE goods SET goods_header='$header' WHERE goods_id=$id";
+			mysqli_query($db_connect,$query);
+			echo "$query<br>";	
+			//break;
+		}
+		//каталоги
+		$parent_list=$this->parrentMatr();
+        $mod_list=$this->modMatr();
+		foreach ($parent_list as $parent)
+		{
+			$parent_maincharter=$parent['goods_maintcharter'];
+			$parent_id=$parent['goods_id'];
+			$parent_tcart=$this->getCharters($parent_id);
+			foreach ($mod_list as $mod)
+            {
+                if ($parent['goods_id'] == $mod['goods_parent'])
+				{
+					$mod_id=$mod['goods_id'];
+					//ставим главный каталог
+					$query="UPDATE goods SET goods_maintcharter=$parent_maincharter WHERE goods_id=$mod_id";
+					mysqli_query($db_connect,$query);
+					echo "$query<br>";
+					//удаляем каталоги
+					$query="DELETE FROM goodshastcharter WHERE goods_id=$$mod_id";
+					mysqli_query($db_connect,$query);
+					echo "$query<br>";
+					//ставим каталоги родителя
+					foreach ($parent_tcart as $tchart)
+					{
+						$tcart_id=$tchart['tcharter_id'];
+						$query="INSERT INTO goodshastcharter (tcharter_id,goods_id) VALUES ($tcart_id,$mod_id)";
+						mysqli_query($db_connect,$query);
+						echo "$query<br>";
+					}
+					
+				}
+			}
+			
+			//break;
+		}
+		mysqli_close($db_connect);
+	}
+	
+	private function getCharters($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT * FROM goodshastcharter WHERE goods_id=$id";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $arr[] = $row;
+            }
+            $tchart=$arr;
+        }
+        else
+        {
+            echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+            $tchart=null;
+        }
+        mysqli_close($db_connect);
+        return $tchart;
+	}
+	
+	
     /**
      *
      */
@@ -653,6 +853,7 @@ class setFilters
 
             //break;
         }
+		mysqli_close($db_connect);
     }
 }
 /**
@@ -694,6 +895,7 @@ class Timer
 $runtime = new Timer();
 $runtime->setStartTime();
 $test=new setFilters();
-$test->copyFilters();
+//$test->copyFilters();
+$test->fixFilters();
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
