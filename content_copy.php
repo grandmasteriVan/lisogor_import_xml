@@ -6,23 +6,22 @@
  * Time: 09:54
  */
 header('Content-type: text/html; charset=UTF-8');
-//define ("host","localhost");
-define ("host","10.0.0.2");
+define ("host","localhost");
 /**
  * database username
  */
 //define ("user", "root");
-define ("user", "uh333660_mebli");
+define ("user", "fm");
 /**
  * database password
  */
 //define ("pass", "");
-define ("pass", "Z7A8JqUh");
+define ("pass", "T6n7C8r1");
 /**
  * database name
  */
 //define ("db", "mebli");
-define ("db", "uh333660_mebli");
+define ("db", "fm");
 class ContentCopy
 {
     var $factory;
@@ -71,7 +70,6 @@ class ContentCopy
         mysqli_close($db_connect);
     }
 }
-
 Class CopyContentByList
 {
     var $factory;
@@ -79,11 +77,10 @@ Class CopyContentByList
     {
         $this->factory = $factory;
     }
-
     private function parrentMatr($goods_maintcharter=14)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id, goods_parent, goods_width, goods_length, goods_height, goods_maintcharter FROM goods WHERE (goods_maintcharter=$goods_maintcharter OR goods_maintcharter=150) and goods_parent=goods_id AND goods_noactual=0 AND goods_active=1";
+        $query="SELECT goods_id, goods_content FROM goods WHERE (goods_maintcharter=$goods_maintcharter OR goods_maintcharter=150) and goods_parent=goods_id AND goods_noactual=0 AND goods_active=1";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -97,7 +94,6 @@ Class CopyContentByList
         echo "</pre>";*/
         return $arr;
     }
-
     /**
      * @param int $goods_maintcharter
      * @return array
@@ -105,7 +101,7 @@ Class CopyContentByList
     private function modMatr($goods_maintcharter=14)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id, goods_content, goods_parent FROM goods WHERE (goods_maintcharter=$goods_maintcharter OR goods_maintcharter=150) AND goods_parent<>goods_id AND goods_noactual=0 AND goods_active=1";
+        $query="SELECT goods_id, goods_parent FROM goods WHERE (goods_maintcharter=$goods_maintcharter OR goods_maintcharter=150) AND goods_parent<>goods_id AND goods_noactual=0 AND goods_active=1";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -116,16 +112,14 @@ Class CopyContentByList
         mysqli_close($db_connect);
         return $arr;
     }
-
     private function WriteCont($id,$cont)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="UPDATE goods SET goods_content='$cont' WHERE goods_id=$id";
         mysqli_query($db_connect,$query);
-        echo "$query<br>";
+        //echo "$query<br>";
         mysqli_close($db_connect);
     }
-
     public function CopyCont()
     {
         $all_goods=$this->parrentMatr();
@@ -135,16 +129,19 @@ Class CopyContentByList
             foreach ($all_goods as $good)
             {
                 $cont=$good['goods_content'];
+				//var_dump($good);
                 foreach ($mod_goods as $mod_good)
                 {
-                    if ($good['goods_id']==$mod_good['goods_parent'])
+                    
+					if ($good['goods_id']==$mod_good['goods_parent'])
                     {
-                        $mod_id=$mod_good['goods_id'];
+                        //var_dump($mod_good);
+						$mod_id=$mod_good['goods_id'];
                         $this->WriteCont($mod_id,$cont);
                     }
                 }
+				//break;
             }
-
         }
     }
 }
@@ -188,7 +185,6 @@ $runtime = new Timer();
 $runtime->setStartTime();
 //$test=new ContentCopy(47,10457);
 //$test->ContCopy();
-
 $test = new CopyContentByList(124);
 $test->CopyCont();
 $runtime->setEndTime();
