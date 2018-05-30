@@ -8,7 +8,7 @@ define ("host","localhost");
 /**
  * database username
  */
-///define ("user", "root");
+//define ("user", "root");
 define ("user", "fm");
 /**
  * database password
@@ -22,22 +22,10 @@ define ("pass", "T6n7C8r1");
 define ("db", "fm");
 
 
-//define ("host","es835db.mirohost.net");
-/**
- * database username
- */
-//define ("user", "root");
-// ("user", "u_fayni");
-/**
- * database password
- */
-//define ("pass", "");
-//define ("pass", "ZID1c0eud3Dc");
-/**
- * database name
- */
-//define ("db", "ddn_new");
-//define ("db", "ddnPZS");
+define ("host_ddn","es835db.mirohost.net");
+define ("user_ddn", "u_fayni");
+define ("pass_ddn", "ZID1c0eud3Dc");
+define ("db_ddn", "ddnPZS");
 
 
 /*
@@ -1091,9 +1079,154 @@ if ($res=mysqli_query($db_connect,$query))
 	*/
 	
 	//снять все акции и проценты с асат
+	//$db_connect=mysqli_connect(host,user,pass,db);
+	//$query="update goods SET goods_stock=0, goods_discount=0, goods_oldprice=0 where factory_id=197";
+	//mysqli_query($db_connect,$query);
+	//mysqli_close($db_connect);
+	
+	
+	//список диванов только с одним наполнением
+	/*
 	$db_connect=mysqli_connect(host,user,pass,db);
-	$query="update goods SET goods_stock=0, goods_discount=0, goods_oldprice=0 where factory_id=197";
-	mysqli_query($db_connect,$query);
+	$query="SELECT goods_id FROM goods WHERE goods_maintcharter=1 OR goods_maintcharter=38 OR goods_maintcharter=2 AND goods_active=1 AND goods_noactual=0";
+	if ($res=mysqli_query($db_connect,$query))
+	{
+		unset($goods);
+		while ($row = mysqli_fetch_assoc($res))
+        {
+                $goods[] = $row;
+        }
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$id=$good['goods_id'];
+				unset($feature);
+				$query="SELECT goodshasfeature_valueint FROM goodshasfeature WHERE feature_id=4 AND goods_id=$id";
+				if ($res=mysqli_query($db_connect,$query))
+				{
+					
+					while ($row = mysqli_fetch_assoc($res))
+					{
+						$feature[] = $row;
+					}
+					if (is_array($feature))
+					{
+						//var_dump($feature);
+						if (count($feature)==1&&$feature[0]['goodshasfeature_valueint']==2)
+						{
+							echo "$id<br>";
+						}
+					}
+					else
+					{
+						echo "$id не имеет наполнения!<br>";
+					}
+					
+				}
+				else
+				{
+					echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+				}
+				
+				//break;
+				
+			}
+			
+			
+		}
+	}
+	else
+	{
+		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+	}
+
 	mysqli_close($db_connect);
+	*/
+	/*
+	echo "<br><br><br><b>DDN</b><br>";
+	$db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+	$query="SELECT goods_id FROM goods";
+	if ($res=mysqli_query($db_connect,$query))
+	{
+		unset($goods);
+		while ($row = mysqli_fetch_assoc($res))
+        {
+                $goods[] = $row;
+        }
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$id=$good['goods_id'];
+				unset($feature);
+				$query="SELECT goodshasfeature_valueid FROM goodshasfeature WHERE feature_id=3 AND goods_id=$id";
+				if ($res=mysqli_query($db_connect,$query))
+				{
+					
+					while ($row = mysqli_fetch_assoc($res))
+					{
+						$feature[] = $row;
+					}
+					if (is_array($feature))
+					{
+						//var_dump($feature);
+						if (count($feature)==1&&($feature[0]['goodshasfeature_valueint']==43||$feature[0]['goodshasfeature_valueint']==44))
+						{
+							echo "$id<br>";
+						}
+					}
+					else
+					{
+						echo "$id не имеет наполнения!<br>";
+					}
+					
+				}
+				else
+				{
+					echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+				}
+				
+				//break;
+				
+			}
+			
+			
+		}
+	}
+	else
+	{
+		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+	}
+	mysqli_close($db_connect);
+	*/
+	
+	//список активный фабрик ФМ
+	/*
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="SELECT factory_name FROM factory WHERE factory_active=1";
+	if ($res=mysqli_query($db_connect,$query))
+	{
+		unset($goods);
+		while ($row = mysqli_fetch_assoc($res))
+        {
+                $factoryes[] = $row;
+        }
+		if (is_array($factoryes))
+		{
+			foreach ($factoryes as $factory)
+			{
+				$name=$factory['factory_name'];
+				echo "$name<br>";
+				
+			}
+		}
+	}
+	else
+	{
+		echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+	}
+	mysqli_close($db_connect);
+	*/
 ?>
 
