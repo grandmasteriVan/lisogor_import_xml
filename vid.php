@@ -603,6 +603,61 @@ class insertVidMatr
 		}
 	}
 }
+
+
+class FixVidSize
+{
+    private function getGoods()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id, goods_content FROM goods WHERE goods_content LIKE '%iframe%'";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+        }
+        else
+        {
+            echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+        }
+        mysqli_close($db_connect);
+        if (!empty($goods))
+        {
+            return $goods;
+        }
+        return 0;
+    }
+
+    private function getVidId($cont)
+    {
+        //echo "Whghgh<pre>";
+        preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $cont, $videoId);
+        //echo count ($videoId)."<br>";
+        return $videoId;
+    }
+
+    public function FixVideo()
+    {
+        $goods=$this->getGoods();
+        if (is_array($goods))
+        {
+            foreach ($goods as $good)
+            {
+                $id=$good['goods_id'];
+                $cont=$good['goods_content'];
+                $vidID=$this->getVidId($cont);
+                var_dump($vidID);
+                break;
+            }
+        }
+        else
+        {
+            echo "No array to work with!<br>";
+        }
+    }
+}
 $runtime = new Timer();
 $runtime->setStartTime();
 
@@ -621,13 +676,19 @@ $runtime->setStartTime();
 //$test->insVidsSL();
 //$test->insVidsAdormo();
 
-$test=new insertVidMatr(97);
-$test->insVidKH();
+//$test=new insertVidMatr(97);
+//$test->insVidKH();
 //$test=new insertVidBeds();
 //$test->getNoVid();
 //$test->goSingle();
 //$test->goLast();
 //$test=new CopyVid();
 //$test->FindVideo();
+///////////////////////
+$test=new FixVidSize();
+$test->FixVideo();
+
+
+
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
