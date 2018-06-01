@@ -23,6 +23,11 @@ define ("pass", "T6n7C8r1");
  */
 //define ("db", "mebli");
 define ("db", "fm");
+
+define ("host_ddn","es835db.mirohost.net");
+define ("user_ddn", "u_fayni");
+define ("pass_ddn", "ZID1c0eud3Dc");
+define ("db_ddn", "ddnPZS");
 /**
  * Class Timer
  */
@@ -371,7 +376,6 @@ class insertVidBeds
         }
     }
 }
-
 class insertVidMatr
 {
 	private $f_id;
@@ -603,14 +607,12 @@ class insertVidMatr
 		}
 	}
 }
-
-
 class FixVidSize
 {
     private function getGoods()
     {
-        $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id, goods_content FROM goods WHERE goods_content LIKE '%iframe%'";
+        $db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+        $query="SELECT  goodshaslang_id,  goodshaslang_content FROM goodshaslang WHERE goodshaslang_content LIKE '%iframe%'";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -629,27 +631,176 @@ class FixVidSize
         }
         return 0;
     }
-
     private function getVidId($cont)
     {
         //echo "Whghgh<pre>";
-        preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $cont, $videoId);
+        preg_match_all('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $cont, $videoId);
         //echo count ($videoId)."<br>";
         return $videoId;
     }
-
+	private function delAllVid($cont)
+	{
+		$cont_new=preg_replace("'<iframe[^>]*?>.*?</iframe>'si","",$cont);
+		return $cont_new;
+	}
+	private function writeLog($text)
+	{
+		file_put_contents("vid_log.txt",$text.PHP_EOL,FILE_APPEND);
+	}
+	private function writeCont($id, $cont)
+	{
+		$db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+		$query="UPDATE goodshaslang SET goodshaslang_content='$cont' WHERE goodshaslang_id=$id";
+		//mysqli_query($db_connect,$query);
+        //echo "$query<br>";
+		$this->writeLog($query);
+		mysqli_close($db_connect);
+	}
+	
+	private function getVidFiles()
+	{
+		$db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+        $query="SELECT  goodsfile_id,  goodsfile_link FROM goodsfile WHERE goodsfile_link!=''";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goodsfiles[] = $row;
+            }
+        }
+        else
+        {
+            echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+        }
+        mysqli_close($db_connect);
+        if (!empty($goodsfiles))
+        {
+            return $goodsfiles;
+        }
+        return 0;
+	}
+	
+	private function writeGoodFileOrder($id)
+	{
+		$db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+		$query="UPDATE goodshaslang SET goodsfile_order=1 WHERE goodsfile_id=$id";
+		//mysqli_query($db_connect,$query);
+        echo "$query<br>";
+		//$this->writeLog($query);
+		mysqli_close($db_connect);
+	}
+	
+	public function VidPos()
+	{
+		$files=$this->getVidFiles();
+		if (is_array($files))
+		{
+			foreach($files as $file)
+			{
+				$id=$file['goodsfile_id'];
+				$this->writeGoodFileOrder($id);
+			}
+		}
+		else
+		{
+			echo "No files!<br>";
+		}
+	}
     public function FixVideo()
     {
         $goods=$this->getGoods();
         if (is_array($goods))
         {
+			echo count($goods)."<br>";
             foreach ($goods as $good)
             {
-                $id=$good['goods_id'];
-                $cont=$good['goods_content'];
-                $vidID=$this->getVidId($cont);
-                var_dump($vidID);
-                break;
+                //unset ($cont);
+				$id=$good['goodshaslang_id'];
+				//$lang_id=$good[''];
+                $cont=$good['goodshaslang_content'];
+				$cont_new=str_ireplace("?rel=0","",$cont);
+				$cont_new=str_ireplace("></iframe></p>","",$cont_new);
+				$cont_new=str_ireplace(" width=\"380\"","",$cont_new);
+				$cont_new=str_ireplace(" width=\"560\"","",$cont_new);
+				$cont_new=str_ireplace("allowfullscreen=\"\" frameborder=\"0\"","",$cont_new);
+				$cont_new=str_ireplace(" frameborder=\"0\" allowfullscreen></iframe>","",$cont_new);
+				$cont_new=str_ireplace("</iframe>&nbsp;<iframe",PHP_EOL,$cont_new);
+				$cont_new=str_ireplace("\"<p>",PHP_EOL,$cont_new);
+				
+				
+				
+				$cont_new=str_ireplace("style=\"text-align: center;\"","",$cont_new);
+				//unset ($vidID);
+                $vidID=$this->getVidId($cont_new);
+				$count=count($vidID[1]);
+				
+                echo "id=$id vid=$count<br>";
+				echo "<pre>";
+				print_r($vidID);
+				echo "</pre>";
+				if ($count==1)
+				{
+					$vid_id1=$vidID[1][0];
+					$cont=$this->delAllVid($cont);
+					$cont="<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"315\" src=\"https://www.youtube.com/embed/$vid_id1\" style=\"text-align: center;\" width=\"560\"></iframe></p>".$cont;
+					$this->writeCont($id,$cont);
+					
+				}
+				if ($count==2)
+				{
+					$vid_id1=$vidID[1][0];
+					$vid_id2=$vidID[1][1];
+					
+					$cont=$this->delAllVid($cont);
+					$cont="<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"220\" src=\"https://www.youtube.com/embed/$vid_id1\" style=\"text-align: center;\" width=\"380\"></iframe></p>".$cont."<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"220\" src=\"https://www.youtube.com/embed/$vid_id2\" style=\"text-align: center;\" width=\"380\"></iframe></p>";
+					$this->writeCont($id,$cont);
+				}
+				if ($count==3)
+				{
+					$vid_id1=$vidID[1][0];
+					$vid_id2=$vidID[1][1];
+					$vid_id3=$vidID[1][2];
+					
+					$cont=$this->delAllVid($cont);
+					$cont="<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"220\" src=\"https://www.youtube.com/embed/$vid_id1\" style=\"text-align: center;\" width=\"380\"></iframe></p>".$cont."<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"220\" src=\"https://www.youtube.com/embed/$vid_id2\" style=\"text-align: center;\" width=\"380\"></iframe>&nbsp;<iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"220\" src=\"https://www.youtube.com/embed/$vid_id3\" style=\"text-align: center;\" width=\"380\"></iframe></p>";
+					$this->writeCont($id,$cont);
+				}
+				
+				/*
+				if ($count==4)
+				{
+					$vid_id1=$vidID[1][0];
+					$vid_id2=$vidID[1][1];
+					$vid_id3=$vidID[1][2];
+					$vid_id4=$vidID[1][3];
+					
+					$cont=$this->delAllVid($cont);
+					$cont="<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"220\" src=\"https://www.youtube.com/embed/$vid_id1\" style=\"text-align: center;\" width=\"380\"></iframe>&nbsp;<iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"220\" src=\"https://www.youtube.com/embed/$vid_id2\" style=\"text-align: center;\" width=\"380\"></iframe></p></p>".$cont."<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"220\" src=\"https://www.youtube.com/embed/$vid_id3\" style=\"text-align: center;\" width=\"380\"></iframe>&nbsp;<iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"220\" src=\"https://www.youtube.com/embed/$vid_id4\" style=\"text-align: center;\" width=\"380\"></iframe></p>";
+					$this->writeCont($id,$cont);
+				}*/
+					
+				/*if ($id==30073)
+				{
+					echo $cont;
+					echo "<br>$id";
+					echo "<pre>";
+					print_r($vidID);
+					echo "</pre>";
+					echo count($vidID[1]);
+				}
+				*/	
+				//var_dump($vidID);
+				//echo "<pre>";
+				//print_r($vidID);
+				//echo "</pre>";
+				//if (is_array($vidID)&&count($vidID)>2)
+				//{
+				//	foreach ($vidID as $vid)
+				//	{
+				//		echo $vid[0]."<br>";
+				//	}
+				//}
+				//break;
             }
         }
         else
@@ -660,22 +811,17 @@ class FixVidSize
 }
 $runtime = new Timer();
 $runtime->setStartTime();
-
 //$test=new insertVidMatr(35);
 //$test->insVidsComFor();
-
 //$test=new insertVidMatr(46);
 //$test->insVidsMatrolux();
 //$test=new insertVidMatr(189);
 //$test->insVidsAdormo();
-
 //$test=new insertVidMatr(63);
 //$test->insVidsAdormo();
-
 //$test=new insertVidMatr(192);
 //$test->insVidsSL();
 //$test->insVidsAdormo();
-
 //$test=new insertVidMatr(97);
 //$test->insVidKH();
 //$test=new insertVidBeds();
@@ -686,9 +832,8 @@ $runtime->setStartTime();
 //$test->FindVideo();
 ///////////////////////
 $test=new FixVidSize();
-$test->FixVideo();
-
-
+//$test->FixVideo();
+$test->VidPos();
 
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
