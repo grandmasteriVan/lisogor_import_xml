@@ -651,7 +651,7 @@ class FixVidSize
 	{
 		$db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
 		$query="UPDATE goodshaslang SET goodshaslang_content='$cont' WHERE goodshaslang_id=$id";
-		//mysqli_query($db_connect,$query);
+		mysqli_query($db_connect,$query);
         //echo "$query<br>";
 		$this->writeLog($query);
 		mysqli_close($db_connect);
@@ -684,9 +684,9 @@ class FixVidSize
 	{
 		$db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
 		$query="UPDATE goodshaslang SET goodsfile_order=1 WHERE goodsfile_id=$id";
-		//mysqli_query($db_connect,$query);
-        echo "$query<br>";
-		//$this->writeLog($query);
+		mysqli_query($db_connect,$query);
+        //echo "$query<br>";
+		$this->writeLog($query);
 		mysqli_close($db_connect);
 	}
 	
@@ -832,7 +832,7 @@ $runtime->setStartTime();
 //$test->FindVideo();
 ///////////////////////
 $test=new FixVidSize();
-//$test->FixVideo();
+$test->FixVideo();
 $test->VidPos();
 
 $runtime->setEndTime();
