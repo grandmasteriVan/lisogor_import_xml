@@ -395,13 +395,19 @@ if ($res=mysqli_query($db_connect,$query))
 	
 	
 	//$db_connect=mysqli_connect(host,user,pass,db);
-	//$query="update goods SET goods_noactual=1 where factory_id=36";
+	//$query="update goods SET goods_noactual=1 where factory_id=142";
 	//mysqli_query($db_connect,$query);
 	//mysqli_close($db_connect);
 	
 	//снять все акции и проценты с матролюкса
 	//$db_connect=mysqli_connect(host,user,pass,db);
 	//$query="update goods SET goods_stock=0, goods_discount=0, goods_oldprice=0 where factory_id=46";
+	//mysqli_query($db_connect,$query);
+	//mysqli_close($db_connect);
+	
+	//снять все акции и проценты с слип енд флай
+	//$db_connect=mysqli_connect(host,user,pass,db);
+	//$query="update goods SET goods_stock=0, goods_discount=0, goods_oldprice=0 where factory_id=124";
 	//mysqli_query($db_connect,$query);
 	//mysqli_close($db_connect);
 	
@@ -1228,5 +1234,57 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 	mysqli_close($db_connect);
 	*/
+	
+	function getGoods()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id, goods_name FROM goods WHERE goods_active=1 AND goods_noactual=0 AND factory_id=154";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+        }
+        else
+        {
+            echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+        }
+        mysqli_close($db_connect);
+        if (!empty($goods))
+        {
+            return $goods;
+        }
+        return 0;
+    }
+	$db_connect=mysqli_connect(host,user,pass,db);
+        $goods=getGoods();
+        if (is_array($goods))
+        {
+            foreach ($goods as $good)
+            {
+                $id=$good['goods_id'];
+                $name=" ".$good['goods_name'];
+                if ((mb_strpos($name, "Пенал")||mb_strpos($name, "пенал")||mb_strpos($name, "Стеллаж")||mb_strpos($name, "стеллаж")||mb_strpos($name, "Витрина")||mb_strpos($name, "витрина")||mb_strpos($name, "Угловой элемент")||mb_strpos($name, "угловой элемент")||mb_strpos($name, "Сервант")||mb_strpos($name, "сервант"))&&(!mb_strpos($name, "Кухня")))
+                {
+                    echo "$name<br>";
+					$query="DELETE FROM goodshastcharter WHERE goods_id=$id";
+                    mysqli_query($db_connect,$query);
+                    echo $query."<br>";
+                    $query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,71)";
+                    mysqli_query($db_connect,$query);
+					echo $query."<br>";
+                    $query="UPDATE goods SET goods_maintcharter=71 WHERE goods_id=$id";
+                    mysqli_query($db_connect,$query);
+                    echo $query."<br>";
+                }
+                
+            }
+        }
+        else
+        {
+            echo "No goods!<br>";
+        }
+        mysqli_close($db_connect);
 ?>
 
