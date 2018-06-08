@@ -47,6 +47,73 @@ class CatMove
         }
         return 0;
     }
+	
+	private function getCatsForGood($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT tcharter_id FROM goodshastcharter WHERE goods_id=$id";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $tcharters[] = $row;
+            }
+        }
+        else
+        {
+            echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+        }
+        mysqli_close($db_connect);
+        if (!empty($tcharters))
+        {
+            return $tcharters;
+        }
+        return 0;
+	}
+	
+	public function moveModules()
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$goods=$this->getGoods();
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$id=$good['goods_id'];
+				$name=$good['goods_name'];
+				$tcharters=$this->getCatsForGood($id);
+				if (is_array ($tcharters))
+				{
+					foreach ($tcharters as $tcharter)
+					{
+						$charter_id=$tcharter['tcharter_id'];
+						//признак того, что товар явлеятеся детским
+						$children=false;
+						if ($charter_id==16)
+						{
+							$children==true;
+						}
+						if ($charter_id==3&&$children==false)
+						{
+							echo "$name<br>";
+							$query="DELETE FROM goodshastcharter WHERE goods_id=$id AND tcharter_id=40";
+							mysqli_query($db_connect,$query);
+							echo $query."<br>";
+							$query="INSERT INTO goodshastcharter (goods_id, tcharter_id) VALUES ($id,40)";
+							mysqli_query($db_connect,$query);
+							echo $query."<br>";
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			echo "No goods!<br>";
+		}
+		mysqli_close($db_connect);
+	}
+	
     public function moveCat()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -107,4 +174,5 @@ class CatMove
 }
 
 $test=new CatMove();
-$test->moveCat();
+//$test->moveCat();
+$test->moveModules();
