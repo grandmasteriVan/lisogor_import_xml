@@ -124,7 +124,7 @@ class CatMove
             {
                 $id=$good['goods_id'];
                 $name=" ".$good['goods_name'];
-                if ((mb_strpos($name, "Пенал")||mb_strpos($name, "пенал")||mb_strpos($name, "Стеллаж")||mb_strpos($name, "стеллаж")||mb_strpos($name, "Витрина")||mb_strpos($name, "витрина")||mb_strpos($name, "Угловой элемент")||mb_strpos($name, "угловой элемент")||mb_strpos($name, "Сервант")||mb_strpos($name, "сервант"))&&(!mb_strpos($name, "Кухня")))
+                /*if ((mb_strpos($name, "Пенал")||mb_strpos($name, "пенал")||mb_strpos($name, "Стеллаж")||mb_strpos($name, "стеллаж")||mb_strpos($name, "Витрина")||mb_strpos($name, "витрина")||mb_strpos($name, "Угловой элемент")||mb_strpos($name, "угловой элемент")||mb_strpos($name, "Сервант")||mb_strpos($name, "сервант"))&&(!mb_strpos($name, "Кухня")))
                 {
                     echo "$name<br>";
 					$query="DELETE FROM goodshastcharter WHERE goods_id=$id";
@@ -136,8 +136,8 @@ class CatMove
                     $query="UPDATE goods SET goods_maintcharter=10 WHERE goods_id=$id";
                     mysqli_query($db_connect,$query);
                     echo $query."<br>";
-                }
-                if (mb_strpos($name, "Полка")||mb_strpos($name, "полка")||mb_strpos($name, "Надствка")||mb_strpos($name, "надставка"))
+                }*/
+                if (mb_strpos($name, "Полка")||mb_strpos($name, "полка")||mb_strpos($name, "Надставка")||mb_strpos($name, "надставка"))
                 {
                     echo "$name<br>";
 					$query="DELETE FROM goodshastcharter WHERE goods_id=$id";
@@ -150,7 +150,8 @@ class CatMove
                     mysqli_query($db_connect,$query);
                     echo $query."<br>";
                 }
-                if (mb_strpos($name, "Бар ")||mb_strpos($name, "бар "))
+                
+				/*if (mb_strpos($name, "Бар ")||mb_strpos($name, "бар "))
                 {
                     echo "$name<br>";
 					$query="DELETE FROM goodshastcharter WHERE goods_id=$id";
@@ -162,7 +163,7 @@ class CatMove
                     $query="UPDATE goods SET goods_maintcharter=12 WHERE goods_id=$id";
                     mysqli_query($db_connect,$query);
                     echo $query."<br>";
-                }
+                }*/
             }
         }
         else
@@ -174,5 +175,5 @@ class CatMove
 }
 
 $test=new CatMove();
-//$test->moveCat();
-$test->moveModules();
+$test->moveCat();
+//$test->moveModules();
