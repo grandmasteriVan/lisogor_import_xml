@@ -809,6 +809,97 @@ class FixVidSize
         }
     }
 }
+
+class EditVidSHK
+{
+	private function getTovList()
+	{
+		//echo host.user.pass.db."<br>";
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$f_id=106;
+        $query="SELECT goods_id, goods_content FROM goods WHERE goods_active=1 AND goods_noactual=0 AND factory_id=$f_id";
+		//echo "$query<br>";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+        }
+		else
+		{
+			echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+		}
+        mysqli_close($db_connect);
+        if (is_array($goods))
+        {
+            return $goods;
+        }
+        else
+        {
+            return null;
+        }
+	}
+	
+	private function getVidId($cont)
+    {
+        //echo "Whghgh<pre>";
+        preg_match_all('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $cont, $videoId);
+        //echo count ($videoId)."<br>";
+        return $videoId;
+    }
+	
+	private function delText($cont)
+	{
+		$cont=str_replace("<a href=\"https://www.youtube.com/watch?v=EmzW8ECVk1A&amp;feature=youtu.be\" target=\"_blank\"><img alt=\"\" src=\"/admin/upload/image/news/mebli/trikoz_kopiya.jpg\" style=\"width: 252px; height: 142px;\" /></a></p>","",$cont);
+		$cont=str_replace("<strong>Мы собрали для Вас полезные советы в этом ролике:</strong>","",$cont);
+		$cont=str_replace("<strong>Что нужно знать при выборе шкафа-купе?</strong>","",$cont);
+		return $cont;
+	}
+	
+	private function writeCont($id, $cont)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goods SET goods_content='$cont' WHERE goods_id=$id";
+		mysqli_query($db_connect,$query);
+        //echo "$query<br>";
+		//$this->writeLog($query);
+		mysqli_close($db_connect);
+	}
+	
+	private function insUpperVid($cont)
+	{
+		$cont="<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/oMtKQTp4xEI\" style=\"text-align: center;\" width=\"380\"></iframe>&nbsp;<iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/EmzW8ECVk1A\" style=\"text-align: center;\" width=\"380\"></iframe></p>".$cont;
+		return $cont;
+	}
+	
+	public function editSHK()
+	{
+		$goods=$this->getTovList();
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$id=$good['goods_id'];
+				$cont=$good['goods_content'];
+				$cont_new=$this->delText($cont);
+				$cont_new=$this->insUpperVid($cont_new);
+				$this->writeCont($id,$cont_new);
+				//break;
+			}
+		}
+		else
+		{
+			echo "No goods!<br>";
+		}
+		
+	}
+    
+}
+
+
+
+
 $runtime = new Timer();
 $runtime->setStartTime();
 //$test=new insertVidMatr(35);
@@ -831,9 +922,12 @@ $runtime->setStartTime();
 //$test=new CopyVid();
 //$test->FindVideo();
 ///////////////////////
-$test=new FixVidSize();
-$test->FixVideo();
-$test->VidPos();
+//$test=new FixVidSize();
+//$test->FixVideo();
+//$test->VidPos();
+///////////////////
+$test=new EditVidSHK();
+$test->editSHK();
 
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
