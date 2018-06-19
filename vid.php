@@ -861,8 +861,8 @@ class EditVidSHK
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="UPDATE goods SET goods_content='$cont' WHERE goods_id=$id";
-		mysqli_query($db_connect,$query);
-        //echo "$query<br>";
+		//mysqli_query($db_connect,$query);
+        echo "$query<br>";
 		//$this->writeLog($query);
 		mysqli_close($db_connect);
 	}
@@ -897,7 +897,74 @@ class EditVidSHK
     
 }
 
-
+class insertVidKitchen
+{
+	private function getTovList()
+	{
+		//echo host.user.pass.db."<br>";
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$f_id=98;
+        $query="SELECT goods_id, goods_content FROM goods WHERE goods_active=1 AND goods_noactual=0 AND factory_id=$f_id AND (goods_maintcharter=20 OR goods_maintcharter=57)";
+		//echo "$query<br>";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+        }
+		else
+		{
+			echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+		}
+        mysqli_close($db_connect);
+        if (is_array($goods))
+        {
+            return $goods;
+        }
+        else
+        {
+            return null;
+        }
+	}
+	
+	private function insDownVid($cont)
+	{
+		$cont=$cont."<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/8MQAD1i8wpQ\" style=\"text-align: center;\" width=\"380\"></iframe>";
+		return $cont;
+	}
+	
+	private function writeCont($id, $cont)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goods SET goods_content='$cont' WHERE goods_id=$id";
+		mysqli_query($db_connect,$query);
+        //echo "$query<br>";
+		//$this->writeLog($query);
+		mysqli_close($db_connect);
+	}
+	
+	public function editKitchen()
+	{
+		$goods=$this->getTovList();
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$id=$good['goods_id'];
+				$cont=$good['goods_content'];
+				$cont_new=$this->insDownVid($cont_new);
+				$this->writeCont($id,$cont_new);
+				//break;
+			}
+		}
+		else
+		{
+			echo "No goods!<br>";
+		}
+		
+	}
+}
 
 
 $runtime = new Timer();
@@ -926,8 +993,11 @@ $runtime->setStartTime();
 //$test->FixVideo();
 //$test->VidPos();
 ///////////////////
-$test=new EditVidSHK();
-$test->editSHK();
+//$test=new EditVidSHK();
+//$test->editSHK();
+
+$test=new insertVidKitchen();
+$test->editKitchen();
 
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
