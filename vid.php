@@ -809,6 +809,231 @@ class FixVidSize
         }
     }
 }
+
+class EditVidSHK
+{
+	private function getTovList()
+	{
+		//echo host.user.pass.db."<br>";
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$f_id=106;
+        $query="SELECT goods_id, goods_content FROM goods WHERE goods_active=1 AND goods_noactual=0 AND factory_id=$f_id";
+		//echo "$query<br>";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+        }
+		else
+		{
+			echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+		}
+        mysqli_close($db_connect);
+        if (is_array($goods))
+        {
+            return $goods;
+        }
+        else
+        {
+            return null;
+        }
+	}
+	
+	private function getVidId($cont)
+    {
+        //echo "Whghgh<pre>";
+        preg_match_all('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $cont, $videoId);
+        //echo count ($videoId)."<br>";
+        return $videoId;
+    }
+	
+	private function delText($cont)
+	{
+		$cont=str_replace("<a href=\"https://www.youtube.com/watch?v=EmzW8ECVk1A&amp;feature=youtu.be\" target=\"_blank\"><img alt=\"\" src=\"/admin/upload/image/news/mebli/trikoz_kopiya.jpg\" style=\"width: 252px; height: 142px;\" /></a></p>","",$cont);
+		$cont=str_replace("<strong>Мы собрали для Вас полезные советы в этом ролике:</strong>","",$cont);
+		$cont=str_replace("<strong>Что нужно знать при выборе шкафа-купе?</strong>","",$cont);
+		return $cont;
+	}
+	
+	private function writeCont($id, $cont)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goods SET goods_content='$cont' WHERE goods_id=$id";
+		//mysqli_query($db_connect,$query);
+        echo "$query<br>";
+		//$this->writeLog($query);
+		mysqli_close($db_connect);
+	}
+	
+	private function insUpperVid($cont)
+	{
+		$cont="<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/oMtKQTp4xEI\" style=\"text-align: center;\" width=\"380\"></iframe>&nbsp;<iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/EmzW8ECVk1A\" style=\"text-align: center;\" width=\"380\"></iframe></p>".$cont;
+		return $cont;
+	}
+	
+	public function editSHK()
+	{
+		$goods=$this->getTovList();
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$id=$good['goods_id'];
+				$cont=$good['goods_content'];
+				$cont_new=$this->delText($cont);
+				$cont_new=$this->insUpperVid($cont_new);
+				$this->writeCont($id,$cont_new);
+				//break;
+			}
+		}
+		else
+		{
+			echo "No goods!<br>";
+		}
+		
+	}
+    
+}
+
+class insertVidKitchen
+{
+	private function getTovList()
+	{
+		//echo host.user.pass.db."<br>";
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$f_id=98;
+        $query="SELECT goods_id, goods_content, goods_maintcharter FROM goods WHERE goods_active=1 AND goods_noactual=0 AND factory_id=$f_id AND (goods_maintcharter=20 OR goods_maintcharter=57)";
+		//echo "$query<br>";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+        }
+		else
+		{
+			echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+		}
+        mysqli_close($db_connect);
+        if (is_array($goods))
+        {
+            return $goods;
+        }
+        else
+        {
+            return null;
+        }
+	}
+	
+	private function insVid($cont)
+	{
+		
+		$cont=$cont."<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/8MQAD1i8wpQ\" style=\"text-align: center;\" width=\"380\"></iframe>";
+		$cont="<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/e99O0gDPkg8\" style=\"text-align: center;\" width=\"380\"></iframe>".$cont;
+		return $cont;
+	}
+	
+	private function writeCont($id, $cont)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goods SET goods_content='$cont' WHERE goods_id=$id";
+		mysqli_query($db_connect,$query);
+        //echo "$query<br>";
+		//$this->writeLog($query);
+		mysqli_close($db_connect);
+	}
+	
+	public function editKitchen()
+	{
+		$goods=$this->getTovList();
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$id=$good['goods_id'];
+				$cont="";
+				$goods_maintcharter=$good['goods_maintcharter'];
+				if ($goods_maintcharter==57)
+				{
+					$cont="<p></p><div style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px;\">
+<strong style=\"margin: 0px; padding: 0px; font-size: 13.2px;\"><span style=\"color: rgb(255, 0, 0);\">Цена указана за метр погонный (без учёта столешницы).</span></strong></div>
+<div style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px;\">
+<strong style=\"margin: 0px; padding: 0px; font-size: 13.2px;\">Пример того, что входит в 1 погонный метр кухни:</strong></div>
+<div style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px;\">
+&nbsp;</div>
+<div style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px; text-align: center;\">
+<strong style=\"margin: 0px; padding: 0px; font-size: 13.2px;\"><img alt=\"\" src=\"/admin/upload/image/Ivanka/111_42230.jpg\" style=\"width: 390px; height: 600px;\" /></strong></div>
+<p style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px; margin: 20px 0px 0px; padding: 0px;\">
+<strong style=\"margin: 0px; padding: 0px;\">Кухня набирается по размерам заказчика, исходя из вариантов секций на дополнительном фото</strong></p>
+<p style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px; text-align: justify;\">
+Кухни фабрики &laquo;Гарант&raquo; представляют собой модульную систему. То есть, они состоят из определенного ассортимента модулей, благодаря которому возможно скомбинировать практически любой размер Вашей кухни. Корпуса и фасады упаковываются раздельно, что позволяет комбинировать цвета на ваш вкус. В ассортименте фабрики есть фасады из материала МДФ, покрытые цветной ПВХ пленкой: однотонные глянцевые, матовые со структурой дерева, с патиной.</p>
+<p style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px; text-align: justify;\">
+&nbsp; &nbsp;Также представлена бюджетная серия кухонь с фасадом из ДСП. Такой фасад покрыт ламинатом под структуру дерева или является просто однотонным. В стандартную комплектацию корпусов входит вся фурнитура, необходимая для полноценного функционирования кухни. В комплект выдвижных ящиков включены телескопические направляющие, которые обеспечивают полное выдвижение самого ящика и плавный ход механизма.</p>
+<p style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px;\">
+<strong>Технические характеристики:</strong></p>
+<ul style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px;\">
+<li style=\"text-align: justify;\">
+- верхние тумбочки изготавливаются в двух размерах: высотой 72 см и 92 см,&nbsp;<span style=\"font-size: 13.2px;\">глубиной</span>&nbsp;30 см;</li>
+<li style=\"text-align: justify;\">
+- тумбочки, открывающиеся вертикально, оснащены газовыми подъёмниками;</li>
+<li style=\"text-align: justify;\">
+- нижние секции высотой 82 см (без учета столешницы) и глубиной 48 см;</li>
+<li style=\"text-align: justify;\">
+- нижние секции комплектуются регулируемыми по высоте ножками, которые можно закрыть сплошным цоколем.</li>
+</ul>
+<p style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px; margin: 20px 0px 0px; padding: 0px; text-align: justify;\">
+Кухни торговой марки &laquo;Гарант&raquo; отличаются оптимальным соотношением доступной цены и высокого качества, что способствует большой популярности на рынке Украины.</p>";
+				}
+				if ($goods_maintcharter==20)
+				{
+					$cont="<p></p><div style=\"text-align: justify;\">
+<div style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px;\">
+<strong>Цена указана за комплект 2 м. без учета стоимости столешници, мойки и техники.</strong></div>
+<div style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px;\">
+<strong>Пример набора 2 м. на картинке ниже.</strong></div>
+<div style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px;\">
+&nbsp;</div>
+</div>
+<div style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px; text-align: center;\">
+<img alt=\"\" src=\"http://fayni-mebli.com/content/goods/12269/2m_-kopiya_30789.jpg\" style=\"font-size:12pt; text-align: center; width: 400px; height: 300px;\" /></div>
+<p style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px; text-align: justify;\">
+&nbsp; &nbsp;Кухни фабрики &laquo;Гарант&raquo; представляют собой модульную систему. То есть, они состоят из определенного ассортимента модулей, благодаря которому возможно скомбинировать практически любой размер Вашей кухни. Корпуса и фасады упаковываются раздельно, что позволяет комбинировать цвета на ваш вкус. В ассортименте фабрики есть фасады из материала МДФ, покрытые цветной ПВХ пленкой: однотонные глянцевые, матовые со структурой дерева, с патиной.</p>
+<p style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px; text-align: justify;\">
+&nbsp; &nbsp;Также представлена бюджетная серия кухонь с фасадом из ДСП. Такой фасад покрыт ламинатом под структуру дерева или является просто однотонным. В стандартную комплектацию корпусов входит вся фурнитура, необходимая для полноценного функционирования кухни. В комплект выдвижных ящиков включены телескопические направляющие, которые обеспечивают полное выдвижение самого ящика и плавный ход механизма.</p>
+<p style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px; text-align: justify;\">
+<strong>Технические характеристики:</strong></p>
+<ul style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px;\">
+<li style=\"text-align: justify;\">
+- верхние тумбочки изготавливаются в двух размерах: высотой 72 см и 92 см, шириной 30 см;</li>
+<li style=\"text-align: justify;\">
+- тумбочки, открывающиеся вертикально, оснащены газовыми подъёмниками;</li>
+<li style=\"text-align: justify;\">
+- нижние секции высотой 82 см (без учета столешницы) и глубиной 48 см;</li>
+<li style=\"text-align: justify;\">
+- нижние секции комплектуются регулируемыми по высоте ножками, которые можно закрыть сплошным цоколем.</li>
+</ul>
+<p style=\"color: rgb(51, 51, 51); font-family: Arial, sans-serif; font-size: 13.2px; margin: 20px 0px 0px; padding: 0px; text-align: justify;\">
+Кухни торговой марки &laquo;Гарант&raquo; отличаются оптимальным соотношением доступной цены и высокого качества, что способствует большой популярности на рынке Украины.</p>";
+				}
+				
+				
+				$cont=$this->insVid($cont);
+				$this->writeCont($id,$cont);
+				//break;
+			}
+		}
+		else
+		{
+			echo "No goods!<br>";
+		}
+		
+	}
+}
+
+
 $runtime = new Timer();
 $runtime->setStartTime();
 //$test=new insertVidMatr(35);
@@ -831,9 +1056,15 @@ $runtime->setStartTime();
 //$test=new CopyVid();
 //$test->FindVideo();
 ///////////////////////
-$test=new FixVidSize();
-$test->FixVideo();
-$test->VidPos();
+//$test=new FixVidSize();
+//$test->FixVideo();
+//$test->VidPos();
+///////////////////
+//$test=new EditVidSHK();
+//$test->editSHK();
+
+$test=new insertVidKitchen();
+$test->editKitchen();
 
 $runtime->setEndTime();
 echo "<br> runtime=".$runtime->getRunTime()." sec <br>";
