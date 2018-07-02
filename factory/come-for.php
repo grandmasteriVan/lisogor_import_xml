@@ -60,11 +60,15 @@ class ComeFor extends Universal
                         {
                             $price=$elem;
                         }
+                        if ($cell_num==8)
+                        {
+                            $price_old=$elem;
+                        }
                         $cell_num++;
                     }
                     if ($name)
                     {
-                        $this->add_price($name,$price);
+                        $this->add_price($name,$price,$price_old);
                     }
                 }
                 $row_num++;
@@ -82,23 +86,58 @@ class ComeFor extends Universal
     public function add_db()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
+        $factory_id=35;
         foreach ($this->data as $d)
         {
             $d_name=$d['name'];
             //echo $d_name."<br>";
             $d_price=$d['kat0'];
-            $factory_id=35;
+            //$factory_id=35;
 
             $strSQL="UPDATE goods ".
-                "SET goods_pricecur=$d_price ".
-                "WHERE goods.goods_article_link=$d_name AND factory_id=$factory_id";
+                "SET goods_price=$d_price ".
+                "WHERE goods.goods_article_link='$d_name' AND factory_id=$factory_id";
             echo $strSQL."<br>";
             //break;
-            //mysqli_query($db_connect, $strSQL);
+            mysqli_query($db_connect, $strSQL);
             //break;
 
         }
 
+    }
+
+    /**
+     * Добавляем старую цену, скидку и галочку Акция для акционных матрасов (если старая и новая цены не равны)
+     */
+    public function addStock()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $factory_id=35;
+        //сначала удаляем все акции
+        $query="update goods SET goods_stock=0, goods_discount=0 where factory_id=35";
+        mysqli_query($db_connect,$query);
+        foreach ($this->data as $d)
+        {
+            $name=$d['name'];
+            $price=$d['cat0'];
+            $price_old=$d['cat1'];
+            //если старая и новая цены отличаются - расчитываем процент скидки и проставляем акцию
+            if ($price!=$price_old AND $price_old!=0)
+            {
+                $discount=round((1-($price/$price_old)))*100;
+                $strSQL="UPDATE goods ".
+                    "SET goods_oldprice=$price_old, goods_discount=$discount, goods_stock=1 ".
+                    "WHERE goods.goods_article_link='$name' AND factory_id=$factory_id";
+                echo $strSQL."<br>";
+                //break;
+                //mysqli_query($db_connect, $strSQL);
+                echo "$strSQL<br>";
+                //break;
+
+            }
+
+        }
+        mysqli_close($db_connect);
     }
 
 
