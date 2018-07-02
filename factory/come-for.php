@@ -52,15 +52,15 @@ class ComeFor extends Universal
                     foreach ($cells as $cell)
                     {
                         $elem=$cell->nodeValue;
-                        if ($cell_num==3)
+                        if ($cell_num==1)
                         {
                             $name=$elem;
                         }
-                        if ($cell_num==6)
+                        if ($cell_num==9)
                         {
                             $price=$elem;
                         }
-                        if ($cell_num==8)
+                        if ($cell_num==10)
                         {
                             $price_old=$elem;
                         }
@@ -115,26 +115,40 @@ class ComeFor extends Universal
         $factory_id=35;
         //сначала удаляем все акции
         $query="update goods SET goods_stock=0, goods_discount=0 where factory_id=35";
-        mysqli_query($db_connect,$query);
+        //mysqli_query($db_connect,$query);
+		echo "$query<br>";
+		//echo "<pre>";
+		//print_r($this->data);
+		//echo "</pre>";
         foreach ($this->data as $d)
         {
             $name=$d['name'];
-            $price=$d['cat0'];
-            $price_old=$d['cat1'];
+			$name = mb_substr($name, 20);
+            $price=$d['kat0'];
+            $price_old=$d['kat1'];
             //если старая и новая цены отличаются - расчитываем процент скидки и проставляем акцию
             if ($price!=$price_old AND $price_old!=0)
             {
-                $discount=round((1-($price/$price_old)))*100;
+                echo "$price_old-$price ";
+				$discount=round((1-($price/$price_old))*100);
                 $strSQL="UPDATE goods ".
                     "SET goods_oldprice=$price_old, goods_discount=$discount, goods_stock=1 ".
                     "WHERE goods.goods_article_link='$name' AND factory_id=$factory_id";
-                echo $strSQL."<br>";
-                //break;
-                //mysqli_query($db_connect, $strSQL);
-                echo "$strSQL<br>";
+                
+				if ($discount>0)
+				{
+					echo $strSQL."<br>";
+					//mysqli_query($db_connect, $strSQL);
+				}
+                //echo "<pre>";
+                //var_dump($d);
+				//echo "name=$name";
+				//echo "</pre>";
+                //echo "$strSQL<br>";
                 //break;
 
             }
+			//break;
 
         }
         mysqli_close($db_connect);
@@ -169,5 +183,4 @@ class ComeFor extends Universal
         </html> --> <?php
         $this->findDif();
     }
-
 }
