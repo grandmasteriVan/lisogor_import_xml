@@ -1235,7 +1235,7 @@ if ($res=mysqli_query($db_connect,$query))
 	mysqli_close($db_connect);
 	*/
 	
-	function getGoods()
+	/*function getGoods()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="SELECT goods_id, goods_name FROM goods WHERE goods_active=1 AND goods_noactual=0 AND factory_id=154";
@@ -1286,5 +1286,12 @@ if ($res=mysqli_query($db_connect,$query))
             echo "No goods!<br>";
         }
         mysqli_close($db_connect);
+		*/
+		
+	//отключить все товары слип енд флай
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="update goods SET goods_noactual=1 where factory_id=124";
+	mysqli_query($db_connect,$query);
+	mysqli_close($db_connect);
 ?>
 

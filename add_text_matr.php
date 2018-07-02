@@ -124,6 +124,29 @@ function add_text_estela()
     }
 }
 
+function add_text_luna()
+{
+    $query="SELECT goods_id, goods_content FROM goods WHERE factory_id=179";
+    $db_connect=mysqli_connect(host,user,pass,db);
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        //
+        while ($row=mysqli_fetch_assoc($res))
+        {
+            $arr[]=$row;
+        }
+        foreach ($arr as $row)
+        {
+            $id=$row['goods_id'];
+            $desc=$row['goods_content'].PHP_EOL."<p>Стоимость указана за базовую комплектацию без ящиков, планки безопасности и в натуральном цвете.</p>";
+			$query="UPDATE goods SET goods_content='$desc' WHERE goods_id=$id";
+            mysqli_query($db_connect,$query);
+            echo "$id $query<br>";
+            //break;
+        }
+    }
+}
+
 function add_text_matroluxe()
 {
     $query="SELECT goods_id, goods_content FROM goods WHERE factory_id=46 AND goods_id<>34207 AND (goodskind_id=40 OR goodskind_id=45 OR goodskind_id=88)";
@@ -157,5 +180,6 @@ function add_text_matroluxe()
 //add_text_tis();
 //add_text_skif();
 //add_text_estela();
-add_text_matroluxe();
+//add_text_matroluxe();
+add_text_luna();
 ?>
