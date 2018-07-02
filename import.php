@@ -98,8 +98,9 @@ switch ($selectedFactory)
         //new untested!!!
         include_once "come-for.php";
         $test= new ComeFor($_FILES['file']['tmp_name'],35);
-        $test->parce_price();
+        $test->parse_price(null);
         $test->test_data();
+        $test->addStock();
         //$test->add_db();
         break;
     case "Livs":
