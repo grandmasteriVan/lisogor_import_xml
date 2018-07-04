@@ -64,13 +64,17 @@ class Corners
         $add="<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/EoGsmck1bZI\" style=\"text-align: center;\" width=\"380\"></iframe></p>";
 		if ($charter==33)
         {
-            $add.="<p>Цена указана за кровать без матраса и подъемного механизма. За дополнительной информацией обращайтесь к менеджерам нашего магазина</p>";
+            $add.="<p>Цена указана за кровать без матраса и подъемного механизма. За дополнительной информацией обращайтесь к менеджерам нашего магазина.</p>";
+        }
+		if ($charter==13)
+		{
+            $add.="<p>Стоимость кровати зависит от материала оббивки. За дополнительной информацией обращайтесь к менеджерам.</p>";
         }
         $cont=$add.$cont;
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="update goods SET goods_content='$cont' where goods_id=$id";
         mysqli_query($db_connect,$query);
-		//echo "$query<br>";
+		echo "$query<br>";
         mysqli_close($db_connect);
     }
     public function checkCorners()
@@ -83,8 +87,8 @@ class Corners
                 $id=$good['goods_id'];
                 $charter=$good['goods_maintcharter'];
                 $cont=$good['goods_content'];
-				//$cont="";
-                $this->setActive($id);
+				$cont="";
+                //$this->setActive($id);
                 $this->addVid($id,$cont,$charter);
             }
         }
