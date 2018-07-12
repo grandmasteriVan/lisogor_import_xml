@@ -29,7 +29,7 @@ class Matroluxe
      * @param $name
      * @return array|null
      */
-    private function readFile($name)
+    public function readFile($name)
     {
         $handle=fopen($name,"r");
         while (!feof($handle))
@@ -55,7 +55,7 @@ class Matroluxe
      * @param $pos
      * @return string
      */
-    private function formArticle1C($pos)
+    public function formArticle1C($pos)
     {
         $article=$pos[2]."/".$pos[3];
         return $article;
@@ -64,7 +64,7 @@ class Matroluxe
      * @param $id
      * @return mixed
      */
-    private function getOldPrice ($id)
+    public function getOldPrice ($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="SELECT goods_price FROM goods WHERE goods_id=$id";
@@ -87,10 +87,10 @@ class Matroluxe
     /**
      *
      */
-    private function unsetStock()
+    public function unsetStock($f_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="update goods SET goods_stock=0, goods_discount=0, goods_oldprice=0 where factory_id=46";
+        $query="update goods SET goods_stock=0, goods_discount=0, goods_oldprice=0 where factory_id=$f_id";
         mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
@@ -99,7 +99,7 @@ class Matroluxe
      * @param $newPrice
      * @return float
      */
-    private function getPercent($oldPrice, $newPrice)
+    public function getPercent($oldPrice, $newPrice)
     {
         $discount=round((1-($newPrice/$oldPrice))*100);
         return $discount;
@@ -108,10 +108,10 @@ class Matroluxe
      * @param $article
      * @return array|null
      */
-    private function getGood($article)
+    public function getGood($article,$f_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id FROM goods WHERE goods_article_1c='$article' AND factory_id=46";
+        $query="SELECT goods_id FROM goods WHERE goods_article_1c='$article' AND factory_id=$f_id";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -133,7 +133,7 @@ class Matroluxe
      * @param $discont
      * @param $id
      */
-    private function writePrice($oldPrice, $newPrice, $discont, $id)
+    public function writePrice($oldPrice, $newPrice, $discont, $id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="update goods SET goods_stock=1, goods_discount=$discont, goods_oldprice=$oldPrice, goods_price=$newPrice where goods_id=$id";
@@ -144,7 +144,7 @@ class Matroluxe
     /**
      *
      */
-    public function setStock()
+    public function setStock($f_id)
     {
         $price1c=$this->readFile("matroluxe.txt");
 		//echo "<pre>";
@@ -155,7 +155,7 @@ class Matroluxe
             foreach ($price1c as $pos1c)
             {
                 $article=$this->formArticle1C($pos1c);
-                $good_id=$this->getGood($article);
+                $good_id=$this->getGood($article,$f_id);
                 $old_price=$this->getOldPrice($good_id);
                 $new_price=$pos1c[6];
                 $discont=$this->getPercent($old_price,$new_price);
@@ -182,5 +182,51 @@ class Matroluxe
         }
     }
 }
-$test=new Matroluxe();
-$test->setStock();
+
+class Asat extends Matroluxe
+{
+	public function setStock($f_id)
+    {
+        $price1c=$this->readFile("asat.txt");
+		//echo "<pre>";
+		//print_r($price1c);
+		//echo "</pre>";
+        if (is_array($price1c))
+        {
+            foreach ($price1c as $pos1c)
+            {
+                $this->unsetStock($f_id);
+				$article=$pos1c[2];
+                $good_id=$this->getGood($article,$f_id);
+                $old_price=$this->getOldPrice($good_id);
+                $new_price=$pos1c[6];
+                $discont=$this->getPercent($old_price,$new_price);
+				echo "<pre>";
+				print_r($pos1c);
+				echo "</pre>";
+				echo "goods_id=$good_id old_price=$old_price, new_price=$new_price, discont=$discont<br>";
+                if ($discont>1)
+                {
+                    $this->writePrice($old_price,$new_price,$discont,$good_id);
+                }
+				else
+				{
+					$old_price=round($new_price*1.15);
+					$discont=$this->getPercent($old_price,$new_price);
+					$this->writePrice($old_price,$new_price,$discont,$good_id);
+				}
+				//break;
+            }
+        }
+        else
+        {
+            echo "No price!";
+        }
+    }
+}
+
+
+//$test=new Matroluxe();
+//$test->setStock(46);
+$test=new Asat();
+$test->setStock(197);
