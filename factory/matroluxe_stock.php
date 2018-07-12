@@ -188,6 +188,7 @@ class Asat extends Matroluxe
 	public function setStock($f_id)
     {
         $price1c=$this->readFile("asat.txt");
+		$this->unsetStock($f_id);
 		//echo "<pre>";
 		//print_r($price1c);
 		//echo "</pre>";
@@ -195,7 +196,7 @@ class Asat extends Matroluxe
         {
             foreach ($price1c as $pos1c)
             {
-                $this->unsetStock($f_id);
+                
 				$article=$pos1c[2];
                 $good_id=$this->getGood($article,$f_id);
                 $old_price=$this->getOldPrice($good_id);
