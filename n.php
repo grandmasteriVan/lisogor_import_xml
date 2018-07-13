@@ -1289,9 +1289,54 @@ if ($res=mysqli_query($db_connect,$query))
 		*/
 		
 	//отключить все товары слип енд флай
+	//$db_connect=mysqli_connect(host,user,pass,db);
+	//$query="update goods SET goods_noactual=1 where factory_id=124";
+	//mysqli_query($db_connect,$query);
+	//mysqli_close($db_connect);
+	
+	function getGoods()
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id FROM goods WHERE factory_id=205 AND goods_maintcharter=13";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+        }
+        else
+        {
+            echo "Error in SQL getGood ".mysqli_error($db_connect)."<br>";
+        }
+        mysqli_close($db_connect);
+        return $goods;
+	}
 	$db_connect=mysqli_connect(host,user,pass,db);
-	$query="update goods SET goods_noactual=1 where factory_id=124";
-	mysqli_query($db_connect,$query);
+	$goods=getGoods();
+	if (is_array($goods))
+	{
+		foreach ($goods as $good)
+		{
+			$id=$good['goods_id'];
+			$content="<p style=\"text-align: center;\"><iframe allow=\"encrypted-media\" allowfullscreen=\"\" frameborder=\"0\" gesture=\"media\" height=\"214\" src=\"https://www.youtube.com/embed/EoGsmck1bZI\" style=\"text-align: center;\" width=\"380\"></iframe></p>
+<p></p>
+<p>Возможные цвета кровати: белый, бежевый, коричневый, черный бархат, черный глянец, бордо, черное/серебро, черное/золото, черная медь, белое/серебро, белый бархат.</p>
+<p>Основание под матрас - металлические трубки. За дополнительную плату возможно заказать: учащённые металличские трубки, металлические трубки + ДВП подложка, буковые ламели. Стоимость уточняйте у менеджера.</p>";
+			$query="UPDATE goods SET goods_content='$content' WHERE goods_id=$id";
+			mysqli_query($db_connect,$query);
+			echo "$query<br>";
+			//break;
+		}
+	}
+	else
+	{
+		echo "No array!<br>";
+	}
 	mysqli_close($db_connect);
+	
+	
+	
+	
 ?>
 
