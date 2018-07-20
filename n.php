@@ -1293,7 +1293,7 @@ if ($res=mysqli_query($db_connect,$query))
 	//$query="update goods SET goods_noactual=1 where factory_id=124";
 	//mysqli_query($db_connect,$query);
 	//mysqli_close($db_connect);
-	
+	/*
 	function getGoods()
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -1334,7 +1334,63 @@ if ($res=mysqli_query($db_connect,$query))
 		echo "No array!<br>";
 	}
 	mysqli_close($db_connect);
+	*/
+	/*
+	$db_connect=mysqli_connect(host,user,pass,db);
+    $query="SELECT count(goods_id) FROM goods WHERE goods_active=1 AND goods_noactual=0 AND goods_productionout=0 AND (goods_maintcharter=5 OR goods_maintcharter=11 OR goods_maintcharter=4 OR goods_maintcharter=40 OR goods_maintcharter=98 )";
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row = mysqli_fetch_assoc($res))
+        {
+                $goods[] = $row;
+        }
+    }
+    else
+    {
+        echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+    }
+	var_dump($goods);
+    mysqli_close($db_connect);
+    */  
+        
+	$db_connect=mysqli_connect(host,user,pass,db);
+    $query="SELECT goods_id FROM goods WHERE goods_active=1 AND goods_noactual=0 AND goods_productionout=0 AND (goods_maintcharter=14 OR goods_maintcharter=150) AND goods_content NOT LIKE '%JF1wYXFtPck%'";
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row = mysqli_fetch_assoc($res))
+        {
+                $goods[] = $row;
+        }
+    }
+    else
+    {
+        echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+    }
+	echo "<b>Матрасы, в котором нет видео JF1wYXFtPck (как выбрать матрас)</b><br>";
+	echo "<pre>";
+	print_r ($goods);
+	echo "</pre>";
+    mysqli_close($db_connect);
 	
+	$db_connect=mysqli_connect(host,user,pass,db);
+	unset ($goods);
+    $query="SELECT goods_id FROM goods WHERE goods_active=1 AND goods_noactual=0 AND goods_productionout=0 AND (goods_maintcharter=13 OR goods_maintcharter=33) AND goods_content NOT LIKE '%EoGsmck1bZI%'";
+    if ($res=mysqli_query($db_connect,$query))
+    {
+        while ($row = mysqli_fetch_assoc($res))
+        {
+                $goods[] = $row;
+        }
+    }
+    else
+    {
+        echo "Error in SQL ".mysqli_error($db_connect)."<br>";
+    }
+	echo "<b>Кровати, в котором нет видео EoGsmck1bZI (как выбрать кровать)</b><br>";
+	echo "<pre>";
+	print_r ($goods);
+	echo "</pre>";
+    mysqli_close($db_connect);
 	
 	
 	
