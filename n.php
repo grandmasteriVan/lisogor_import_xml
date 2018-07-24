@@ -1395,4 +1395,3 @@ if ($res=mysqli_query($db_connect,$query))
 	
 	
 ?>
-
