@@ -1352,7 +1352,7 @@ if ($res=mysqli_query($db_connect,$query))
 	var_dump($goods);
     mysqli_close($db_connect);
     */  
-        
+    /*    
 	$db_connect=mysqli_connect(host,user,pass,db);
     $query="SELECT goods_id FROM goods WHERE goods_active=1 AND goods_noactual=0 AND goods_productionout=0 AND (goods_maintcharter=14 OR goods_maintcharter=150) AND goods_content NOT LIKE '%JF1wYXFtPck%'";
     if ($res=mysqli_query($db_connect,$query))
@@ -1391,7 +1391,276 @@ if ($res=mysqli_query($db_connect,$query))
 	print_r ($goods);
 	echo "</pre>";
     mysqli_close($db_connect);
+	*/
 	
+	//включить все нужные категории во всех товарах ливс
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="select goods_id from goods where factory_id=7";
+	//$cat_id=1073;
+	if ($res=mysqli_query($db_connect,$query))
+    {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+            //var_dump($goods);
+			//echo "<pre>";
+			//print_r ($goods);
+			//echo "</pre>";
+			foreach ($goods as $good)
+			{
+				$id=$good['goods_id'];
+				
+				//a
+				$cat_id=39;
+				if (checkDuplicate($id,$cat_id))
+				{
+					echo "good $id has A category<br>";
+					$query="update goodshascategory SET goodshascategory_active=1 where category_id=$cat_id and goods_id=$id";
+					//echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				else
+				{
+					$query="insert into goodshascategory (category_id, goods_id, goodshascategory_price, goodshascategory_active, goodshascategory_pricecur) VALUES ($cat_id,$id,0,1,0)";
+					echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				//0
+				$cat_id=68;
+				if (checkDuplicate($id,$cat_id))
+				{
+					echo "good $id has 0 category<br>";
+					$query="update goodshascategory SET goodshascategory_active=1 where category_id=$cat_id and goods_id=$id";
+					//echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				else
+				{
+					$query="insert into goodshascategory (category_id, goods_id, goodshascategory_price, goodshascategory_active, goodshascategory_pricecur) VALUES ($cat_id,$id,0,1,0)";
+					echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				//1
+				$cat_id=69;
+				if (checkDuplicate($id,$cat_id))
+				{
+					echo "good $id has 1 category<br>";
+					$query="update goodshascategory SET goodshascategory_active=1 where category_id=$cat_id and goods_id=$id";
+					//echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				else
+				{
+					$query="insert into goodshascategory (category_id, goods_id, goodshascategory_price, goodshascategory_active, goodshascategory_pricecur) VALUES ($cat_id,$id,0,1,0)";
+					echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				//2
+				$cat_id=543;
+				if (checkDuplicate($id,$cat_id))
+				{
+					echo "good $id has 2 category<br>";
+					$query="update goodshascategory SET goodshascategory_active=1 where category_id=$cat_id and goods_id=$id";
+					//echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				else
+				{
+					$query="insert into goodshascategory (category_id, goods_id, goodshascategory_price, goodshascategory_active, goodshascategory_pricecur) VALUES ($cat_id,$id,0,1,0)";
+					echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				//3
+				$cat_id=544;
+				if (checkDuplicate($id,$cat_id))
+				{
+					echo "good $id has 3 category<br>";
+					$query="update goodshascategory SET goodshascategory_active=1 where category_id=$cat_id and goods_id=$id";
+					//echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				else
+				{
+					$query="insert into goodshascategory (category_id, goods_id, goodshascategory_price, goodshascategory_active, goodshascategory_pricecur) VALUES ($cat_id,$id,0,1,0)";
+					echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				//4
+				$cat_id=545;
+				if (checkDuplicate($id,$cat_id))
+				{
+					echo "good $id has 4 category<br>";
+					$query="update goodshascategory SET goodshascategory_active=1 where category_id=$cat_id and goods_id=$id";
+					//echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				else
+				{
+					$query="insert into goodshascategory (category_id, goods_id, goodshascategory_price, goodshascategory_active, goodshascategory_pricecur) VALUES ($cat_id,$id,0,1,0)";
+					echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				//5
+				$cat_id=546;
+				if (checkDuplicate($id,$cat_id))
+				{
+					echo "good $id has 5 category<br>";
+					$query="update goodshascategory SET goodshascategory_active=1 where category_id=$cat_id and goods_id=$id";
+					//echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				else
+				{
+					$query="insert into goodshascategory (category_id, goods_id, goodshascategory_price, goodshascategory_active, goodshascategory_pricecur) VALUES ($cat_id,$id,0,1,0)";
+					echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				//6
+				$cat_id=547;
+				if (checkDuplicate($id,$cat_id))
+				{
+					echo "good $id has 6 category<br>";
+					$query="update goodshascategory SET goodshascategory_active=1 where category_id=$cat_id and goods_id=$id";
+					//echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				else
+				{
+					$query="insert into goodshascategory (category_id, goods_id, goodshascategory_price, goodshascategory_active, goodshascategory_pricecur) VALUES ($cat_id,$id,0,1,0)";
+					echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				//7
+				$cat_id=548;
+				if (checkDuplicate($id,$cat_id))
+				{
+					echo "good $id has 7 category<br>";
+					$query="update goodshascategory SET goodshascategory_active=1 where category_id=$cat_id and goods_id=$id";
+					//echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				else
+				{
+					$query="insert into goodshascategory (category_id, goods_id, goodshascategory_price, goodshascategory_active, goodshascategory_pricecur) VALUES ($cat_id,$id,0,1,0)";
+					echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				//8
+				$cat_id=549;
+				if (checkDuplicate($id,$cat_id))
+				{
+					echo "good $id has 8 category<br>";
+					$query="update goodshascategory SET goodshascategory_active=1 where category_id=$cat_id and goods_id=$id";
+					//echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				else
+				{
+					$query="insert into goodshascategory (category_id, goods_id, goodshascategory_price, goodshascategory_active, goodshascategory_pricecur) VALUES ($cat_id,$id,0,1,0)";
+					echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				//9
+				$cat_id=550;
+				if (checkDuplicate($id,$cat_id))
+				{
+					echo "good $id has 9 category<br>";
+					$query="update goodshascategory SET goodshascategory_active=1 where category_id=$cat_id and goods_id=$id";
+					//echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				else
+				{
+					$query="insert into goodshascategory (category_id, goods_id, goodshascategory_price, goodshascategory_active, goodshascategory_pricecur) VALUES ($cat_id,$id,0,1,0)";
+					echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				//10
+				$cat_id=551;
+				if (checkDuplicate($id,$cat_id))
+				{
+					echo "good $id has 10 category<br>";
+					$query="update goodshascategory SET goodshascategory_active=1 where category_id=$cat_id and goods_id=$id";
+					//echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				else
+				{
+					$query="insert into goodshascategory (category_id, goods_id, goodshascategory_price, goodshascategory_active, goodshascategory_pricecur) VALUES ($cat_id,$id,0,1,0)";
+					echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				//11
+				$cat_id=552;
+				if (checkDuplicate($id,$cat_id))
+				{
+					echo "good $id has 11 category<br>";
+					$query="update goodshascategory SET goodshascategory_active=1 where category_id=$cat_id and goods_id=$id";
+					//echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				else
+				{
+					$query="insert into goodshascategory (category_id, goods_id, goodshascategory_price, goodshascategory_active, goodshascategory_pricecur) VALUES ($cat_id,$id,0,1,0)";
+					echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				//12
+				$cat_id=553;
+				if (checkDuplicate($id,$cat_id))
+				{
+					echo "good $id has 12 category<br>";
+					$query="update goodshascategory SET goodshascategory_active=1 where category_id=$cat_id and goods_id=$id";
+					//echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+				else
+				{
+					$query="insert into goodshascategory (category_id, goods_id, goodshascategory_price, goodshascategory_active, goodshascategory_pricecur) VALUES ($cat_id,$id,0,1,0)";
+					echo "$query<br>";
+					mysqli_query($db_connect,$query);
+				}
+			}
+    }
+	else
+	{
+		echo "error in SQL $query";
+	}
 	
+	mysqli_close($db_connect);
 	
+	//проверка не дублируются ли категории
+	function checkDuplicate($id,$cat_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT 	goodshascategory_id FROM goodshascategory WHERE goods_id=$id AND category_id=$cat_id";
+		//echo $query."<br>";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+			while ($row = mysqli_fetch_assoc($res))
+            {
+                $articles[] = $row;
+            }
+			$art=null;
+			if (is_array($articles))
+            {
+                foreach ($articles as $article)
+                {
+                    //получаем нужный текст
+                    $art=$article['goodshascategory_id'];
+                }
+            }
+		}
+		mysqli_query($db_connect, $query);
+		//var_dump ($art);
+		if ($art==null)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
 ?>
