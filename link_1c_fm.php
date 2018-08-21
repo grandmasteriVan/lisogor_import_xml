@@ -237,6 +237,27 @@ class Novelty extends Link
         mysqli_close($db_connect);
     }
 }
+
+class Miromark extends Link
+{
+	public function parseMiromark()
+    {
+        $f_id=96;
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $this->ReadFile();
+        //$this->printData();
+        foreach ($this->data as $d)
+        {
+            $code1c=$d[0];
+            $name=$d[1];
+            $query = "UPDATE goods SET goods_article_1c='$code1c' WHERE goods_name like '%$name' AND factory_id=$f_id";
+            mysqli_query($db_connect,$query);
+            echo "$query<br>";
+        }
+        mysqli_close($db_connect);
+    }
+}
+
 /**
  * Class Green
  */
