@@ -250,7 +250,7 @@ class Miromark extends Link
         {
             $code1c=$d[0];
             $name=$d[1];
-            $query = "UPDATE goods SET goods_article_1c='$code1c' WHERE goods_name like '%$name' AND factory_id=$f_id";
+            $query = "UPDATE goods SET goods_article_1c='$code1c' WHERE goods_article_link = '$name' AND factory_id=$f_id";
             mysqli_query($db_connect,$query);
             echo "$query<br>";
         }
@@ -859,8 +859,12 @@ $time_start = microtime(true);
 
 //$test=new Greid("greid-1.txt");
 //$test->parseGreid();
-$test=new Estella("estela.txt");
-$test->parseEstella();
+//$test=new Estella("estela.txt");
+//$test->parseEstella();
+
+$test=new Miromark("miromark.txt");
+$test->parseMiromark();
+
 $time_end = microtime(true);
 $time = $time_end - $time_start;
 echo "Runtime: $time sec<br>";
