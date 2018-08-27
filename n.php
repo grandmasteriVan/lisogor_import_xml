@@ -1392,7 +1392,7 @@ if ($res=mysqli_query($db_connect,$query))
 	echo "</pre>";
     mysqli_close($db_connect);
 	*/
-	
+	/*
 	//включить все нужные категории во всех товарах ливс
 	$db_connect=mysqli_connect(host,user,pass,db);
 	$query="select goods_id from goods where factory_id=7";
@@ -1662,5 +1662,41 @@ if ($res=mysqli_query($db_connect,$query))
 		{
 			return true;
 		}
+	}*/
+	
+	//$db_connect=mysqli_connect(host,user,pass,db);
+	//$query="update goods SET goods_noactual=0 where factory_id=142";
+	//mysqli_query($db_connect,$query);
+	//mysqli_close($db_connect);
+	
+	
+	/*$db_connect=mysqli_connect(host,user,pass,db);
+	$query="select goods_name, goods_content from goods where goods_active=1 AND goods_noactual=0";
+	if ($res=mysqli_query($db_connect,$query))
+	{
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+    }
+     else
+	{
+		 echo "Error in SQL: $query<br>";
 	}
+	if (is_array($goods))
+	{
+		foreach($goods as $good)
+		{
+			$name=$good['goods_name'];
+			$text=$good['goods_content'];
+			$text=strip_tags($text);
+			$file=$name.PHP_EOL.$text.PHP_EOL.PHP_EOL;
+			file_put_contents("texts_fm.txt",$file,FILE_APPEND);
+		}
+	}
+	
+	
+	mysqli_close($db_connect);
+	*/
 ?>
+
