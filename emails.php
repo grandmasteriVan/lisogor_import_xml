@@ -2,6 +2,23 @@
 
 header('Content-type: text/html; charset=UTF-8');
 
+//define ("host","localhost");
+define ("host","localhost");
+/**
+ * database username
+ */
+//define ("user", "root");
+define ("user", "fm");
+/**
+ * database password
+ */
+//define ("pass", "");
+define ("pass", "T6n7C8r1");
+/**
+ * database name
+ */
+//define ("db", "mebli");
+define ("db", "fm");
 
 
 define ("host_ddn","es835db.mirohost.net");
@@ -13,6 +30,129 @@ define ("db_ddn", "ddnPZS");
 //define ("user_ddn", "root");
 //define ("pass_ddn", "");
 //define ("db_ddn", "ddn");
+
+class EmailFM
+{
+	
+	private function getOrdersByUser($user_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT booking_id FROM booking WHERE member_id=$user_id";
+		if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $bookings[] = $row;
+            }
+        }
+        else
+        {
+            echo "Error in SQL getUsers ".mysqli_error($db_connect)."<br>";
+        }
+		mysqli_close($db_connect);
+		return $bookings;
+	}
+	
+	private function getProductNameByBooking($booking_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT basket_prodname FROM basket WHERE booking_id=$booking_id";
+		//echo "$query<br>";
+		if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+        }
+        else
+        {
+            echo "Error in SQL getUsers ".mysqli_error($db_connect)."<br>";
+        }
+		mysqli_close($db_connect);
+		return $goods;
+	}
+	
+	private function getUsers()
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT member_id, member_email, member_name, member_tel FROM member";
+		//echo "$query<br>";
+		if ($res=mysqli_query($db_connect,$query))
+        {
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $users[] = $row;
+            }
+        }
+        else
+        {
+            echo "Error in SQL getUsers ".mysqli_error($db_connect)."<br>";
+        }
+		mysqli_close($db_connect);
+		if (is_array($users))
+		{
+			return $users;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public function getEmails()
+	{
+		$members=$this->getUsers();
+		//var_dump($members);
+		if (is_array($members))
+		 {
+			 foreach($members as $member)
+			 {
+				 $member_id=$member['member_id'];
+				 $email=$member['member_email'];
+				 $name=$member['member_name'];
+				 $tel=$member['member_tel'];
+				 $f_string="$email;$name;$tel;";
+				 $orders=$this->getOrdersByUser($member_id);
+				 //var_dump ($orders);
+				 if (is_array ($orders))
+				 {
+					 foreach($orders as $order)
+					 {
+						 $order_id=$order['booking_id'];
+						 $goods=$this->getProductNameByBooking($order_id);
+						 //echo "member=$member_id (mail=$email, ) order=$order_id goods are:<br>";
+						 //echo "<pre>";
+						 //print_r($goods);
+						 //echo "</pre>";
+						 if (is_array($goods))
+						 {
+							 foreach ($goods as $good)
+							 {
+								 $good_name=$good['basket_prodname'];
+								 $f_string.="$good_name, ";
+								 //echo "$good_name<br>";
+								 //echo 
+							 }
+						 }
+						 
+					 }
+				 }
+				 $f_string.=";".PHP_EOL;
+				 echo "$f_string<br>";
+				 file_put_contents("emails_fm.csv",$f_string,FILE_APPEND);
+				 
+				 //break;*/
+			 }
+			 
+		 }
+		 else
+		 {
+			 echo"No array of members!<br>";
+		 }
+	}
+}
+
 
 class EmailDDN
 {
@@ -199,5 +339,6 @@ class EmailDDN
 	 }	
 }
 
-$test=new EmailDDN();
+//$test=new EmailDDN();
+$test = new EmailFM();
 $test->getEmails();
