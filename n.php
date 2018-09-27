@@ -1,5 +1,5 @@
 <?php
-//header('Content-Type: text/html; charset=utf-8');
+header('Content-Type: text/html; charset=utf-8');
 /**
  * database host
  */
@@ -8,18 +8,18 @@ define ("host","localhost");
 /**
  * database username
  */
-//define ("user", "root");
-define ("user", "fm");
+define ("user", "root");
+//define ("user", "newfm");
 /**
  * database password
  */
-//define ("pass", "");
-define ("pass", "T6n7C8r1");
+define ("pass", "");
+//define ("pass", "N0r7F8g6");
 /**
  * database name
  */
-//define ("db", "mebli");
-define ("db", "fm");
+define ("db", "fm_new");
+//define ("db", "newfm");
 
 
 define ("host_ddn","es835db.mirohost.net");
@@ -1698,10 +1698,364 @@ if ($res=mysqli_query($db_connect,$query))
 	
 	mysqli_close($db_connect);
 	*/
-	
+	/*
 	$db_connect=mysqli_connect(host,user,pass,db);
-    $query="update goods SET goods_stock=0, goods_discount=0, goods_oldprice=0 where factory_id=202";
+    $query="update goods SET goods_stock=0, goods_discount=0, goods_oldprice=0 where factory_id=35";
     mysqli_query($db_connect,$query);
     mysqli_close($db_connect);
+	*/
+	/*
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="update goods SET goods_noactual=1 where factory_id=139";
+	mysqli_query($db_connect,$query);
+	mysqli_close($db_connect);
+	
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="update goods SET goods_noactual=1 where factory_id=135";
+	mysqli_query($db_connect,$query);
+	mysqli_close($db_connect);
+	
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="update goods SET goods_noactual=1 where factory_id=150";
+	mysqli_query($db_connect,$query);
+	mysqli_close($db_connect);
+	
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="update goods SET goods_noactual=1 where factory_id=158";
+	mysqli_query($db_connect,$query);
+	mysqli_close($db_connect);
+	
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="update goods SET goods_noactual=1 where factory_id=152";
+	mysqli_query($db_connect,$query);
+	mysqli_close($db_connect);
+	
+	
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="update goods SET goods_noactual=1 where factory_id=142";
+	mysqli_query($db_connect,$query);
+	mysqli_close($db_connect);
+	*/
+	/*$db_connect=mysqli_connect(host,user,pass,db);
+	$query="UPDATE goods SET goods_noactual=0 WHERE factory_id=97";
+	mysqli_query($db_connect,$query);
+	mysqli_close($db_connect);*/
+	/*
+	//скопировать фильтры и контент из родительского товара фабрики его дочкам
+	public function copyFilters()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        //return;
+		$parent_list=$this->parrentMatr();
+        $mod_list=$this->modMatr();
+		//return;
+        foreach ($parent_list as $parent)
+        {
+            $parent_id=$parent['goods_id'];
+			//главный раздел каталога матраса
+			$maintcharter=$parent['goods_maintcharter'];
+			//идем по дочкам
+            foreach ($mod_list as $mod)
+            {
+                if ($parent['goods_id'] == $mod['goods_parent'])
+                {
+                    $mod_id = $mod['goods_id'];
+                    $mod_size = $mod['goods_width'];
+                    $mod_size_l = $mod['goods_length'];
+					//прописываем тот же главный раздел каталога дочке, что и родителю
+					$query="UPDATE goods SET goods_maintcharter=$maintcharter WHERE goods_id=$mod_id";
+					mysqli_query($db_connect, $query);
+					
+                    //echo "<br><b>$mod_size * $mod_size_l</b><br>";
+                    //дропаем старые записи
+                    $query = "DELETE FROM goodshasfeature WHERE goods_id=$mod_id";
+                    mysqli_query($db_connect, $query);
+                    //echo $query."<br>";
+                    //для каждой фичи записываем ее в БД
+                    foreach ($features as $feat)
+                    {
+                        //echo "копируем фильтры<br>";
+                        $goodshasfeature_valueint = $feat['goodshasfeature_valueint'];
+                        $goodshasfeature_valuefloat = $feat['goodshasfeature_valuefloat'];
+                        $goodshasfeature_valuetext = $feat['goodshasfeature_valuetext'];
+                        $feature_id = $feat['feature_id'];
+                        //пишем размерность (одно/полтора/двуспальные)
+
+                        //не пишем ненужные значния
+                        if ($feature_id == 93 || $feature_id == 33 || $feature_id == 52 || $feature_id == 53 || $feature_id == 55 || $feature_id == 54 || $feature_id == 56 || $feature_id == 147) {
+                            $query = "INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, " .
+                                "goodshasfeature_valuetext, goods_id, feature_id) " .
+                                "VALUES ($goodshasfeature_valueint, $goodshasfeature_valuefloat, " .
+                                "'$goodshasfeature_valuetext', $mod_id, $feature_id)";
+                            mysqli_query($db_connect, $query);
+                            //echo "Удачно!<br>";
+                            //echo $query."<br>";
+                        }
+                    }
+                    //////////////////////
+                   ///пишем размеры
+                    if ($mod_size <= 900)
+                    {
+                        //$goodshasfeature_valueint=1;
+                        $this->setFilter($mod_id, 192, 1);
+                    }
+                    if ($mod_size > 900 && $mod_size <= 1500)
+                    {
+                        //$goodshasfeature_valueint=3;
+                        $this->setFilter($mod_id, 192, 3);
+                    }
+                    if ($mod_size > 1500)
+                    {
+                        //$goodshasfeature_valueint=2;
+                        $this->setFilter($mod_id, 192, 2);
+                    }
+                    //пишем размер
+                    if ($mod_size == 600 && $mod_size_l == 1200)
+                    {
+                        //$goodshasfeature_valueint=1;
+                        $this->setFilter($mod_id, 211, 2);
+                    }
+                    if ($mod_size == 700 && $mod_size_l == 1400)
+                    {
+                        $this->setFilter($mod_id, 211, 2);
+                    }
+                    if ($mod_size == 700 && $mod_size_l == 1900)
+                    {
+                        $this->setFilter($mod_id, 211, 3);
+                    }
+                    if ($mod_size == 700 && $mod_size_l == 2000)
+                    {
+                        $this->setFilter($mod_id, 211, 4);
+                    }
+                    if ($mod_size == 800 && $mod_size_l == 1600)
+                    {
+                        $this->setFilter($mod_id, 211, 5);
+                    }
+                    if ($mod_size == 800 && $mod_size_l == 1900)
+                    {
+                        $this->setFilter($mod_id, 211, 6);
+                    }
+                    if ($mod_size == 800 && $mod_size_l == 2000)
+                    {
+                        $this->setFilter($mod_id, 211, 7);
+                    }
+                    if ($mod_size == 900 && $mod_size_l == 1900)
+                    {
+                        $this->setFilter($mod_id, 211, 8);
+                    }
+                    if ($mod_size == 900 && $mod_size_l == 2000)
+                    {
+                        $this->setFilter($mod_id, 211, 9);
+                    }
+                    if ($mod_size == 1000 && $mod_size_l == 1900)
+                    {
+                        $this->setFilter($mod_id, 211, 10);
+                    }
+                    if ($mod_size == 1000 && $mod_size_l == 2000)
+                    {
+                        $this->setFilter($mod_id, 211, 11);
+                    }
+                    if ($mod_size == 1200 && $mod_size_l == 1900)
+                    {
+                        $this->setFilter($mod_id, 211, 12);
+                    }
+                    if ($mod_size == 1200 && $mod_size_l == 2000)
+                    {
+                        $this->setFilter($mod_id, 211, 13);
+                    }
+                    if ($mod_size == 1400 && $mod_size_l == 1900)
+                    {
+                        $this->setFilter($mod_id, 211, 14);
+                    }
+                    if ($mod_size == 1400 && $mod_size_l == 2000)
+                    {
+                        $this->setFilter($mod_id, 211, 15);
+                    }
+                    if ($mod_size == 1500 && $mod_size_l == 1900)
+                    {
+                        $this->setFilter($mod_id, 211, 16);
+                    }
+                    if ($mod_size == 1500 && $mod_size_l == 2000)
+                    {
+                        $this->setFilter($mod_id, 211, 17);
+                    }
+                    if ($mod_size == 1600 && $mod_size_l == 1900)
+                    {
+                        $this->setFilter($mod_id, 211, 18);
+                    }
+                    if ($mod_size == 1600 && $mod_size_l == 2000)
+                    {
+                        $this->setFilter($mod_id, 211, 19);
+                    }
+                    if ($mod_size == 1700 && $mod_size_l == 1900)
+                    {
+                        $this->setFilter($mod_id, 211, 20);
+                    }
+                    if ($mod_size == 1700 && $mod_size_l == 2000)
+                    {
+                        $this->setFilter($mod_id, 211, 21);
+                    }
+                    if ($mod_size == 1800 && $mod_size_l == 1900)
+                    {
+                        $this->setFilter($mod_id, 211, 22);
+                    }
+                    if ($mod_size == 1800 && $mod_size_l == 2000)
+                    {
+                        $this->setFilter($mod_id, 211, 23);
+                    }
+                    if ($mod_size == 1900 && $mod_size_l == 1900)
+                    {
+                        $this->setFilter($mod_id, 211, 24);
+                    }
+                    if ($mod_size == 1900 && $mod_size_l == 2000)
+                    {
+                        $this->setFilter($mod_id, 211, 25);
+                    }
+                    if ($mod_size == 2000 && $mod_size_l == 2000)
+                    {
+                        $this->setFilter($mod_id, 211, 26);
+                    }
+                    if ($mod_size == 2000 && $mod_size_l == 2200)
+                    {
+                        $this->setFilter($mod_id, 211, 27);
+                    }
+					
+                }
+
+            }
+
+            //break;
+        }
+		mysqli_close($db_connect);
+    }
+	*/
+	/*
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="select goodshaslang_id, goodshaslang_content from goodshaslang where lang_id=1 and (goodshaslang_id>14080 AND goodshaslang_id< 318010)";
+	if ($res=mysqli_query($db_connect,$query))
+	{
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+    }
+    else
+	{
+		 echo "Error in SQL: $query<br>";
+	}
+	//unset ($res);
+	if (is_array($goods))
+	{
+		//var_dump($goods);
+		$i=1;
+		foreach ($goods as $good)
+		{
+			$id=$good['goodshaslang_id'];
+			$cont=$good['goodshaslang_content'];
+			if (strrpos ($cont,'%D0%93%D0%B0%D1%80%D0%B0%D0%BD%D1%82-%D0%BF%D0%B5%D1%81%D0%BA%D0%BE%D1%81%D1%82%D1%80%D1%83%D0%B9')!=false)
+			//if (strrpos ($cont,'garant-peskostruj')!=false)
+			{
+				//echo "<pre>";
+				$cont=str_replace('%D0%93%D0%B0%D1%80%D0%B0%D0%BD%D1%82-%D0%BF%D0%B5%D1%81%D0%BA%D0%BE%D1%81%D1%82%D1%80%D1%83%D0%B9','garant-peskostruj',$cont);
+				//print_r($good);
+				//echo "$cont<br>";
+				//echo "</pre>";
+				$query="UPDATE goodshaslang SET goodshaslang_content='$cont' WHERE goodshaslang_id=$id";
+				mysqli_query($db_connect,$query);
+				
+				echo "$i<br>";
+				$i++;
+				//break;
+			}
+		}
+	}
+	else
+	{
+		echo "No array!";
+	}
+	*/
+	
+	
+	
+	/*
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="select sectionhaslang_id, sectionhaslang_content from sectionhaslang where lang_id=1";
+	if ($res=mysqli_query($db_connect,$query))
+	{
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $sections[] = $row;
+            }
+    }
+	if (is_array ($sections))
+	{
+		foreach ($sections as $section)
+		{
+			$id=$section['sectionhaslang_id'];
+			$cont=$section['sectionhaslang_content'];
+			$new_cont=preg_replace('~<p[^>]*>~', '<p>', $cont);
+			echo $new_cont."<br>";
+			//$query="UPDATE sectionhaslang SET sectionhaslang_content='$new_cont' WHERE sectionhaslang_id=$id";
+			//mysqli_query($db_connect,$query);
+			//break;
+		}
+	}
+	else
+	{
+		echo "No array!<br>";
+	}
+	*/
+	
+	set_time_limit(9000);
+	function translateText($txt)
+    {
+        //я
+		$api_key="trnsl.1.1.20170706T112229Z.752766fa973319f4.6dcbe2932c5e110da20ee3ce61c5986e7e492e7f";
+		//алена
+        //$api_key="trnsl.1.1.20180827T115930Z.dabf581f6854b5e7.14a06f36c6a994bdfa2be1f303fd9fb71f2b3c9f";
+        $lang="ru-uk";
+        $txt=str_replace(" ","%20",$txt);
+        $link="https://translate.yandex.net/api/v1.5/tr.json/translate?key=".$api_key."&text=".$txt."&lang=".$lang;
+        //echo $link."<br>";
+        $result=file_get_contents($link);
+        $result=json_decode($result,true);
+        $ukr_txt=$result['text'][0];
+        //var_dump($result);
+        return $ukr_txt;
+    }
+	
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="select goods_id, goodshaslang_name from goodshaslang where lang_id=1 AND goodshaslang_active=1 AND goods_id>35042";
+	if ($res=mysqli_query($db_connect,$query))
+	{
+            while ($row = mysqli_fetch_assoc($res))
+            {
+                $goods[] = $row;
+            }
+    }
+	else
+	{
+		 echo "Error in SQL: $query<br>";
+	}
+	if (is_array($goods))
+	{
+		foreach ($goods as $good)
+		{
+			$name=$good['goodshaslang_name'];
+			$id=$good['goods_id'];
+			$name_ukr=translateText($name);
+			$f_string="$id;$name_ukr;".PHP_EOL;
+			file_put_contents("names_ukr.csv",$f_string,FILE_APPEND);
+		}
+	}
+	else
+	{
+		echo "no array!<br>";
+	}
+
+
+	
+	
+	
 ?>
 
