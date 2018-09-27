@@ -5,35 +5,31 @@
  * Date: 06.11.2017
  * Time: 10:21
  */
-/**
- * Class Timer
- * подсчет времени выполнения скрипта
- */
-/**
- * database host
- */
-//define ("host","localhost");
-/**
- *
- */
+
 define ("host","localhost");
 /**
  * database username
  */
-define ("user", "root");
-//define ("user", "fm");
+//define ("user", "root");
+define ("user", "fm");
 /**
  * database password
  */
-define ("pass", "");
-//define ("pass", "T6n7C8r1");
+//define ("pass", "");
+define ("pass", "T6n7C8r1");
 /**
  * database name
  */
-define ("db", "mebli");
-//define ("db", "fm");
+//define ("db", "mebli");
+define ("db", "fm");
 /**
  * Class Timer
+ */
+ 
+ 
+ /**
+ * Class Timer
+ * подсчет времени выполнения скрипта
  */
 class Timer
 {
@@ -80,7 +76,10 @@ class BaseTranslate
      */
     public function translateText($txt)
     {
-        $api_key="trnsl.1.1.20170706T112229Z.752766fa973319f4.6dcbe2932c5e110da20ee3ce61c5986e7e492e7f";
+        //я
+		$api_key="trnsl.1.1.20170706T112229Z.752766fa973319f4.6dcbe2932c5e110da20ee3ce61c5986e7e492e7f";
+		//алена
+        //$api_key="trnsl.1.1.20180827T115930Z.dabf581f6854b5e7.14a06f36c6a994bdfa2be1f303fd9fb71f2b3c9f";
         $lang="ru-uk";
         $txt=str_replace(" ","%20",$txt);
         $link="https://translate.yandex.net/api/v1.5/tr.json/translate?key=".$api_key."&text=".$txt."&lang=".$lang;
@@ -125,7 +124,7 @@ class GoodsTranslate extends BaseTranslate
     private function selectGoods()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id, goods_name, goods_url, goods_content FROM goods WHERE goods_active=1 AND (goods_id>30996 AND goods_id<34000) order by goods_id";
+        $query="SELECT goods_id, goods_name, goods_url, goods_content FROM goods WHERE goods_active=1 AND goods_noactual=0 AND goods_id>33077 order by goods_id";
         if ($res=mysqli_query($db_connect,$query))
         {
             while ($row = mysqli_fetch_assoc($res))
@@ -161,12 +160,15 @@ class GoodsTranslate extends BaseTranslate
                 $text=$good['goods_content'];
                 $id=$good['goods_id'];
                 $text=$this->strip($text);
-                $name_ukr=$this->translateText($name);
-                $text_ukr=$this->translateText($text);
-                $url="http://fayni-mebli.com/".$good['goods_url'].".html";
-                $file_string="[id]".$id."[/id]".PHP_EOL.$url.PHP_EOL."[goods_name_ukr]".$name_ukr."[/goods_name_ukr]".PHP_EOL.
-                    "[goods_text_ukr]".$text_ukr."[/goods_text_ukr]".PHP_EOL.PHP_EOL;
-                file_put_contents("goods-20.txt",$file_string,FILE_APPEND);
+               
+				$name_ukr=$this->translateText($name);
+				$text_ukr=$this->translateText($text);
+				$url="http://fayni-mebli.com/".$good['goods_url'].".html";
+				$file_string="[id]".$id."[/id]".PHP_EOL.$url.PHP_EOL."[goods_name_ukr]".$name_ukr."[/goods_name_ukr]".PHP_EOL.
+						"[goods_text_ukr]".$text_ukr."[/goods_text_ukr]".PHP_EOL.PHP_EOL;
+				file_put_contents("goods-n.txt",$file_string,FILE_APPEND);
+				
+				
                 //echo $file_string;
                 //break;
             }
@@ -348,12 +350,12 @@ class cleanFile
 $runtime = new Timer();
 set_time_limit(9000);
 $runtime->setStartTime();
-$test= new cleanFile();
-$test->getDiff();
+//$test= new cleanFile();
+//$test->getDiff();
 
 
-//$test=new GoodsTranslate();
-//$test->translate();
+$test=new GoodsTranslate();
+$test->translate();
 //$test=new ArticleTranslate();
 //$test->translate();
 $runtime->setEndTime();

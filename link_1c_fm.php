@@ -857,13 +857,13 @@ $time_start = microtime(true);
 //$test->parseNova();
 
 
-//$test=new Greid("greid-1.txt");
-//$test->parseGreid();
+$test=new Greid("greid.txt");
+$test->parseGreid();
 //$test=new Estella("estela.txt");
 //$test->parseEstella();
 
-$test=new Miromark("miromark.txt");
-$test->parseMiromark();
+//$test=new Miromark("miromark.txt");
+//$test->parseMiromark();
 
 $time_end = microtime(true);
 $time = $time_end - $time_start;
