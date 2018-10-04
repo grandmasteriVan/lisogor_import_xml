@@ -8,18 +8,54 @@ define ("host","localhost");
 /**
  * database username
  */
-define ("user", "root");
-//define ("user", "newfm");
+//define ("user", "root");
+define ("user", "newfm");
 /**
  * database password
  */
-define ("pass", "");
-//define ("pass", "N0r7F8g6");
+//define ("pass", "");
+define ("pass", "N0r7F8g6");
 /**
  * database name
  */
-define ("db", "fm_new");
-//define ("db", "newfm");
+//define ("db", "fm_new");
+define ("db", "newfm");
+
+class Timer
+{
+    /**
+     * @var время начала выпонения
+     */
+    private $start_time;
+    /**
+     * @var время конца выполнения
+     */
+    private $end_time;
+    /**
+     * встанавливаем время начала выполнения скрипта
+     */
+    public function setStartTime()
+    {
+        $this->start_time = microtime(true);
+    }
+    /**
+     * устанавливаем время конца выполнения скрипта
+     */
+    public function setEndTime()
+    {
+        $this->end_time = microtime(true);
+    }
+    /**
+     * @return mixed время выполения
+     * возвращаем время выполнения скрипта в секундах
+     */
+    public function getRunTime()
+     {
+         return $this->$this->end_time-$this->start_time;
+     }
+}
+
+
 
 Class clean_style
 {
@@ -77,6 +113,7 @@ Class clean_style
 	
 	public function test()
 	{
+		//echo "Start!<br>";
 		$goods=$this->getGoods();
 		if (is_array($goods))
 		{
@@ -91,7 +128,8 @@ Class clean_style
 				//break;
 				$this->writeCont($id,$cont_new);
 				$i++;
-				echo "$i:$id<br>";
+				///if ($i)
+				//echo "$i:$id<br>";
 				
 			}
 		}
@@ -99,9 +137,14 @@ Class clean_style
 		{
 			echo "No array!";
 		}
+		echo "Finish! $i<br>";
 	}
 		
 }
-
+$runtime = new Timer();
+$runtime->setStartTime();
 $test=new clean_style();
 $test->test();
+$runtime->setEndTime();
+echo "<br>runtime=".$runtime->getRunTime()." sec <br>";
+echo "Em!";
