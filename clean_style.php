@@ -73,8 +73,14 @@ Class clean_style
 		$new_cont = preg_replace('~<div[^>]*>~', '<p>', $new_cont);
 		$new_cont=str_replace('</div>','</p>',$new_cont);
 		//span
-		$new_cont = preg_replace('~<span[^>]*>~', '<p>', $new_cont);
-		$new_cont=str_replace('</span>','</p>',$new_cont);
+		$new_cont = preg_replace('~<span[^>]*>~', '', $new_cont);
+		$new_cont=str_replace('</span>','',$new_cont);
+		
+		//h1-h2
+		$new_cont=str_replace('<h1>','<h3>',$new_cont);
+		$new_cont=str_replace('</h1>','<h3>',$new_cont);
+		$new_cont=str_replace('<h2>','<h3>',$new_cont);
+		$new_cont=str_replace('</h2>','<h3>',$new_cont);
 		return $new_cont;
 	}
 	
@@ -82,7 +88,7 @@ Class clean_style
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="update goodshaslang SET goodshaslang_content='$cont' where lang_id=1 AND goods_id=$id";
-		//mysqli_query($db_connect,$query);
+		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
 	
