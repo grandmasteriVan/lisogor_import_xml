@@ -66,7 +66,7 @@ Class clean_style
 		$new_cont=str_replace('</b>','',$new_cont);
 		$new_cont = preg_replace('~<i[^>]*>~', '<p>', $cont);
 		$new_cont=str_replace('</i>','',$new_cont);
-		$new_cont = preg_replace('~<u[^>]*>~', '<p>', $cont);
+		$new_cont = preg_replace('~<u[^>]*>~', '', $cont);
 		$new_cont=str_replace('</u>','',$new_cont);
 		$new_cont = preg_replace('~<strong[^>]*>~', '', $cont);
 		$new_cont=str_replace('</strong>','',$new_cont);
@@ -78,14 +78,19 @@ Class clean_style
 		$new_cont = preg_replace('~<span[^>]*>~', '', $new_cont);
 		$new_cont=str_replace('</span>','',$new_cont);
 		
-		//h1-h2
-		$new_cont=str_replace('<h1>','<h3>',$new_cont);
-		$new_cont=str_replace('</h1>','<h3>',$new_cont);
-		$new_cont=str_replace('<h2>','<h3>',$new_cont);
-		$new_cont=str_replace('</h2>','<h3>',$new_cont);
+		//h1-h7
+		$new_cont = preg_replace('~<h1[^>]*>~', '<h3>', $new_cont);
+		$new_cont=str_replace('</h1>','</h3>',$new_cont);
+		$new_cont = preg_replace('~<h2[^>]*>~', '<h3>', $new_cont);
+		$new_cont=str_replace('</h2>','</h3>',$new_cont);
+		$new_cont = preg_replace('~<h3[^>]*>~', '<h3>', $new_cont);
+		$new_cont = preg_replace('~<h4[^>]*>~', '<h4>', $new_cont);
+		$new_cont = preg_replace('~<h5[^>]*>~', '<h5>', $new_cont);
+		$new_cont = preg_replace('~<h6[^>]*>~', '<h6>', $new_cont);
+		$new_cont = preg_replace('~<h7[^>]*>~', '<h7>', $new_cont);
 		
 		//ul
-		$new_cont = preg_replace('~<ul[^>]*>~', '<ul>', $cont);
+		//$new_cont = preg_replace('~<ul[^>]*>~', '<ul>', $cont);
 		return $new_cont;
 	}
 	
