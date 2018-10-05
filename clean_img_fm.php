@@ -8,18 +8,18 @@ define ("host","localhost");
 /**
  * database username
  */
-define ("user", "root");
-//define ("user", "newfm");
+//define ("user", "root");
+define ("user", "newfm");
 /**
  * database password
  */
-define ("pass", "");
-//define ("pass", "N0r7F8g6");
+//define ("pass", "");
+define ("pass", "N0r7F8g6");
 /**
  * database name
  */
-define ("db", "fm_new");
-//define ("db", "newfm");
+//define ("db", "fm_new");
+define ("db", "newfm");
 
 function getGoods()
 	{
@@ -44,6 +44,15 @@ function getGoods()
 		{
 			return null;
 		}
+	}
+	
+	function writeCont($id,$cont)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goodshaslang SET goodshaslang_content='$cont' WHERE goods_id=$id AND lang_id=1";
+		mysqli_query($db_connect,$query);
+		//echo $query;
+		mysqli_close($db_connect);
 	}
 	
 	function cleanImg($cont)
@@ -92,6 +101,7 @@ function getGoods()
 			
 		}
 		echo $cont;
+		return $cont;
 		//
 	}
 	
@@ -105,13 +115,17 @@ function getGoods()
 			{
 				$id=$good['goods_id'];
 				$cont=$good['goodshaslang_content'];
-				if ($id==2501)
-				{
+				$cont=cleanImg($cont);
+				writeCont($id,$cont);
+				echo "$id";
+				//if ($id==18582)
+				//{
 					//echo "Im in!<br>";
 					//var_dump($cont);
-					cleanImg($cont);
-					break;
-				}
+					//$cont=cleanImg($cont);
+					//writeCont($id,$cont);
+					//break;
+				//}
 				
 				
 			}

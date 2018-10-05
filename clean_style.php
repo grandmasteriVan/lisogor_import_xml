@@ -62,11 +62,13 @@ Class clean_style
 	private function cleanParagraph($cont)
 	{
 		$new_cont = preg_replace('~<p[^>]*>~', '<p>', $cont);
-		$new_cont=str_replace('<b>','',$new_cont);
+		$new_cont = preg_replace('~<b[^>]*>~', '<p>', $cont);
 		$new_cont=str_replace('</b>','',$new_cont);
-		$new_cont=str_replace('<i>','',$new_cont);
+		$new_cont = preg_replace('~<i[^>]*>~', '<p>', $cont);
 		$new_cont=str_replace('</i>','',$new_cont);
-		$new_cont=str_replace('<strong>','',$new_cont);
+		$new_cont = preg_replace('~<u[^>]*>~', '<p>', $cont);
+		$new_cont=str_replace('</u>','',$new_cont);
+		$new_cont = preg_replace('~<strong[^>]*>~', '', $cont);
 		$new_cont=str_replace('</strong>','',$new_cont);
 		
 		//div
@@ -81,6 +83,9 @@ Class clean_style
 		$new_cont=str_replace('</h1>','<h3>',$new_cont);
 		$new_cont=str_replace('<h2>','<h3>',$new_cont);
 		$new_cont=str_replace('</h2>','<h3>',$new_cont);
+		
+		//ul
+		$new_cont = preg_replace('~<ul[^>]*>~', '<ul>', $cont);
 		return $new_cont;
 	}
 	
