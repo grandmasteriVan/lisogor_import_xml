@@ -61,6 +61,7 @@ Class clean_style
 {
 	private function cleanParagraph($cont)
 	{
+		/*
 		$new_cont = preg_replace('~<p[^>]*>~', '<p>', $cont);
 		$new_cont = preg_replace('~<b[^>]*>~', '<p>', $cont);
 		$new_cont=str_replace('</b>','',$new_cont);
@@ -91,6 +92,10 @@ Class clean_style
 		
 		//ul
 		//$new_cont = preg_replace('~<ul[^>]*>~', '<ul>', $cont);
+		*/
+		$new_cont=str_replace('<p>&nbsp;</p>','',$cont);
+		$new_cont=str_replace('<p>&gt;&nbsp;</p>','',$new_cont);
+		
 		return $new_cont;
 	}
 	

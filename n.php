@@ -8,18 +8,18 @@ define ("host","localhost");
 /**
  * database username
  */
-define ("user", "root");
-//define ("user", "newfm");
+//define ("user", "root");
+define ("user", "newfm");
 /**
  * database password
  */
-define ("pass", "");
-//define ("pass", "N0r7F8g6");
+//define ("pass", "");
+define ("pass", "N0r7F8g6");
 /**
  * database name
  */
-define ("db", "fm_new");
-//define ("db", "newfm");
+//define ("db", "fm_new");
+define ("db", "newfm");
 
 
 define ("host_ddn","es835db.mirohost.net");
@@ -2005,7 +2005,7 @@ if ($res=mysqli_query($db_connect,$query))
 		echo "No array!<br>";
 	}
 	*/
-	
+	/*
 	set_time_limit(9000);
 	function translateText($txt)
     {
@@ -2052,9 +2052,110 @@ if ($res=mysqli_query($db_connect,$query))
 	{
 		echo "no array!<br>";
 	}
+	*/
+	/*
+	function getGoods($cat_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_id from goodshascategory WHERE category_id=$cat_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		if (is_array($goods))
+		{
+			return $goods;
+		}
+		else
+		{
+			return null;
+		}
+	}
 
-
+	$goods=getGoods(130);
+	if (is_array($goods))
+	{
+		foreach ($goods as $good)
+		{
+			$id=$good['goods_id'];
+			
+		}
+	}
+	else
+	{
+		echo "No goods!";
+	}
+	*/
 	
+	function getGoodsByFactory()
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_id from goodshasfeature WHERE feature_id=232 AND goodshasfeature_valueid=181";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		return $goods;
+	}
+	
+	function get1C($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_article_1c from goods WHERE goods_id=$id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		//var_dump ($goods);
+		return $goods[0]['goods_article_1c'];
+	}
+	
+	function write1C($id,$code)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="update goods SET goods_article_1c='$code' where goods_id=$id";
+		mysqli_query($db_connect,$query);
+		echo "$query<br>";
+		mysqli_close($db_connect);
+	}
+	
+	
+	$goods=getGoodsByFactory();
+	//var_dump ($goods);
+	foreach ($goods as $good)
+	{
+		$id=$good['goods_id'];
+		$code=get1C($id);
+		$new_code=$code.";1";
+		echo "$id $code $new_code<br>";
+		write1C($id,$new_code);
+		//break;
+	}
+ 	
 	
 	
 ?>
