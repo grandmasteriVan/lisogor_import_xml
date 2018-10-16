@@ -27,6 +27,11 @@ define ("user_ddn", "u_fayni");
 define ("pass_ddn", "ZID1c0eud3Dc");
 define ("db_ddn", "ddnPZS");
 
+define ("host_old","localhost");
+define ("user_old", "fm");
+define ("pass_old", "T6n7C8r1");
+define ("db_old", "fm");
+
 
 /*
 $db_connect=mysqli_connect(host,user,pass,db);
@@ -2094,7 +2099,7 @@ if ($res=mysqli_query($db_connect,$query))
 		echo "No goods!";
 	}
 	*/
-	
+	/*
 	function getGoodsByFactory()
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -2155,8 +2160,26 @@ if ($res=mysqli_query($db_connect,$query))
 		write1C($id,$new_code);
 		//break;
 	}
- 	
+ 	*/
 	
+	$db_connect=mysqli_connect(host_old,user_old,pass_old,db_old);
+		$query="SELECT factory_id, factory_name FROM factory WHERE factory_noactual=1";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+	
+	echo "<pre>";
+	print_r($goods);
+	echo "</pre>";
 	
 ?>
 
