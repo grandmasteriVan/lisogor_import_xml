@@ -2161,7 +2161,7 @@ if ($res=mysqli_query($db_connect,$query))
 		//break;
 	}
  	*/
-	
+	/*
 	$db_connect=mysqli_connect(host_old,user_old,pass_old,db_old);
 		$query="SELECT factory_id, factory_name FROM factory WHERE factory_noactual=1";
 		if ($res=mysqli_query($db_connect,$query))
@@ -2180,6 +2180,59 @@ if ($res=mysqli_query($db_connect,$query))
 	echo "<pre>";
 	print_r($goods);
 	echo "</pre>";
+	*/
+	
+	function getUkrSeoId($seo_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT seopagehaslang_id FROM seopagehaslang WHERE lang_id=2 AND seopage_id=$seo_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$seopages[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+	}
+	
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="SELECT seopagehaslang_id, seopage_id FROM seopagehaslang WHERE lang_id=1 AND seopagehaslang_active=1";
+	if ($res=mysqli_query($db_connect,$query))
+	{
+			while ($row = mysqli_fetch_assoc($res))
+			{
+				$seopages[] = $row;
+			}
+	}
+	else
+	{
+		 echo "Error in SQL: $query<br>";		
+	}
+	
+	if (is_array($seopages))
+	{
+		foreach ($seopages as $seopage)
+		{
+			$seo_id=$seopage['seopage_id'];
+			$ukr_seopage=getUkrSeoId($seo_id);
+			if (!is_array($ukr_seopage))
+			{
+				echo "seo page with id=$seo_id has no ukr version!<br>";
+			}
+			
+		}
+	}
+	else
+	{
+		echo "No array of seopages!<br>";
+	}
+	
+	mysqli_close($db_connect);
+	
 	
 ?>
 
