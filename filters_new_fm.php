@@ -2655,7 +2655,7 @@ function setFilters($category_id)
 	}
 	
 }
-
+/*
 $goods=getGoods(9);
 //echo "<pre>";
 //print_r ($goods);
@@ -2669,6 +2669,7 @@ foreach ($goods as $good)
 	
 	
 }
+*/
 /*
 if (is_array($goods))
 {

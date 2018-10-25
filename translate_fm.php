@@ -6,22 +6,23 @@
  * Time: 10:21
  */
 
+//define ("host","localhost");
 define ("host","localhost");
 /**
  * database username
  */
 //define ("user", "root");
-define ("user", "fm");
+define ("user", "newfm");
 /**
  * database password
  */
 //define ("pass", "");
-define ("pass", "T6n7C8r1");
+define ("pass", "N0r7F8g6");
 /**
  * database name
  */
-//define ("db", "mebli");
-define ("db", "fm");
+//define ("db", "fm_new");
+define ("db", "newfm");
 /**
  * Class Timer
  */
@@ -113,6 +114,77 @@ class BaseTranslate
         return $txt;
     }
 }
+
+class TranslateDiv extends BaseTranslate
+{
+	private function getGoods()
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_id from goodshascategory WHERE category_id=1";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		if (is_array($goods))
+		{
+			return $goods;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	private function getTextforId($id)
+	{
+		db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goodshaslang_content from goodshaslang WHERE goods_id=$id AND goodshaslang_active=1 AND lang_id=1 AND goodshaslang_content NOT LIKE ''";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$text[] = $row;
+				}
+		}
+		mysqli_close($db_connect);
+		if (is_array ($text))
+		{
+			return $text[0]['goodshaslang_content'];
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	public function translate()
+	{
+		$goods=getGoods();
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$id=$good['goods_id'];
+				$text=getTextforId($id);
+				echo "$id has $text<br>";
+				break;
+			}
+		}
+		else
+		{
+			echo "No goods!";
+		}
+	}
+}
+
 /**
  * Class GoodsTranslate
  */
@@ -347,6 +419,9 @@ class cleanFile
 		}
 	}
 }
+
+
+
 $runtime = new Timer();
 set_time_limit(9000);
 $runtime->setStartTime();
@@ -354,7 +429,8 @@ $runtime->setStartTime();
 //$test->getDiff();
 
 
-$test=new GoodsTranslate();
+//$test=new GoodsTranslate();
+$test = new TranslateDiv();
 $test->translate();
 //$test=new ArticleTranslate();
 //$test->translate();
