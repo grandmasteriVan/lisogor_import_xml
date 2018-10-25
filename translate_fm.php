@@ -1,4 +1,5 @@
 <?php
+header('Content-Type: text/html; charset=utf-8');
 /**
  * Created by PhpStorm.
  * User: ivan
@@ -11,18 +12,18 @@ define ("host","localhost");
 /**
  * database username
  */
-//define ("user", "root");
-define ("user", "newfm");
+define ("user", "root");
+//define ("user", "newfm");
 /**
  * database password
  */
-//define ("pass", "");
-define ("pass", "N0r7F8g6");
+define ("pass", "");
+//define ("pass", "N0r7F8g6");
 /**
  * database name
  */
-//define ("db", "fm_new");
-define ("db", "newfm");
+define ("db", "fm_new");
+//define ("db", "newfm");
 /**
  * Class Timer
  */
@@ -145,7 +146,7 @@ class TranslateDiv extends BaseTranslate
 	
 	private function getTextforId($id)
 	{
-		db_connect=mysqli_connect(host,user,pass,db);
+		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="select goodshaslang_content from goodshaslang WHERE goods_id=$id AND goodshaslang_active=1 AND lang_id=1 AND goodshaslang_content NOT LIKE ''";
 		if ($res=mysqli_query($db_connect,$query))
 		{
@@ -167,15 +168,28 @@ class TranslateDiv extends BaseTranslate
 	
 	public function translate()
 	{
-		$goods=getGoods();
+		$goods=$this->getGoods();
 		if (is_array($goods))
 		{
+			//var_dump ($goods);
 			foreach ($goods as $good)
 			{
 				$id=$good['goods_id'];
-				$text=getTextforId($id);
-				echo "$id has $text<br>";
-				break;
+				$text=$this->getTextforId($id);
+				//var_dump($text);
+				//echo "$id has $text<br>";
+				//break;
+				if (!is_null($text))
+				{
+					$text=$this->strip($text);
+					$ukr_text=$this->translateText($text);
+					$ukr_text=str_replace("_______",PHP_EOL,$ukr_text);
+					$file_string="[id]".$id."[/id]".PHP_EOL."[ru_text]".$text."[/ru_text]".PHP_EOL."[ukr_text]".$ukr_text."[/ukr_text]".PHP_EOL.PHP_EOL;
+					file_put_contents("ukr_div.txt",$file_string,FILE_APPEND);
+					echo "$file_string<br>";
+					//break;
+				}
+				
 			}
 		}
 		else
@@ -423,7 +437,7 @@ class cleanFile
 
 
 $runtime = new Timer();
-set_time_limit(9000);
+set_time_limit(90000);
 $runtime->setStartTime();
 //$test= new cleanFile();
 //$test->getDiff();
