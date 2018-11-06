@@ -47,6 +47,199 @@ function getGoods($cat_id=98)
 	}
 }
 
+function getParrentGoods($goods)
+{
+	if (is_array($goods))
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		foreach ($goods as $good)
+		{
+			$id=$good;
+			$query="select goods_id from goods WHERE goods_parent=$id AND goods_id=$id";
+			if ($res=mysqli_query($db_connect,$query))
+			{
+				unset ($tmp);
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$tmp[] = $row;
+				}
+				if (is_array($tmp))
+				{
+					$parrents[]=$tmp[0]['goods_id'];
+				}
+			}
+			else
+			{
+				 echo "Error in SQL: $query<br>";		
+			}
+			
+			
+		}
+		mysqli_close($db_connect);
+		return $parrents;
+		
+	}
+}
+
+function getGoodsByCatAndFactory($cat_id, $f_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_id from goodshascategory WHERE category_id=$cat_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		if (is_array ($goods_all))
+		{
+			//var_dump($goods_all);
+			foreach ($goods_all as $good)
+			{
+				$id=$good['goods_id'];
+				$features=getFeatures($id);
+				if (is_array($features))
+				{
+					foreach ($features as $feature)
+					{
+						$feature_id=$feature['feature_id'];
+						$val_id=$feature['goodshasfeature_valueid'];
+						if ($feature_id==232&&$val_id==$f_id)
+						{
+							$goods_by_factoty[]=$id;
+							break;
+						}
+					}
+				}
+				
+				//break;
+			}
+		}
+		else
+		{
+			echo "no goods by category<br>";
+		}
+		
+		mysqli_close($db_connect);
+		if (is_array($goods_by_factoty))
+		{
+			return $goods_by_factoty;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+function delFeature($goods_id,$feature_id)
+{
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="DELETE FROM goodshasfeature WHERE goods_id=$goods_id AND feature_id=$feature_id";
+	echo "$query<br>";
+	mysqli_query($db_connect,$query);
+	mysqli_close($db_connect);
+
+}
+
+
+function copyFiltersByFactory()
+{
+	$goods=getGoodsByCatAndFactory(14,181);
+	//var_dump($goods);
+	
+	if (is_array($goods))
+	{
+		$parrents=getParrentGoods($goods);
+		echo "<br><br><br>";
+		var_dump($parrents);
+		if (is_array($parrents))
+		{
+			foreach ($parrents as $parrent)
+			{
+				
+				$parent_id=$parrent;
+				$parrent_features=getFeatures($parent_id);
+				echo "<br><br>$parent_id<br>";
+				var_dump ($parrent_features);
+				$mods=getModGoods($parent_id);
+				echo "<br>";
+				var_dump($mods);
+				if (is_array($mods))
+				{
+					foreach ($mods as $mod)
+					{
+						
+						$mod_id=$mod['goods_id'];
+						echo "$mod_id<br>";
+						if ($mod_id!=$parent_id)
+						{
+							//удаляем копируемые фичи в старом товаре
+							delFeature($mod_id,52);
+							delFeature($mod_id,53);
+							delFeature($mod_id,54);
+							delFeature($mod_id,55);
+							delFeature($mod_id,56);
+							
+							foreach ($parrent_features as $parrent_feature)
+							{
+								$f_id=$parrent_feature['feature_id'];
+								$f_val=$parrent_feature['goodshasfeature_valueid'];
+								if ($f_id==52||$f_id==53||$f_id==54||$f_id==55||$f_id==56)
+								{
+									//на всякий случай удаляем новый фильтр чтоб не было дублей
+									delFilter($mod_id, $f_id, $f_val);
+									//создаем новый фильтр в товаре
+									insFilter($mod_id, $f_id, $f_val);
+								}
+							}
+						}
+						
+					}
+				}
+				//break;
+			}
+		}
+	}
+	
+}
+
+copyFiltersByFactory();
+
+
+//достаем список товаров, являющихся модификацией родителя
+function getModGoods($parrent_id)
+{
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="select goods_id from goods WHERE goods_parent=$parrent_id";
+	if ($res=mysqli_query($db_connect,$query))
+	{
+			while ($row = mysqli_fetch_assoc($res))
+			{
+				$goods[] = $row;
+			}
+	}
+	else
+	{
+		 echo "Error in SQL: $query<br>";		
+	}
+	mysqli_close($db_connect);
+	if (is_array($goods))
+	{
+		return $goods;
+	}
+	else
+	{
+		return null;
+	}
+}
+
+
+
 function getFeatures($good_id)
 {
 	$db_connect=mysqli_connect(host,user,pass,db);
@@ -104,6 +297,7 @@ function delFilter($goods_id, $feature_id, $value_id)
 {
 	$db_connect=mysqli_connect(host,user,pass,db);
 	$query="DELETE FROM goodshasfeature WHERE goods_id=$goods_id AND feature_id=$feature_id AND goodshasfeature_valueid=$value_id";
+	echo "$query<br>";
 	mysqli_query($db_connect,$query);
 	mysqli_close($db_connect);
 }
@@ -120,7 +314,7 @@ function insFilter($goods_id, $feature_id, $value_id)
 {
 	$db_connect=mysqli_connect(host,user,pass,db);
 	$query="INSERT INTO goodshasfeature (goods_id, feature_id, goodshasfeature_valueid) VALUES ($goods_id, $feature_id, $value_id)";
-	//echo "$query<br><br>";
+	echo "$query<br><br>";
 	mysqli_query($db_connect,$query);
 	mysqli_close($db_connect);
 }
@@ -188,16 +382,24 @@ function checkFilters ($id)
     
 	return;
 }
-
+/*
 setFilters(13);
+echo "13 done <br>";
 setFilters(3);
+echo "3 done <br>";
 setFilters(10);
+echo "10 done <br>";
 setFilters(124);
+echo "124 done <br>";
 setFilters(125);
+echo "125 done <br>";
 setFilters(7);
+echo "7 done <br>";
 setFilters(59);
+echo "59 done <br>";
 setFilters(12);
-
+echo "12 done <br>";
+*/
 
 function setFilters($category_id)
 {
@@ -208,10 +410,10 @@ function setFilters($category_id)
 		{
 			$id=$good['goods_id'];
 			$filters=getFeatures($id);
-			echo "Old filters for $id:";
-			echo "<pre>";
-			print_r ($filters);
-			echo "</pre>";
+			//echo "Old filters for $id:";
+			//echo "<pre>";
+			//print_r ($filters);
+			//echo "</pre>";
 			
 			if (is_array($filters))
 			{
@@ -3748,6 +3950,11 @@ function setFilters($category_id)
 					
 				}
 			}
+			//$filters=getFeatures($id);
+			//echo "New filters for $id:";
+			//echo "<pre>";
+			//print_r ($filters);
+			//echo "</pre>";
 			
 		}
 	}
@@ -3757,6 +3964,8 @@ function setFilters($category_id)
 	}
 	
 }
+
+//!!!!раскоментить!
 /*
 $goods=getGoods(9);
 //echo "<pre>";
@@ -3769,9 +3978,9 @@ foreach ($goods as $good)
 	echo "<br><br>";
 	//break;
 	
-	
 }
 */
+
 /*
 if (is_array($goods))
 {
