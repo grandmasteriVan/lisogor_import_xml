@@ -213,10 +213,91 @@ class insGoodsComponent
 					$this->insComponent(38437,$id);
 					//Ножка регулируемая (пластик)
 					$this->insComponent(38438,$id);
+					if ($depth==450&&$length==2200)
+					{
+						//Консоль радиусная 2200х450
+						$this->insComponent(38425,$id);
+						//Консоль прямая 2200х450
+						$this->insComponent(38427,$id);
+					}
+					if ($depth==450&&$length==2400)
+					{
+						//Консоль прямая 2400х450
+						$this->insComponent(38449,$id);
+						//Консоль радиусная 2400х450
+						$this->insComponent(38452,$id);
+					}
+					
+					if ($depth==600&&$length==2200)
+					{
+						//Консоль радиусная 2200х600
+						$this->insComponent(38426,$id);
+						//Консоль прямая 2200х600
+						$this->insComponent(38447,$id);
+					}
+					if ($depth==600&&$length==2400)
+					{
+						//Консоль прямая 2400х600
+						$this->insComponent(38428,$id);
+						//Консоль радиусная 2400х600
+						$this->insComponent(38453,$id);
+					}
+					
+					if ($length>=1000&&$length<=1800)
+					{
+						//Карниз 1000-1800
+						$this->insComponent(38433,$id);
+					}
+					if ($length>=1900&&$length<=2700)
+					{
+						//Карниз 1810-2700
+						$this->insComponent(38434,$id);
+					}
+					if ($length>=2800&&$length<=3600)
+					{
+						//Карниз 2710-3600
+						$this->insComponent(38435,$id);
+					}
+					
+					//Полка в пенал
+					$this->insComponent(38439,$id);
+					//Полка в платяное отделение
+					$this->insComponent(38440,$id);
+					//Стойка
+					$this->insComponent(38442,$id);
+					
 					if ($depth==450)
 					{
-						
+						//Микролифт
+						$this->insComponent(38443,$id);
 					}
+					if ($depth==600)
+					{
+						//Скалка + скалкодержатель
+						$this->insComponent(38441,$id);
+					}
+					
+					if (($length==1000&&$width==600)||($length==1100&&$width==600)||($length==1200&&$width==600)||($length==1300&&$width==600)||($length==1400&&$width==600)||($length==1500&&$width==600)||($length==1900&&$width==600)||($length==2000&&$width==600)||($length==2800&&$width==600)||($length==2900&&$width==600)||($length==3000&&$width==600)||($length==3100&&$width==600)||($length==3200&&$width==600)||($length==3300&&$width==600))
+					{
+						//Комплект ящиков 430х600
+						$this->insComponent(38430,$id);
+					}
+					if (($length==1000&&$width==450)||($length==1100&&$width==450)||($length==1200&&$width==450)||($length==1300&&$width==450)||($length==1400&&$width==450)||($length==1500&&$width==450)||($length==1900&&$width==450)||($length==2000&&$width==450)||($length==2800&&$width==450)||($length==2900&&$width==450)||($length==3000&&$width==450)||($length==3100&&$width==450)||($length==3200&&$width==450)||($length==3300&&$width==450))
+					{
+						//Комплект ящиков 430х450
+						$this->insComponent(38429,$id);
+					}
+					if (($length==1700&&$width==600)||($length==1800&&$width==600)||($length==2100&&$width==600)||($length==2200&&$width==600)||($length==2300&&$width==600)||($length==2400&&$width==600)||($length==2500&&$width==600)||($length==2600&&$width==600)||($length==2700&&$width==600)||($length==3400&&$width==600)||($length==3500&&$width==600)||($length==3600&&$width==600))
+					{
+						//Комплект ящиков 600х600
+						$this->insComponent(38432,$id);
+					}
+					if (($length==1700&&$width==450)||($length==1800&&$width==450)||($length==2100&&$width==450)||($length==2200&&$width==450)||($length==2300&&$width==450)||($length==2400&&$width==450)||($length==2500&&$width==450)||($length==2600&&$width==450)||($length==2700&&$width==450)||($length==3400&&$width==450)||($length==3500&&$width==450)||($length==3600&&$width==450))
+					{
+						//Комплект ящиков 600х450
+						$this->insComponent(38431,$id);
+					}
+					
 				}
 				
 			}
