@@ -2181,7 +2181,7 @@ if ($res=mysqli_query($db_connect,$query))
 	print_r($goods);
 	echo "</pre>";
 	*/
-	
+	/*
 	function getUkrSeoId($seo_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -2232,7 +2232,7 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 	
 	mysqli_close($db_connect);
-	
+	*/
 	
 ?>
 

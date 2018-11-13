@@ -23,10 +23,10 @@ define ("db", "newfm");
 
 class ContentCopy
 {
-	private function getRefCont ($id)
+	private function getRefCont ($id,$lang)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
-		$query="select goodshaslang_content from goodshaslang WHERE goods_id=$id AND lang_id=1";
+		$query="select goodshaslang_content from goodshaslang WHERE goods_id=$id AND lang_id=$lang";
 		if ($res=mysqli_query($db_connect,$query))
 		{
 				while ($row = mysqli_fetch_assoc($res))
@@ -49,10 +49,10 @@ class ContentCopy
 		}
 	}
 	
-	private function setCont($id,$cont)
+	private function setCont($id,$cont,$lang)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
-		$query="UPDATE goodshaslang SET goodshaslang_content='$cont' WHERE goods_id=$id AND lang_id=1";
+		$query="UPDATE goodshaslang SET goodshaslang_content='$cont' WHERE goods_id=$id AND lang_id=$lang";
 		//echo "$query<br><br>";
 		echo "$id rewrited!<br>";
 		mysqli_query($db_connect,$query);
@@ -133,9 +133,9 @@ class ContentCopy
 		}
 	}
 	
-	public function copyContent($ref_id,$factory_id, $category_id)
+	public function copyContent($ref_id,$factory_id, $category_id,$lang)
 	{
-		$ref_cont=$this->getRefCont($ref_id);
+		$ref_cont=$this->getRefCont($ref_id,$lang);
 		$goods=$this->getGoods($category_id,$factory_id);
 		//$goods=$this->getGoods(9,93);
 		var_dump($goods);
@@ -151,7 +151,7 @@ class ContentCopy
 				//var_dump($id);
 				if ($id!=$ref_id)
 				{
-					$this->setCont($id,$ref_cont);
+					$this->setCont($id,$ref_cont,$lang);
 				}
 				
 				//break;
@@ -161,4 +161,4 @@ class ContentCopy
 }
 
 $test=new ContentCopy();
-$test->copyContent(15423,93,9);
+$test->copyContent(15286,101,9,2);

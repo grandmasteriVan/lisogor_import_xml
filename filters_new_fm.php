@@ -208,7 +208,7 @@ function copyFiltersByFactory()
 	
 }
 
-copyFiltersByFactory();
+//copyFiltersByFactory();
 
 
 //достаем список товаров, являющихся модификацией родителя
@@ -400,28 +400,500 @@ echo "59 done <br>";
 setFilters(12);
 echo "12 done <br>";
 */
+setFilters(14);
 
 function setFilters($category_id)
 {
 	$goods=getGoods($category_id);
+	//var_dump ($goods);
 	if (is_array($goods))
 	{
 		foreach ($goods as $good)
 		{
 			$id=$good['goods_id'];
+			unset ($filters);
 			$filters=getFeatures($id);
-			//echo "Old filters for $id:";
-			//echo "<pre>";
-			//print_r ($filters);
-			//echo "</pre>";
-			
+			/*if ($id==33395)
+			{
+				echo "Old filters for $id (cat=$category_id):";
+				echo "<pre>";
+				print_r ($filters);
+				echo "</pre>";
+			}*/
+				
 			if (is_array($filters))
 			{
-				foreach ($filters as $filter)
+				
+				//foreach ($filters as $f)
+				for ($i=0;$i<count($filters);$i++)
 				{
-					$value_id=$filter['goodshasfeature_valueid'];
-					$feature_id=$filter['feature_id'];
+					//echo "<br>";
+					//var_dump ($filters);
+					//echo "<br>";
+					//var_dump ($filters[$i]);
+					$value_id=$filters[$i]['goodshasfeature_valueid'];
+					$feature_id=$filters[$i]['feature_id'];
+					//echo "$value_id $feature_id<br>";
+					//break;
 					//делаем отдельный блок проверки фильтров для каждой категории
+					
+					//матрасы
+					if ($category_id==14)
+					{
+						//echo "go1!<br>";
+						if ($feature_id==211&&$value_id==3176)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 276, 3405);
+							//создаем новый фильтр в товаре
+							insFilter($id, 276, 3405);
+						}
+						if ($feature_id==211&&$value_id==3178)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 276, 3407);
+							//создаем новый фильтр в товаре
+							insFilter($id, 276, 3407);
+						}
+						if ($feature_id==211&&$value_id==3181)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 276, 3410);
+							//создаем новый фильтр в товаре
+							insFilter($id, 276, 3410);
+						}
+						if ($feature_id==211&&$value_id==3183)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 276, 3412);
+							//создаем новый фильтр в товаре
+							insFilter($id, 276, 3412);
+						}
+						if ($feature_id==211&&$value_id==3189)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 276, 3418);
+							//создаем новый фильтр в товаре
+							insFilter($id, 276, 3418);
+						}
+						if ($feature_id==211&&$value_id==3203)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 276, 3432);
+							//создаем новый фильтр в товаре
+							insFilter($id, 276, 3432);
+						}
+						
+						if ($feature_id==93&&$value_id==1043)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 277, 3433);
+							//создаем новый фильтр в товаре
+							insFilter($id, 277, 3433);
+						}
+						if ($feature_id==93&&$value_id==1044)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 277, 3434);
+							//создаем новый фильтр в товаре
+							insFilter($id, 277, 3434);
+						}
+						if ($feature_id==93&&$value_id==1045)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 277, 3435);
+							//создаем новый фильтр в товаре
+							insFilter($id, 277, 3435);
+						}
+						if ($feature_id==93&&$value_id==1046)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 277, 3436);
+							//создаем новый фильтр в товаре
+							insFilter($id, 277, 3436);
+						}
+						if ($feature_id==93&&$value_id==1047)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 277, 3437);
+							//создаем новый фильтр в товаре
+							insFilter($id, 277, 3437);
+						}
+						
+						if ($feature_id==33&&$value_id==834)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 278, 3438);
+							//создаем новый фильтр в товаре
+							insFilter($id, 278, 3438);
+						}
+						if ($feature_id==33&&$value_id==835)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 278, 3439);
+							//создаем новый фильтр в товаре
+							insFilter($id, 278, 3439);
+						}
+						if ($feature_id==33&&$value_id==836)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 278, 3440);
+							//создаем новый фильтр в товаре
+							insFilter($id, 278, 3440);
+						}
+						if ($feature_id==33&&$value_id==837)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 278, 3441);
+							//создаем новый фильтр в товаре
+							insFilter($id, 278, 3441);
+						}
+						
+						if ($feature_id==192&&$value_id==3059)
+						{
+							//echo "go!<br>";
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 279, 3442);
+							//создаем новый фильтр в товаре
+							insFilter($id, 279, 3442);
+						}
+						if ($feature_id==192&&$value_id==3065)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 279, 3442);
+							//создаем новый фильтр в товаре
+							insFilter($id, 279, 3442);
+						}
+						if ($feature_id==192&&$value_id==3061)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 279, 3443);
+							//создаем новый фильтр в товаре
+							insFilter($id, 279, 3443);
+						}
+						
+						if ($feature_id==52&&$value_id==861)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 280, 3445);
+							//создаем новый фильтр в товаре
+							insFilter($id, 280, 3445);
+						}
+						if ($feature_id==52&&$value_id==872)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 280, 3446);
+							//создаем новый фильтр в товаре
+							insFilter($id, 280, 3446);
+						}
+						if ($feature_id==52&&$value_id==873)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 280, 3447);
+							//создаем новый фильтр в товаре
+							insFilter($id, 280, 3447);
+						}
+						if ($feature_id==52&&$value_id==874)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 280, 3448);
+							//создаем новый фильтр в товаре
+							insFilter($id, 280, 3448);
+						}
+						if ($feature_id==52&&$value_id==875)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 280, 3449);
+							//создаем новый фильтр в товаре
+							insFilter($id, 280, 3449);
+						}
+						
+						if ($feature_id==53&&$value_id==878)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 280, 3451);
+							//создаем новый фильтр в товаре
+							insFilter($id, 280, 3451);
+						}
+						if ($feature_id==53&&$value_id==879)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 280, 3454);
+							//создаем новый фильтр в товаре
+							insFilter($id, 280, 3454);
+						}
+						if ($feature_id==53&&$value_id==876)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 280, 3455);
+							//создаем новый фильтр в товаре
+							insFilter($id, 280, 3455);
+						}
+						if ($feature_id==53&&$value_id==884)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 280, 3603);
+							//создаем новый фильтр в товаре
+							insFilter($id, 280, 3603);
+						}
+						if ($feature_id==53&&$value_id==885)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 280, 3457);
+							//создаем новый фильтр в товаре
+							insFilter($id, 280, 3457);
+						}
+						
+						if ($feature_id==55&&$value_id==944)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 282, 3458);
+							//создаем новый фильтр в товаре
+							insFilter($id, 282, 3458);
+						}
+						if ($feature_id==55&&$value_id==943)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 282, 3459);
+							//создаем новый фильтр в товаре
+							insFilter($id, 282, 3459);
+						}
+						if ($feature_id==55&&$value_id==942)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 282, 3460);
+							//создаем новый фильтр в товаре
+							insFilter($id, 282, 3460);
+						}
+						if ($feature_id==55&&$value_id==947)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 282, 3461);
+							//создаем новый фильтр в товаре
+							insFilter($id, 282, 3461);
+						}
+						
+						if ($feature_id==54&&$value_id==890)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 283, 3462);
+							//создаем новый фильтр в товаре
+							insFilter($id, 283, 3462);
+						}
+						if ($feature_id==54&&$value_id==889)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 283, 3463);
+							//создаем новый фильтр в товаре
+							insFilter($id, 283, 3463);
+						}
+						if ($feature_id==54&&$value_id==938)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 283, 3465);
+							//создаем новый фильтр в товаре
+							insFilter($id, 283, 3465);
+						}
+						if ($feature_id==54&&$value_id==895)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 283, 3471);
+							//создаем новый фильтр в товаре
+							insFilter($id, 283, 3471);
+						}
+						if ($feature_id==54&&$value_id==939)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 283, 3466);
+							//создаем новый фильтр в товаре
+							insFilter($id, 283, 3466);
+						}
+						if ($feature_id==54&&$value_id==940)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 283, 3467);
+							//создаем новый фильтр в товаре
+							insFilter($id, 283, 3467);
+						}
+						if ($feature_id==54&&$value_id==898)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 283, 3468);
+							//создаем новый фильтр в товаре
+							insFilter($id, 283, 3468);
+						}
+						if ($feature_id==54&&$value_id==903)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 283, 3469);
+							//создаем новый фильтр в товаре
+							insFilter($id, 283, 3469);
+						}
+						if ($feature_id==54&&$value_id==909)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 283, 3469);
+							//создаем новый фильтр в товаре
+							insFilter($id, 283, 3469);
+						}
+						if ($feature_id==54&&$value_id==931)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 283, 3470);
+							//создаем новый фильтр в товаре
+							insFilter($id, 283, 3470);
+						}
+						if ($feature_id==54&&$value_id==921)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 283, 3472);
+							//создаем новый фильтр в товаре
+							insFilter($id, 283, 3472);
+						}
+						if ($feature_id==54&&$value_id==927)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 283, 3473);
+							//создаем новый фильтр в товаре
+							insFilter($id, 283, 3473);
+						}
+						if ($feature_id==54&&$value_id==892)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 283, 3475);
+							//создаем новый фильтр в товаре
+							insFilter($id, 283, 3475);
+						}
+						if ($feature_id==54&&$value_id==891)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 283, 3475);
+							//создаем новый фильтр в товаре
+							insFilter($id, 283, 3475);
+						}
+						if ($feature_id==54&&$value_id==893)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 283, 3475);
+							//создаем новый фильтр в товаре
+							insFilter($id, 283, 3475);
+						}
+						if ($feature_id==54&&$value_id==941)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 283, 3475);
+							//создаем новый фильтр в товаре
+							insFilter($id, 283, 3475);
+						}
+						
+						if ($feature_id==56&&$value_id==394)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 284, 3476);
+							//создаем новый фильтр в товаре
+							insFilter($id, 284, 3476);
+						}
+						if ($feature_id==56&&$value_id==395)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 284, 3477);
+							//создаем новый фильтр в товаре
+							insFilter($id, 284, 3477);
+						}
+						if ($feature_id==56&&$value_id==396)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 284, 3478);
+							//создаем новый фильтр в товаре
+							insFilter($id, 284, 3478);
+						}
+						if ($feature_id==56&&$value_id==397)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 284, 3479);
+							//создаем новый фильтр в товаре
+							insFilter($id, 284, 3479);
+						}
+						if ($feature_id==56&&$value_id==378)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 284, 3480);
+							//создаем новый фильтр в товаре
+							insFilter($id, 284, 3480);
+						}
+						
+						if ($feature_id==212&&$value_id==373)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 285, 3482);
+							//создаем новый фильтр в товаре
+							insFilter($id, 285, 3482);
+						}
+						if ($feature_id==212&&$value_id==398)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 285, 3483);
+							//создаем новый фильтр в товаре
+							insFilter($id, 285, 3483);
+						}
+						
+					}
+					
 					//кровати
 					if ($category_id==13)
 					{
@@ -3950,6 +4422,7 @@ function setFilters($category_id)
 					
 				}
 			}
+			//break;
 			//$filters=getFeatures($id);
 			//echo "New filters for $id:";
 			//echo "<pre>";
@@ -4876,387 +5349,6 @@ if (is_array($goods))
 				delFilter($id, 274, 3398);
 				//создаем новый фильтр в товаре
 				insFilter($id, 274, 3398);
-			}
-			*/
-			
-			/*матрасы 14*/
-			/*
-			if ($feature_id==211&&$value_id==3176)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 276, 3405);
-				//создаем новый фильтр в товаре
-				insFilter($id, 276, 3405);
-			}
-			if ($feature_id==211&&$value_id==3178)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 276, 3407);
-				//создаем новый фильтр в товаре
-				insFilter($id, 276, 3407);
-			}
-			if ($feature_id==211&&$value_id==3181)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 276, 3410);
-				//создаем новый фильтр в товаре
-				insFilter($id, 276, 3410);
-			}
-			if ($feature_id==211&&$value_id==3183)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 276, 3412);
-				//создаем новый фильтр в товаре
-				insFilter($id, 276, 3412);
-			}
-			if ($feature_id==211&&$value_id==3189)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 276, 3418);
-				//создаем новый фильтр в товаре
-				insFilter($id, 276, 3418);
-			}
-			if ($feature_id==211&&$value_id==3203)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 276, 3432);
-				//создаем новый фильтр в товаре
-				insFilter($id, 276, 3432);
-			}
-			
-			if ($feature_id==93&&$value_id==1043)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 277, 3433);
-				//создаем новый фильтр в товаре
-				insFilter($id, 277, 3433);
-			}
-			if ($feature_id==93&&$value_id==1044)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 277, 3434);
-				//создаем новый фильтр в товаре
-				insFilter($id, 277, 3434);
-			}
-			if ($feature_id==93&&$value_id==1045)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 277, 3435);
-				//создаем новый фильтр в товаре
-				insFilter($id, 277, 3435);
-			}
-			if ($feature_id==93&&$value_id==1046)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 277, 3436);
-				//создаем новый фильтр в товаре
-				insFilter($id, 277, 3436);
-			}
-			if ($feature_id==93&&$value_id==1047)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 277, 3437);
-				//создаем новый фильтр в товаре
-				insFilter($id, 277, 3437);
-			}
-			
-			if ($feature_id==33&&$value_id==834)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 278, 3438);
-				//создаем новый фильтр в товаре
-				insFilter($id, 278, 3438);
-			}
-			if ($feature_id==33&&$value_id==835)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 278, 3439);
-				//создаем новый фильтр в товаре
-				insFilter($id, 278, 3439);
-			}
-			if ($feature_id==33&&$value_id==836)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 278, 3440);
-				//создаем новый фильтр в товаре
-				insFilter($id, 278, 3440);
-			}
-			if ($feature_id==33&&$value_id==837)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 278, 3441);
-				//создаем новый фильтр в товаре
-				insFilter($id, 278, 3441);
-			}
-			
-			if ($feature_id==192&&$value_id==2059)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 279, 3442);
-				//создаем новый фильтр в товаре
-				insFilter($id, 279, 3442);
-			}
-			if ($feature_id==192&&$value_id==2065)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 279, 3442);
-				//создаем новый фильтр в товаре
-				insFilter($id, 279, 3442);
-			}
-			if ($feature_id==192&&$value_id==2061)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 279, 3443);
-				//создаем новый фильтр в товаре
-				insFilter($id, 279, 3443);
-			}
-			
-			if ($feature_id==52&&$value_id==861)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 280, 3445);
-				//создаем новый фильтр в товаре
-				insFilter($id, 280, 3445);
-			}
-			if ($feature_id==52&&$value_id==872)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 280, 3446);
-				//создаем новый фильтр в товаре
-				insFilter($id, 280, 3446);
-			}
-			if ($feature_id==52&&$value_id==873)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 280, 3447);
-				//создаем новый фильтр в товаре
-				insFilter($id, 280, 3447);
-			}
-			if ($feature_id==52&&$value_id==874)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 280, 3448);
-				//создаем новый фильтр в товаре
-				insFilter($id, 280, 3448);
-			}
-			if ($feature_id==52&&$value_id==875)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 280, 3449);
-				//создаем новый фильтр в товаре
-				insFilter($id, 280, 3449);
-			}
-			
-			if ($feature_id==53&&$value_id==878)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 280, 3451);
-				//создаем новый фильтр в товаре
-				insFilter($id, 280, 3451);
-			}
-			if ($feature_id==53&&$value_id==879)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 280, 3454);
-				//создаем новый фильтр в товаре
-				insFilter($id, 280, 3454);
-			}
-			if ($feature_id==53&&$value_id==876)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 280, 3455);
-				//создаем новый фильтр в товаре
-				insFilter($id, 280, 3455);
-			}
-			if ($feature_id==53&&$value_id==884)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 280, 3603);
-				//создаем новый фильтр в товаре
-				insFilter($id, 280, 3603);
-			}
-			if ($feature_id==53&&$value_id==885)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 280, 3457);
-				//создаем новый фильтр в товаре
-				insFilter($id, 280, 3457);
-			}
-			
-			if ($feature_id==55&&$value_id==944)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 282, 3458);
-				//создаем новый фильтр в товаре
-				insFilter($id, 282, 3458);
-			}
-			if ($feature_id==55&&$value_id==943)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 282, 3459);
-				//создаем новый фильтр в товаре
-				insFilter($id, 282, 3459);
-			}
-			if ($feature_id==55&&$value_id==942)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 282, 3460);
-				//создаем новый фильтр в товаре
-				insFilter($id, 282, 3460);
-			}
-			if ($feature_id==55&&$value_id==947)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 282, 3461);
-				//создаем новый фильтр в товаре
-				insFilter($id, 282, 3461);
-			}
-			
-			if ($feature_id==54&&$value_id==890)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 283, 3462);
-				//создаем новый фильтр в товаре
-				insFilter($id, 283, 3462);
-			}
-			if ($feature_id==54&&$value_id==889)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 283, 3463);
-				//создаем новый фильтр в товаре
-				insFilter($id, 283, 3463);
-			}
-			if ($feature_id==54&&$value_id==938)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 283, 3465);
-				//создаем новый фильтр в товаре
-				insFilter($id, 283, 3465);
-			}
-			if ($feature_id==54&&$value_id==895)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 283, 3471);
-				//создаем новый фильтр в товаре
-				insFilter($id, 283, 3471);
-			}
-			if ($feature_id==54&&$value_id==939)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 283, 3466);
-				//создаем новый фильтр в товаре
-				insFilter($id, 283, 3466);
-			}
-			if ($feature_id==54&&$value_id==940)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 283, 3467);
-				//создаем новый фильтр в товаре
-				insFilter($id, 283, 3467);
-			}
-			if ($feature_id==54&&$value_id==898)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 283, 3468);
-				//создаем новый фильтр в товаре
-				insFilter($id, 283, 3468);
-			}
-			
-			if ($feature_id==56&&$value_id==394)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 284, 3476);
-				//создаем новый фильтр в товаре
-				insFilter($id, 284, 3476);
-			}
-			if ($feature_id==56&&$value_id==395)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 284, 3477);
-				//создаем новый фильтр в товаре
-				insFilter($id, 284, 3477);
-			}
-			if ($feature_id==56&&$value_id==396)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 284, 3478);
-				//создаем новый фильтр в товаре
-				insFilter($id, 284, 3478);
-			}
-			if ($feature_id==56&&$value_id==397)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 284, 3479);
-				//создаем новый фильтр в товаре
-				insFilter($id, 284, 3479);
-			}
-			if ($feature_id==56&&$value_id==378)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 284, 3480);
-				//создаем новый фильтр в товаре
-				insFilter($id, 284, 3480);
-			}
-			
-			if ($feature_id==212&&$value_id==373)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 285, 3482);
-				//создаем новый фильтр в товаре
-				insFilter($id, 285, 3482);
-			}
-			if ($feature_id==212&&$value_id==398)
-			{
-				//delFilter($id, $feature_id, $value_id);
-				//на всякий случай удаляем новый фильтр чтоб не было дублей
-				delFilter($id, 285, 3483);
-				//создаем новый фильтр в товаре
-				insFilter($id, 285, 3483);
 			}
 			*/
 			
