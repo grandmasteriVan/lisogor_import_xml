@@ -54,7 +54,8 @@ function getParrentGoods($goods)
 		$db_connect=mysqli_connect(host,user,pass,db);
 		foreach ($goods as $good)
 		{
-			$id=$good;
+			$id=$good['goods_id'];
+			//var_dump($id);
 			$query="select goods_id from goods WHERE goods_parent=$id AND goods_id=$id";
 			if ($res=mysqli_query($db_connect,$query))
 			{
@@ -335,6 +336,7 @@ function checkFilters ($id)
     {
             $feature_id[]=$filter['feature_id'];
     }
+	/* шкафы-купе
 	if (!in_array(286,$feature_id))
     {
         echo "В товаре с ид=$id не проставлен размер по ширине!<br>";
@@ -379,7 +381,47 @@ function checkFilters ($id)
     {
         echo "В товаре с ид=$id не проставлен стиль!<br>";
     }
-    
+	*/
+    if (!in_array(276,$feature_id))
+    {
+        echo "В товаре с ид=$id не проставлен размер!<br>";
+    }
+	if (!in_array(277,$feature_id))
+    {
+        echo "В товаре с ид=$id не проставлена высота!<br>";
+    }
+	if (!in_array(278,$feature_id))
+    {
+        echo "В товаре с ид=$id не проставлена нагрузка!<br>";
+    }
+	if (!in_array(279,$feature_id))
+    {
+        echo "В товаре с ид=$id не проставлено количемсво мест!<br>";
+    }
+	if (!in_array(280,$feature_id))
+    {
+        echo "В товаре с ид=$id не проставлен тип матраса!<br>";
+    }
+	if (!in_array(281,$feature_id))
+    {
+        echo "В товаре с ид=$id не проставлен тип пружины!<br>";
+    }
+	if (!in_array(282,$feature_id))
+    {
+        echo "В товаре с ид=$id не проставлена жесткость!<br>";
+    }
+	if (!in_array(283,$feature_id))
+    {
+        echo "В товаре с ид=$id не проставлено наполнение!<br>";
+    }
+	if (!in_array(284,$feature_id))
+    {
+        echo "В товаре с ид=$id не проставлены особенности!<br>";
+    }
+	if (!in_array(285,$feature_id))
+    {
+        echo "В товаре с ид=$id не проставлено назначение!<br>";
+    }
 	return;
 }
 /*
@@ -400,7 +442,7 @@ echo "59 done <br>";
 setFilters(12);
 echo "12 done <br>";
 */
-setFilters(14);
+//setFilters(14);
 
 function setFilters($category_id)
 {
@@ -4439,20 +4481,24 @@ function setFilters($category_id)
 }
 
 //!!!!раскоментить!
-/*
-$goods=getGoods(9);
+
+$goods=getGoods(14);
+$goods=getParrentGoods($goods);
+//var_dump($goods);
 //echo "<pre>";
 //print_r ($goods);
 //echo "</pre>";
+
 foreach ($goods as $good)
 {
-	$id=$good['goods_id'];
+	$id=$good;
 	checkFilters($id);
 	echo "<br><br>";
 	//break;
 	
 }
-*/
+
+
 
 /*
 if (is_array($goods))

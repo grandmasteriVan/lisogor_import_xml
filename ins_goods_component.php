@@ -9,6 +9,7 @@ define ("host","localhost");
  * database username
  */
 //define ("user", "root");
+//define ("user", "newfm");
 define ("user", "newfm");
 /**
  * database password
@@ -47,6 +48,15 @@ class insGoodsComponent
 		{
 			return null;
 		}
+	}
+	
+	private function delComponents ($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="DELETE FROM component WHERE goods_id=$id";
+		echo "$query<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
 	}
 	
 	private function getGoods($cat_id, $f_id)
@@ -150,9 +160,9 @@ class insGoodsComponent
 	private function insComponent ($comp_id,$good_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
-		$query="INSERT INTO component (goods_id, component_child) VALUES ($comp_id,$good_id)";
+		$query="INSERT INTO component (goods_id, component_child) VALUES ($good_id,$comp_id)";
 		echo "$query<br><br>";
-		//mysqli_query($db_connect,$query);
+		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
 	
@@ -161,15 +171,23 @@ class insGoodsComponent
 		$goods=$this->getGoods($cat_id, $f_id);
 		if (is_array($goods))
 		{
+			var_dump($goods);
 			foreach ($goods as $good)
 			{
-				$id=$good['good_id'];
+				$id=$good;
 				$sizes=$this->getSize($id);
 				$depth=$sizes[0]['goods_depth'];
 				$width=$sizes[0]['goods_width'];
-				$length=$sizes[0]['goods_length'];
+				$length=$sizes[0]['goods_height'];
+				$height=$sizes[0]['goods_height'];
 				$name=$this->getName($id);
 				$name=" ".$name;
+				$this->delComponents ($id);
+				if ($id==15299)
+				{
+					echo "<br> id=$id depth=$depth width=$width length=$length<br><br>";
+				}
+				
 				if (mb_strpos($name, "Угловой"))
 				{
 					//Комплект ящиков 430х450
@@ -277,22 +295,22 @@ class insGoodsComponent
 						$this->insComponent(38441,$id);
 					}
 					
-					if (($length==1000&&$width==600)||($length==1100&&$width==600)||($length==1200&&$width==600)||($length==1300&&$width==600)||($length==1400&&$width==600)||($length==1500&&$width==600)||($length==1900&&$width==600)||($length==2000&&$width==600)||($length==2800&&$width==600)||($length==2900&&$width==600)||($length==3000&&$width==600)||($length==3100&&$width==600)||($length==3200&&$width==600)||($length==3300&&$width==600))
+					if (($width==1000&&$depth==600)||($width==1100&&$depth==600)||($width==1200&&$depth==600)||($width==1300&&$depth==600)||($width==1400&&$depth==600)||($width==1500&&$depth==600)||($width==1900&&$depth==600)||($width==2000&&$depth==600)||($width==2800&&$depth==600)||($width==2900&&$depth==600)||($width==3000&&$depth==600)||($width==3100&&$depth==600)||($width==3200&&$depth==600)||($width==3300&&$depth==600))
 					{
 						//Комплект ящиков 430х600
 						$this->insComponent(38430,$id);
 					}
-					if (($length==1000&&$width==450)||($length==1100&&$width==450)||($length==1200&&$width==450)||($length==1300&&$width==450)||($length==1400&&$width==450)||($length==1500&&$width==450)||($length==1900&&$width==450)||($length==2000&&$width==450)||($length==2800&&$width==450)||($length==2900&&$width==450)||($length==3000&&$width==450)||($length==3100&&$width==450)||($length==3200&&$width==450)||($length==3300&&$width==450))
+					if (($width==1000&&$depth==450)||($width==1100&&$depth==450)||($width==1200&&$depth==450)||($width==1300&&$depth==450)||($width==1400&&$depth==450)||($width==1500&&$depth==450)||($width==1900&&$depth==450)||($width==2000&&$depth==450)||($width==2800&&$depth==450)||($width==2900&&$depth==450)||($width==3000&&$depth==450)||($width==3100&&$depth==450)||($width==3200&&$depth==450)||($width==3300&&$depth==450))
 					{
 						//Комплект ящиков 430х450
 						$this->insComponent(38429,$id);
 					}
-					if (($length==1700&&$width==600)||($length==1800&&$width==600)||($length==2100&&$width==600)||($length==2200&&$width==600)||($length==2300&&$width==600)||($length==2400&&$width==600)||($length==2500&&$width==600)||($length==2600&&$width==600)||($length==2700&&$width==600)||($length==3400&&$width==600)||($length==3500&&$width==600)||($length==3600&&$width==600))
+					if (($width==1700&&$depth==600)||($width==1800&&$depth==600)||($width==2100&&$depth==600)||($width==2200&&$depth==600)||($width==2300&&$depth==600)||($width==2400&&$depth==600)||($width==2500&&$depth==600)||($width==2600&&$depth==600)||($width==2700&&$depth==600)||($width==3400&&$depth==600)||($width==3500&&$depth==600)||($width==3600&&$depth==600))
 					{
 						//Комплект ящиков 600х600
 						$this->insComponent(38432,$id);
 					}
-					if (($length==1700&&$width==450)||($length==1800&&$width==450)||($length==2100&&$width==450)||($length==2200&&$width==450)||($length==2300&&$width==450)||($length==2400&&$width==450)||($length==2500&&$width==450)||($length==2600&&$width==450)||($length==2700&&$width==450)||($length==3400&&$width==450)||($length==3500&&$width==450)||($length==3600&&$width==450))
+					if (($width==1700&&$depth==450)||($width==1800&&$depth==450)||($width==2100&&$depth==450)||($width==2200&&$depth==450)||($width==2300&&$depth==450)||($width==2400&&$depth==450)||($width==2500&&$depth==450)||($width==2600&&$depth==450)||($width==2700&&$depth==450)||($width==3400&&$depth==450)||($width==3500&&$depth==450)||($width==3600&&$depth==450))
 					{
 						//Комплект ящиков 600х450
 						$this->insComponent(38431,$id);
@@ -309,3 +327,6 @@ class insGoodsComponent
 	}
 	
 }
+
+$test=new insGoodsComponent();
+$test->insGoodComp(9, 93);
