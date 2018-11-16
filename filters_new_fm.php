@@ -443,6 +443,7 @@ setFilters(12);
 echo "12 done <br>";
 */
 //setFilters(14);
+setFilters(1);
 
 function setFilters($category_id)
 {
@@ -4462,6 +4463,29 @@ function setFilters($category_id)
                         }
                     }
 					
+					//диваны
+					if ($category_id==1)
+					{
+						if ($feature_id==245&&$value_id==3258)
+						{
+							//удаляем старый фильтр
+                            delFilter($id, $feature_id, $value_id);
+                            //на всякий случай удаляем новый фильтр чтоб не было дублей
+                            delFilter($id, 155, 2926);
+                            //создаем новый фильтр в товаре
+                            insFilter($id, 155, 2926);
+						}
+						if ($feature_id==245&&$value_id==3259)
+						{
+							//удаляем старый фильтр
+                            delFilter($id, $feature_id, $value_id);
+                            //на всякий случай удаляем новый фильтр чтоб не было дублей
+                            delFilter($id, 155, 2925);
+                            //создаем новый фильтр в товаре
+                            insFilter($id, 155, 2925);
+						}
+					}
+					
 				}
 			}
 			//break;
@@ -4480,8 +4504,11 @@ function setFilters($category_id)
 	
 }
 
-//!!!!раскоментить!
 
+
+
+//!!!!раскоментить!
+/*
 $goods=getGoods(14);
 $goods=getParrentGoods($goods);
 //var_dump($goods);
@@ -4498,7 +4525,7 @@ foreach ($goods as $good)
 	
 }
 
-
+*/
 
 /*
 if (is_array($goods))

@@ -193,22 +193,22 @@ class insGoodsComponent
 					//Комплект ящиков 430х450
 					$this->insComponent(38429,$id);
 					//Карниз на консоль
-					$this->insComponent(38436,$id);
+					//$this->insComponent(38436,$id);
 					//Ножка Н60 D60 (алюминий)
-					$this->insComponent(38437,$id);
+					//$this->insComponent(38437,$id);
 					//Ножка регулируемая (пластик)
-					$this->insComponent(38438,$id);
+					//$this->insComponent(38438,$id);
 					//Полка в пенал
-					$this->insComponent(38439,$id);
+					//$this->insComponent(38439,$id);
 					//Полка в платяное отделение
-					$this->insComponent(38440,$id);
+					//$this->insComponent(38440,$id);
 					//Скалка + скалкодержатель
-					$this->insComponent(38441,$id);
+					//$this->insComponent(38441,$id);
 					//Стойка
-					$this->insComponent(38442,$id);
+					//$this->insComponent(38442,$id);
 					//Микролифт
-					$this->insComponent(38443,$id);
-					if ($depth==450&&$length==2200)
+					//$this->insComponent(38443,$id);
+					/*if ($depth==450&&$length==2200)
 					{
 						//Консоль радиусная 2200х450
 						$this->insComponent(38425,$id);
@@ -221,17 +221,17 @@ class insGoodsComponent
 						$this->insComponent(38449,$id);
 						//Консоль радиусная 2400х450
 						$this->insComponent(38452,$id);
-					}
+					}*/
 				}
 				else
 				{
 					//Карниз на консоль
-					$this->insComponent(38436,$id);
+					//$this->insComponent(38436,$id);
 					//Ножка Н60 D60 (алюминий)
-					$this->insComponent(38437,$id);
+					//$this->insComponent(38437,$id);
 					//Ножка регулируемая (пластик)
-					$this->insComponent(38438,$id);
-					if ($depth==450&&$length==2200)
+					//$this->insComponent(38438,$id);
+					/*if ($depth==450&&$length==2200)
 					{
 						//Консоль радиусная 2200х450
 						$this->insComponent(38425,$id);
@@ -244,8 +244,8 @@ class insGoodsComponent
 						$this->insComponent(38449,$id);
 						//Консоль радиусная 2400х450
 						$this->insComponent(38452,$id);
-					}
-					
+					}*/
+					/*
 					if ($depth==600&&$length==2200)
 					{
 						//Консоль радиусная 2200х600
@@ -294,7 +294,7 @@ class insGoodsComponent
 						//Скалка + скалкодержатель
 						$this->insComponent(38441,$id);
 					}
-					
+					*/
 					if (($width==1000&&$depth==600)||($width==1100&&$depth==600)||($width==1200&&$depth==600)||($width==1300&&$depth==600)||($width==1400&&$depth==600)||($width==1500&&$depth==600)||($width==1900&&$depth==600)||($width==2000&&$depth==600)||($width==2800&&$depth==600)||($width==2900&&$depth==600)||($width==3000&&$depth==600)||($width==3100&&$depth==600)||($width==3200&&$depth==600)||($width==3300&&$depth==600))
 					{
 						//Комплект ящиков 430х600
@@ -329,4 +329,4 @@ class insGoodsComponent
 }
 
 $test=new insGoodsComponent();
-$test->insGoodComp(9, 93);
+$test->insGoodComp(9, 101);
