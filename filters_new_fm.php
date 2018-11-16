@@ -442,8 +442,8 @@ echo "59 done <br>";
 setFilters(12);
 echo "12 done <br>";
 */
-//setFilters(14);
-setFilters(1);
+setFilters(14);
+//setFilters(1);
 
 function setFilters($category_id)
 {
@@ -678,41 +678,51 @@ function setFilters($category_id)
 						{
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 280, 3451);
+							delFilter($id, 281, 3451);
 							//создаем новый фильтр в товаре
-							insFilter($id, 280, 3451);
+							insFilter($id, 281, 3451);
 						}
 						if ($feature_id==53&&$value_id==879)
 						{
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 280, 3454);
+							delFilter($id, 281, 3454);
 							//создаем новый фильтр в товаре
-							insFilter($id, 280, 3454);
+							insFilter($id, 281, 3454);
 						}
 						if ($feature_id==53&&$value_id==876)
 						{
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 280, 3455);
+							delFilter($id, 281, 3455);
 							//создаем новый фильтр в товаре
-							insFilter($id, 280, 3455);
+							insFilter($id, 281, 3455);
 						}
 						if ($feature_id==53&&$value_id==884)
 						{
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 280, 3603);
+							delFilter($id, 281, 3603);
 							//создаем новый фильтр в товаре
-							insFilter($id, 280, 3603);
+							insFilter($id, 281, 3603);
 						}
+						if ($feature_id==53&&$value_id==885)
+						{
+							//delFilter($id, $feature_id, $value_id);
+							//на всякий случай удаляем новый фильтр чтоб не было дублей
+							delFilter($id, 281, 3457);
+							delFilter($id, 281, 3457);
+							//создаем новый фильтр в товаре
+							insFilter($id, 281, 3457);
+						}
+						
 						if ($feature_id==53&&$value_id==885)
 						{
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
 							delFilter($id, 280, 3457);
 							//создаем новый фильтр в товаре
-							insFilter($id, 280, 3457);
+							insFilter($id, 281, 3457);
 						}
 						
 						if ($feature_id==55&&$value_id==944)
