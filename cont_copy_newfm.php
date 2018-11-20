@@ -23,7 +23,13 @@ define ("db", "newfm");
 
 class ContentCopy
 {
-	private function getRefCont ($id,$lang)
+    /**
+     * выбирает контент из товара-образца
+     * @param $id int ид образца
+     * @param $lang int язык (1-русский, 2-украинский)
+     * @return null
+     */
+    private function getRefCont ($id, $lang)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="select goodshaslang_content from goodshaslang WHERE goods_id=$id AND lang_id=$lang";
@@ -48,8 +54,14 @@ class ContentCopy
 			return null;
 		}
 	}
-	
-	private function setCont($id,$cont,$lang)
+
+    /**
+     * записывает контент в товар
+     * @param $id int - ид товара, куда надо вставить контент
+     * @param $cont string - контент
+     * @param $lang int - ид языка
+     */
+    private function setCont($id, $cont, $lang)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="UPDATE goodshaslang SET goodshaslang_content='$cont' WHERE goods_id=$id AND lang_id=$lang";
@@ -58,8 +70,13 @@ class ContentCopy
 		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
-	
-	private function getFeatures($good_id)
+
+    /**
+     * возвращает список фильтров товара
+     * @param $good_id int - ид товара
+     * @return array|null - массив фильтров товара
+     */
+    private function getFeatures($good_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="select goodshasfeature_valueid, feature_id from goodshasfeature WHERE goods_id=$good_id";
@@ -84,8 +101,14 @@ class ContentCopy
 			return null;
 		}
 	}
-	
-	private function getGoods($cat_id, $f_id)
+
+    /**
+     * выбирает все товары, которые принадлежат определенной фабрике и находятся в определенном разделе
+     * @param $cat_id int - ид категории, из которой надо выбрать товары
+     * @param $f_id int - ид фабрики
+     * @return array|null
+     */
+    private function getGoods($cat_id, $f_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="select goods_id from goodshascategory WHERE category_id=$cat_id";
@@ -132,8 +155,15 @@ class ContentCopy
 			return null;
 		}
 	}
-	
-	public function copyContent($ref_id,$factory_id, $category_id,$lang)
+
+    /**
+     * копирует контент из образца всем товарам одной фабрике которые находятся в определенном разделе
+     * @param $ref_id int - ид товара образца
+     * @param $factory_id int - ид фабрики
+     * @param $category_id int - ид категории
+     * @param $lang int - ид языка
+     */
+    public function copyContent($ref_id, $factory_id, $category_id, $lang)
 	{
 		$ref_cont=$this->getRefCont($ref_id,$lang);
 		$goods=$this->getGoods($category_id,$factory_id);
