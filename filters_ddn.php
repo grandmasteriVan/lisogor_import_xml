@@ -103,23 +103,27 @@ class Filters
 				$id=$good['goods_id'];
 				//выбираем только наполенние, остальные фильтры нам не нужны
 				$features=$this->getFeature($id,3);
+				$no=true;
 				if (is_array($features))
 				{
+					
 					//var_dump ($features);
 					if (count($features)==1&&$features[0]==41)
 					{
 						echo "$id= Только ППУ!<br>";
 						//$this->delFeature($id,3);
-						$this->delFeatureVal($id,212);
-						$this->insFeature($id,3,212);
+						//$this->delFeatureVal($id,212);
+						//$this->insFeature($id,3,212);
+						$no=false;
 					}
 					
 					if (count($features)==1&&($features[0]==39||$features[0]==43||$features[0]==44))
 					{
 						echo "$id= Пружина+ППУ!<br>";
 						//$this->delFeature($id,3);
-						$this->delFeatureVal($id,208);
-						$this->insFeature($id,3,208);
+						//$this->delFeatureVal($id,208);
+						//$this->insFeature($id,3,208);
+						$no=false;
 					}
 					
 					if (in_array(35,$features)||(in_array(42,$features)&&(in_array(43,$features)||in_array(44,$features)||in_array(49,$features))))
@@ -127,24 +131,32 @@ class Filters
 						echo "$id= Змейка+Пружина+ППУ!<br>";
 						//var_dump($features);
 						//$this->delFeature($id,3);
-						$this->delFeatureVal($id,209);
-						$this->insFeature($id,3,209);
+						//$this->delFeatureVal($id,209);
+						//$this->insFeature($id,3,209);
+						$no=false;
 					}
 					if ((in_array(37,$features)&&(!in_array(44,$features)&&!in_array(43,$features)&&!in_array(39,$features)))||(in_array(36,$features)&&in_array(41,$features)&&in_array(44,$features)&&!in_array(43,$features)&&!in_array(39,$features)))
 					{
 						echo "$id= Ламели+ППУ!<br>";
 						//var_dump($features);
-						$this->delFeatureVal($id,210);
-						$this->insFeature($id,3,210);
+						//$this->delFeatureVal($id,210);
+						//$this->insFeature($id,3,210);
+						$no=false;
 					}
 					if (in_array(38,$features)||(in_array(36,$features)&&(in_array(44,$features)||in_array(43,$features)||in_array(39,$features))))
 					{
 						echo "$id= Ламели+пружина+ППУ!<br>";
 						//var_dump($features);
-						$this->delFeatureVal($id,211);
-						$this->insFeature($id,3,211);
+						//$this->delFeatureVal($id,211);
+						//$this->insFeature($id,3,211);
+						$no=false;
 					}
 					
+					if ($no==true)
+					{
+						echo "$id без новых фильтров<br>";
+					}
+					/*
 					if ($id==3100)
 					{
 						var_dump($features);
@@ -152,6 +164,7 @@ class Filters
 						//	echo "!!!";
 						
 					}
+					*/
 					//break;
 					
 				}
