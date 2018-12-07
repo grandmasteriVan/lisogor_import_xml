@@ -147,9 +147,13 @@ class insGoodsComponent
 		{
 			 echo "Error in SQL: $query<br>";		
 		}
-		if (is_array($sizes))
+		/*echo "<pre>";
+		print_r($name);
+		echo "</pre>";*/
+		if (is_array($name))
 		{
 			return $name[0]['goodshaslang_name'];
+			
 		}
 		else
 		{
@@ -181,139 +185,141 @@ class insGoodsComponent
 				$length=$sizes[0]['goods_height'];
 				$height=$sizes[0]['goods_height'];
 				$name=$this->getName($id);
+				var_dump ($name);
 				$name=" ".$name;
+				//var_dump($name);
 				$this->delComponents ($id);
-				if ($id==15299)
+				if ($id==28318)
 				{
-					echo "<br> id=$id depth=$depth width=$width length=$length<br><br>";
+					echo "<br>$name id=$id depth=$depth width=$width length=$length<br><br>";
 				}
 				
 				if (mb_strpos($name, "Угловой"))
 				{
 					//Комплект ящиков 430х450
-					$this->insComponent(38429,$id);
+					$this->insComponent(38221,$id);
 					//Карниз на консоль
-					//$this->insComponent(38436,$id);
+					$this->insComponent(38236,$id);
 					//Ножка Н60 D60 (алюминий)
-					//$this->insComponent(38437,$id);
+					$this->insComponent(38237,$id);
 					//Ножка регулируемая (пластик)
-					//$this->insComponent(38438,$id);
+					$this->insComponent(38238,$id);
 					//Полка в пенал
-					//$this->insComponent(38439,$id);
+					$this->insComponent(38242,$id);
 					//Полка в платяное отделение
-					//$this->insComponent(38440,$id);
+					$this->insComponent(38240,$id);
 					//Скалка + скалкодержатель
-					//$this->insComponent(38441,$id);
+					$this->insComponent(38243,$id);
 					//Стойка
-					//$this->insComponent(38442,$id);
+					$this->insComponent(38246,$id);
 					//Микролифт
-					//$this->insComponent(38443,$id);
-					/*if ($depth==450&&$length==2200)
+					$this->insComponent(38245,$id);
+					if ($depth==450&&$length==2200)
 					{
 						//Консоль радиусная 2200х450
 						$this->insComponent(38425,$id);
 						//Консоль прямая 2200х450
-						$this->insComponent(38427,$id);
+						$this->insComponent(38215,$id);
 					}
 					if ($depth==450&&$length==2400)
 					{
 						//Консоль прямая 2400х450
-						$this->insComponent(38449,$id);
+						$this->insComponent(38222,$id);
 						//Консоль радиусная 2400х450
-						$this->insComponent(38452,$id);
-					}*/
+						$this->insComponent(38229,$id);
+					}
 				}
 				else
 				{
 					//Карниз на консоль
-					//$this->insComponent(38436,$id);
+					$this->insComponent(38236,$id);
 					//Ножка Н60 D60 (алюминий)
-					//$this->insComponent(38437,$id);
+					$this->insComponent(38237,$id);
 					//Ножка регулируемая (пластик)
-					//$this->insComponent(38438,$id);
-					/*if ($depth==450&&$length==2200)
+					$this->insComponent(38238,$id);
+					if ($depth==450&&$length==2200)
 					{
 						//Консоль радиусная 2200х450
 						$this->insComponent(38425,$id);
 						//Консоль прямая 2200х450
-						$this->insComponent(38427,$id);
+						$this->insComponent(38215,$id);
 					}
 					if ($depth==450&&$length==2400)
 					{
 						//Консоль прямая 2400х450
-						$this->insComponent(38449,$id);
+						$this->insComponent(38222,$id);
 						//Консоль радиусная 2400х450
-						$this->insComponent(38452,$id);
-					}*/
-					/*
+						$this->insComponent(38229,$id);
+					}
+					
 					if ($depth==600&&$length==2200)
 					{
 						//Консоль радиусная 2200х600
-						$this->insComponent(38426,$id);
+						$this->insComponent(38217,$id);
 						//Консоль прямая 2200х600
-						$this->insComponent(38447,$id);
+						$this->insComponent(38215,$id);
 					}
 					if ($depth==600&&$length==2400)
 					{
 						//Консоль прямая 2400х600
-						$this->insComponent(38428,$id);
+						$this->insComponent(38223,$id);
 						//Консоль радиусная 2400х600
-						$this->insComponent(38453,$id);
+						$this->insComponent(38231,$id);
 					}
 					
 					if ($length>=1000&&$length<=1800)
 					{
 						//Карниз 1000-1800
-						$this->insComponent(38433,$id);
+						$this->insComponent(38232,$id);
 					}
 					if ($length>=1900&&$length<=2700)
 					{
 						//Карниз 1810-2700
-						$this->insComponent(38434,$id);
+						$this->insComponent(38234,$id);
 					}
 					if ($length>=2800&&$length<=3600)
 					{
 						//Карниз 2710-3600
-						$this->insComponent(38435,$id);
+						$this->insComponent(38235,$id);
 					}
 					
 					//Полка в пенал
-					$this->insComponent(38439,$id);
+					$this->insComponent(38242,$id);
 					//Полка в платяное отделение
-					$this->insComponent(38440,$id);
+					$this->insComponent(38240,$id);
 					//Стойка
-					$this->insComponent(38442,$id);
+					$this->insComponent(38246,$id);
 					
 					if ($depth==450)
 					{
 						//Микролифт
-						$this->insComponent(38443,$id);
+						$this->insComponent(38245,$id);
 					}
 					if ($depth==600)
 					{
 						//Скалка + скалкодержатель
-						$this->insComponent(38441,$id);
+						$this->insComponent(38243,$id);
 					}
-					*/
+					
 					if (($width==1000&&$depth==600)||($width==1100&&$depth==600)||($width==1200&&$depth==600)||($width==1300&&$depth==600)||($width==1400&&$depth==600)||($width==1500&&$depth==600)||($width==1900&&$depth==600)||($width==2000&&$depth==600)||($width==2800&&$depth==600)||($width==2900&&$depth==600)||($width==3000&&$depth==600)||($width==3100&&$depth==600)||($width==3200&&$depth==600)||($width==3300&&$depth==600))
 					{
 						//Комплект ящиков 430х600
-						$this->insComponent(38430,$id);
+						$this->insComponent(38225,$id);
 					}
 					if (($width==1000&&$depth==450)||($width==1100&&$depth==450)||($width==1200&&$depth==450)||($width==1300&&$depth==450)||($width==1400&&$depth==450)||($width==1500&&$depth==450)||($width==1900&&$depth==450)||($width==2000&&$depth==450)||($width==2800&&$depth==450)||($width==2900&&$depth==450)||($width==3000&&$depth==450)||($width==3100&&$depth==450)||($width==3200&&$depth==450)||($width==3300&&$depth==450))
 					{
 						//Комплект ящиков 430х450
-						$this->insComponent(38429,$id);
+						$this->insComponent(38221,$id);
 					}
 					if (($width==1700&&$depth==600)||($width==1800&&$depth==600)||($width==2100&&$depth==600)||($width==2200&&$depth==600)||($width==2300&&$depth==600)||($width==2400&&$depth==600)||($width==2500&&$depth==600)||($width==2600&&$depth==600)||($width==2700&&$depth==600)||($width==3400&&$depth==600)||($width==3500&&$depth==600)||($width==3600&&$depth==600))
 					{
 						//Комплект ящиков 600х600
-						$this->insComponent(38432,$id);
+						$this->insComponent(38227,$id);
 					}
 					if (($width==1700&&$depth==450)||($width==1800&&$depth==450)||($width==2100&&$depth==450)||($width==2200&&$depth==450)||($width==2300&&$depth==450)||($width==2400&&$depth==450)||($width==2500&&$depth==450)||($width==2600&&$depth==450)||($width==2700&&$depth==450)||($width==3400&&$depth==450)||($width==3500&&$depth==450)||($width==3600&&$depth==450))
 					{
 						//Комплект ящиков 600х450
-						$this->insComponent(38431,$id);
+						$this->insComponent(38226,$id);
 					}
 					
 				}
@@ -329,4 +335,4 @@ class insGoodsComponent
 }
 
 $test=new insGoodsComponent();
-$test->insGoodComp(9, 101);
+$test->insGoodComp(9, 93);

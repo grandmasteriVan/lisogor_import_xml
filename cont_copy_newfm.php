@@ -20,7 +20,6 @@ define ("pass", "N0r7F8g6");
  */
 //define ("db", "fm_new");
 define ("db", "newfm");
-
 class ContentCopy
 {
     /**
@@ -54,7 +53,6 @@ class ContentCopy
 			return null;
 		}
 	}
-
     /**
      * записывает контент в товар
      * @param $id int - ид товара, куда надо вставить контент
@@ -70,7 +68,6 @@ class ContentCopy
 		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
-
     /**
      * возвращает список фильтров товара
      * @param $good_id int - ид товара
@@ -101,7 +98,37 @@ class ContentCopy
 			return null;
 		}
 	}
-
+	
+	/**
+     * возвращает артикул товара
+     * @param $good_id int - ид товара
+     * @return 
+     */
+    private function getArticle($good_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_article from goods WHERE goods_id=$good_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		if (is_array($goods))
+		{
+			return $goods[0]['goods_article'];
+		}
+		else
+		{
+			return null;
+		}
+	}
     /**
      * выбирает все товары, которые принадлежат определенной фабрике и находятся в определенном разделе
      * @param $cat_id int - ид категории, из которой надо выбрать товары
@@ -155,7 +182,6 @@ class ContentCopy
 			return null;
 		}
 	}
-
     /**
      * копирует контент из образца всем товарам одной фабрике которые находятся в определенном разделе
      * @param $ref_id int - ид товара образца
@@ -172,11 +198,12 @@ class ContentCopy
 		echo "<br><br>";
 		var_dump ($ref_cont);
 		echo "<br><br>";
-		//if (is_array($goods))
+		if (is_array($goods))
 		{
 			foreach ($goods as $good)
 			{
 				$id=$good;
+				$article=$this->getArticle($id);
 				//var_dump($good);
 				//var_dump($id);
 				if ($id!=$ref_id)
@@ -184,11 +211,18 @@ class ContentCopy
 					$this->setCont($id,$ref_cont,$lang);
 				}
 				
+				/*if ($article==5714013||$article==5714011)
+				{
+					$this->setCont($id,$ref_cont,$lang);
+				}*/
+				
+				
+				
 				//break;
 			}
 		}
 	}
 }
-
 $test=new ContentCopy();
-$test->copyContent(15286,101,9,2);
+$test->copyContent(15423,93,9,2);
+$test->copyContent(15423,93,9,1);

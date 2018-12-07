@@ -1708,7 +1708,7 @@ if ($res=mysqli_query($db_connect,$query))
     $query="update goods SET goods_stock=0, goods_discount=0, goods_oldprice=0 where factory_id=35";
     mysqli_query($db_connect,$query);
     mysqli_close($db_connect);
-	*/
+	/*
 	/*
 	$db_connect=mysqli_connect(host,user,pass,db);
 	$query="update goods SET goods_noactual=1 where factory_id=139";
@@ -2233,6 +2233,66 @@ if ($res=mysqli_query($db_connect,$query))
 	
 	mysqli_close($db_connect);
 	*/
+	
+	function setNoAction($goods_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="update goods SET goods_discount=0, goods_oldprice=0 where goods_id=$goods_id";
+		mysqli_query($db_connect,$query);
+		$query="update goodshasfeature SET goodshasfeature_valueid=0, where goods_id=$goods_id AND feature_id=228";
+		mysqli_query($db_connect,$query);
+		echo "$query<br>";
+		mysqli_close($db_connect);
+	}
+	
+	function getGoodsByFactory($f_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_id FROM goodshasfeature WHERE feature_id=232 AND goodshasfeature_valueid=$f_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		if (is_array($goods))
+		{
+			return $goods;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	function setNoActionByFactory($f_id)
+	{
+		$goods=getGoodsByFactory($f_id);
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$id=$good[goods_id];
+				setNoAction($id);
+			}
+		}
+		else
+		{
+			echo "No goods!";
+		}
+	}
+	
+	//comefor
+	setNoActionByFactory(37);
+	//matroluxe
+	setNoActionByFactory(45);
+	//asat
+	setNoActionByFactory(181);
 	
 ?>
 
