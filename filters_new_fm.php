@@ -336,6 +336,12 @@ function checkFilters ($id)
     {
             $feature_id[]=$filter['feature_id'];
     }
+	if ($id==8370)
+	{
+		echo "<pre>";
+		print_r($filters);
+		echo "</pre>";
+	}
 	/* шкафы-купе
 	if (!in_array(286,$feature_id))
     {
@@ -442,7 +448,7 @@ echo "59 done <br>";
 setFilters(12);
 echo "12 done <br>";
 */
-setFilters(14);
+//setFilters(14);
 //setFilters(1);
 
 function setFilters($category_id)
@@ -4518,7 +4524,7 @@ function setFilters($category_id)
 
 
 //!!!!раскоментить!
-/*
+
 $goods=getGoods(14);
 $goods=getParrentGoods($goods);
 //var_dump($goods);
@@ -4535,7 +4541,7 @@ foreach ($goods as $good)
 	
 }
 
-*/
+
 
 /*
 if (is_array($goods))
