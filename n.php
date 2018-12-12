@@ -2239,7 +2239,8 @@ if ($res=mysqli_query($db_connect,$query))
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="update goods SET goods_discount=0, goods_oldprice=0 where goods_id=$goods_id";
 		mysqli_query($db_connect,$query);
-		$query="update goodshasfeature SET goodshasfeature_valueid=0, where goods_id=$goods_id AND feature_id=228";
+		echo "$query<br>";
+		$query="update goodshasfeature SET goodshasfeature_valueid=0 where goods_id=$goods_id AND feature_id=228";
 		mysqli_query($db_connect,$query);
 		echo "$query<br>";
 		mysqli_close($db_connect);
@@ -2272,7 +2273,9 @@ if ($res=mysqli_query($db_connect,$query))
 	
 	function setNoActionByFactory($f_id)
 	{
+		
 		$goods=getGoodsByFactory($f_id);
+		var_dump($goods);
 		if (is_array($goods))
 		{
 			foreach ($goods as $good)
@@ -2288,11 +2291,13 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 	
 	//comefor
-	setNoActionByFactory(37);
+	//setNoActionByFactory(37);
 	//matroluxe
-	setNoActionByFactory(45);
+	//setNoActionByFactory(45);
 	//asat
-	setNoActionByFactory(181);
+	//setNoActionByFactory(181);
+	//corners
+	setNoActionByFactory(186);
 	
 ?>
 

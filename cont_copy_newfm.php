@@ -206,15 +206,17 @@ class ContentCopy
 				$article=$this->getArticle($id);
 				//var_dump($good);
 				//var_dump($id);
+				/*
 				if ($id!=$ref_id)
 				{
 					$this->setCont($id,$ref_cont,$lang);
 				}
-				
-				/*if ($article==5714013||$article==5714011)
+				*/
+				//крпирование по артикулу
+				if ($article==5728799||$article==5728816)
 				{
 					$this->setCont($id,$ref_cont,$lang);
-				}*/
+				}
 				
 				
 				
@@ -224,5 +226,5 @@ class ContentCopy
 	}
 }
 $test=new ContentCopy();
-$test->copyContent(15423,93,9,2);
-$test->copyContent(15423,93,9,1);
+$test->copyContent(28815,86,20,2);
+$test->copyContent(28815,86,20,1);

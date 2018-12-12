@@ -4525,13 +4525,13 @@ function setFilters($category_id)
 
 //!!!!раскоментить!
 
-$goods=getGoods(14);
+$goods=getGoods(9);
 $goods=getParrentGoods($goods);
 //var_dump($goods);
 //echo "<pre>";
 //print_r ($goods);
 //echo "</pre>";
-
+/*
 foreach ($goods as $good)
 {
 	$id=$good;
@@ -4539,11 +4539,11 @@ foreach ($goods as $good)
 	echo "<br><br>";
 	//break;
 	
-}
+}*/
 
 
 
-/*
+
 if (is_array($goods))
 {
 	foreach ($goods as $good)
@@ -4557,11 +4557,11 @@ if (is_array($goods))
 		
 		$sizes=getSize($id);
 		$sizes=$sizes[0];
-			var_dump($sizes);
+		//	var_dump($sizes);
 			$width=$sizes['goods_width'];
 			$len=$sizes['goods_length'];
 			$height=$sizes['goods_height'];
-		/*
+		
 		foreach ($filters as $filter)
 		{
 			$value_id=$filter['goodshasfeature_valueid'];
@@ -6285,7 +6285,7 @@ if (is_array($goods))
 			*/
 						
 			/*шкафы-купе 9*/
-			/*
+			
 			if ($feature_id==221&&$value_id==3001)
 			{
 				//delFilter($id, $feature_id, $value_id);
@@ -6582,8 +6582,8 @@ if (is_array($goods))
 			//break;
 			
 			
-		}*/
-		/*
+		}
+		
 		if ($len>0&&$len<1000)
 			{
 				//на всякий случай удаляем новый фильтр чтоб не было дублей
@@ -6727,8 +6727,8 @@ if (is_array($goods))
 				//создаем новый фильтр в товаре
 				insFilter($id, 288, 3503);
 			}
-		*/
-		/*
+		
+		
 		$filters=getFeatures($id);
 		echo "New filters for $id:"; 
 		echo "<pre>";
@@ -6740,4 +6740,4 @@ if (is_array($goods))
 else
 {
 	echo "No goods!<br>";
-}*/
+}
