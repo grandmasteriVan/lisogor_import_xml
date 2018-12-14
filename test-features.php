@@ -197,6 +197,49 @@ class TestFeatures
 		}
 	}
 	
+	private function getFeatureVal($good_id,$feature_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goodshasfeature_valueid from goodshasfeature WHERE goods_id=$good_id AND feature_id=$feature_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$features[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		return $features;
+	}
+	
+	public function testSizeFeature($cat_id)
+	{
+		$goods=$this->getGoodsByCat($cat_id);
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$id=$good['goods_id'];
+				//по высоте
+				$feature_val=$this->getFeatureVal($id,287);
+				if (!is_array($feature_val)||count($feature_val)!=1)
+				{
+					echo "Товар $id имеет некоректоно заполненый фильтр По высоте<br>";
+				}
+				
+				$feature_val=$this->getFeatureVal($id,288);
+				if (!is_array($feature_val)||count($feature_val)!=1)
+				{
+					echo "Товар $id имеет некоректоно заполненый фильтр По глубине<br>";
+				}
+				
+			}
+		}
+	}
+	
 	private function getGoodsByCat($cat_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -491,3 +534,4 @@ $test=new TestFeatures();
 //$test->setPlacetoSHK(9);
 //$test->setStyletoSHK(9);
 //$test->setFeaturestoSHK(9);
+$test->testSizeFeature(9);
