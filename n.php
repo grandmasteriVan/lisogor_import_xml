@@ -2233,7 +2233,7 @@ if ($res=mysqli_query($db_connect,$query))
 	
 	mysqli_close($db_connect);
 	*/
-	
+	/*
 	function setNoAction($goods_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -2298,6 +2298,133 @@ if ($res=mysqli_query($db_connect,$query))
 	//setNoActionByFactory(181);
 	//corners
 	setNoActionByFactory(186);
+	*/
 	
+	function delFeature($goods_id,$feature_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="DELETE FROM goodshasfeature WHERE goods_id=$goods_id AND feature_id=$feature_id";
+		//echo "$query<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+
+	}
+	
+	function getSize($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_depth from goods WHERE goods_id=$id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$sizes[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		if (is_array($sizes))
+		{
+			return $sizes;
+		}
+		else
+		{
+			return null;
+		}
+	}
+	
+	function insFilter($goods_id, $feature_id, $value_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="INSERT INTO goodshasfeature (goods_id, feature_id, goodshasfeature_valueid) VALUES ($goods_id, $feature_id, $value_id)";
+		//echo "$query<br><br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+	
+	function getGoodsByCategory($cat_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_id from goodshascategory WHERE category_id=$cat_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		return $goods_all;
+	}
+	
+	$goods1=getGoodsByCategory(9);
+	//var_dump($goods);
+	foreach ($goods1 as $good1)
+	{
+		$id=$good1['goods_id'];
+		//var_dump($id);
+		$size=getSize($id);
+		//var_dump($size);
+		$wigth=(int)$size[0]['goods_depth'];
+		//var_dump($wigth);
+		$nofilter=true;
+		
+		delFeature($id,288);
+		if ($wigth>0&&$wigth<430)
+		{
+			//на всякий случай удаляем новый фильтр чтоб не было дублей
+			//delFilter($id, 288, 3499);
+			//создаем новый фильтр в товаре
+			insFilter($id, 288, 3499);
+			$nofilter=false;
+		}
+		if ($wigth>=430&&$wigth<450)
+		{
+			//на всякий случай удаляем новый фильтр чтоб не было дублей
+			//delFilter($id, 288, 3500);
+			//создаем новый фильтр в товаре
+			insFilter($id, 288, 3500);
+			$nofilter=false;
+		}
+		if ($wigth>=450&&$wigth<580)
+		{
+			//на всякий случай удаляем новый фильтр чтоб не было дублей
+			//delFilter($id, 288, 3501);
+			//создаем новый фильтр в товаре
+			insFilter($id, 288, 3501);
+			$nofilter=false;
+		}
+		if ($wigth>=580&&$wigth<=600)
+		{
+			//на всякий случай удаляем новый фильтр чтоб не было дублей
+			//delFilter($id, 288, 3502);
+			//создаем новый фильтр в товаре
+			insFilter($id, 288, 3502);
+			$nofilter=false;
+		}
+		if ($wigth>600)
+		{
+			//на всякий случай удаляем новый фильтр чтоб не было дублей
+			//delFilter($id, 288, 3503);
+			//создаем новый фильтр в товаре
+			insFilter($id, 288, 3503);
+			$nofilter=false;
+		}
+		if ($nofilter)
+		{
+			$no_filters[]=$id;
+		}
+	}
+	echo "<pre>";
+	print_r($no_filters);
+	echo "</pre>";
+	
+
 ?>
 
