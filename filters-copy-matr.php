@@ -413,8 +413,67 @@ class CopyFilters
 		}
 	}
 	
+	public function test()
+	{
+		$goods=$this->getGoodsByCategory(14);
+		foreach ($goods as $good)
+		{
+			$id=$good['goods_id'];
+			$filters=$this->getFeatures($id);
+			//var_dump($id);
+			$f_id=null;
+			foreach ($features as $feature)
+			{
+				$f_id[]=$feature['feature_id'];
+			}
+			if (!in_array(276,$f_id))
+			{
+				echo "В товаре с ид=$id не проставлен размер!<br>";
+			}
+			if (!in_array(277,$f_id))
+			{
+				echo "В товаре с ид=$id не проставлена высота!<br>";
+			}
+			if (!in_array(278,$f_id))
+			{
+				echo "В товаре с ид=$id не проставлена нагрузка на место!<br>";
+			}
+			if (!in_array(379,$f_id))
+			{
+				echo "В товаре с ид=$id не проставлено количество мест!<br>";
+			}
+			if (!in_array(280,$f_id))
+			{
+				echo "В товаре с ид=$id не фильтр тип матраса!<br>";
+			}
+			if (!in_array(281,$f_id))
+			{
+				echo "В товаре с ид=$id не фильтр тип пружины!<br>";
+			}
+			if (!in_array(282,$f_id))
+			{
+				echo "В товаре с ид=$id не фильтр жесткость!<br>";
+			}
+			if (!in_array(283,$f_id))
+			{
+				echo "В товаре с ид=$id не фильтр наполнение!<br>";
+			}
+			if (!in_array(284,$f_id))
+			{
+				echo "В товаре с ид=$id не фильтр особенности!<br>";
+			}
+			if (!in_array(285,$f_id))
+			{
+				echo "В товаре с ид=$id не фильтр По назначению!<br>";
+			}
+			echo "<br><br>";
+			//break;
+			
+		}
+	}
 	
 	
 }
 $test=new CopyFilters();
-$test->copyFiltersMatr(14);
+//$test->copyFiltersMatr(14);
+$test->test();
