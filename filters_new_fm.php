@@ -451,6 +451,8 @@ echo "12 done <br>";
 //setFilters(14);
 //setFilters(1);
 
+setFilters(7);
+
 function setFilters($category_id)
 {
 	$goods=getGoods($category_id);
@@ -3396,36 +3398,36 @@ function setFilters($category_id)
 							//удаляем старый фильтр
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 378, 3565);
+							delFilter($id, 374, 3370);
 							//создаем новый фильтр в товаре
-							insFilter($id, 378, 3565);
+							insFilter($id, 374, 3370);
 						}
 						if ($feature_id==16&&$value_id==699)
 						{
 							//удаляем старый фильтр
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 378, 3568);
+							delFilter($id, 374, 3371);
 							//создаем новый фильтр в товаре
-							insFilter($id, 378, 3568);
+							insFilter($id, 374, 3371);
 						}
 						if ($feature_id==16&&$value_id==697)
 						{
 							//удаляем старый фильтр
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 378, 3567);
+							delFilter($id, 374, 3373);
 							//создаем новый фильтр в товаре
-							insFilter($id, 378, 3567);
+							insFilter($id, 374, 3373);
 						}
 						if ($feature_id==16&&$value_id==700)
 						{
 							//удаляем старый фильтр
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 378, 3567);
+							delFilter($id, 374, 3373);
 							//создаем новый фильтр в товаре
-							insFilter($id, 378, 3567);
+							insFilter($id, 374, 3373);
 						}
 						
 						if ($feature_id==90&&$value_id==814)
@@ -3489,18 +3491,18 @@ function setFilters($category_id)
 							//удаляем старый фильтр
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 379, 3840);
+							delFilter($id, 375, 3825);
 							//создаем новый фильтр в товаре
-							insFilter($id, 379, 3840);
+							insFilter($id, 379, 3825);
 						}
 						if ($feature_id==198&&$value_id==2952)
 						{
 							//удаляем старый фильтр
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 379, 3842);
+							delFilter($id, 375, 3827);
 							//создаем новый фильтр в товаре
-							insFilter($id, 379, 3842);
+							insFilter($id, 375, 3827);
 						}
 						
 						if ($feature_id==19&&$value_id==732)
@@ -3508,36 +3510,36 @@ function setFilters($category_id)
 							//удаляем старый фильтр
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 380, 3793);
+							delFilter($id, 376, 3746);
 							//создаем новый фильтр в товаре
-							insFilter($id, 380, 3793);
+							insFilter($id, 376, 3746);
 						}
 						if ($feature_id==19&&$value_id==728)
 						{
 							//удаляем старый фильтр
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 380, 3550);
+							delFilter($id, 376, 3743);
 							//создаем новый фильтр в товаре
-							insFilter($id, 380, 3550);
+							insFilter($id, 376, 3743);
 						}
 						if ($feature_id==19&&$value_id==734)
 						{
 							//удаляем старый фильтр
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 380, 3550);
+							delFilter($id, 376, 3743);
 							//создаем новый фильтр в товаре
-							insFilter($id, 380, 3550);
+							insFilter($id, 376, 3743);
 						}
 						if ($feature_id==19&&$value_id==738)
 						{
 							//удаляем старый фильтр
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 380, 3811);
+							delFilter($id, 376, 3747);
 							//создаем новый фильтр в товаре
-							insFilter($id, 380, 3811);
+							insFilter($id, 376, 3747);
 						}
 						
 						if ($feature_id==128&&$value_id==3129)
@@ -3545,18 +3547,18 @@ function setFilters($category_id)
 							//удаляем старый фильтр
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 382, 3843);
+							delFilter($id, 377, 3828);
 							//создаем новый фильтр в товаре
-							insFilter($id, 382, 3843);
+							insFilter($id, 377, 3828);
 						}
 						if ($feature_id==128&&$value_id==3083)
 						{
 							//удаляем старый фильтр
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 382, 3843);
+							delFilter($id, 377, 3828);
 							//создаем новый фильтр в товаре
-							insFilter($id, 382, 3843);
+							insFilter($id, 377, 3828);
 						}
 						
 						if ($feature_id==154&&$value_id==3135)
@@ -3564,18 +3566,18 @@ function setFilters($category_id)
 							//удаляем старый фильтр
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 381, 3595);
+							delFilter($id, 378, 3831);
 							//создаем новый фильтр в товаре
-							insFilter($id, 381, 3595);
+							insFilter($id, 378, 3831);
 						}
 						if ($feature_id==154&&$value_id==3136)
 						{
 							//удаляем старый фильтр
 							//delFilter($id, $feature_id, $value_id);
 							//на всякий случай удаляем новый фильтр чтоб не было дублей
-							delFilter($id, 381, 3597);
+							delFilter($id, 378, 3832);
 							//создаем новый фильтр в товаре
-							insFilter($id, 381, 3597);
+							insFilter($id, 378, 3832);
 						}
 						
 						if ($feature_id==18&&$value_id==232)
@@ -4525,8 +4527,8 @@ function setFilters($category_id)
 
 //!!!!раскоментить!
 
-$goods=getGoods(9);
-$goods=getParrentGoods($goods);
+//$goods=getGoods(9);
+//$goods=getParrentGoods($goods);
 //var_dump($goods);
 //echo "<pre>";
 //print_r ($goods);
@@ -4540,10 +4542,7 @@ foreach ($goods as $good)
 	//break;
 	
 }*/
-
-
-
-
+/*
 if (is_array($goods))
 {
 	foreach ($goods as $good)
@@ -4558,9 +4557,9 @@ if (is_array($goods))
 		$sizes=getSize($id);
 		$sizes=$sizes[0];
 		//	var_dump($sizes);
-			$width=$sizes['goods_width'];
-			$len=$sizes['goods_length'];
-			$height=$sizes['goods_height'];
+		$width=$sizes['goods_width'];
+		$len=$sizes['goods_length'];
+		$height=$sizes['goods_height'];
 		
 		foreach ($filters as $filter)
 		{
@@ -6285,7 +6284,7 @@ if (is_array($goods))
 			*/
 						
 			/*шкафы-купе 9*/
-			
+			/*
 			if ($feature_id==221&&$value_id==3001)
 			{
 				//delFilter($id, $feature_id, $value_id);
@@ -6577,13 +6576,13 @@ if (is_array($goods))
 			}
 			
 			
-			
+			*/
 			
 			//break;
 			
 			
-		}
-		
+		//}
+		/*
 		if ($len>0&&$len<1000)
 			{
 				//на всякий случай удаляем новый фильтр чтоб не было дублей
@@ -6691,7 +6690,8 @@ if (is_array($goods))
 				insFilter($id, 287, 3498);
 			}
 			
-			
+			*/
+			/*
 			if ($width>0&&$width<430)
 			{
 				//на всякий случай удаляем новый фильтр чтоб не было дублей
@@ -6713,7 +6713,7 @@ if (is_array($goods))
 				//создаем новый фильтр в товаре
 				insFilter($id, 288, 3501);
 			}
-			if ($width>=580&&$width<600)
+			if ($width>=580&&$width<=600)
 			{
 				//на всякий случай удаляем новый фильтр чтоб не было дублей
 				delFilter($id, 288, 3502);
@@ -6729,15 +6729,15 @@ if (is_array($goods))
 			}
 		
 		
-		$filters=getFeatures($id);
-		echo "New filters for $id:"; 
-		echo "<pre>";
-		print_r ($filters);
-		echo "</pre>";
+		//$filters=getFeatures($id);
+		//echo "New filters for $id:"; 
+		//echo "<pre>";
+		//print_r ($filters);
+		//echo "</pre>";
 	    //break;
 	}
 }
 else
 {
 	echo "No goods!<br>";
-}
+}*/
