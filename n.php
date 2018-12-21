@@ -2299,7 +2299,7 @@ if ($res=mysqli_query($db_connect,$query))
 	//corners
 	setNoActionByFactory(186);
 	*/
-	
+	/*
 	function delFeature($goods_id,$feature_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -2424,6 +2424,15 @@ if ($res=mysqli_query($db_connect,$query))
 	echo "<pre>";
 	print_r($no_filters);
 	echo "</pre>";
+	*/
+	/*
+	$db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+	$query="UPDATE  goodshastissue SET  goodshastissue_active=0 WHERE tissue_id=150 OR  tissue_id=151 OR tissue_id=152";
+	echo "$query<br>";
+	mysqli_query($db_connect,$query);
+	mysqli_close($db_connect);
+	*/
+	
 	
 
 ?>
