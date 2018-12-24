@@ -536,4 +536,4 @@ $test=new TestFeatures();
 //$test->setFeaturestoSHK(9);
 //$test->testSizeFeature(9);
 
-$test->test(13);
+$test->test(124);
