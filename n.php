@@ -2433,6 +2433,113 @@ if ($res=mysqli_query($db_connect,$query))
 	mysqli_close($db_connect);
 	*/
 	
+	function getGoodsByFactory()
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_id from goodshasfeature WHERE feature_id=232 AND goodshasfeature_valueid=27";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		return $goods;
+	}
+	
+	function getGoodsByFactoryDDN()
+	{
+		$db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+		$query="select goods_id from goodshasfeature WHERE feature_id=14 AND goodshasfeature_valueid=91";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		return $goods;
+	}
+	
+	function hasPrice($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_id from goodshaslang WHERE goodshaslang_content like '%грн%' AND goods_id=$id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		if (is_array($goods))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	/*
+	$goods=getGoodsByFactory();
+	foreach ($goods as $good)
+	{
+		$id=$good['goods_id'];
+		if (hasPrice($id))
+		{
+			echo "$id<br>";
+		}
+	}
+	*/
+	
+	function setPop($id,$pop)
+	{
+		$db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+		$query="UPDATE  goods SET  goods_popular=$pop WHERE goods_id=$id";
+		echo "$query<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+	
+	function setPopDDN($id,$pop)
+	{
+		$db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
+		$query="UPDATE  goods SET  goods_popular=$pop WHERE goods_id=$id";
+		echo "DDN $query<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+	
+	$goods=getGoodsByFactory();
+	foreach ($goods as $good)
+	{
+		$id=$good['goods_id'];
+		setPop($id,0);
+	}
+	
+	$goods=getGoodsByFactoryDDN();
+	var_dump($goods);
+	foreach ($goods as $good)
+	{
+		$id=$good['goods_id'];
+		setPopDDN($id,0);
+	}
 	
 
 ?>
