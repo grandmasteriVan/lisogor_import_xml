@@ -8,18 +8,18 @@ define ("host","localhost");
 /**
  * database username
  */
-define ("user", "root");
-//define ("user", "newfm");
+//define ("user", "root");
+define ("user", "newfm");
 /**
  * database password
  */
-define ("pass", "");
-//define ("pass", "N0r7F8g6");
+//define ("pass", "");
+define ("pass", "N0r7F8g6");
 /**
  * database name
  */
-define ("db", "fm_new");
-//define ("db", "newfm");
+//define ("db", "fm_new");
+define ("db", "newfm");
 
 class addComponents
 {
@@ -201,7 +201,7 @@ class addComponents
 			$id=$good;
 			$text=$this->getArticle1CName($id);
 			//var_dump($text);
-			echo "$id= $text<br>";
+			//echo "$id= $text<br>";
 		}
 		echo "<br><br>";
 		$goods=$this->getGoodsByCatAndFactory(57,86);
@@ -211,7 +211,7 @@ class addComponents
 			{
 				$id=$good;
 				$name=$this->getGoodsName($id);
-				echo "$name<br>";
+				echo "<b>$name</b><br>";
 				if (stripos($name,"Модест")!=false)
 				{
 					echo "$id=$name<br>";
@@ -264,6 +264,10 @@ class addComponents
 					}
 				}
 			}
+		}
+		else
+		{
+			echo "No goods<br>";
 		}
 	}
 }
