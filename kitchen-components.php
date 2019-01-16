@@ -135,7 +135,7 @@ class addComponents
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="INSERT INTO component (goods_id, component_child) VALUES ($good_id,$comp_id)";
 		echo "$query<br><br>";
-		mysqli_query($db_connect,$query);
+		//mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
 	
@@ -224,7 +224,11 @@ class addComponents
 							echo "$comp_id= $text<br>";
 							if ($this->isPart($id,$comp_id))
 							{
-								echo "$comp_id уже есть частью $id<br>";
+								echo "$comp_id уже есть частью $id<br>";		
+							}
+							else
+							{
+								$this->insComponent($comp_id,$id);
 							}
 						}
 					}
@@ -241,7 +245,11 @@ class addComponents
 							echo "$comp_id= $text<br>";
 							if ($this->isPart($id,$comp_id))
 							{
-								echo "$comp_id уже есть частью $id<br>";
+								echo "$comp_id уже есть частью $id<br>";		
+							}
+							else
+							{
+								$this->insComponent($comp_id,$id);
 							}
 						}
 					}
@@ -258,11 +266,143 @@ class addComponents
 							echo "$comp_id= $text<br>";
 							if ($this->isPart($id,$comp_id))
 							{
-								echo "$comp_id уже есть частью $id<br>";
+								echo "$comp_id уже есть частью $id<br>";		
+							}
+							else
+							{
+								$this->insComponent($comp_id,$id);
 							}
 						}
 					}
 				}
+				if (stripos($name,"Квадрис")!=false)
+				{
+					echo "$id=$name<br>";
+					foreach ($goods_comp as $good_comp)
+					{
+						$comp_id=$good_comp;
+						$text=$this->getArticle1CName($comp_id);
+						if (stripos(" ".$text,"Квадрис")!=false)
+						{
+							echo "$comp_id= $text<br>";
+							if ($this->isPart($id,$comp_id))
+							{
+								echo "$comp_id уже есть частью $id<br>";		
+							}
+							else
+							{
+								$this->insComponent($comp_id,$id);
+							}
+						}
+					}
+				}
+				if (stripos($name,"Горизонт")!=false)
+				{
+					echo "$id=$name<br>";
+					foreach ($goods_comp as $good_comp)
+					{
+						$comp_id=$good_comp;
+						$text=$this->getArticle1CName($comp_id);
+						if (stripos(" ".$text,"Горизонт")!=false)
+						{
+							echo "$comp_id= $text<br>";
+							if ($this->isPart($id,$comp_id))
+							{
+								echo "$comp_id уже есть частью $id<br>";		
+							}
+							else
+							{
+								$this->insComponent($comp_id,$id);
+							}
+						}
+					}
+				}
+				if (stripos($name,"Платинум")!=false)
+				{
+					echo "$id=$name<br>";
+					foreach ($goods_comp as $good_comp)
+					{
+						$comp_id=$good_comp;
+						$text=$this->getArticle1CName($comp_id);
+						if (stripos(" ".$text,"Платинум")!=false)
+						{
+							echo "$comp_id= $text<br>";
+							if ($this->isPart($id,$comp_id))
+							{
+								echo "$comp_id уже есть частью $id<br>";		
+							}
+							else
+							{
+								$this->insComponent($comp_id,$id);
+							}
+						}
+					}
+				}
+				if (stripos($name,"Санрайз")!=false)
+				{
+					echo "$id=$name<br>";
+					foreach ($goods_comp as $good_comp)
+					{
+						$comp_id=$good_comp;
+						$text=$this->getArticle1CName($comp_id);
+						if (stripos(" ".$text,"Санрайз")!=false)
+						{
+							echo "$comp_id= $text<br>";
+							if ($this->isPart($id,$comp_id))
+							{
+								echo "$comp_id уже есть частью $id<br>";		
+							}
+							else
+							{
+								$this->insComponent($comp_id,$id);
+							}
+						}
+					}
+				}
+				if (stripos($name,"Фрейм")!=false)
+				{
+					echo "$id=$name<br>";
+					foreach ($goods_comp as $good_comp)
+					{
+						$comp_id=$good_comp;
+						$text=$this->getArticle1CName($comp_id);
+						if (stripos(" ".$text,"Фрейм")!=false)
+						{
+							echo "$comp_id= $text<br>";
+							if ($this->isPart($id,$comp_id))
+							{
+								echo "$comp_id уже есть частью $id<br>";		
+							}
+							else
+							{
+								$this->insComponent($comp_id,$id);
+							}
+						}
+					}
+				}
+				if (stripos($name,"Элит")!=false)
+				{
+					echo "$id=$name<br>";
+					foreach ($goods_comp as $good_comp)
+					{
+						$comp_id=$good_comp;
+						$text=$this->getArticle1CName($comp_id);
+						if (stripos(" ".$text,"Элит")!=false)
+						{
+							echo "$comp_id= $text<br>";
+							if ($this->isPart($id,$comp_id))
+							{
+								echo "$comp_id уже есть частью $id<br>";		
+							}
+							else
+							{
+								$this->insComponent($comp_id,$id);
+							}
+						}
+					}
+				}
+
+				//break;
 			}
 		}
 		else
@@ -270,7 +410,47 @@ class addComponents
 			echo "No goods<br>";
 		}
 	}
+
+	private function countElem($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select component_id from component WHERE goods_id=$id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$elements[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		if (is_array($elements))
+		{
+			return count($elements);
+		}
+	}
+
+	public function testCount()
+	{
+		$goods=$this->getGoodsByCatAndFactory(57,86);
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$id=$good;
+				$count_elem=$this->countElem($id);
+				if (is_null($count_elem))
+				{
+					$count_elem=0;
+				}
+				echo "$id  имеет $count_elem составных<br>";
+			}
+		}
+	}
 }
 
 $test=new addComponents();
-$test->test();
+//$test->test();
+$test->testCount();
