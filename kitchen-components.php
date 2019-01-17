@@ -135,7 +135,7 @@ class addComponents
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="INSERT INTO component (goods_id, component_child) VALUES ($good_id,$comp_id)";
 		echo "$query<br><br>";
-		//mysqli_query($db_connect,$query);
+		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
 	
