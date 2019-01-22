@@ -36,7 +36,7 @@ class checkSizes
         //echo gettype($this->need_string);
        //echo "$sizes $cat_id";
         $this->cat_id=$cat_id;
-        $this->need_string=$sizes;
+        $this->need_string=" ".$sizes;
         //$this->$cat_id=$_GET["cat_id"];
         //$this->$need_string=$_GET['sizes'];
     }
@@ -126,6 +126,35 @@ class checkSizes
                     if (!($sizes[0]['goods_height']>0))
                     {
                         $size_string.="нет высоты  ";
+                    }
+                }
+
+                if (!strrpos($this->need_string,"width"))
+                {
+                    if ($sizes[0]['goods_width']>0)
+                    {
+                        $size_string.="но есть ширина ";
+                    }
+                }
+                if (!strrpos($this->need_string,"length"))
+                {
+                    if ($sizes[0]['goods_length']>0)
+                    {
+                        $size_string.="но есть длина ";
+                    }
+                }
+                if (!strrpos($this->need_string,"depth"))
+                {
+                    if ($sizes[0]['goods_depth']>0)
+                    {
+                        $size_string.="но есть глубина ";
+                    }
+                }
+                if (!strrpos($this->need_string,"height"))
+                {
+                    if ($sizes[0]['goods_height']>0)
+                    {
+                        $size_string.="но есть высота ";
                     }
                 }
                 //var_dump($sizes);
