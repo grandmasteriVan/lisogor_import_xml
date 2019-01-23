@@ -21,13 +21,26 @@ define ("pass", "N0r7F8g6");
 //define ("db", "fm_new");
 define ("db", "newfm");
 
+/**
+ * Class checkSizes
+ */
 class checkSizes
 {
-    
+
+    /**
+     * @var int айди категории
+     */
     private $cat_id = 1;
 
+    /**
+     * @var string размерности, которые проверяме
+     */
     public $need_string = 'ff';
-    
+
+    /**
+     * Записываем получаемые значения в поля лкасса
+     * checkSizes constructor.
+     */
     function __construct()
     {
         //var_dump ($_GET);
@@ -41,8 +54,12 @@ class checkSizes
         //$this->$need_string=$_GET['sizes'];
     }
 
-    
-    
+
+    /**
+     * получаем размеры товаров
+     * @param $id int ид товара
+     * @return array|null массив с размерами товара
+     */
     private function getSizes($id)
     {
        
@@ -71,6 +88,11 @@ class checkSizes
 	
     }
 
+    /**
+     * получаем список ид товаров в категрии
+     * @param $cat_id int айди категории
+     * @return array массив с ид товаров принадлежщих данной категории
+     */
     private function getGoodsByCategory($cat_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -88,7 +110,10 @@ class checkSizes
 		}
 		return $goods_all;
     }
-    
+
+    /**
+     * проверяем размерности товаров по категориям
+     */
     public function test()
     {
         $goods=$this->getGoodsByCategory($this->cat_id);
@@ -174,6 +199,6 @@ class checkSizes
 }
 
 $test = new checkSizes();
-echo "шкафы распашные:<br>";
+//echo "шкафы распашные:<br>";
 $test->test();
 //https://fayni-mebli.com/check-sizes.php?cat_id=10&sizes=width,height,depth
