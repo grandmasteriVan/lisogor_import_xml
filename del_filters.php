@@ -23,6 +23,11 @@ define ("db", "newfm");
 
 class CheckByCategory
 {
+    /**
+     * выбираем товары, принадлижащие одной категории
+     * @param $cat_id int айди категории
+     * @return array масссив ид товаров
+     */
     private function getGoodsByCategory($cat_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -41,7 +46,12 @@ class CheckByCategory
         mysqli_close($db_connect);
 		return $goods_all;
     }
-    
+
+    /**
+     * выбираем количество категорий, к которым принадлижит данный товар
+     * @param $id ид товара
+     * @return int количество категорий, которое имеет товар
+     */
     private function getCategoryForGood($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -61,6 +71,10 @@ class CheckByCategory
 		return count($goods_all);
     }
 
+    /**
+     * выводим все товары из данной категории, которые имеют больше одной категории
+     * @param $cat_id int айди категории
+     */
     public function test($cat_id)
     {
         $goods=$this->getGoodsByCategory($cat_id);
@@ -80,6 +94,11 @@ class CheckByCategory
 
 class DellOldFilters
 {
+    /**
+     * выбираем товары, принадлижащие одной категории
+     * @param $cat_id int айди категории
+     * @return array масссив ид товаров
+     */
     private function getGoodsByCategory($cat_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -99,7 +118,12 @@ class DellOldFilters
 		return $goods_all;
     }
 
-    private function delFeature($goods_id,$feature_id)
+    /**
+     * удаляем все значения определенного фильтра из товара
+     * @param $goods_id int айди товара
+     * @param $feature_id int айди фичи (фильтра)
+     */
+    private function delFeature($goods_id, $feature_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="DELETE FROM goodshasfeature WHERE goods_id=$goods_id AND feature_id=$feature_id";
@@ -110,6 +134,11 @@ class DellOldFilters
     }
 
 
+    /**
+     * получаем список фильтров товара
+     * @param $good_id int айди товара
+     * @return array|null массив айди фичей товара
+     */
     private function getFeatures($good_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -136,6 +165,10 @@ class DellOldFilters
         }
     }
 
+    /**
+     * удаляем старые фильтры по категориям
+     * @param $cat_id int ид категории, в которой надо удалить старые фильтры
+     */
     public function delFilters($cat_id)
     {
         $goods=$this->getGoodsByCategory($cat_id);
