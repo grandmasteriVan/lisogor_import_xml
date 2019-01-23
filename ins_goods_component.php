@@ -22,9 +22,17 @@ define ("pass", "N0r7F8g6");
 //define ("db", "fm_new");
 define ("db", "newfm");
 
+/**
+ * Class insGoodsComponent
+ */
 class insGoodsComponent
 {
-	private function getFeatures($good_id)
+    /**
+     * получаем массив со всеми фильтрами товара
+     * @param $good_id int айди товара
+     * @return array|null массив со всеми фильтрами и их значениями заданного товара
+     */
+    private function getFeatures($good_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="select goodshasfeature_valueid, feature_id from goodshasfeature WHERE goods_id=$good_id";
@@ -49,8 +57,12 @@ class insGoodsComponent
 			return null;
 		}
 	}
-	
-	private function delComponents ($id)
+
+    /**
+     * удаляем все составные для определенного товара
+     * @param $id int айди товара? для которого надо удалить все составные
+     */
+    private function delComponents ($id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="DELETE FROM component WHERE goods_id=$id";
@@ -58,8 +70,14 @@ class insGoodsComponent
 		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
-	
-	private function getGoods($cat_id, $f_id)
+
+    /**
+     * Получаем все товараы определенной фабрики которые находятся в поределенном раздле
+     * @param $cat_id int айди категории
+     * @param $f_id int айди фабрики
+     * @return array|null массив с ид товаров которые находятся в определенной категории и принадлежжат определенной фабрике
+     */
+    private function getGoods($cat_id, $f_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="select goods_id from goodshascategory WHERE category_id=$cat_id";
@@ -106,8 +124,13 @@ class insGoodsComponent
 			return null;
 		}
 	}
-	
-	private function getSize($id)
+
+    /**
+     * получаем размеры товаров
+     * @param $id int ид товара
+     * @return array|null массив с размерами товара
+     */
+    private function getSize($id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="select goods_width, goods_height, goods_depth from goods WHERE goods_id=$id";
@@ -131,11 +154,16 @@ class insGoodsComponent
 			return null;
 		}
 	}
-	
-	private function getName($id)
+
+    /**
+     * получаем имя njdfhf
+     * @param $id int ид товара
+     * @return null|string имя товара
+     */
+    private function getName($id, $lang=1)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
-		$query="SELECT goodshaslang_name FROM goodshaslang WHERE goods_id=$id AND lang_id=1";
+		$query="SELECT goodshaslang_name FROM goodshaslang WHERE goods_id=$id AND lang_id=$lang";
 		if ($res=mysqli_query($db_connect,$query))
 		{
 				while ($row = mysqli_fetch_assoc($res))
@@ -160,8 +188,13 @@ class insGoodsComponent
 			return null;
 		}
 	}
-	
-	private function insComponent ($comp_id,$good_id)
+
+    /**
+     * вставляем составную часть (компонент) в товар
+     * @param $comp_id int ид компонента, который надо вставить в товар
+     * @param $good_id int товар, в который вставляем компонент
+     */
+    private function insComponent ($comp_id, $good_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="INSERT INTO component (goods_id, component_child) VALUES ($good_id,$comp_id)";
@@ -169,8 +202,13 @@ class insGoodsComponent
 		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
-	
-	public function insGoodComp($cat_id, $f_id)
+
+    /**
+     * вставляем составные части в шкафы купе
+     * @param $cat_id int ид категории
+     * @param $f_id int ид фабрики
+     */
+    public function insGoodComp($cat_id, $f_id)
 	{
 		$goods=$this->getGoods($cat_id, $f_id);
 		if (is_array($goods))
