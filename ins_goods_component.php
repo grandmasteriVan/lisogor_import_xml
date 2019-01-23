@@ -21,7 +21,6 @@ define ("pass", "N0r7F8g6");
  */
 //define ("db", "fm_new");
 define ("db", "newfm");
-
 /**
  * Class insGoodsComponent
  */
@@ -57,7 +56,6 @@ class insGoodsComponent
 			return null;
 		}
 	}
-
     /**
      * удаляем все составные для определенного товара
      * @param $id int айди товара? для которого надо удалить все составные
@@ -70,7 +68,6 @@ class insGoodsComponent
 		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
-
     /**
      * Получаем все товараы определенной фабрики которые находятся в поределенном раздле
      * @param $cat_id int айди категории
@@ -124,7 +121,6 @@ class insGoodsComponent
 			return null;
 		}
 	}
-
     /**
      * получаем размеры товаров
      * @param $id int ид товара
@@ -154,7 +150,6 @@ class insGoodsComponent
 			return null;
 		}
 	}
-
     /**
      * получаем имя njdfhf
      * @param $id int ид товара
@@ -188,7 +183,6 @@ class insGoodsComponent
 			return null;
 		}
 	}
-
     /**
      * вставляем составную часть (компонент) в товар
      * @param $comp_id int ид компонента, который надо вставить в товар
@@ -202,7 +196,6 @@ class insGoodsComponent
 		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
-
     /**
      * вставляем составные части в шкафы купе
      * @param $cat_id int ид категории
@@ -371,6 +364,5 @@ class insGoodsComponent
 	}
 	
 }
-
 $test=new insGoodsComponent();
 $test->insGoodComp(9, 93);

@@ -20,23 +20,19 @@ define ("pass", "N0r7F8g6");
  */
 //define ("db", "fm_new");
 define ("db", "newfm");
-
 /**
  * Class checkSizes
  */
 class checkSizes
 {
-
     /**
      * @var int айди категории
      */
     private $cat_id = 1;
-
     /**
      * @var string размерности, которые проверяме
      */
     public $need_string = 'ff';
-
     /**
      * Записываем получаемые значения в поля лкасса
      * checkSizes constructor.
@@ -53,8 +49,6 @@ class checkSizes
         //$this->$cat_id=$_GET["cat_id"];
         //$this->$need_string=$_GET['sizes'];
     }
-
-
     /**
      * получаем размеры товаров
      * @param $id int ид товара
@@ -87,7 +81,6 @@ class checkSizes
 		}
 	
     }
-
     /**
      * получаем список ид товаров в категрии
      * @param $cat_id int айди категории
@@ -110,7 +103,6 @@ class checkSizes
 		}
 		return $goods_all;
     }
-
     /**
      * проверяем размерности товаров по категориям
      */
@@ -153,7 +145,6 @@ class checkSizes
                         $size_string.="нет высоты  ";
                     }
                 }
-
                 if (!strrpos($this->need_string,"width"))
                 {
                     if ($sizes[0]['goods_width']>0)
@@ -186,7 +177,6 @@ class checkSizes
                 //echo"<br><br>";
                 //echo "$size_string";
                // break;
-
                 if ($size_string!="")
                 {
                     $size_string="у товара с ид=$id ".$size_string;
@@ -195,9 +185,7 @@ class checkSizes
             }
         }
     }
-
 }
-
 $test = new checkSizes();
 //echo "шкафы распашные:<br>";
 $test->test();
