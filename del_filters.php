@@ -53,7 +53,7 @@ class CheckByCategory
     private function getCategoryForGood($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-		$query="select distinct category_id from goodshascategory WHERE goods_id=$id";
+		$query="select category_id from goodshascategory WHERE goods_id=$id";
 		if ($res=mysqli_query($db_connect,$query))
 		{
 				while ($row = mysqli_fetch_assoc($res))
@@ -181,7 +181,7 @@ class DellOldFilters
                         $feature_id=$feature['feature_id'];
                         if ($cat_id==9)
                         {
-                            if ($feature_id==221||$feature_id==222||$feature_id==223||$feature_id==16||$feature_id==15||$feature_id==32||$feature_id==6||$feature_id==198||$feature_id==154||$feature_id==18)
+                            if ($feature_id==221||$feature_id==222||$feature_id==223||$feature_id==16||$feature_id==15||$feature_id==32||$feature_id==6||$feature_id==198||$feature_id==154||$feature_id==18||$feature_id==16)
                             {
                                 $this->delFeature($id,$feature_id);
                             }
