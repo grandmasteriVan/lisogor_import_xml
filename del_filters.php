@@ -20,7 +20,6 @@ define ("pass", "N0r7F8g6");
  */
 //define ("db", "new_fm");
 define ("db", "newfm");
-
 class CheckByCategory
 {
     /**
@@ -46,7 +45,6 @@ class CheckByCategory
         mysqli_close($db_connect);
 		return $goods_all;
     }
-
     /**
      * выбираем количество категорий, к которым принадлижит данный товар
      * @param $id ид товара
@@ -55,7 +53,7 @@ class CheckByCategory
     private function getCategoryForGood($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-		$query="select category_id from goodshascategory WHERE goods_id=$id";
+		$query="select distinct category_id from goodshascategory WHERE goods_id=$id";
 		if ($res=mysqli_query($db_connect,$query))
 		{
 				while ($row = mysqli_fetch_assoc($res))
@@ -70,7 +68,6 @@ class CheckByCategory
         mysqli_close($db_connect);
 		return count($goods_all);
     }
-
     /**
      * выводим все товары из данной категории, которые имеют больше одной категории
      * @param $cat_id int айди категории
@@ -91,7 +88,6 @@ class CheckByCategory
         }
     }
 }
-
 class DellOldFilters
 {
     /**
@@ -117,7 +113,6 @@ class DellOldFilters
         mysqli_close($db_connect);
 		return $goods_all;
     }
-
     /**
      * удаляем все значения определенного фильтра из товара
      * @param $goods_id int айди товара
@@ -130,10 +125,7 @@ class DellOldFilters
         echo "$query<br>";
         mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
-
     }
-
-
     /**
      * получаем список фильтров товара
      * @param $good_id int айди товара
@@ -164,7 +156,6 @@ class DellOldFilters
             return null;
         }
     }
-
     /**
      * удаляем старые фильтры по категориям
      * @param $cat_id int ид категории, в которой надо удалить старые фильтры
@@ -172,34 +163,44 @@ class DellOldFilters
     public function delFilters($cat_id)
     {
         $goods=$this->getGoodsByCategory($cat_id);
+        //var_dump($goods);
         if (is_array($goods))
         {
             foreach ($goods as $good)
             {
                 $id=$good['goods_id'];
                 $features=$this->getFeatures($id);
+                if ($id==27727)
+                {
+                    var_dump ($features);
+                }
                 if (is_array($features))
                 {
                     foreach ($features as $feature)
                     {
                         $feature_id=$feature['feature_id'];
-                        if ($feature_id==221||$feature_id==222||$feature_id==223||$feature_id==16||$feature_id==15||$feature_id==32||$feature_id==6||$feature_id==198||$feature_id==154||$feature_id==18)
+                        if ($cat_id==9)
                         {
-                            $this->delFeature($id,$feature_id);
+                            if ($feature_id==221||$feature_id==222||$feature_id==223||$feature_id==16||$feature_id==15||$feature_id==32||$feature_id==6||$feature_id==198||$feature_id==154||$feature_id==18)
+                            {
+                                $this->delFeature($id,$feature_id);
+                            }
                         }
+                        if ($cat_id==13)
+                        {
+                            if ($feature_id==227||$feature_id==47||$feature_id==50||$feature_id==6||$feature_id==49||$feature_id==48||$feature_id==17||$feature_id==18||$feature_id==50||$feature_id==48)
+                            {
+                                $this->delFeature($id,$feature_id);
+                            }
+                        }
+                        
                     }
                 }
-
             }
         }
     }
-
-
-
 }
-
-//$test=new CheckByCategory();
-//$test->test(9);
-
+$test=new CheckByCategory();
+$test->test(13);
 $test1=new DellOldFilters();
 $test1->delFilters(9);

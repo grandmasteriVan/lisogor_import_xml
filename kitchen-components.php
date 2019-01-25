@@ -20,7 +20,6 @@ define ("pass", "N0r7F8g6");
  */
 //define ("db", "fm_new");
 define ("db", "newfm");
-
 class addComponents
 {
     /**
@@ -83,7 +82,6 @@ class addComponents
 			return null;
 		}
 	}
-
     /**
      * получаем массив фичей для определенного товара
      * @param $good_id int ид товара
@@ -114,7 +112,6 @@ class addComponents
 			return null;
 		}
 	}
-
     /**
      * Получаем имя товара
      * @param $id int ид товара
@@ -145,7 +142,6 @@ class addComponents
 			return null;
 		}
 	}
-
     /**
      * вставка составной части в основной товар
      * @param $comp_id int ид компонента
@@ -159,7 +155,6 @@ class addComponents
 		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
-
     /**
      * проверяет является ли $comp_id составной частью $good_id
      * @param $good_id int ид основного товара
@@ -191,7 +186,6 @@ class addComponents
 			return true;
 		}
 	}
-
     /**
      * получаем код 1С товара
      * @param $id int ид товара
@@ -222,7 +216,6 @@ class addComponents
 			return null;
 		}
 	}
-
     /**
      *вставляем компоненты в кухни
      */
@@ -254,7 +247,7 @@ class addComponents
 					{
 						$comp_id=$good_comp;
 						$text=$this->getArticle1CName($comp_id);
-						if (stripos(" ".$text,"Модерн")!=false)
+						if (stripos(" ".$text,"Модест")!=false)
 						{
 							echo "$comp_id= $text<br>";
 							if ($this->isPart($id,$comp_id))
@@ -373,14 +366,14 @@ class addComponents
 						}
 					}
 				}
-				if (stripos($name,"Санрайз")!=false)
+				if (stripos($name,"Санрайс")!=false)
 				{
 					echo "$id=$name<br>";
 					foreach ($goods_comp as $good_comp)
 					{
 						$comp_id=$good_comp;
 						$text=$this->getArticle1CName($comp_id);
-						if (stripos(" ".$text,"Санрайз")!=false)
+						if (stripos(" ".$text,"Санрайс")!=false)
 						{
 							echo "$comp_id= $text<br>";
 							if ($this->isPart($id,$comp_id))
@@ -437,6 +430,27 @@ class addComponents
 					}
 				}
 
+				if (stripos($name,"Винтаж")!=false)
+				{
+					echo "$id=$name<br>";
+					foreach ($goods_comp as $good_comp)
+					{
+						$comp_id=$good_comp;
+						$text=$this->getArticle1CName($comp_id);
+						if (stripos(" ".$text,"Винтаж")!=false)
+						{
+							echo "$comp_id= $text<br>";
+							if ($this->isPart($id,$comp_id))
+							{
+								echo "$comp_id уже есть частью $id<br>";		
+							}
+							else
+							{
+								$this->insComponent($comp_id,$id);
+							}
+						}
+					}
+				}
 				//break;
 			}
 		}
@@ -445,7 +459,6 @@ class addComponents
 			echo "No goods<br>";
 		}
 	}
-
     /**
      * возвращаем количество составных частей товара
      * @param $id int ид товара
@@ -471,7 +484,6 @@ class addComponents
 			return count($elements);
 		}
 	}
-
     /**
      * выводим количество составных частей для всех товаров определенной фабрики в определенном разделе
      */
@@ -493,7 +505,6 @@ class addComponents
 		}
 	}
 }
-
 $test=new addComponents();
 //$test->test();
 $test->testCount();
