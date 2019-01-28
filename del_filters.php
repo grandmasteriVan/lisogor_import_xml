@@ -90,7 +90,12 @@ class CheckByCategory
 }
 class DellOldFilters
 {
-    
+    /**
+     * выбираем товары, принадлижащие одной категории и определенной фабрике
+     * @param $cat_id int айди категории
+     * @param $f_id int айди фабрики
+     * @return array масссив ид товаров
+     */
     private function getGoodsByCatAndFactory($cat_id, $f_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -214,6 +219,11 @@ class DellOldFilters
         }
     }
 
+    /**
+     * получаем список фильтров и их значения для товара
+     * @param $good_id int айди товара
+     * @return array|null массив айди фичей и их значения для товара
+     */
     private function getFeaturesVal($good_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -264,6 +274,7 @@ class DellOldFilters
                         $feature_id=$feature['feature_id'];
                         if ($cat_id==9)
                         {
+                            //
                             if ($feature_id==221||$feature_id==222||$feature_id==223||$feature_id==16||$feature_id==15||$feature_id==32||$feature_id==6||$feature_id==198||$feature_id==154||$feature_id==18||$feature_id==16)
                             {
                                 $this->delFeature($id,$feature_id);
@@ -278,6 +289,7 @@ class DellOldFilters
                         }
                         if ($cat_id==1)
                         {
+                            //оставсляем только фильтры из списка
                             if ($feature_id!=232&&$feature_id!=235&&$feature_id!=237&&$feature_id!=238&&$feature_id!=239&&$feature_id!=240&&$feature_id!=241&&$feature_id!=242&&$feature_id!=243&&$feature_id!=244&&$feature_id!=245&&$feature_id!=246&&$feature_id!=247&&$feature_id!=248&&$feature_id!=84&&$feature_id!=85&&$feature_id!=230&&$feature_id!=234)
                             {
                                 $this->delFeature($id,$feature_id);
@@ -289,6 +301,12 @@ class DellOldFilters
             }
         }
     }
+
+    /**
+     * удаляем старые фильтры во всех товарах одной фвбрики в одной каьегории (для ткстов)
+     * @param $cat_id int ид категории, в которой надо удалить старые фильтры
+     *  @param $f_id int ид фабрики, в которой надо удалить старые фильтры
+     */
     public function delFiltersTest($cat_id,$f_id)
     {
         $goods=$this->getGoodsByCatAndFactory($cat_id,$f_id);
