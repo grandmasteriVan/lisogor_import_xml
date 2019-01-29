@@ -2924,7 +2924,7 @@ if ($res=mysqli_query($db_connect,$query))
 	//copyFiltersMatr(14);
 	test()
 	*/
-
+/*
 	function getFeatures($good_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -3017,6 +3017,97 @@ if ($res=mysqli_query($db_connect,$query))
 
 	}
 	mysqli_close($db_connect);
+
+	*/
+
+	function getGoodsByCategory($cat_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_id from goodshascategory WHERE category_id=$cat_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		return $goods_all;
+	}
+
+	function getFeature($good_id,$feature_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goodshasfeature_valueid from goodshasfeature WHERE goods_id=$good_id AND feature_id=$feature_id";
+		//echo "$query<br>";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row["goodshasfeature_valueid"];
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		//var_dump ($goods_all);
+		if (is_array($goods_all))
+		{
+			return $goods_all;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	function is_active($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_noactual,goods_productionout from goods WHERE goods_id=$id";
+		//echo "$query<br>";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		$act=$goods[0]['goods_noactual'];
+		$out=$goods[0]['goods_productionout'];
+		if ($act==1||$out==1)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+	$goods= getGoodsByCategory(14);
+	foreach ($goods as $good)
+	{
+		$id=$good['goods_id'];
+		$features=getFeature($id,276);
+		if (count($features)<1&&is_active($id))
+		{
+			//var_dump($features);
+			echo "$id<br>";
+			//break;
+		}
+	}
+
+
 
 ?>
 
