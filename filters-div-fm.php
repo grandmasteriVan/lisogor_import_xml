@@ -23,7 +23,13 @@ define ("db", "newfm");
 
 class FiltersDiv
 {
-    private function delFeatureVal($goods_id,$f_id,$val_id)
+    /**
+     * удаляет определенное значение фильтра для товара
+     * @param $goods_id int айди товара, в котором надо удалить значение фильтра
+     * @param $f_id int айди фильтра
+     * @param $val_id int айди значения фильтра
+     */
+    private function delFeatureVal($goods_id, $f_id, $val_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="DELETE FROM goodshasfeature WHERE goods_id=$goods_id AND feature_id=$f_id AND goodshasfeature_valueid=$val_id";
@@ -31,8 +37,14 @@ class FiltersDiv
 		//mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
-	
-	private function insFeature($goods_id, $feature_id, $value_id)
+
+    /**
+     * вставляем новое значение фильтра в товар
+     * @param $goods_id int айди товара
+     * @param $feature_id int айди фильтра
+     * @param $value_id int айди значения фильтра
+     */
+    private function insFeature($goods_id, $feature_id, $value_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="INSERT INTO goodshasfeature (goods_id, feature_id, goodshasfeature_valueid) VALUES ($goods_id, $feature_id, $value_id)";
@@ -66,7 +78,13 @@ class FiltersDiv
 		return $goods_all;
     }
 
-    private function getFeature($good_id,$feature_id)
+    /**
+     * выбираем все значения одного фильтра для определенного товара
+     * @param $good_id int айди товара
+     * @param $feature_id int айди фильтра
+     * @return array|null массив айди значений фильтра
+     */
+    private function getFeature($good_id, $feature_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="select goodshasfeature_valueid from goodshasfeature WHERE goods_id=$good_id AND feature_id=$feature_id";
@@ -91,7 +109,10 @@ class FiltersDiv
 			return null;
 		}
     }
-    
+
+    /**
+     * вставляем новые значения фильтра Наполнение дивана в зависимости от старых значений
+     */
     public function setNewFilters()
     {
         $goods=$this->getGoodsByCategory(1);
