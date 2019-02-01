@@ -451,6 +451,50 @@ class addComponents
 						}
 					}
 				}
+
+				if (stripos($name,"глянець 1")!=false)
+				{
+					echo "$id=$name<br>";
+					foreach ($goods_comp as $good_comp)
+					{
+						$comp_id=$good_comp;
+						$text=$this->getArticle1CName($comp_id);
+						if (stripos(" ".$text,"глянець 1")!=false)
+						{
+							echo "$comp_id= $text<br>";
+							if ($this->isPart($id,$comp_id))
+							{
+								echo "$comp_id уже есть частью $id<br>";		
+							}
+							else
+							{
+								$this->insComponent($comp_id,$id);
+							}
+						}
+					}
+				}
+
+				if (stripos($name,"глянець 2")!=false)
+				{
+					echo "$id=$name<br>";
+					foreach ($goods_comp as $good_comp)
+					{
+						$comp_id=$good_comp;
+						$text=$this->getArticle1CName($comp_id);
+						if (stripos(" ".$text,"глянець 2")!=false)
+						{
+							echo "$comp_id= $text<br>";
+							if ($this->isPart($id,$comp_id))
+							{
+								echo "$comp_id уже есть частью $id<br>";		
+							}
+							else
+							{
+								$this->insComponent($comp_id,$id);
+							}
+						}
+					}
+				}
 				//break;
 			}
 		}
