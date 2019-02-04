@@ -185,7 +185,7 @@ class DellOldFilters
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="DELETE FROM goodshasfeature WHERE goods_id=$goods_id AND feature_id=$feature_id";
         echo "$query<br>";
-        mysqli_query($db_connect,$query);
+        //mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
     /**
@@ -263,6 +263,7 @@ class DellOldFilters
             {
                 $id=$good['goods_id'];
                 $features=$this->getFeatures($id);
+                //var_dump ($features);
                 if ($id==27727)
                 {
                     var_dump ($features);
@@ -273,16 +274,24 @@ class DellOldFilters
                     {
                         $feature_id=$feature['feature_id'];
                         if ($cat_id==9)
+                        //шк
                         {
                             //
-                            if ($feature_id==221||$feature_id==222||$feature_id==223||$feature_id==16||$feature_id==15||$feature_id==32||$feature_id==6||$feature_id==198||$feature_id==154||$feature_id==18||$feature_id==16)
+                            //if ($feature_id==221||$feature_id==222||$feature_id==223||$feature_id==16||$feature_id==15||$feature_id==32||$feature_id==6||$feature_id==198||$feature_id==154||$feature_id==18||$feature_id==16)
+                            //{
+                            //    $this->delFeature($id,$feature_id);
+                            //}
+                            if ($feature_id!=286&&$feature_id!=287&&$feature_id!=288&&$feature_id!=289&&$feature_id!=290&&$feature_id!=291&&$feature_id!=315&&$feature_id!=293&&$feature_id!=294&&$feature_id!=18&&$feature_id!=232&&$feature_id!=235&&$feature_id!=234&&$feature_id!=292&&$feature_id!=295)
                             {
                                 $this->delFeature($id,$feature_id);
                             }
+
                         }
                         if ($cat_id==13)
+                        //кровати
                         {
-                            if ($feature_id==227||$feature_id==47||$feature_id==50||$feature_id==6||$feature_id==49||$feature_id==48||$feature_id==17||$feature_id==18||$feature_id==50||$feature_id==48)
+                            //if ($feature_id==227||$feature_id==47||$feature_id==50||$feature_id==6||$feature_id==49||$feature_id==48||$feature_id==17||$feature_id==18||$feature_id==50||$feature_id==48)
+                            if ($feature_id!=316&&$feature_id!=317&&$feature_id!=318&&$feature_id!=319&&$feature_id!=320&&$feature_id!=321&&$feature_id!=323&&$feature_id!=324&&$feature_id!=322&&$feature_id!=232&&$feature_id!=235&&$feature_id!=234)
                             {
                                 $this->delFeature($id,$feature_id);
                             }
@@ -341,5 +350,5 @@ class DellOldFilters
 //$test=new CheckByCategory();
 //$test->test(13);
 $test1=new DellOldFilters();
-$test1->delFilters(1);
+$test1->delFilters(9);
 //$test1->delFiltersTest(1,180);
