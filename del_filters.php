@@ -185,7 +185,7 @@ class DellOldFilters
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="DELETE FROM goodshasfeature WHERE goods_id=$goods_id AND feature_id=$feature_id";
         echo "$query<br>";
-        mysqli_query($db_connect,$query);
+        //mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
     /**
@@ -304,6 +304,15 @@ class DellOldFilters
                                 $this->delFeature($id,$feature_id);
                             }
                         }
+                        if ($cat_id==14)
+                        //матрасы
+                        {
+                            //оставсляем только фильтры из списка
+                            if ($feature_id!=276&&$feature_id!=277&&$feature_id!=237&&$feature_id!=278&&$feature_id!=279&&$feature_id!=280&&$feature_id!=281&&$feature_id!=282&&$feature_id!=283&&$feature_id!=284&&$feature_id!=285&&$feature_id!=232&&$feature_id!=234&&$feature_id!=235&&$feature_id!=229)
+                            {
+                                $this->delFeature($id,$feature_id);
+                            }
+                        }
                         
                     }
                 }
@@ -350,5 +359,5 @@ class DellOldFilters
 //$test=new CheckByCategory();
 //$test->test(13);
 $test1=new DellOldFilters();
-$test1->delFilters(9);
+$test1->delFilters(14);
 //$test1->delFiltersTest(1,180);
