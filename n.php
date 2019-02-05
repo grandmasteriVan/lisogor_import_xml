@@ -3020,6 +3020,7 @@ if ($res=mysqli_query($db_connect,$query))
 
 	*/
 
+	/*
 	function getGoodsByCategory($cat_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -3106,6 +3107,82 @@ if ($res=mysqli_query($db_connect,$query))
 			//break;
 		}
 	}
+	*/
+
+	function getSizes($id)
+    {
+       
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_length, goods_width, goods_height, goods_depth from goods WHERE goods_id=$id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$sizes[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		if (is_array($sizes))
+		{
+			return $sizes;
+		}
+		else
+		{
+			return null;
+		}
+	
+    }
+    /**
+     * получаем список ид товаров в категрии
+     * @param $cat_id int айди категории
+     * @return array массив с ид товаров принадлежщих данной категории
+     */
+    function getGoodsByCategory($cat_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_id from goodshascategory WHERE category_id=$cat_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		return $goods_all;
+	}
+	
+	$goods=getGoodsByCategory(13);
+	//var_dump($goods);
+	
+	if (is_array($goods))
+	{
+		foreach ($goods as $good)
+		{
+			$id=$good['goods_id'];
+			$sizes=getSizes($id);
+			//var_dump($sizes);
+			$size_string="";
+			if ($sizes[0]['goods_depth']>0)
+			{
+				$size_string.="$id есть глубина<br>";
+			}
+			echo $size_string;
+		}
+
+	}
+	else
+	{
+		echo "No array!";
+	}
+	
 
 
 
