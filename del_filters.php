@@ -313,6 +313,25 @@ class DellOldFilters
                                 $this->delFeature($id,$feature_id);
                             }
                         }
+                        if ($cat_id==7)
+                        //журнальные столы
+                        {
+                            //оставсляем только фильтры из списка
+                            if ($feature_id!=232&&$feature_id!=234&&$feature_id!=235&&$feature_id!=229&&$feature_id!=374&&$feature_id!=357&&$feature_id!=352&&$feature_id!=375&&$feature_id!=376&&$feature_id!=377&&$feature_id!=378&&$feature_id!=379)
+                            {
+                                $this->delFeature($id,$feature_id);
+                            }
+                        }
+
+                        if ($cat_id==4)
+                        //прихожие
+                        {
+                            //оставсляем только фильтры из списка
+                            if ($feature_id!=232&&$feature_id!=234&&$feature_id!=235&&$feature_id!=229&&$feature_id!=303&&$feature_id!=304&&$feature_id!=305&&$feature_id!=306)
+                            {
+                                $this->delFeature($id,$feature_id);
+                            }
+                        }
                         
                     }
                 }
@@ -359,5 +378,5 @@ class DellOldFilters
 //$test=new CheckByCategory();
 //$test->test(13);
 $test1=new DellOldFilters();
-$test1->delFilters(14);
+$test1->delFilters(4);
 //$test1->delFiltersTest(1,180);
