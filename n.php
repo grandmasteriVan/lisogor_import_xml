@@ -3109,6 +3109,7 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 	*/
 
+	/*
 	function getSizes($id)
     {
        
@@ -3135,7 +3136,8 @@ if ($res=mysqli_query($db_connect,$query))
 			return null;
 		}
 	
-    }
+	}*/
+	
     /**
      * получаем список ид товаров в категрии
      * @param $cat_id int айди категории
@@ -3158,7 +3160,7 @@ if ($res=mysqli_query($db_connect,$query))
 		}
 		return $goods_all;
 	}
-	
+	/*
 	$goods=getGoodsByCategory(13);
 	//var_dump($goods);
 	
@@ -3182,6 +3184,7 @@ if ($res=mysqli_query($db_connect,$query))
 	{
 		echo "No array!";
 	}
+	*/
 	
 
 

@@ -189,4 +189,8 @@ class checkSizes
 $test = new checkSizes();
 //echo "шкафы распашные:<br>";
 $test->test();
-//https://fayni-mebli.com/check-sizes.php?cat_id=10&sizes=width,height,depth
+/*https://fayni-mebli.com/check-sizes.php?cat_id=10&sizes=width,height,depth
+https://fayni-mebli.com/check-sizes.php?cat_id=10&sizes=width,height,depth
+10 - это ид категории, меняешь на любую другую по необходимости
+width,height,depth - это размерности, которые скрипт проверяет в категории. можешь сюда вписать любые из набора: length, width, height, depth
+*/
