@@ -332,6 +332,15 @@ class DellOldFilters
                                 $this->delFeature($id,$feature_id);
                             }
                         }
+                        if ($cat_id==124)
+                        //тумбы
+                        {
+                            //оставсляем только фильтры из списка
+                            if ($feature_id!=232&&$feature_id!=234&&$feature_id!=235&&$feature_id!=229&&$feature_id!=349&&$feature_id!=348&&$feature_id!=347&&$feature_id!=342&&$feature_id!=346&&$feature_id!=345&&$feature_id!=344&&$feature_id!=343&&$feature_id!=341&&$feature_id!=340)
+                            {
+                                $this->delFeature($id,$feature_id);
+                            }
+                        }
                         
                     }
                 }
@@ -340,7 +349,7 @@ class DellOldFilters
     }
 
     /**
-     * удаляем старые фильтры во всех товарах одной фвбрики в одной каьегории (для ткстов)
+     * удаляем старые фильтры во всех товарах одной фвбрики в одной категории (для ткстов)
      * @param $cat_id int ид категории, в которой надо удалить старые фильтры
      *  @param $f_id int ид фабрики, в которой надо удалить старые фильтры
      */
@@ -378,5 +387,5 @@ class DellOldFilters
 //$test=new CheckByCategory();
 //$test->test(13);
 $test1=new DellOldFilters();
-$test1->delFilters(4);
+$test1->delFilters(124);
 //$test1->delFiltersTest(1,180);
