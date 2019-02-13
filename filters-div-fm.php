@@ -139,7 +139,53 @@ class FiltersDiv
 		{
 			return true;
 		}
-	}
+    }
+    
+    public function delOldFilters()
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$query="DELETE FROM goodshasfeature WHERE goodshasfeature_valueid=3235 AND feature_id=242";
+		echo "$query<br><br>";
+        mysqli_query($db_connect,$query);
+        
+        $query="DELETE FROM goodshasfeature WHERE goodshasfeature_valueid=3236 AND feature_id=242";
+		echo "$query<br><br>";
+        mysqli_query($db_connect,$query);
+        
+        $query="DELETE FROM goodshasfeature WHERE goodshasfeature_valueid=3237 AND feature_id=242";
+		echo "$query<br><br>";
+		mysqli_query($db_connect,$query);
+
+        $query="DELETE FROM goodshasfeature WHERE goodshasfeature_valueid=3238 AND feature_id=242";
+		echo "$query<br><br>";
+        mysqli_query($db_connect,$query);
+        
+        $query="DELETE FROM goodshasfeature WHERE goodshasfeature_valueid=3239 AND feature_id=242";
+		echo "$query<br><br>";
+        mysqli_query($db_connect,$query);
+        
+        $query="DELETE FROM goodshasfeature WHERE goodshasfeature_valueid=3240 AND feature_id=242";
+		echo "$query<br><br>";
+        mysqli_query($db_connect,$query);
+        
+        $query="DELETE FROM goodshasfeature WHERE goodshasfeature_valueid=3241 AND feature_id=242";
+		echo "$query<br><br>";
+        mysqli_query($db_connect,$query);
+        
+        $query="DELETE FROM goodshasfeature WHERE goodshasfeature_valueid=3242 AND feature_id=242";
+		echo "$query<br><br>";
+        mysqli_query($db_connect,$query);
+        
+        $query="DELETE FROM goodshasfeature WHERE goodshasfeature_valueid=3243 AND feature_id=242";
+		echo "$query<br><br>";
+        mysqli_query($db_connect,$query);
+        
+        $query="DELETE FROM goodshasfeature WHERE goodshasfeature_valueid=3600 AND feature_id=242";
+		echo "$query<br><br>";
+		mysqli_query($db_connect,$query);
+
+		mysqli_close($db_connect);
+    }
 
     /**
      * вставляем новые значения фильтра Наполнение дивана в зависимости от старых значений
@@ -219,4 +265,5 @@ class FiltersDiv
     }
 }
 $test=new FiltersDiv();
-$test->setNewFilters();
+//$test->setNewFilters();
+$test->delOldFilters();
