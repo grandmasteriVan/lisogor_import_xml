@@ -103,7 +103,8 @@ class CheckFilters
 
     public function testFilters()
     {
-        $goods=$this->getGoodsByCategory(10);
+		//$goods=$this->getGoodsByCategory(10);
+		$goods=$this->getGoodsByCategory(12);
         if (is_array($goods))
         {
             foreach ($goods as $good)
@@ -117,7 +118,8 @@ class CheckFilters
                     foreach ($features as $feature)
                     {
                         $f_id=$feature['feature_id'];
-                        if ($f_id==330||$f_id==332||$f_id==333||$f_id==334||$f_id==332||$f_id==331||$f_id==336||$f_id==337||$f_id==338||$f_id==339||$f_id==335)
+						//if ($f_id==330||$f_id==332||$f_id==333||$f_id==334||$f_id==332||$f_id==331||$f_id==336||$f_id==337||$f_id==338||$f_id==339||$f_id==335)
+						if ($f_id==362||$f_id==363||$f_id==364||$f_id==365||$f_id==361||$f_id==366||$f_id==367||$f_id==368||$f_id==369||$f_id==360)
                         {
                             $is_new=true;
                         }

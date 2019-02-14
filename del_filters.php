@@ -185,7 +185,7 @@ class DellOldFilters
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="DELETE FROM goodshasfeature WHERE goods_id=$goods_id AND feature_id=$feature_id";
         echo "$query<br>";
-        //mysqli_query($db_connect,$query);
+        mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
     /**
@@ -273,6 +273,7 @@ class DellOldFilters
                     foreach ($features as $feature)
                     {
                         $feature_id=$feature['feature_id'];
+                        //echo $feature_id." ";
                         if ($cat_id==9)
                         //шк
                         {
@@ -341,9 +342,38 @@ class DellOldFilters
                                 $this->delFeature($id,$feature_id);
                             }
                         }
+                        if ($cat_id==12)
+                        //комоды
+                        {
+                            //оставсляем только фильтры из списка
+                            if ($feature_id!=232&&$feature_id!=234&&$feature_id!=235&&$feature_id!=229&&$feature_id!=362&&$feature_id!=363&&$feature_id!=364&&$feature_id!=365&&$feature_id!=361&&$feature_id!=366&&$feature_id!=367&&$feature_id!=368&&$feature_id!=369&&$feature_id!=360)
+                            {
+                                $this->delFeature($id,$feature_id);
+                            }
+                        }
+                        if ($cat_id==10)
+                        //шкафы распашные
+                        {
+                            //оставсляем только фильтры из списка
+                            if ($feature_id!=232&&$feature_id!=234&&$feature_id!=235&&$feature_id!=229&&$feature_id!=330&&$feature_id!=332&&$feature_id!=333&&$feature_id!=334&&$feature_id!=331&&$feature_id!=336&&$feature_id!=337&&$feature_id!=338&&$feature_id!=339&&$feature_id!=335)
+                            {
+                                $this->delFeature($id,$feature_id);
+                            }
+                        }
+                        if ($cat_id==10)
+                        //полки
+                        {
+                            //оставсляем только фильтры из списка
+                            if ($feature_id!=232&&$feature_id!=234&&$feature_id!=235&&$feature_id!=229&&$feature_id!=254&&$feature_id!=255&&$feature_id!=256&&$feature_id!=257&&$feature_id!=258&&$feature_id!=259&&$feature_id!=260&&$feature_id!=261)
+                            {
+                                $this->delFeature($id,$feature_id);
+                                //echo "1!<br>";
+                            }
+                        }
                         
                     }
                 }
+                //break;
             }
         }
     }
@@ -387,5 +417,5 @@ class DellOldFilters
 //$test=new CheckByCategory();
 //$test->test(13);
 $test1=new DellOldFilters();
-$test1->delFilters(124);
+$test1->delFilters(10);
 //$test1->delFiltersTest(1,180);
