@@ -370,6 +370,16 @@ class DellOldFilters
                                 //echo "1!<br>";
                             }
                         }
+                        if ($cat_id==3)
+                        //спальни
+                        {
+                            //оставсляем только фильтры из списка
+                            if ($feature_id!=232&&$feature_id!=234&&$feature_id!=235&&$feature_id!=229&&$feature_id!=325&&$feature_id!=326&&$feature_id!=327&&$feature_id!=329&&$feature_id!=328)
+                            {
+                                $this->delFeature($id,$feature_id);
+                                //echo "1!<br>";
+                            }
+                        }
                         
                     }
                 }
@@ -417,5 +427,5 @@ class DellOldFilters
 //$test=new CheckByCategory();
 //$test->test(13);
 $test1=new DellOldFilters();
-$test1->delFilters(10);
+$test1->delFilters(3);
 //$test1->delFiltersTest(1,180);
