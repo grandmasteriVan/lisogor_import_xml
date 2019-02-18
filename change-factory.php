@@ -116,11 +116,7 @@ class ChangeFactory
 		}
 	}
 
-    /**
-     * удаляем все значения определенного фильтра из товара
-     * @param $goods_id int айди товара
-     * @param $feature_id int айди фичи (фильтра)
-     */
+   
     private function setNewFactory($new_f_id,$good_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
