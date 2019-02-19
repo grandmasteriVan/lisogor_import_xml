@@ -3143,6 +3143,7 @@ if ($res=mysqli_query($db_connect,$query))
      * @param $cat_id int айди категории
      * @return array массив с ид товаров принадлежщих данной категории
      */
+	/*
     function getGoodsByCategory($cat_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -3160,6 +3161,7 @@ if ($res=mysqli_query($db_connect,$query))
 		}
 		return $goods_all;
 	}
+	*/
 	/*
 	$goods=getGoodsByCategory(13);
 	//var_dump($goods);
@@ -3185,6 +3187,37 @@ if ($res=mysqli_query($db_connect,$query))
 		echo "No array!";
 	}
 	*/
+
+	function getGoodsByCategory($cat_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_id from goodshascategory WHERE category_id=$cat_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+		return $goods_all;
+	}
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$goods=getGoodsByCategory(148);
+	foreach ($goods as $good)
+	{
+		$id=$good['goods_id'];
+		
+        $query="UPDATE goods SET goods_popular=0 WHERE goods_id=$id";
+        echo "$query<br>";
+        mysqli_query($db_connect,$query);
+        
+	}
+	mysqli_close($db_connect);
 	
 
 

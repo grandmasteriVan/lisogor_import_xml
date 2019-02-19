@@ -21,6 +21,11 @@ define ("pass", "");
 define ("db", "new_fm");
 //define ("db", "newfm");
 
+define ("host_host","176.114.3.186");
+define ("user_host", "newfm_remote");
+define ("pass_host", "F8g7T7d2");
+define ("db_host", "newfm");
+
 
 class FixFilters
 {
