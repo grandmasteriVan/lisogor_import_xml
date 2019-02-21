@@ -55,26 +55,117 @@ class fixSizes
     private function getSizes($id)
     {
        
-		$db_connect=mysqli_connect(host,user,pass,db);
-		$query="select goods_length, goods_width, goods_height, goods_depth from goods WHERE goods_id=$id";
-		if ($res=mysqli_query($db_connect,$query))
+			$db_connect=mysqli_connect(host,user,pass,db);
+			$query="select goods_length, goods_width, goods_height, goods_depth from goods WHERE goods_id=$id";
+			if ($res=mysqli_query($db_connect,$query))
+			{
+					while ($row = mysqli_fetch_assoc($res))
+					{
+						$sizes[] = $row;
+					}
+			}
+			else
+			{
+				echo "Error in SQL: $query<br>";		
+			}
+			mysqli_close($db_connect);
+			if (is_array($sizes))
+			{
+				return $sizes;
+			}
+			else
+			{
+				return null;
+			}
+		}
+
+		private function updateLen($id,$len)
 		{
-				while ($row = mysqli_fetch_assoc($res))
+			$db_connect=mysqli_connect(host,user,pass,db);
+      $query="UPDATE goods SET goods_length=$len WHERE goods_id=$id";
+      echo "$query<br>";
+      //$file_string="$query".PHP_EOL;
+      //file_put_contents("ukr_kichen.txt",$file_string,FILE_APPEND);
+      mysqli_query($db_connect,$query);
+      mysqli_close($db_connect);
+		}
+
+		private function updateWidth($id,$width)
+		{
+			$db_connect=mysqli_connect(host,user,pass,db);
+      $query="UPDATE goods SET goods_width=$width WHERE goods_id=$id";
+      echo "$query<br>";
+      //$file_string="$query".PHP_EOL;
+      //file_put_contents("ukr_kichen.txt",$file_string,FILE_APPEND);
+      mysqli_query($db_connect,$query);
+      mysqli_close($db_connect);
+		}
+
+		private function updateDep($id,$dep)
+		{
+			$db_connect=mysqli_connect(host,user,pass,db);
+      $query="UPDATE goods SET goods_depth=$dep WHERE goods_id=$id";
+      echo "$query<br>";
+      //$file_string="$query".PHP_EOL;
+      //file_put_contents("ukr_kichen.txt",$file_string,FILE_APPEND);
+      mysqli_query($db_connect,$query);
+      mysqli_close($db_connect);
+		}
+
+		public function fix($cat_id)
+		{
+			$goods=$this->getGoodsByCategory($cat_id);
+			if (is_array($goods))
+			{
+				foreach ($goods as $good)
 				{
-					$sizes[] = $row;
+					$id=$good['goods_id'];
+					$sizes=$this->getSizes($id);
+					if (is_array($sizes))
+					{
+						$depth=$sizes[0]['goods_depth'];
+						$len=$sizes[0]['goods_length'];
+						if($len==0&&$depth>0)
+						{
+							echo "$id глубина=$depth длина=$len<br>";
+							$this->updateDep($id,0);
+							$this->updateLen($id,$depth);
+						}
+					}
 				}
+			}
 		}
-		else
+
+		public function testSizes($cat_id)
 		{
-			 echo "Error in SQL: $query<br>";		
+			$goods=$this->getGoodsByCategory($cat_id);
+			if (is_array($goods))
+			{
+				foreach ($goods as $good)
+				{
+					$id=$good['goods_id'];
+					$sizes=$this->getSizes($id);
+					if (is_array($sizes))
+					{
+						$len=$sizes[0]['goods_length'];
+						$width=$sizes[0]['goods_width'];
+						/*if ($len>$width)
+						{
+							echo "$id<br>";
+							$this->updateLen($id,$width);
+							$this->updateWidth($id,$len);
+						}*/
+						if ($len==0)
+						{
+							echo "$id<br>";
+						}
+					}
+				}
+			}
 		}
-		mysqli_close($db_connect);
-		if (is_array($sizes))
-		{
-			return $sizes;
-		}
-		else
-		{
-			return null;
-		}
+
 }
+
+$test=new fixSizes();
+//$test->fix(1);
+$test->testSizes(1);
