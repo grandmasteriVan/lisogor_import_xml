@@ -172,7 +172,7 @@ class MakeDiscount
                 $new_price=round($old_price*0.85);
                 $this->writePrice($new_price,$old_price,15,$id);
                 $this->addDiscount(14,$id);
-                break;
+                //break;
             }
 
         }

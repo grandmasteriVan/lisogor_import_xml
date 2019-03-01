@@ -3188,6 +3188,7 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 	*/
 
+	/*
 	function getGoodsByCategory($cat_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -3218,8 +3219,13 @@ if ($res=mysqli_query($db_connect,$query))
         
 	}
 	mysqli_close($db_connect);
-	
+	*/
 
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="UPDATE goods SET goods_popular=-200 WHERE goods_productionout=1 OR goods_noactual=1";
+	echo "$query<br><br>";
+	mysqli_query($db_connect,$query);
+	mysqli_close($db_connect);
 
 
 ?>
