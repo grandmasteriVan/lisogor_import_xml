@@ -3221,12 +3221,100 @@ if ($res=mysqli_query($db_connect,$query))
 	mysqli_close($db_connect);
 	*/
 
+	/*
 	$db_connect=mysqli_connect(host,user,pass,db);
 	$query="UPDATE goods SET goods_popular=-200 WHERE goods_productionout=1 OR goods_noactual=1";
 	echo "$query<br><br>";
 	mysqli_query($db_connect,$query);
 	mysqli_close($db_connect);
+	*/
 
+	/*
+	function getGoodsByFactory($f_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_id from goodshasfeature WHERE feature_id=232 AND goodshasfeature_valueid=$f_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		return $goods;
+	}
+
+	function setNoActual($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goods SET goods_noactual=1 WHERE goods_id=$id";
+		echo "$query<br><br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+
+	$goods=getGoodsByFactory(135);
+	foreach ($goods as $good)
+	{
+		$id=$good['goods_id'];
+		setNoActual($id);
+	}
+
+	*/
+
+	function getTextAll()
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_id, lang_id, goodshaslang_content from goodshaslang WHERE goodshaslang_content LIKE '%<p>&gt;&nbsp;</p>%' OR goodshaslang_content LIKE '%<p>&gt;&nbsp;&gt;&nbsp;&nbsp;</p>%'";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		return $goods;
+	}
+
+	function writeCont($id,$lang,$cont)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goodshaslang SET goodshaslang_content='$cont' WHERE goods_id=$id AND lang_id=$lang";
+		//echo "$query<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+
+	$goods=getTextAll();
+	if (is_array($goods))
+	{
+		echo count($goods)."<br>";
+		foreach ($goods as $good)
+		{
+			$id=$good['goods_id'];
+			$lang=$good['lang_id'];
+			$cont=$good['goodshaslang_content'];
+			$cont_new=str_replace("<p>&gt;&nbsp;</p>","",$cont);
+			$cont_new=str_replace("<p>&gt;&nbsp;&gt;&nbsp;&nbsp;</p>","",$cont_new);
+			writeCont($id,$lang,$cont_new);
+			//break;
+
+		}
+	}
+	else
+	{
+		echo "No array<br>";
+	}
 
 ?>
 
