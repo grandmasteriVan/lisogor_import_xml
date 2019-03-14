@@ -548,7 +548,30 @@ class addComponents
 			}
 		}
 	}
+
+	private function setActive($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goodshaslang SET goodshaslang_active=1 WHERE goods_id=$id";
+		echo "$query<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+
+	public function turnOn()
+	{
+		$goods=$this->getGoodsByCatAndFactory(148,86);
+		if (is_array($goods))
+		{
+			foreach ($goods as $good)
+			{
+				$id=$good;
+				$this->setActive($id);
+			}
+		}
+	}
 }
 $test=new addComponents();
 //$test->test();
-$test->testCount();
+//$test->testCount();
+$test->turnOn();
