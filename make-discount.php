@@ -115,7 +115,7 @@ class MakeDiscount
         }
     }
 
-     private function getPrice($id)
+    private function getPrice($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="SELECT goods_price FROM goods WHERE goods_id=$id";
@@ -134,6 +134,32 @@ class MakeDiscount
         if (is_array($goods))
         {
             return $goods[0]['goods_price'];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private function getOldPrice($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_oldprice FROM goods WHERE goods_id=$id";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    $goods[] = $row;
+                }
+        }
+        else
+        {
+            echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        if (is_array($goods))
+        {
+            return $goods[0]['goods_oldprice'];
         }
         else
         {
@@ -170,7 +196,7 @@ class MakeDiscount
                 $id=$good;
                 $old_price=$this->getPrice($id);
                 $new_price=round($old_price*0.85);
-                $this->writePrice($new_price,$old_price,15,$id);
+                $this->writePrice($new_price,$old_price,0,$id);
                 $this->addDiscount(14,$id);
                 //break;
             }
@@ -183,7 +209,30 @@ class MakeDiscount
 
     }
 
+    public function unsetDiscount()
+    {
+        $goods=$this->getGoodsByCatAndNoFactory(9,101);
+        if (is_array($goods))
+        {
+            foreach ($goods as $good)
+            {
+                $id=$good;
+                $new_price=$this->getOldPrice($id);
+                //$new_price=round($old_price*0.85);
+                $this->writePrice($new_price,0,15,$id);
+                //$this->addDiscount(14,$id);
+                //break;
+            }
+
+        }
+        else
+        {
+            echo "No goods!<br>";
+        }
+    }
+
 }
 
 $test=new MakeDiscount();
-$test->setDiscount();
+//$test->setDiscount();
+$test->unsetDiscount();
