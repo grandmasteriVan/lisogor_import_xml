@@ -57,7 +57,7 @@ class MakeDiscount
 					{
 						$feature_id=$feature['feature_id'];
 						$val_id=$feature['goodshasfeature_valueid'];
-						if ($feature_id==232&&$val_id!=$f_id)
+						if (($feature_id==232&&$val_id!=$f_id)&&($feature_id==232&&$val_id!=139)&&($feature_id==232&&$val_id!=34))
 						{
 							$goods_by_factoty[]=$id;
 							break;
@@ -185,19 +185,50 @@ class MakeDiscount
         mysqli_close($db_connect);
     }
 
-    public function setDiscount()
+    private function isInStore($id)
     {
-        $goods=$this->getGoodsByCatAndNoFactory(9,101);
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goodshasfeature_valueid FROM goodshasfeature WHERE goods_id=$id AND feature_id=231";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    $goods[] = $row;
+                }
+        }
+        else
+        {
+            echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        if ($goods[0]['goodshasfeature_valueid']==1)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
+    }
+
+    public function setDiscount($cat)
+    {
+        $goods=$this->getGoodsByCatAndNoFactory($cat,101);
         //var_dump($goods);
         if (is_array($goods))
         {
             foreach ($goods as $good)
             {
                 $id=$good;
-                $old_price=$this->getPrice($id);
-                $new_price=round($old_price*0.85);
-                $this->writePrice($new_price,$old_price,0,$id);
-                $this->addDiscount(14,$id);
+                if ($this->isInStore($id)!=true)
+                {
+                    $old_price=$this->getPrice($id);
+                    $new_price=round($old_price*0.9);
+                    $this->writePrice($new_price,$old_price,10,$id);
+                    $this->addDiscount(16,$id);
+                }
+                
                 //break;
             }
 
@@ -235,4 +266,18 @@ class MakeDiscount
 
 $test=new MakeDiscount();
 //$test->setDiscount();
-$test->unsetDiscount();
+//$test->unsetDiscount();
+$test->setDiscount(13);
+$test->setDiscount(5);
+$test->setDiscount(4);
+$test->setDiscount(10);
+$test->setDiscount(3);
+$test->setDiscount(124);
+$test->setDiscount(12);
+$test->setDiscount(125);
+$test->setDiscount(40);
+$test->setDiscount(11);
+$test->setDiscount(7);
+$test->setDiscount(59);
+$test->setDiscount(75);
+$test->setDiscount(9);
