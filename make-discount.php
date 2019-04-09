@@ -115,6 +115,33 @@ class MakeDiscount
         }
     }
 
+    private function getGoodsByFactory ($f_id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_id FROM goodshasfeature WHERE feature_id=232 AND goodshasfeature_valueid=$f_id";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    $goods[] = $row;
+                }
+        }
+        else
+        {
+            echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        if (is_array($goods))
+        {
+            return $goods;
+        }
+        else
+        {
+            return null;
+        }
+        
+    }
+
     private function getPrice($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -223,10 +250,12 @@ class MakeDiscount
                 $id=$good;
                 if ($this->isInStore($id)!=true)
                 {
-                    $old_price=$this->getPrice($id);
-                    $new_price=round($old_price*0.9);
-                    $this->writePrice($new_price,$old_price,10,$id);
-                    $this->addDiscount(16,$id);
+                    $new_price=$this->getOldPrice($id);
+                    $this->writePrice($new_price,0,0,$id);
+                    //$old_price=$this->getPrice($id);
+                    //$new_price=round($old_price*0.9);
+                    //$this->writePrice($new_price,$old_price,10,$id);
+                    //$this->addDiscount(16,$id);
                 }
                 
                 //break;
@@ -236,6 +265,29 @@ class MakeDiscount
         else
         {
             echo "No goods!<br>";
+        }
+
+    }
+
+    public function makeDiscountByFactory($f_id)
+    {
+        $goods=$this->getGoodsByFactory($f_id);
+        //var_dump ($goods);
+        if (is_array($goods))
+        {
+            foreach ($goods as $good)
+            {
+                $id=$good['goods_id'];
+                $old_price=$this->getPrice($id);
+                $new_price=round($old_price*0.85);
+                $this->writePrice($new_price,$old_price,15,$id);
+                $this->addDiscount(11,$id);
+            }
+
+        }
+        else
+        {
+            echo "No array!";
         }
 
     }
@@ -267,17 +319,18 @@ class MakeDiscount
 $test=new MakeDiscount();
 //$test->setDiscount();
 //$test->unsetDiscount();
-$test->setDiscount(13);
-$test->setDiscount(5);
-$test->setDiscount(4);
-$test->setDiscount(10);
-$test->setDiscount(3);
-$test->setDiscount(124);
-$test->setDiscount(12);
-$test->setDiscount(125);
-$test->setDiscount(40);
-$test->setDiscount(11);
-$test->setDiscount(7);
-$test->setDiscount(59);
-$test->setDiscount(75);
-$test->setDiscount(9);
+//$test->setDiscount(13);
+//$test->setDiscount(5);
+//$test->setDiscount(4);
+//$test->setDiscount(10);
+//$test->setDiscount(3);
+//$test->setDiscount(124);
+//$test->setDiscount(12);
+//$test->setDiscount(125);
+//$test->setDiscount(40);
+//$test->setDiscount(11);
+//$test->setDiscount(7);
+//$test->setDiscount(59);
+//$test->setDiscount(75);
+//$test->setDiscount(9);
+$test->makeDiscountByFactory(136);
