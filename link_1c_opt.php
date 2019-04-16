@@ -96,6 +96,7 @@ class SetFilters
             echo "Error in SQL: $query<br>";		
         }
         mysqli_close($db_connect);
+        return $goods;
     }
 
     private function delFeature($goods_id, $feature_id)
@@ -103,7 +104,16 @@ class SetFilters
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="DELETE FROM goodshasfeature WHERE goods_id=$goods_id AND feature_id=$feature_id";
         echo "$query<br>";
-        mysqli_query($db_connect,$query);
+        //mysqli_query($db_connect,$query);
+        mysqli_close($db_connect);
+    }
+
+    private function writeName($goods_id, $lang, $name)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="UPDATE goodshasfeature SET goodshaslang_name='$name' WHERE goods_id=$goods_id AND lang_id=$lang";
+        echo "$query<br>";
+        //mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
 
@@ -112,16 +122,142 @@ class SetFilters
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="INSERT INTO goodshasfeature (goods_id, feature_id, goodshasfeature_valueid) VALUES ($goods_id, $feature_id, $value_id)";
         echo "$query<br><br>";
-        mysqli_query($db_connect,$query);
+        //mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
 
     public function test ()
     {
         $goods=$this->getGoods();
-        
+        if (is_array($goods))
+        {
+            foreach ($goods as $good)
+            {
+                $id=$good['goods_id'];
+                $name=$good['goodshaslang_name'];
+                //echo "<b>$name:</b><br>";
+                //вид продукции
+                $this->delFeature($id,22);
+                $this->insFilter($id,22,117);
+
+                //korpus
+                $this->delFeature($id, 7);
+                $this->insFilter($id,7,29);
+
+                //cvet
+                $this->delFeature($id,4);
+                if (mb_stripos($name,"Орех болонья тёмный"))
+                {
+                    $this->insFilter($id,4,9);
+                }
+                if (mb_stripos($name,"Дуб сонома"))
+                {
+                    $this->insFilter($id,4,6);
+                }
+                if (mb_stripos($name,"Венге"))
+                {
+                    $this->insFilter($id,4,5);
+                }
+                if (mb_stripos($name,"Дуб молочный"))
+                {
+                    $this->insFilter($id,4,7);
+                }
+                if (mb_stripos($name,"Дуб сонома трюфель"))
+                {
+                    $this->insFilter($id,4,8);
+                }
+
+                //fasad
+                if (mb_stripos($name,"ДСП/ДСП"))
+                {
+                    $this->delFeature($id,6);
+                    $this->insFilter($id,6,22);
+                    $name_tmp=str_ireplace("ДСП/ДСП", "2 ДСП",$name);
+                }
+                if (mb_stripos($name,"ДСП/Зеркал"))
+                {
+                    $this->delFeature($id,6);
+                    $this->insFilter($id,6,17);
+                    $name_tmp=str_ireplace("ДСП/Зеркало", "ДСП/Зеркало",$name);
+                }
+                if (mb_stripos($name,"Зеркало/Зеркало"))
+                {
+                    $this->delFeature($id,6);
+                    $this->insFilter($id,6,23);
+                    $name_tmp=str_ireplace("Зеркало/Зеркало", "2 Зеркала",$name);
+                }
+                if (mb_stripos($name,"ДСП/ДСП/ДСП"))
+                {
+                    $this->delFeature($id,6);
+                    $this->insFilter($id,6,116);
+                    $name_tmp=str_ireplace("ДСП/ДСП/ДСП", "3 ДСП",$name);
+                }
+                if (mb_stripos($name,"ДСП/ДСП/Зеркало"))
+                {
+                    $this->delFeature($id,6);
+                    $this->insFilter($id,6,21);
+                    $name_tmp=str_ireplace("ДСП/ДСП/Зеркало", "2 ДСП/Зеркало",$name);
+                }
+                if (mb_stripos($name,"ДСП/Зеркало/Зеркало"))
+                {
+                    $this->delFeature($id,6);
+                    $this->insFilter($id,6,24);
+                    $name_tmp=str_ireplace("ДСП/Зеркало/Зеркало", "ДСП/2 Зеркала",$name);
+                }
+                if (mb_stripos($name,"Зеркало/Зеркало/Зеркало"))
+                {
+                    $this->delFeature($id,6);
+                    $this->insFilter($id,6,171);
+                    $name_tmp=str_ireplace("Зеркало/Зеркало/Зеркало", "3 Зеркала",$name);
+                }
+                if (mb_stripos($name,"ДСП/ДСП/ДСП/ДСП"))
+                {
+                    $this->delFeature($id,6);
+                    $this->insFilter($id,6,157);
+                    $name_tmp=str_ireplace("ДСП/ДСП/ДСП/ДСП", "4 ДСП",$name);
+                }
+                if (mb_stripos($name,"ДСП/ДСП/ДСП/Зеркало"))
+                {
+                    $this->delFeature($id,6);
+                    $this->insFilter($id,6,172);
+                    $name_tmp=str_ireplace("ДСП/ДСП/ДСП/Зеркало", "3 ДСП/Зеркало",$name);
+                }
+                if (mb_stripos($name,"ДСП/ДСП/Зеркало/Зеркало"))
+                {
+                    $this->delFeature($id,6);
+                    $this->insFilter($id,6,43);
+                    $name_tmp=str_ireplace("ДСП/ДСП/Зеркало/Зеркало", "2 ДСП/2 Зеркала",$name);
+                }
+                if (mb_stripos($name,"ДСП/Зеркало/Зеркало/Зеркало"))
+                {
+                    $this->delFeature($id,6);
+                    $this->insFilter($id,6,173);
+                    $name_tmp=str_ireplace("ДСП/Зеркало/Зеркало/Зеркало", "ДСП/3 Зеркала",$name);
+                }
+                if (mb_stripos($name,"Зеркало/Зеркало/Зеркало/Зеркало"))
+                {
+                    $this->delFeature($id,6);
+                    $this->insFilter($id,6,174);
+                    $name_tmp=str_ireplace("Зеркало/Зеркало/Зеркало/Зеркало", "4 Зеркала",$name);
+                }
+                
+                $name_tmp=str_ireplace("Шкаф-купе", "Шкаф-купе ",$name_tmp);
+                $name_tmp=str_ireplace(" 4дв", "",$name_tmp);
+                $name_tmp=str_ireplace(" 3дв", "",$name_tmp);
+                $name_tmp=str_ireplace(" 2дв", "",$name_tmp);
+                echo "<b>$name:</b>-$name_tmp<br>";
+                //break;
+            }
+        }   
+        else
+        {
+            echo "No array!";
+
+        }   
     }
 }
 
 //$test=new Link1C('garant-sklad.txt');
 //$test->parseGarant();
+$test=new SetFilters();
+$test->test();
