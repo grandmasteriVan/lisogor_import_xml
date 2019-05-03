@@ -200,6 +200,7 @@ class MakeDiscount
         $query="UPDATE goods SET goods_price=$new_price, goods_oldprice=$old_price, goods_discount=$discount WHERE goods_id=$id";
         echo "$query<br>";
         mysqli_query($db_connect,$query);
+        //var_dump(mysql_affected_rows());
         mysqli_close($db_connect);
     }
 
@@ -292,6 +293,8 @@ class MakeDiscount
 
     }
 
+
+
     public function unsetDiscount()
     {
         $goods=$this->getGoodsByCatAndNoFactory(9,101);
@@ -302,7 +305,30 @@ class MakeDiscount
                 $id=$good;
                 $new_price=$this->getOldPrice($id);
                 //$new_price=round($old_price*0.85);
-                $this->writePrice($new_price,0,15,$id);
+                $this->writePrice($new_price,0,0,$id);
+               
+                //$this->addDiscount(14,$id);
+                //break;
+            }
+
+        }
+        else
+        {
+            echo "No goods!<br>";
+        }
+    }
+
+    public function ggg($f_id)
+    {
+        $goods=$this->getGoodsByFactory($f_id);
+        if (is_array($goods))
+        {
+            foreach ($goods as $good)
+            {
+                $id=$good['goods_id'];
+                $new_price=$this->getOldPrice($id);
+                //$new_price=round($old_price*0.85);
+                $this->writePrice($new_price,0,0,$id);
                 //$this->addDiscount(14,$id);
                 //break;
             }
@@ -333,4 +359,5 @@ $test=new MakeDiscount();
 //$test->setDiscount(59);
 //$test->setDiscount(75);
 //$test->setDiscount(9);
-$test->makeDiscountByFactory(136);
+//$test->makeDiscountByFactory(136);
+$test->ggg(136);

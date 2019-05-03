@@ -3266,7 +3266,7 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 
 	*/
-
+/*
 	function getTextAll()
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -3314,6 +3314,45 @@ if ($res=mysqli_query($db_connect,$query))
 	else
 	{
 		echo "No array<br>";
+	}
+*/
+	function getGoodsByName()
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_id,goodshaslang_name  from goodshaslang WHERE goodshaslang_name LIKE '%складальна%'";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		return $goods;
+	}
+
+	function srtName($id,$name)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+        $query="UPDATE goodshaslang SET goodshaslang_name='$name' WHERE goods_id=$id AND lang_id=2";
+        echo "$query<br>";
+        mysqli_query($db_connect,$query);
+        mysqli_close($db_connect);
+	}
+
+	var_dump(getGoodsByName());
+	$goods=getGoodsByName();
+	foreach ($goods as $good)
+	{
+		$name=$good['goodshaslang_name'];
+		$id=$good['goods_id'];
+		$name_new=str_ireplace("складальна","модульна",$name);
+		srtName($id,$name_new);
+
 	}
 
 ?>

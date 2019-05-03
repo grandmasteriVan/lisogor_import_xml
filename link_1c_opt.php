@@ -245,7 +245,12 @@ class SetFilters
                 $name_tmp=str_ireplace(" 4дв", "",$name_tmp);
                 $name_tmp=str_ireplace(" 3дв", "",$name_tmp);
                 $name_tmp=str_ireplace(" 2дв", "",$name_tmp);
-                echo "<b>$name:</b>-$name_tmp<br>";
+                $name_tmp_ukr=str_ireplace("Шкаф", "Шафа",$name_tmp);
+                $name_tmp_ukr=str_ireplace("Зеркал", "Дзеркал",$name_tmp_ukr);
+               
+                $name_tmp_ukr=str_ireplace("Орех болонья тёмный", "Горіх болон'я темний",$name_tmp_ukr);
+                $name_tmp_ukr=str_ireplace("Дуб молочный", "Дуб молочний",$name_tmp_ukr);
+                echo "<b>$name:</b>-$name_tmp-$name_tmp_ukr<br>";
                 //break;
             }
         }   
