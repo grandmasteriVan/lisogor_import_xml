@@ -21,7 +21,7 @@ define ("pass", "VRYA1Q0R");
 /**
  * database name
  */
-//define ("db", "mebli");
+//define ("db", "opt");
 define ("db", "optmebli");
 
 class Link1C
@@ -104,7 +104,7 @@ class SetFilters
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="DELETE FROM goodshasfeature WHERE goods_id=$goods_id AND feature_id=$feature_id";
         echo "$query<br>";
-        //mysqli_query($db_connect,$query);
+        mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
 
@@ -113,14 +113,35 @@ class SetFilters
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="UPDATE goodshasfeature SET goodshaslang_name='$name' WHERE goods_id=$goods_id AND lang_id=$lang";
         echo "$query<br>";
-        //mysqli_query($db_connect,$query);
+        mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
 
-    function insFilter($goods_id, $feature_id, $value_id)
+    private function insFilter($goods_id, $feature_id, $value_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="INSERT INTO goodshasfeature (goods_id, feature_id, goodshasfeature_valueid) VALUES ($goods_id, $feature_id, $value_id)";
+        echo "$query<br><br>";
+        mysqli_query($db_connect,$query);
+        mysqli_close($db_connect);
+    }
+
+    private function setName($name_ru,$name_ukr,$id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="UPDATE goodshaslang SET goodshaslang_name='$name_ru' WHERE goods_id=$id AND lang_id=1";
+        echo "$query<br>";
+        mysqli_query($db_connect,$query);
+        $query="UPDATE goodshaslang SET goodshaslang_name='$name_ukr' WHERE goods_id=$id AND lang_id=2";
+        echo "$query<br>";
+        mysqli_query($db_connect,$query);
+        mysqli_close($db_connect);
+    }
+
+    private function setActive($goods_id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="UPDATE goodshaslang SET goodshaslang_active=1 WHERE goods_id=$goods_id";
         echo "$query<br><br>";
         //mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
@@ -141,8 +162,8 @@ class SetFilters
                 $this->insFilter($id,22,117);
 
                 //korpus
-                $this->delFeature($id, 7);
-                $this->insFilter($id,7,29);
+                //$this->delFeature($id, 7);
+                //$this->insFilter($id,7,29);
 
                 //cvet
                 $this->delFeature($id,4);
@@ -167,79 +188,81 @@ class SetFilters
                     $this->insFilter($id,4,8);
                 }
 
+                
                 //fasad
                 if (mb_stripos($name,"ДСП/ДСП"))
                 {
-                    $this->delFeature($id,6);
-                    $this->insFilter($id,6,22);
+                    //$this->delFeature($id,6);
+                    //$this->insFilter($id,6,22);
                     $name_tmp=str_ireplace("ДСП/ДСП", "2 ДСП",$name);
                 }
                 if (mb_stripos($name,"ДСП/Зеркал"))
                 {
-                    $this->delFeature($id,6);
-                    $this->insFilter($id,6,17);
+                    //$this->delFeature($id,6);
+                    //$this->insFilter($id,6,17);
                     $name_tmp=str_ireplace("ДСП/Зеркало", "ДСП/Зеркало",$name);
                 }
                 if (mb_stripos($name,"Зеркало/Зеркало"))
                 {
-                    $this->delFeature($id,6);
-                    $this->insFilter($id,6,23);
+                    //$this->delFeature($id,6);
+                    //$this->insFilter($id,6,23);
                     $name_tmp=str_ireplace("Зеркало/Зеркало", "2 Зеркала",$name);
                 }
                 if (mb_stripos($name,"ДСП/ДСП/ДСП"))
                 {
-                    $this->delFeature($id,6);
-                    $this->insFilter($id,6,116);
+                    //$this->delFeature($id,6);
+                    //$this->insFilter($id,6,116);
                     $name_tmp=str_ireplace("ДСП/ДСП/ДСП", "3 ДСП",$name);
                 }
                 if (mb_stripos($name,"ДСП/ДСП/Зеркало"))
                 {
-                    $this->delFeature($id,6);
-                    $this->insFilter($id,6,21);
+                    //$this->delFeature($id,6);
+                    //$this->insFilter($id,6,21);
                     $name_tmp=str_ireplace("ДСП/ДСП/Зеркало", "2 ДСП/Зеркало",$name);
                 }
                 if (mb_stripos($name,"ДСП/Зеркало/Зеркало"))
                 {
-                    $this->delFeature($id,6);
-                    $this->insFilter($id,6,24);
+                    //$this->delFeature($id,6);
+                    //$this->insFilter($id,6,24);
                     $name_tmp=str_ireplace("ДСП/Зеркало/Зеркало", "ДСП/2 Зеркала",$name);
                 }
                 if (mb_stripos($name,"Зеркало/Зеркало/Зеркало"))
                 {
-                    $this->delFeature($id,6);
-                    $this->insFilter($id,6,171);
+                    //$this->delFeature($id,6);
+                    //$this->insFilter($id,6,171);
                     $name_tmp=str_ireplace("Зеркало/Зеркало/Зеркало", "3 Зеркала",$name);
                 }
                 if (mb_stripos($name,"ДСП/ДСП/ДСП/ДСП"))
                 {
-                    $this->delFeature($id,6);
-                    $this->insFilter($id,6,157);
+                    //$this->delFeature($id,6);
+                    //$this->insFilter($id,6,157);
                     $name_tmp=str_ireplace("ДСП/ДСП/ДСП/ДСП", "4 ДСП",$name);
                 }
                 if (mb_stripos($name,"ДСП/ДСП/ДСП/Зеркало"))
                 {
-                    $this->delFeature($id,6);
-                    $this->insFilter($id,6,172);
+                    //$this->delFeature($id,6);
+                    //$this->insFilter($id,6,172);
                     $name_tmp=str_ireplace("ДСП/ДСП/ДСП/Зеркало", "3 ДСП/Зеркало",$name);
                 }
                 if (mb_stripos($name,"ДСП/ДСП/Зеркало/Зеркало"))
                 {
-                    $this->delFeature($id,6);
-                    $this->insFilter($id,6,43);
+                    //$this->delFeature($id,6);
+                    //$this->insFilter($id,6,43);
                     $name_tmp=str_ireplace("ДСП/ДСП/Зеркало/Зеркало", "2 ДСП/2 Зеркала",$name);
                 }
                 if (mb_stripos($name,"ДСП/Зеркало/Зеркало/Зеркало"))
                 {
-                    $this->delFeature($id,6);
-                    $this->insFilter($id,6,173);
+                    //$this->delFeature($id,6);
+                    //$this->insFilter($id,6,173);
                     $name_tmp=str_ireplace("ДСП/Зеркало/Зеркало/Зеркало", "ДСП/3 Зеркала",$name);
                 }
                 if (mb_stripos($name,"Зеркало/Зеркало/Зеркало/Зеркало"))
                 {
-                    $this->delFeature($id,6);
-                    $this->insFilter($id,6,174);
+                    //$this->delFeature($id,6);
+                    //$this->insFilter($id,6,174);
                     $name_tmp=str_ireplace("Зеркало/Зеркало/Зеркало/Зеркало", "4 Зеркала",$name);
                 }
+                
                 
                 $name_tmp=str_ireplace("Шкаф-купе", "Шкаф-купе ",$name_tmp);
                 $name_tmp=str_ireplace(" 4дв", "",$name_tmp);
@@ -250,7 +273,9 @@ class SetFilters
                
                 $name_tmp_ukr=str_ireplace("Орех болонья тёмный", "Горіх болон'я темний",$name_tmp_ukr);
                 $name_tmp_ukr=str_ireplace("Дуб молочный", "Дуб молочний",$name_tmp_ukr);
-                echo "<b>$name:</b>-$name_tmp-$name_tmp_ukr<br>";
+                //echo "<b>$name:</b>-$name_tmp-$name_tmp_ukr<br>";
+                $this->setName($name_tmp,$name_tmp_ukr,$id);
+                $this->setActive($id);
                 //break;
             }
         }   
