@@ -158,8 +158,8 @@ class SetFilters
                 $name=$good['goodshaslang_name'];
                 //echo "<b>$name:</b><br>";
                 //вид продукции
-                $this->delFeature($id,22);
-                $this->insFilter($id,22,117);
+                //$this->delFeature($id,22);
+                //$this->insFilter($id,22,117);
 
                 //korpus
                 //$this->delFeature($id, 7);
@@ -274,8 +274,8 @@ class SetFilters
                 $name_tmp_ukr=str_ireplace("Орех болонья тёмный", "Горіх болон'я темний",$name_tmp_ukr);
                 $name_tmp_ukr=str_ireplace("Дуб молочный", "Дуб молочний",$name_tmp_ukr);
                 //echo "<b>$name:</b>-$name_tmp-$name_tmp_ukr<br>";
-                $this->setName($name_tmp,$name_tmp_ukr,$id);
-                $this->setActive($id);
+                //$this->setName($name_tmp,$name_tmp_ukr,$id);
+                //$this->setActive($id);
                 //break;
             }
         }   
