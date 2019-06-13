@@ -303,6 +303,7 @@ function delFilter($goods_id, $feature_id, $value_id)
 	mysqli_close($db_connect);
 }
 
+
 function delFilterNum($goods_id, $feature_id, $value_id)
 {
 	$db_connect=mysqli_connect(host,user,pass,db);
@@ -451,8 +452,9 @@ echo "12 done <br>";
 //setFilters(14);
 //setFilters(1);
 
-setFilters(11);
-setFilters(124);
+//setFilters(11);
+//setFilters(124);
+setFilters(10);
 
 function setFilters($category_id)
 {

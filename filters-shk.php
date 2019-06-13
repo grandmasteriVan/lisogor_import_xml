@@ -204,7 +204,7 @@ function set_filters()
                             mysqli_query($db_connect,$query);
                             echo "$query <br>";
                             //записываем новый фильтр
-                            $query="INSERT INTO goodshasfeature (goodshasfeature_valueint, goodshasfeature_valuefloat, ".
+                            $query="INSERT INTO goodshasfeature (т, goodshasfeature_valuefloat, ".
                                 "goodshasfeature_valuetext, goods_id, feature_id) ".
                                 "VALUES (9,0,'',$id,117)";
                             mysqli_query($db_connect,$query);

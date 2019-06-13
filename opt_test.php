@@ -97,7 +97,28 @@ class test1c
 
 
     }
+
+    public function setNamesFromFile()
+    {
+        $this->ReadFile1();
+        $db_connect=mysqli_connect(host,user,pass,db);
+        foreach ($this->data as $pos)
+        {
+            $code1c=$pos[0];
+            $name=$pos[1];
+            $good=$this->getGood($code1c);
+            if (is_array($good))
+            {
+                $goods_id=$good[0]['goods_id'];
+                $query="UPDATE goodshaslang SET goodshaslang_name='$name' WHERE goods_id=$id AND lang_id=1";
+                echo "$query<br>";
+                mysqli_query($db_connect,$query);
+            }
+        }
+        mysqli_close($db_connect);
+    }
 }
 
-$test=new test1c('14-05.txt');
-$test->test();
+$test=new test1c('13-06.txt');
+//$test->test();
+$test->setNamesFromFile();
