@@ -3316,6 +3316,7 @@ if ($res=mysqli_query($db_connect,$query))
 		echo "No array<br>";
 	}
 */
+/*
 	function getGoodsByName()
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -3354,6 +3355,15 @@ if ($res=mysqli_query($db_connect,$query))
 		srtName($id,$name_new);
 
 	}
+	*/
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="UPDATE goodshastissue SET goodshastissue_active=1 WHERE tissue_id=1178";
+	echo "$query<br>";
+	mysqli_query($db_connect,$query);
+	mysqli_close($db_connect);
+	
+
+	
 
 ?>
 
