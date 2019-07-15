@@ -544,14 +544,14 @@ class ModMatroluxe
                 $id=$good;
                 $name=$this->getName($id);
                 $sizes=$this->getSize($id);
-                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=1000&&$sizes['goods_width']<=2000)&&(strripos($name," 2 ДСП"!=false))
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=1000&&$sizes['goods_width']<=2000)&&($sizes['goods_depth']==450)&&(strripos($name,"2 ДСП"!=false))
                 {
                     if ($id!=46618)
                     {
                         $this->setMod($id,46618);
                     }
                 }
-                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=2100&&$sizes['goods_width']<=2400)&&(strripos($name,"3 ДСП"!=false))
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=2100&&$sizes['goods_width']<=2400)&&($sizes['goods_depth']==450)&&(strripos($name,"3 ДСП"!=false))
                 {
                     if ($id!=47113)
                     {
@@ -559,20 +559,126 @@ class ModMatroluxe
                     }
                 }
 
-                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=1000&&$sizes['goods_width']<=2000)&&(strripos($name," 2 Зеркала"!=false))
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=1000&&$sizes['goods_width']<=2000)&&($sizes['goods_depth']==450)&&(strripos($name,"2 Зеркала"!=false))
                 {
                     if ($id!=46673)
                     {
                         $this->setMod($id,46673);
                     }
                 }
-                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=2100&&$sizes['goods_width']<=2400)&&(strripos($name,"3 Зеркала"!=false))
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=2100&&$sizes['goods_width']<=2400)&&($sizes['goods_depth']==450)&&(strripos($name,"3 Зеркала"!=false))
                 {
                     if ($id!=47173)
                     {
                         $this->setMod($id,47173);
                     }
                 }
+
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=1000&&$sizes['goods_width']<=2000)&&($sizes['goods_depth']==450)&&(strripos($name,"ДСП/Зеркало"!=false))
+                {
+                    if ($id!=46728)
+                    {
+                        $this->setMod($id,46728);
+                    }
+                }
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=2100&&$sizes['goods_width']<=2400)&&($sizes['goods_depth']==450)&&(strripos($name,"ДСП/Зеркало"!=false))
+                {
+                    if ($id!=47403)
+                    {
+                        $this->setMod($id,47403);
+                    }
+                }
+
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=1000&&$sizes['goods_width']<=2000)&&($sizes['goods_depth']==450)&&(strripos($name,"ДСП/Пескоструй"!=false))
+                {
+                    if ($id!=46783)
+                    {
+                        $this->setMod($id,46783);
+                    }
+                }
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=2100&&$sizes['goods_width']<=2400)&&($sizes['goods_depth']==450)&&(strripos($name,"ДСП/Пескоструй"!=false))
+                {
+                    if ($id!=47233)
+                    {
+                        $this->setMod($id,47233);
+                    }
+                }
+
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=1000&&$sizes['goods_width']<=2000)&&($sizes['goods_depth']==450)&&(strripos($name,"Зеркало/Пескоструй"!=false))
+                {
+                    if ($id!=46838)
+                    {
+                        $this->setMod($id,46838);
+                    }
+                }
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=2100&&$sizes['goods_width']<=2400)&&($sizes['goods_depth']==450)&&(strripos($name,"2 Пескоструя/Зеркало"!=false))
+                {
+                    if ($id!=47233)
+                    {
+                        $this->setMod($id,47233);
+                    }
+                }
+
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=1000&&$sizes['goods_width']<=2000)&&($sizes['goods_depth']==450)&&(strripos($name,"Пескоструй"!=false))
+                {
+                    if ($id!=46893)
+                    {
+                        $this->setMod($id,46893);
+                    }
+                }
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=2100&&$sizes['goods_width']<=2400)&&($sizes['goods_depth']==450)&&(strripos($name,"Пескоструй"!=false))
+                {
+                    if ($id!=47253)
+                    {
+                        $this->setMod($id,47253);
+                    }
+                }
+
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=1000&&$sizes['goods_width']<=2000)&&($sizes['goods_depth']==450)&&(strripos($name,"Комби зеркало"!=false))
+                {
+                    if ($id!=46948)
+                    {
+                        $this->setMod($id,46948);
+                    }
+                }
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=2100&&$sizes['goods_width']<=2400)&&($sizes['goods_depth']==450)&&(strripos($name,"Комби зеркало"!=false))
+                {
+                    if ($id!=47193)
+                    {
+                        $this->setMod($id,47193);
+                    }
+                }
+
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=1000&&$sizes['goods_width']<=2000)&&($sizes['goods_depth']==450)&&(strripos($name,"Комби стекло"!=false))
+                {
+                    if ($id!=47003)
+                    {
+                        $this->setMod($id,47003);
+                    }
+                }
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=2100&&$sizes['goods_width']<=2400)&&($sizes['goods_depth']==450)&&(strripos($name,"Комби стекло"!=false))
+                {
+                    if ($id!=47213)
+                    {
+                        $this->setMod($id,47213);
+                    }
+                }
+
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=1000&&$sizes['goods_width']<=2000)&&($sizes['goods_depth']==450)&&(strripos($name,"Фотопечать"!=false))
+                {
+                    if ($id!=47003)
+                    {
+                        $this->setMod($id,47003);
+                    }
+                }
+                if ((strripos($name,"Классик 1")!=false)&&($sizes['goods_width']>=2100&&$sizes['goods_width']<=2400)&&($sizes['goods_depth']==450)&&(strripos($name,"Фотопечать"!=false))
+                {
+                    if ($id!=47273)
+                    {
+                        $this->setMod($id,47273);
+                    }
+                }
+
 
             }
             else
