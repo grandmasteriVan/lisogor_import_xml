@@ -3357,12 +3357,50 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 	*/
 	$db_connect=mysqli_connect(host,user,pass,db);
-	$query="UPDATE goodshastissue SET goodshastissue_active=1 WHERE tissue_id=1178";
+	$query="UPDATE goodshastissue SET goodshastissue_active=0 WHERE tissue_id=741";
+	echo "$query<br>";
+	mysqli_query($db_connect,$query);
+	
+	$query="UPDATE goodshastissue SET goodshastissue_active=0 WHERE tissue_id=742";
+	echo "$query<br>";
+	mysqli_query($db_connect,$query);
+	
+	$query="UPDATE goodshastissue SET goodshastissue_active=1 WHERE tissue_id=1019";
+	echo "$query<br>";
+	mysqli_query($db_connect,$query);
+	
+	$query="UPDATE goodshastissue SET goodshastissue_active=1 WHERE tissue_id=733";
+	echo "$query<br>";
+	mysqli_query($db_connect,$query);
+	
+	$query="UPDATE goodshastissue SET goodshastissue_active=1 WHERE tissue_id=734";
+	echo "$query<br>";
+	mysqli_query($db_connect,$query);
+	
+	$query="UPDATE goodshastissue SET goodshastissue_active=1 WHERE tissue_id=735";
+	echo "$query<br>";
+	mysqli_query($db_connect,$query);
+	
+	$query="UPDATE goodshastissue SET goodshastissue_active=1 WHERE tissue_id=736";
+	echo "$query<br>";
+	mysqli_query($db_connect,$query);
+	
+	$query="UPDATE goodshastissue SET goodshastissue_active=1 WHERE tissue_id=737";
+	echo "$query<br>";
+	mysqli_query($db_connect,$query);
+	
+	$query="UPDATE goodshastissue SET goodshastissue_active=1 WHERE tissue_id=738";
+	echo "$query<br>";
+	mysqli_query($db_connect,$query);
+		
+	$query="UPDATE goodshastissue SET goodshastissue_active=1 WHERE tissue_id=739";
+	echo "$query<br>";
+	mysqli_query($db_connect,$query);
+	
+	$query="UPDATE goodshastissue SET goodshastissue_active=1 WHERE tissue_id=740";
 	echo "$query<br>";
 	mysqli_query($db_connect,$query);
 	mysqli_close($db_connect);
-	
-
 	
 
 ?>
