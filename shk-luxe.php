@@ -2719,11 +2719,225 @@ class ModMatroluxe
     }
 }
 
+class ComponentsMatroluxe
+{
+    private function getFeaturesVal($good_id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="select feature_id,goodshasfeature_valueid from goodshasfeature WHERE goods_id=$good_id";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    $goods[] = $row;
+                }
+        }
+        else
+        {
+            echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        if (is_array($goods))
+        {
+            return $goods;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private function getName($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goodshaslang_name from goodshaslang WHERE goods_id=$id AND lang_id=1";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    $names[] = $row;
+                }
+        }
+        else
+        {
+             echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        if (is_array($names))
+        {
+            return $names[0]['goodshaslang_name'];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private function getGoodsByCatAndFactory($cat_id, $f_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_id from goodshascategory WHERE category_id=$cat_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        //var_dump ($goods);
+		if (is_array ($goods_all))
+		{
+			//var_dump($goods_all);
+			foreach ($goods_all as $good)
+			{
+				$id=$good['goods_id'];
+				$features=$this->getFeaturesVal($id);
+				if (is_array($features))
+				{
+					foreach ($features as $feature)
+					{
+						$feature_id=$feature['feature_id'];
+						$val_id=$feature['goodshasfeature_valueid'];
+						if ($feature_id==232&&$val_id==$f_id)
+						{
+							$goods_by_factoty[]=$id;
+							break;
+						}
+					}
+				}
+				
+				//break;
+			}
+		}
+		else
+		{
+			echo "no goods by category<br>";
+		}
+		
+		mysqli_close($db_connect);
+		if (is_array($goods_by_factoty))
+		{
+			return $goods_by_factoty;
+		}
+		else
+		{
+			return null;
+		}
+    }
+
+    private function getSize($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="select goods_width, goods_depth, goods_height from goods WHERE goods_id=$id";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    $sizes[] = $row;
+                }
+        }
+        else
+        {
+             echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        if (is_array($sizes))
+        {
+            return $sizes[0];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private function setComp ($good_id,$comp_id]\7
+    \7)
+   	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="INSERT INTO component (goods_id, component_child, component_in_complect) VALUES ($good_id,$comp_id)";
+		echo "$query<br><br>";
+		//mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+
+    public function setComponents()
+    {
+        $goods=$this->getGoodsByCatAndFactory(9,3894);
+        $components=$this->getGoodsByCatAndFactory(154,3894);
+        echo "goods=".count ($goods)."<br>";
+        echo "components=".count ($components)."<br>";
+        foreach ($goods as $good)
+        {
+            $id=$good;
+            $goods_sizes=$this->getSize($id);
+            $name=$this->getName($id);
+            $name_explode_main=explode(" ",$name);
+            //var_dump ($name_explode_main);
+            $name_main_serries=$name_explode_main[1]." ".$name_explode_main[2];
+            //echo "$name_main_serries <br><br>";
+
+            //var_dump ($goods_sizes);
+            //echo "<br>";
+            foreach ($components as $comp) 
+            {
+                $name_comp=$this->getName($comp);
+                $name_tmp=explode(" ",$name_comp);
+                //var_dump ($name_tmp);
+                $sizes_comp=$name_tmp[3];
+                //формат: высота, ширина, глубина
+                $sizes_comp=explode("*",$sizes_comp);
+                $name_comp_series=$name_tmp[1]." ".$name_tmp[2];
+                //echo "$name_comp_series<br>";
+                
+                if ($name_main_serries==$name_comp_series)
+                {
+                    //echo "попали в цикл<br>";
+                    //var_dump ($sizes_comp);
+                    //echo "<br>";
+                    //высоты у нас, на самом деле 2
+                    //глубины тоже 2
+                    //а вот ширина компонента должна ряваятся ширине шкафа
+                    if ($goods_sizes['goods_depth']==$sizes_comp[2])
+                    {
+                        //echo "нашли товар по глубине<br>";
+                        if ($sizes_comp[1]==$goods_sizes['goods_width'])
+                        {
+                            //echo "нашли товар по ширине<br>";
+                            //echo $goods_sizes['goods_height']." - ".$sizes_comp[0];
+                            if(($goods_sizes['goods_height']==2000||$goods_sizes['goods_height']==2100)&&($sizes_comp[0]=='2000-2100'))
+                            {
+                                $this->setComp($id,$comp);
+                                break;
+                            }
+                            if(($goods_sizes['goods_height']==2200||$goods_sizes['goods_height']==2300||$goods_sizes['goods_height']==2400)&&($sizes_comp[0]=='2200-2400'))
+                            {
+                                $this->setComp($id,$comp);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            //break;
+
+        }
+
+    }
+}
+
 
 
 
 //$test=new LuxeStudio();
 //$test->setFilters();
 
-$test=new ModMatroluxe();
-$test->setModSHK();
+//$test=new ModMatroluxe();
+//$test->setModSHK();
+
+$test=new ComponentsMatroluxe();
+$test->setComponents();
