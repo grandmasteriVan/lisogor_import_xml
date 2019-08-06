@@ -187,8 +187,8 @@ class LuxeStudio
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="DELETE FROM goodshasfeature WHERE goods_id=$goods_id AND feature_id=$feature_id";
-        echo "$query<br>";
-        //mysqli_query($db_connect,$query);
+        //echo "$query<br>";
+        mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
 
@@ -196,8 +196,8 @@ class LuxeStudio
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="INSERT INTO goodshasfeature (goods_id, feature_id, goodshasfeature_valueid) VALUES ($goods_id, $feature_id, $value_id)";
-        echo "$query<br><br>";
-        //mysqli_query($db_connect,$query);
+        //echo "$query<br><br>";
+        mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
 
@@ -379,6 +379,7 @@ class LuxeStudio
                 $this->insFilter($id,295,3548);
                 $this->insFilter($id,295,3549);
 
+                echo "$id done <br>";
 
 
             }
@@ -2855,13 +2856,12 @@ class ComponentsMatroluxe
         }
     }
 
-    private function setComp ($good_id,$comp_id]\7
-    \7)
+    private function setComp ($good_id,$comp_id,$count)
    	{
 		$db_connect=mysqli_connect(host,user,pass,db);
-		$query="INSERT INTO component (goods_id, component_child, component_in_complect) VALUES ($good_id,$comp_id)";
+		$query="INSERT INTO component (goods_id, component_child, component_in_complect) VALUES ($good_id,$comp_id,$count)";
 		echo "$query<br><br>";
-		//mysqli_query($db_connect,$query);
+		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
 
@@ -2871,59 +2871,141 @@ class ComponentsMatroluxe
         $components=$this->getGoodsByCatAndFactory(154,3894);
         echo "goods=".count ($goods)."<br>";
         echo "components=".count ($components)."<br>";
+        //var_dump($goods);
+        //корпуса
+        /*
         foreach ($goods as $good)
         {
             $id=$good;
-            $goods_sizes=$this->getSize($id);
-            $name=$this->getName($id);
-            $name_explode_main=explode(" ",$name);
-            //var_dump ($name_explode_main);
-            $name_main_serries=$name_explode_main[1]." ".$name_explode_main[2];
-            //echo "$name_main_serries <br><br>";
-
-            //var_dump ($goods_sizes);
-            //echo "<br>";
-            foreach ($components as $comp) 
+            //тут делали по 1000 шкафов за раз, иначе сервак вис
+            if ($id==46618)
             {
-                $name_comp=$this->getName($comp);
-                $name_tmp=explode(" ",$name_comp);
-                //var_dump ($name_tmp);
-                $sizes_comp=$name_tmp[3];
-                //формат: высота, ширина, глубина
-                $sizes_comp=explode("*",$sizes_comp);
-                $name_comp_series=$name_tmp[1]." ".$name_tmp[2];
-                //echo "$name_comp_series<br>";
-                
-                if ($name_main_serries==$name_comp_series)
+                $goods_sizes=$this->getSize($id);
+                $name=$this->getName($id);
+                $name_explode_main=explode(" ",$name);
+                //var_dump ($name_explode_main);
+                $name_main_serries=$name_explode_main[1]." ".$name_explode_main[2];
+                //echo "$name_main_serries <br><br>";
+
+                //var_dump ($goods_sizes);
+                //echo "<br>";
+                foreach ($components as $comp) 
                 {
-                    //echo "попали в цикл<br>";
-                    //var_dump ($sizes_comp);
-                    //echo "<br>";
-                    //высоты у нас, на самом деле 2
-                    //глубины тоже 2
-                    //а вот ширина компонента должна ряваятся ширине шкафа
-                    if ($goods_sizes['goods_depth']==$sizes_comp[2])
+                    $name_comp=$this->getName($comp);
+                    $name_tmp=explode(" ",$name_comp);
+                    //var_dump ($name_tmp);
+                    $sizes_comp=$name_tmp[3];
+                    //формат: высота, ширина, глубина
+                    $sizes_comp=explode("*",$sizes_comp);
+                    $name_comp_series=$name_tmp[1]." ".$name_tmp[2];
+                    //echo "$name_comp_series<br>";
+                    
+                    if ($name_main_serries==$name_comp_series)
                     {
-                        //echo "нашли товар по глубине<br>";
-                        if ($sizes_comp[1]==$goods_sizes['goods_width'])
+                        //echo "попали в цикл<br>";
+                        //var_dump ($sizes_comp);
+                        //echo "<br>";
+                        //высоты у нас, на самом деле 2
+                        //глубины тоже 2
+                        //а вот ширина компонента должна ряваятся ширине шкафа
+                        if ($goods_sizes['goods_depth']==$sizes_comp[2])
                         {
-                            //echo "нашли товар по ширине<br>";
-                            //echo $goods_sizes['goods_height']." - ".$sizes_comp[0];
-                            if(($goods_sizes['goods_height']==2000||$goods_sizes['goods_height']==2100)&&($sizes_comp[0]=='2000-2100'))
+                            //echo "нашли товар по глубине<br>";
+                            if ($sizes_comp[1]==$goods_sizes['goods_width'])
                             {
-                                $this->setComp($id,$comp);
-                                break;
-                            }
-                            if(($goods_sizes['goods_height']==2200||$goods_sizes['goods_height']==2300||$goods_sizes['goods_height']==2400)&&($sizes_comp[0]=='2200-2400'))
-                            {
-                                $this->setComp($id,$comp);
-                                break;
+                                //echo "нашли товар по ширине<br>";
+                                //echo $goods_sizes['goods_height']." - ".$sizes_comp[0];
+                                if(($goods_sizes['goods_height']==2000||$goods_sizes['goods_height']==2100)&&($sizes_comp[0]=='2000-2100'))
+                                {
+                                    $this->setComp($id,$comp,1);
+                                    break;
+                                }
+                                if(($goods_sizes['goods_height']==2200||$goods_sizes['goods_height']==2300||$goods_sizes['goods_height']==2400)&&($sizes_comp[0]=='2200-2400'))
+                                {
+                                    $this->setComp($id,$comp,1);
+                                    break;
+                                }
                             }
                         }
                     }
                 }
+                //break;
+
             }
-            //break;
+            
+
+        }*/
+        //фасады
+        foreach ($goods as $good)
+        {
+            $id=$good;
+            $goods_sizes=$this->getSize($id);
+            $good_sname=$this->getName($id);
+            if (strripos($name,"2 ДСП")!=false)
+            {
+                //ищем нужный размер
+                if 
+            }
+            if (strripos($name,"2 Зеркала")!=false)
+            {
+                //ищем нужный размер
+                if 
+            }
+            if (strripos($name,"ДСП/Зеркало")!=false)
+            {
+                //ищем нужный размер
+                if 
+            }
+            if (strripos($name,"ДСП/Пескоструй")!=false)
+            {
+                //ищем нужный размер
+                if 
+            }
+            if (strripos($name,"Зеркало/Пескоструй")!=false)
+            {
+                //ищем нужный размер
+                if 
+            }
+            if (strripos($name," Пескоструй")!=false)
+            {
+                //ищем нужный размер
+                if 
+            }
+            if (strripos($name,"Комби зеркало")!=false)
+            {
+                //ищем нужный размер
+                if 
+            }
+            if (strripos($name,"Комби стекло")!=false)
+            {
+                //ищем нужный размер
+                if 
+            }
+            if (strripos($name,"Фотопечать")!=false)
+            {
+                //ищем нужный размер
+                if 
+            }
+            if (strripos($name,"3 ДСП")!=false)
+            {
+                //ищем нужный размер
+                if 
+            }
+            if (strripos($name,"3 Зеркала")!=false)
+            {
+                //ищем нужный размер
+                if 
+            }
+            if (strripos($name,"2 ДСП/Зеркало")!=false)
+            {
+                //ищем нужный размер
+                if 
+            }
+            if (strripos($name,"2 ДСП/Пескоструй")!=false)
+            {
+                //ищем нужный размер
+                if 
+            }
 
         }
 
@@ -2933,11 +3015,11 @@ class ComponentsMatroluxe
 
 
 
-//$test=new LuxeStudio();
-//$test->setFilters();
+$test=new LuxeStudio();
+$test->setFilters();
 
 //$test=new ModMatroluxe();
 //$test->setModSHK();
-
-$test=new ComponentsMatroluxe();
+//set_time_limit(40000);
+////$test=new ComponentsMatroluxe();
 $test->setComponents();

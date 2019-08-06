@@ -3356,6 +3356,7 @@ if ($res=mysqli_query($db_connect,$query))
 
 	}
 	*/
+	/*
 	$db_connect=mysqli_connect(host,user,pass,db);
 	$query="UPDATE goodshastissue SET goodshastissue_active=0 WHERE tissue_id=741";
 	echo "$query<br>";
@@ -3401,7 +3402,102 @@ if ($res=mysqli_query($db_connect,$query))
 	echo "$query<br>";
 	mysqli_query($db_connect,$query);
 	mysqli_close($db_connect);
+	*/
+
+	function getFeaturesVal($good_id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="select feature_id,goodshasfeature_valueid from goodshasfeature WHERE goods_id=$good_id";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    $goods[] = $row;
+                }
+        }
+        else
+        {
+            echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        if (is_array($goods))
+        {
+            return $goods;
+        }
+        else
+        {
+            return null;
+        }
+    }
+	function setNoActual($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goods SET goods_noactual=1 WHERE goods_id=$id";
+		echo "$query<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+	function getGoodsByCatAndFactory($cat_id, $f_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_id from goodshascategory WHERE category_id=$cat_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        //var_dump ($goods);
+		if (is_array ($goods_all))
+		{
+			//var_dump($goods_all);
+			foreach ($goods_all as $good)
+			{
+				$id=$good['goods_id'];
+				$features=getFeaturesVal($id);
+				if (is_array($features))
+				{
+					foreach ($features as $feature)
+					{
+						$feature_id=$feature['feature_id'];
+						$val_id=$feature['goodshasfeature_valueid'];
+						if ($feature_id==232&&$val_id==$f_id)
+						{
+							$goods_by_factoty[]=$id;
+							break;
+						}
+					}
+				}
+				
+				//break;
+			}
+		}
+		else
+		{
+			echo "no goods by category<br>";
+		}
+		
+		mysqli_close($db_connect);
+		if (is_array($goods_by_factoty))
+		{
+			return $goods_by_factoty;
+		}
+		else
+		{
+			return null;
+		}
+	}
 	
+	$goods=getGoodsByCatAndFactory(9,109);
+	foreach ($goods as $good)
+	{
+		setNoActual($good);
+	}
 
 ?>
 
