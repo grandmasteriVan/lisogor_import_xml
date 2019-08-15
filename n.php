@@ -3403,7 +3403,7 @@ if ($res=mysqli_query($db_connect,$query))
 	mysqli_query($db_connect,$query);
 	mysqli_close($db_connect);
 	*/
-
+/*
 	function getFeaturesVal($good_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -3492,12 +3492,62 @@ if ($res=mysqli_query($db_connect,$query))
 			return null;
 		}
 	}
-	
+	*/
+	/*
+
 	$goods=getGoodsByCatAndFactory(9,109);
 	foreach ($goods as $good)
 	{
 		setNoActual($good);
 	}
+	*/
+	
+/*
+	$db_connect=mysqli_connect(host,user,pass,db);
+	//20 85-110-81
+	$goods=getGoodsByCatAndFactory(20, 85);
+	foreach ($goods as $good)
+	{
+		$id=$good;
+		
+        $query="UPDATE goods SET goods_popular=0 WHERE goods_id=$id";
+        echo "$query<br>";
+        mysqli_query($db_connect,$query);
+        
+	}
+	mysqli_close($db_connect);
+*/
+	//убрать у всех кроватей, у которых стоит фильтр с мягкой оббивкой фильтр ДСП
+	$db_connect=mysqli_connect(host,user,pass,db);
+    $query="SELECT goods_id from goodshasfeature WHERE feature_id=323 AND goodshasfeature_valueid=3636";
+	if ($res=mysqli_query($db_connect,$query))
+	{
+        while ($row = mysqli_fetch_assoc($res))
+        {
+            $goods[] = $row;
+        }
+    }
+    else
+    {
+        echo "Error in SQL: $query<br>";		
+	}
+
+	//var_dump ($goods);
+	if (is_array($goods))
+	{
+		foreach ($goods as $good) 
+		{
+			# code...
+			$id=$good['goods_id'];
+			$query="DELETE FROM goodshasfeature WHERE goods_id=$id AND feature_id=318 AND goodshasfeature_valueid=3624";
+			echo "$query<br>";
+			mysqli_query($db_connect,$query);
+		}
+		
+
+	}
+		
+	mysqli_close($db_connect);
 
 ?>
 

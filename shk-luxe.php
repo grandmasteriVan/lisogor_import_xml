@@ -2941,71 +2941,86 @@ class ComponentsMatroluxe
             $id=$good;
             $goods_sizes=$this->getSize($id);
             $good_sname=$this->getName($id);
-            if (strripos($name,"2 ДСП")!=false)
+            foreach ($components as $component)
             {
-                //ищем нужный размер
-                if 
+                if (strripos($name,"Фасад")!=false)
+                {
+                    if (strripos($name,"2 ДСП")!=false)
+                    {
+                        //ищем нужный размер
+                        if ()
+                    }
+                    if (strripos($name,"2 Зеркала")!=false)
+                    {
+                        //ищем нужный размер
+                        if 
+                    }
+                    if (strripos($name,"ДСП/Зеркало")!=false)
+                    {
+                        //ищем нужный размер
+                        if 
+                    }
+                    if (strripos($name,"ДСП/Пескоструй")!=false)
+                    {
+                        //ищем нужный размер
+                        if 
+                    }
+                    if (strripos($name,"Зеркало/Пескоструй")!=false)
+                    {
+                        //ищем нужный размер
+                        if 
+                    }
+                    if (strripos($name," Пескоструй")!=false)
+                    {
+                        //ищем нужный размер
+                        if 
+                    }
+                    if (strripos($name,"Комби зеркало")!=false)
+                    {
+                        //ищем нужный размер
+                        if 
+                    }
+                    if (strripos($name,"Комби стекло")!=false)
+                    {
+                        //ищем нужный размер
+                        if 
+                    }
+                    if (strripos($name,"Фотопечать")!=false)
+                    {
+                        //ищем нужный размер
+                        if 
+                    }
+                    if (strripos($name,"3 ДСП")!=false)
+                    {
+                        //ищем нужный размер
+                        if 
+                    }
+                    if (strripos($name,"3 Зеркала")!=false)
+                    {
+                        //ищем нужный размер
+                        if 
+                    }
+                    if (strripos($name,"2 ДСП/Зеркало")!=false)
+                    {
+                        //ищем нужный размер
+                        if 
+                    }
+                    if (strripos($name,"2 ДСП/Пескоструй")!=false)
+                    {
+                        //ищем нужный размер
+                        if 
+                    }
+                    if (strripos($name,"2 Пескоструя/Зеркало")!=false)
+                    {
+                        //ищем нужный размер
+                        if 
+                    }
+
+                }
+
             }
-            if (strripos($name,"2 Зеркала")!=false)
-            {
-                //ищем нужный размер
-                if 
-            }
-            if (strripos($name,"ДСП/Зеркало")!=false)
-            {
-                //ищем нужный размер
-                if 
-            }
-            if (strripos($name,"ДСП/Пескоструй")!=false)
-            {
-                //ищем нужный размер
-                if 
-            }
-            if (strripos($name,"Зеркало/Пескоструй")!=false)
-            {
-                //ищем нужный размер
-                if 
-            }
-            if (strripos($name," Пескоструй")!=false)
-            {
-                //ищем нужный размер
-                if 
-            }
-            if (strripos($name,"Комби зеркало")!=false)
-            {
-                //ищем нужный размер
-                if 
-            }
-            if (strripos($name,"Комби стекло")!=false)
-            {
-                //ищем нужный размер
-                if 
-            }
-            if (strripos($name,"Фотопечать")!=false)
-            {
-                //ищем нужный размер
-                if 
-            }
-            if (strripos($name,"3 ДСП")!=false)
-            {
-                //ищем нужный размер
-                if 
-            }
-            if (strripos($name,"3 Зеркала")!=false)
-            {
-                //ищем нужный размер
-                if 
-            }
-            if (strripos($name,"2 ДСП/Зеркало")!=false)
-            {
-                //ищем нужный размер
-                if 
-            }
-            if (strripos($name,"2 ДСП/Пескоструй")!=false)
-            {
-                //ищем нужный размер
-                if 
-            }
+            
+            
 
         }
 
