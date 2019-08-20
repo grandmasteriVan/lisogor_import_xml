@@ -79,11 +79,36 @@ class FiltersFix
         return $return;
     }
 
+    private function delFeature($goods_id, $feature_id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="DELETE FROM goodshasfeature WHERE goods_id=$goods_id AND feature_id=$feature_id";
+        echo "$query<br>";
+        mysqli_query($db_connect,$query);
+        mysqli_close($db_connect);
+    }
+
+    private function insFilter($goods_id, $feature_id, $value_id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="INSERT INTO goodshasfeature (goods_id, feature_id, goodshasfeature_valueid) VALUES ($goods_id, $feature_id, $value_id)";
+        echo "$query<br><br>";
+        mysqli_query($db_connect,$query);
+        mysqli_close($db_connect);
+    }
+
     public function FixPriceCat($catId)
     {
         //9000-17000-17000+
-        $goods=$this->getGoodsPrice(1,17000,20000000);
-        var_dump ($goods);
+        $goods=$this->getGoodsPrice($catId,0,10000);
+        //var_dump ($goods);
+        foreach ($goods as $good)
+        {
+            $id=$good;
+            $this->delFeature($id,235);
+            $this->insFilter($id,235,556);
+        }
+
 
     }
 
@@ -136,6 +161,18 @@ class FiltersFix
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="UPDATE goods SET goods_width=$width, goods_depth=$depth, goods_height=$height, goods_length=$length WHERE goods_id=$id";
+        echo "$query<br>";
+        mysqli_query($db_connect,$query);
+        mysqli_close($db_connect);
+    }
+
+    private function setSliper($id,$width,$length)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="UPDATE goodshasfeature SET goodshasfeature_valuenum=$width WHERE goods_id=$id AND feature_id=84";
+        echo "$query<br>";
+        mysqli_query($db_connect,$query);
+        $query="UPDATE goodshasfeature SET goodshasfeature_valuenum=$length WHERE goods_id=$id AND feature_id=85";
         echo "$query<br>";
         mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
@@ -247,6 +284,7 @@ class FiltersFix
                 {
                     var_dump ($sizes);
                     echo "$id<br>";
+                    $this->setSliper($id,$sizes['length'],$sizes['width']);
                 }
 
             }
@@ -255,8 +293,8 @@ class FiltersFix
 }
 
 $test=new FiltersFix();
-//$test->FixPriceCat(1);
+$test->FixPriceCat(38);
 //$test->FixSizes();
-$test->testSleeper(1);
-echo "<br><br>";
-$test->testSleeper(38);
+//$test->testSleeper(1);
+//echo "<br><br>";
+//$test->testSleeper(38);

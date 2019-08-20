@@ -22,10 +22,7 @@ define ("pass", "N0r7F8g6");
 define ("db", "newfm");
 
 
-define ("host_ddn","es835db.mirohost.net");
-define ("user_ddn", "u_fayni");
-define ("pass_ddn", "ZID1c0eud3Dc");
-define ("db_ddn", "ddnPZS");
+c
 
 define ("host_old","localhost");
 define ("user_old", "fm");
