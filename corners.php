@@ -126,7 +126,62 @@ class Corners
         }
 
     }
+
+    private function get1CCode ($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_article_1c from goods WHERE goods_id=$id";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    $names[] = $row;
+                }
+        }
+        else
+        {
+             echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        if (is_array($names))
+        {
+            return $names[0]['goods_article_1c'];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private function setCode1C ($good_id,$code)
+   	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goods SET goods_article_1c='$code' WHERE goods_id=$good_id";
+		echo "$query<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+    }
+
+    public function Fix1C ()
+    {
+        $goods=$this->getGoodsByFactory(186);
+        if (is_array($goods))
+        {
+            foreach ($goods as $good)
+            {
+                $id=$good['goods_id'];
+                $code1C=$this->get1CCode($id);
+                echo "$code1C-";
+                $code1C=str_ireplace(";","/",$code1C);
+                echo "$code1C<br>";
+                $this->setCode1C($id,$code1C);
+            }
+
+        }
+        
+    }
 }
 
 $test=new Corners();
-$test->setComponents();
+//$test->setComponents();
+$test->Fix1C();

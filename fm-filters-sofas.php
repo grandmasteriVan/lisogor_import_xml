@@ -26,7 +26,7 @@ class FiltersFix
     private function getPrice ($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-		$query="SELECT goods_priceord from goods WHERE goods_id=$id";
+		$query="SELECT goods_priceord FROM goods WHERE goods_id=$id";
 		if ($res=mysqli_query($db_connect,$query))
 		{
 				while ($row = mysqli_fetch_assoc($res))
@@ -52,7 +52,7 @@ class FiltersFix
     private function getGoodsPrice($catId, $minPrice, $maxPrice)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-		$query="SELECT goods_id from goodshascategory WHERE category_id=$catId";
+		$query="SELECT goods_id FROM goodshascategory WHERE category_id=$catId";
 		if ($res=mysqli_query($db_connect,$query))
 		{
 				while ($row = mysqli_fetch_assoc($res))
@@ -86,7 +86,177 @@ class FiltersFix
         var_dump ($goods);
 
     }
+
+    private function getSize($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goods_width, goods_depth, goods_height, goods_length FROM goods WHERE goods_id=$id";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    $sizes[] = $row;
+                }
+        }
+        else
+        {
+             echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        if (is_array($sizes))
+        {
+            return $sizes[0];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    private function getGoodsByCat($catId)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_id FROM goodshascategory WHERE category_id=$catId";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        return $goods_all;
+    }
+
+    private function SetSizes($id,$width,$depth,$height,$length)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="UPDATE goods SET goods_width=$width, goods_depth=$depth, goods_height=$height, goods_length=$length WHERE goods_id=$id";
+        echo "$query<br>";
+        mysqli_query($db_connect,$query);
+        mysqli_close($db_connect);
+    }
+
+    private function isActual($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_noactual FROM goods WHERE goods_id=$id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+        if ($goods[0]['goods_noactual']==1)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public function FixSizes()
+    {
+
+        $goods=$this->getGoodsByCat(38);
+        if (is_array($goods))
+        {
+            foreach ($goods as $good)
+            {
+                $id=$good['goods_id'];
+                $sizes=$this->getSize($id);
+                /*if ($sizes['goods_length']>$sizes['goods_width'])
+                {
+                    echo "$id длинна больше ширины<br>";
+                    $this->SetSizes($id,$sizes['goods_length'],$sizes['goods_depth'],$sizes['goods_height'],$sizes['goods_width']);
+
+                }*/
+                //$this->SetSizes($id,$sizes['goods_width'],$sizes['goods_length'],$sizes['goods_height'],0);
+                if ($sizes['goods_depth']==0&&$this->isActual($id))
+                {
+                    echo "$id<br>";
+                }
+            }
+
+        }
+        else
+        {
+            echo "No array!<br>";
+        }
+    }
+
+    private function getSleeper ($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        //ширина
+        $query="SELECT goodshasfeature_valuenum FROM goodshasfeature WHERE goods_id=$id AND feature_id=84";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$width[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        //длинна
+        $query="SELECT goodshasfeature_valuenum FROM goodshasfeature WHERE goods_id=$id AND feature_id=85";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$length[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        $sizes['width']=(int)$width[0]['goodshasfeature_valuenum'];
+        $sizes['length']=(int)$length[0]['goodshasfeature_valuenum'];
+        return $sizes;
+
+    }
+
+    public function testSleeper ($catId)
+    {
+        $goods=$this->getGoodsByCat($catId);
+        if (is_array($goods))
+        {
+            foreach ($goods as $good)
+            {
+                $id=$good['goods_id'];
+                $sizes=$this->getSleeper($id);
+                
+                if ($sizes['width']>$sizes['length'])
+                {
+                    var_dump ($sizes);
+                    echo "$id<br>";
+                }
+
+            }
+        }
+    }
 }
 
 $test=new FiltersFix();
-$test->FixPriceCat(1);
+//$test->FixPriceCat(1);
+//$test->FixSizes();
+$test->testSleeper(1);
+echo "<br><br>";
+$test->testSleeper(38);
