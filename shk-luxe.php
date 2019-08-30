@@ -8,18 +8,18 @@ define ("host","localhost");
 /**
  * database username
  */
-//define ("user", "root");
-define ("user", "newfm");
+define ("user", "root");
+//define ("user", "newfm");
 /**
  * database password
  */
-//define ("pass", "");
-define ("pass", "N0r7F8g6");
+define ("pass", "");
+//define ("pass", "N0r7F8g6");
 /**
  * database name
  */
-//define ("db", "new_fm");
-define ("db", "newfm");
+define ("db", "new_fm");
+//define ("db", "newfm");
 
 class LuxeStudio
 {
@@ -2861,7 +2861,7 @@ class ComponentsMatroluxe
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="INSERT INTO component (goods_id, component_child, component_in_complect) VALUES ($good_id,$comp_id,$count)";
 		echo "$query<br><br>";
-		mysqli_query($db_connect,$query);
+		//mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
 
@@ -2941,84 +2941,278 @@ class ComponentsMatroluxe
             $id=$good;
             $goods_sizes=$this->getSize($id);
             $good_sname=$this->getName($id);
+            $goods_sizes=$this->getSize($id);
+            echo "<b>$good_sname</b><br>";
             foreach ($components as $component)
             {
-                if (strripos($name,"Фасад")!=false)
+                
+                $compName=$this->getName($component);
+                if (strripos($compName,"Фасад")!=false)
                 {
-                    if (strripos($name,"2 ДСП")!=false)
+                    $size=explode("*",$compName);
+                    //$size=$size[1];
+                    //echo "$compName=$size[1]<br>";
+                    //для фасадов из нескольких частей
+                    $hasFirstHalf=false;
+                    if ((strrpos($compName,"ДСП")!=false)&&(strrpos($good_sname,"2 ДСП")!=false))
                     {
                         //ищем нужный размер
-                        if ()
+                        if (($goods_sizes['goods_width']==$size[1])&&($size[2]!=600))
+                        {
+                            //если размер совпадает - добавляем в комплект
+                            echo "$compName<br>";
+                            $this->setComp($id,$component,2);
+                            break;
+                        }
                     }
-                    if (strripos($name,"2 Зеркала")!=false)
+                    if ((strrpos($compName,"Зеркало*")!=false)&(strrpos($good_sname,"2 Зеркала")!=false))
                     {
                         //ищем нужный размер
-                        if 
+                        if (($goods_sizes['goods_width']==$size[1])&&($size[2]!=600))
+                        {
+                            //если размер совпадает - добавляем в комплект
+                            echo "$compName<br>";
+                            $this->setComp($id,$component,2);
+                            break;
+                        }
                     }
-                    if (strripos($name,"ДСП/Зеркало")!=false)
+                    if ((strrpos($compName,"ДСП")!=false)&&(strrpos($good_sname,"3 ДСП")!=false))
                     {
                         //ищем нужный размер
-                        if 
+                        if (($goods_sizes['goods_width']==$size[1])&&($size[2]!=600))
+                        {
+                            //если размер совпадает - добавляем в комплект
+                            echo "$compName<br>";
+                            $this->setComp($id,$component,3);
+                            break;
+                        }
                     }
-                    if (strripos($name,"ДСП/Пескоструй")!=false)
+                    if ((strrpos($compName,"Зеркало*")!=false)&(strrpos($good_sname,"3 Зеркала")!=false))
                     {
                         //ищем нужный размер
-                        if 
+                        if (($goods_sizes['goods_width']==$size[1])&&($size[2]!=600))
+                        {
+                            //если размер совпадает - добавляем в комплект
+                            echo "$compName<br>";
+                            $this->setComp($id,$component,3);
+                            break;
+                        }
                     }
-                    if (strripos($name,"Зеркало/Пескоструй")!=false)
+                    if ((strrpos($compName,"комбинированный (зеркало+дсп)")!=false)&(strrpos($good_sname,"Комби зеркало")!=false))
                     {
                         //ищем нужный размер
-                        if 
+                        if (($goods_sizes['goods_width']==$size[1])&&($size[2]!=450))
+                        {
+                            //если размер совпадает - добавляем в комплект
+                            if ($goods_sizes['goods_width']<2100)
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,2);
+                                break;
+                            }
+                            else
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,3);
+                                break;
+                            }
+                            
+                        }
                     }
-                    if (strripos($name," Пескоструй")!=false)
+                    if ((strrpos($compName,"комбинированный (остальное)")!=false)&(strrpos($good_sname,"Комби стекло")!=false))
                     {
                         //ищем нужный размер
-                        if 
+                        if (($goods_sizes['goods_width']==$size[1])&&($size[2]!=450))
+                        {
+                            //если размер совпадает - добавляем в комплект
+                            if ($goods_sizes['goods_width']<2100)
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,2);
+                                break;
+                            }
+                            else
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,3);
+                                break;
+                            }
+                            
+                        }
                     }
-                    if (strripos($name,"Комби зеркало")!=false)
+                    if ((strrpos($compName,"Зеркало+пескоструй")!=false)&(strrpos($good_sname,"Пескоструй")!=false))
                     {
                         //ищем нужный размер
-                        if 
+                        if (($goods_sizes['goods_width']==$size[1])&&($size[2]!=450))
+                        {
+                            //если размер совпадает - добавляем в комплект
+                            if ($goods_sizes['goods_width']<2100)
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,2);
+                                break;
+                            }
+                            else
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,3);
+                                break;
+                            }
+                            
+                        }
                     }
-                    if (strripos($name,"Комби стекло")!=false)
+                    if ((strrpos($compName,"полноцветная печать")!=false)&(strrpos($good_sname,"Фотопечать")!=false))
                     {
                         //ищем нужный размер
-                        if 
+                        if (($goods_sizes['goods_width']==$size[1])&&($size[2]!=450))
+                        {
+                            //если размер совпадает - добавляем в комплект
+                            if ($goods_sizes['goods_width']<2100)
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,2);
+                                break;
+                            }
+                            else
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,3);
+                                break;
+                            }
+                            
+                        }
                     }
-                    if (strripos($name,"Фотопечать")!=false)
+                    if ((strrpos($compName,"ДСП")!=false)&(strrpos($good_sname,"ДСП/Пескоструй")!=false))
                     {
                         //ищем нужный размер
-                        if 
+                        if (($goods_sizes['goods_width']==$size[1])&&($size[2]!=450))
+                        {
+                            //если размер совпадает - добавляем в комплект
+                            if ($goods_sizes['goods_width']<2100)
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,1);
+
+                            }
+                            else
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,2);
+                            }
+                            
+                        }
                     }
-                    if (strripos($name,"3 ДСП")!=false)
+                    if ((strrpos($compName,"Зеркало+пескоструй")!=false)&(strrpos($good_sname,"ДСП/Пескоструй")!=false))
                     {
                         //ищем нужный размер
-                        if 
+                        if (($goods_sizes['goods_width']==$size[1])&&($size[2]!=450))
+                        {
+                            //если размер совпадает - добавляем в комплект
+                            if ($goods_sizes['goods_width']<2100)
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,1);
+
+                            }
+                            else
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,1);
+                            }
+                            
+                        }
                     }
-                    if (strripos($name,"3 Зеркала")!=false)
+
+                    if ((strrpos($compName,"Зеркало*")!=false)&(strrpos($good_sname,"Зеркало/Пескоструй")!=false))
                     {
                         //ищем нужный размер
-                        if 
+                        if (($goods_sizes['goods_width']==$size[1])&&($size[2]!=450))
+                        {
+                            //если размер совпадает - добавляем в комплект
+                            if ($goods_sizes['goods_width']<2100)
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,1);
+
+                            }
+                            else
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,1);
+                            }
+                            
+                        }
                     }
-                    if (strripos($name,"2 ДСП/Зеркало")!=false)
+                    if ((strrpos($compName,"Зеркало+пескоструй")!=false)&(strrpos($good_sname,"Зеркало/Пескоструй")!=false))
                     {
                         //ищем нужный размер
-                        if 
+                        if (($goods_sizes['goods_width']==$size[1])&&($size[2]!=450))
+                        {
+                            //если размер совпадает - добавляем в комплект
+                            if ($goods_sizes['goods_width']<2100)
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,1);
+
+                            }
+                            else
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,2);
+                            }
+                            
+                        }
                     }
-                    if (strripos($name,"2 ДСП/Пескоструй")!=false)
+
+                    if ((strrpos($compName,"ДСП")!=false)&(strrpos($good_sname,"ДСП/Зеркало")!=false))
                     {
                         //ищем нужный размер
-                        if 
+                        if (($goods_sizes['goods_width']==$size[1])&&($size[2]!=450))
+                        {
+                            //если размер совпадает - добавляем в комплект
+                            if ($goods_sizes['goods_width']<2100)
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,1);
+
+                            }
+                            else
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,1);
+                            }
+                            
+                        }
                     }
-                    if (strripos($name,"2 Пескоструя/Зеркало")!=false)
+                    if ((strrpos($compName,"Зеркало*")!=false)&(strrpos($good_sname,"ДСП/Зеркало")!=false))
                     {
                         //ищем нужный размер
-                        if 
+                        if (($goods_sizes['goods_width']==$size[1])&&($size[2]!=450))
+                        {
+                            //если размер совпадает - добавляем в комплект
+                            if ($goods_sizes['goods_width']<2100)
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,1);
+
+                            }
+                            else
+                            {
+                                echo "$compName<br>";
+                                $this->setComp($id,$component,2);
+                            }
+                            
+                        }
                     }
+
+
+                    
 
                 }
 
             }
+            //для одного шкафа
+            //break;
             
             
 
@@ -3030,11 +3224,11 @@ class ComponentsMatroluxe
 
 
 
-$test=new LuxeStudio();
-$test->setFilters();
+//$test=new LuxeStudio();
+//$test->setFilters();
 
 //$test=new ModMatroluxe();
 //$test->setModSHK();
-//set_time_limit(40000);
-////$test=new ComponentsMatroluxe();
+set_time_limit(40000);
+$test=new ComponentsMatroluxe();
 $test->setComponents();

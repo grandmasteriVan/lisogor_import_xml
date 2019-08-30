@@ -22,8 +22,6 @@ define ("pass", "N0r7F8g6");
 define ("db", "newfm");
 
 
-c
-
 define ("host_old","localhost");
 define ("user_old", "fm");
 define ("pass_old", "T6n7C8r1");
@@ -3514,6 +3512,7 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 	mysqli_close($db_connect);
 */
+/*
 	//убрать у всех кроватей, у которых стоит фильтр с мягкой оббивкой фильтр ДСП
 	$db_connect=mysqli_connect(host,user,pass,db);
     $query="SELECT goods_id from goodshasfeature WHERE feature_id=323 AND goodshasfeature_valueid=3636";
@@ -3545,6 +3544,62 @@ if ($res=mysqli_query($db_connect,$query))
 	}
 		
 	mysqli_close($db_connect);
+*/
 
+	function getGoodsByFactory($f_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_id from goodshasfeature WHERE feature_id=232 AND goodshasfeature_valueid=$f_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		return $goods;
+	}
+	
+	function getPrice($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_price from goods WHERE goods_id=$id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		return $goods[0]['goods_price'];
+	}
+
+	function setPrice($id,$price)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goods SET goods_price=$price, goods_priceord=$price WHERE goods_id=$id";
+		echo "$query<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+
+	$goods=getGoodsByFactory(33);
+	foreach ($goods as $good)
+	{
+		$id=$good['goods_id'];
+		$price=getPrice($id);
+		$pricenew=round(1.4*$price);
+		setPrice($id,$pricenew);
+	}
 ?>
 
