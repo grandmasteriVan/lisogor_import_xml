@@ -3564,7 +3564,16 @@ if ($res=mysqli_query($db_connect,$query))
 		mysqli_close($db_connect);
 		return $goods;
 	}
-	
+
+	function delGoodFromDisc($id,$discId)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="DELETE FROM discounthasgoods WHERE  discount_id=$discId AND goods_id=$id";
+		echo "$query<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+	/*
 	function getPrice($id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -3600,6 +3609,15 @@ if ($res=mysqli_query($db_connect,$query))
 		$price=getPrice($id);
 		$pricenew=round(1.4*$price);
 		setPrice($id,$pricenew);
+	}
+	*/
+
+	$goods=getGoodsByFactory(101);
+	foreach ($goods as $good)
+	{
+		$id=$good['goods_id'];
+		delGoodFromDisc($id,16);
+
 	}
 ?>
 

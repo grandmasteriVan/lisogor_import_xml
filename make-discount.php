@@ -23,6 +23,25 @@ define ("db", "newfm");
 
 class MakeDiscount
 {
+    private function getGoodsByCat($cat_id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_id from goodshascategory WHERE category_id=$cat_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        return $goods_all;
+    }
+    
     /**
      * выбираем товары, принадлижащие одной категории  кроме одной фабрики
      * @param $cat_id int айди категории
@@ -340,6 +359,34 @@ class MakeDiscount
         }
     }
 
+    public function delDiscount($discId)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="DELETE FROM discounthasgoods WHERE  discount_id=$discId";
+        echo "$query<br>";
+        mysqli_query($db_connect,$query);
+        mysqli_close($db_connect);
+    }
+
+    public function setDiscountByCat($catId,$discId)
+    {
+        $goods=$this->getGoodsByCat($catId);
+        if (is_array($goods))
+        {
+            foreach ($goods as $good)
+            {
+                $id=$good['goods_id'];
+                $this->addDiscount($discId,$id);
+                //break;
+            }
+
+        }
+        else
+        {
+            echo "No goods!<br>";
+        }
+    }
+
 }
 
 $test=new MakeDiscount();
@@ -360,4 +407,19 @@ $test=new MakeDiscount();
 //$test->setDiscount(75);
 //$test->setDiscount(9);
 //$test->makeDiscountByFactory(136);
-$test->ggg(136);
+//$test->ggg(136);
+$test->delDiscount(16);
+/*$test->setDiscountByCat(16);
+$test->setDiscountByCat(34);
+$test->setDiscountByCat(33);
+$test->setDiscountByCat(17);
+$test->setDiscountByCat(74);
+$test->setDiscountByCat(71);
+$test->setDiscountByCat(126);
+$test->setDiscountByCat(32);
+$test->setDiscountByCat(150);
+$test->setDiscountByCat(151);
+$test->setDiscountByCat(138);
+$test->setDiscountByCat(127);*/
+
+$test->setDiscountByCat(9,16);
