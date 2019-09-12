@@ -41,6 +41,87 @@ class MakeDiscount
         mysqli_close($db_connect);
         return $goods_all;
     }
+
+    function getGoodsByCatAndFactory($cat_id, $f_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_id from goodshascategory WHERE category_id=$cat_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		if (is_array ($goods_all))
+		{
+			//var_dump($goods_all);
+			foreach ($goods_all as $good)
+			{
+				$id=$good['goods_id'];
+				$features=$this->getFeatures($id);
+				if (is_array($features))
+				{
+					foreach ($features as $feature)
+					{
+						$feature_id=$feature['feature_id'];
+						$val_id=$feature['goodshasfeature_valueid'];
+						if ($feature_id==232&&$val_id==$f_id)
+						{
+							$goods_by_factoty[]=$id;
+							break;
+						}
+					}
+				}
+				
+				//break;
+			}
+		}
+		else
+		{
+			echo "no goods by category<br>";
+		}
+		
+		mysqli_close($db_connect);
+		if (is_array($goods_by_factoty))
+		{
+			return $goods_by_factoty;
+		}
+		else
+		{
+			return null;
+		}
+    }
+    
+    private function getFeatures($good_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goodshasfeature_valueid, feature_id from goodshasfeature WHERE goods_id=$good_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		if (is_array($goods))
+		{
+			return $goods;
+		}
+		else
+		{
+			return null;
+		}
+	}
     
     /**
      * выбираем товары, принадлижащие одной категории  кроме одной фабрики
@@ -368,6 +449,18 @@ class MakeDiscount
         mysqli_close($db_connect);
     }
 
+    public function setDiscByCatAndFactory($cadId,$fId,$discId)
+    {
+        $goods=$this->getGoodsByCatAndFactory($cadId,$fId);
+        //var_dump ($goods);
+        
+        foreach ($goods as $good)
+        {
+            
+            $this->addDiscount($discId,$good);
+        }
+    }
+
     public function setDiscountByCat($catId,$discId)
     {
         $goods=$this->getGoodsByCat($catId);
@@ -408,7 +501,7 @@ $test=new MakeDiscount();
 //$test->setDiscount(9);
 //$test->makeDiscountByFactory(136);
 //$test->ggg(136);
-$test->delDiscount(16);
+//$test->delDiscount(16);
 /*$test->setDiscountByCat(16);
 $test->setDiscountByCat(34);
 $test->setDiscountByCat(33);
@@ -421,5 +514,6 @@ $test->setDiscountByCat(150);
 $test->setDiscountByCat(151);
 $test->setDiscountByCat(138);
 $test->setDiscountByCat(127);*/
-
-$test->setDiscountByCat(9,16);
+$test->setDiscByCatAndFactory(9,93,16);
+$test->setDiscByCatAndFactory(9,101,16);
+//$test->setDiscountByCat(9,16);

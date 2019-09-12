@@ -3573,10 +3573,11 @@ if ($res=mysqli_query($db_connect,$query))
 		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
-	/*
+	
 	function getPrice($id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
+		//$query="SELECT goods_pricecur from goods WHERE goods_id=$id";
 		$query="SELECT goods_price from goods WHERE goods_id=$id";
 		if ($res=mysqli_query($db_connect,$query))
 		{
@@ -3590,34 +3591,126 @@ if ($res=mysqli_query($db_connect,$query))
 			echo "Error in SQL: $query<br>";		
 		}
 		mysqli_close($db_connect);
+		//return $goods[0]['goods_pricecur'];
 		return $goods[0]['goods_price'];
+	}
+
+	function getAllPrices ($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT * FROM goodshastissue WHERE goods_id = $id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$prices[] = $row;
+				}
+		}
+		else
+		{
+			echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		//return $goods[0]['goods_pricecur'];
+		return $prices;
 	}
 
 	function setPrice($id,$price)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
-		$query="UPDATE goods SET goods_price=$price, goods_priceord=$price WHERE goods_id=$id";
+		$priceukr=ceil($price/10)*10;
+		$query="UPDATE goods SET goods_price=$price, goods_priceord=$priceukr WHERE goods_id=$id";
 		echo "$query<br>";
 		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
 
-	$goods=getGoodsByFactory(33);
-	foreach ($goods as $good)
+	function setPriceCat($id,$price,$priceCur)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$priceukr=ceil($price/10)*10;
+		$query="UPDATE goodshastissue SET goodshastissue_price=$price, goodshastissue_pricecur=$priceCur WHERE goodshastissue_id=$id";
+		echo "$query<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+
+	$goods=getGoodsByFactory(110);
+	$percent=1.07;
+	/*foreach ($goods as $good)
 	{
 		$id=$good['goods_id'];
 		$price=getPrice($id);
-		$pricenew=round(1.4*$price);
+		echo "$price ";
+		$pricenew=round($price*1.25);
+		//echo $pricenew."<br>";
 		setPrice($id,$pricenew);
-	}
-	*/
-
-	$goods=getGoodsByFactory(101);
+	}*/
 	foreach ($goods as $good)
 	{
 		$id=$good['goods_id'];
-		delGoodFromDisc($id,16);
+		$prices=getAllPrices ($id);
+		//var_dump ($prices);
+		$minP=null;
+		foreach ($prices as $price) 
+		{
+			$priceId=$price['goodshastissue_id'];
+			$price=(int)$price['goodshastissue_price'];
+			$priceCur=(int)$price['goodshastissue_pricecur'];
+			$price=round($price*$percent);
+			$priceCur=round($priceCur*$percent);
+			setPriceCat($priceId,$price,$priceCur);
+			$minP[]=$price;
+		}
+		//var_dump($minP);
+		$minP=min($minP);
+		if ($minP!=0)
+		{
+			setPrice($id,$minP);
+		}
+		else
+		{
+			//$id=$good['goods_id'];
+			$price=getPrice($id);
+			echo "$price ";
+			$pricenew=round($price*$percent);
+			//echo $pricenew."<br>";
+			setPrice($id,$pricenew);
+		}
+		
+		//break;
+		
+	}
+	
+	//select goods_id from goodshastissue WHERE goodshastissue_active=1 AND goods_id IN (SELECT goods_id from goodshasfeature WHERE feature_id=232 AND goodshasfeature_valueid=109)
+
+	/*
+	$goods=getGoodsByFactory(139);
+	foreach ($goods as $good)
+	{
+		$id=$good['goods_id'];
+		delGoodFromDisc($id,24);
 
 	}
+	*/
+/*
+	$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT fvaluehaslang_name from fvaluehaslang WHERE lang_id=1 AND fvaluehaslang_active=1 AND fvalue_id IN (SELECT goodshasfeature_valueid FROM goodshasfeature WHERE feature_id=232)";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		echo "<pre>";
+		print_r($goods);
+		echo "</pre>";
+		*/
 ?>
 
