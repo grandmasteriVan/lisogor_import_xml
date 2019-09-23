@@ -3420,10 +3420,24 @@ class ComponentsMatroluxe
             {
                 echo "$id имеет слишком мало компонентов ($numComp при ширине $width)<br>";
             }
+            else
+            {
+                $this->setActive($id);
+
+            }
             
             //break;
         }
     }
+
+    private function setActive($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goodshaslang SET goodshaslang_active=1 WHERE goods_id=$id";
+		echo "$query<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
 
     private function fixComp($id,$quantity)
     {
