@@ -3447,6 +3447,35 @@ class ComponentsMatroluxe
         mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
+
+    
+    private function setUkrName($id,$name)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goodshaslang SET goodshaslang_name='$name' WHERE goods_id=$id AND lang_id=2";
+		echo "$query<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+    }
+
+    public function translate()
+    {
+        $goods=$this->getGoodsByCatAndFactory(9,3894);
+        foreach ($goods as $id)
+        {
+            $nameRu=$this->getName($id);
+            $nameUkr=str_ireplace("Шкаф-купе","Шафа-купе",$nameRu);
+            $nameUkr=str_ireplace("Классик","Класік",$nameUkr);
+            $nameUkr=str_ireplace("Зеркало","Дзеркало",$nameUkr);
+            $nameUkr=str_ireplace("Зеркала","Дзеркала",$nameUkr);
+            $nameUkr=str_ireplace("Пескоструй","Піскоструй",$nameUkr);
+            $nameUkr=str_ireplace("Пескоструя","Піскоструя",$nameUkr);
+            $nameUkr=str_ireplace("Комби стекло","Комбі скло",$nameUkr);
+            $nameUkr=str_ireplace("Фотопечать","Фотодрук",$nameUkr);
+            $this->setUkrName($id,$nameUkr);
+            echo "$nameRu - $nameUkr<br>";
+        }
+    }
 }
 
 
@@ -3460,4 +3489,5 @@ class ComponentsMatroluxe
 set_time_limit(40000);
 $test=new ComponentsMatroluxe();
 //$test->setComponents();
-$test->notEnoughtComp();
+//$test->notEnoughtComp();
+$test->translate();
