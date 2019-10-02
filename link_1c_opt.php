@@ -83,7 +83,7 @@ class SetFilters
     private function getGoods()
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id, goodshaslang_name from goodshaslang WHERE lang_id=1 AND goodshaslang_active=0 AND goodshaslang_name like '%Шкаф-купе%'";
+        $query="SELECT goods_id, goodshaslang_name from goodshaslang WHERE lang_id=1 AND goodshaslang_active=1 AND goodshaslang_name like '%Шкаф-купе%'";
         if ($res=mysqli_query($db_connect,$query))
         {
                 while ($row = mysqli_fetch_assoc($res))
@@ -169,27 +169,30 @@ class SetFilters
                 $this->delFeature($id,4);
                 if (mb_stripos($name,"Орех болонья тёмный"))
                 {
-                    $this->insFilter($id,4,9);
+                    $this->insFilter($id,4,32);
                 }
                 if (mb_stripos($name,"Дуб сонома"))
                 {
-                    $this->insFilter($id,4,6);
+                    $this->insFilter($id,4,25);
                 }
                 if (mb_stripos($name,"Венге"))
                 {
-                    $this->insFilter($id,4,5);
+                    $this->insFilter($id,4,19);
                 }
                 if (mb_stripos($name,"Дуб молочный"))
                 {
-                    $this->insFilter($id,4,7);
+                    $this->insFilter($id,4,26);
                 }
                 if (mb_stripos($name,"Дуб сонома трюфель"))
                 {
-                    $this->insFilter($id,4,8);
+                    $this->delFeature($id,4);
+                    $this->insFilter($id,4,27);
+                    
                 }
 
                 
                 //fasad
+                /*
                 if (mb_stripos($name,"ДСП/ДСП"))
                 {
                     //$this->delFeature($id,6);
@@ -273,6 +276,7 @@ class SetFilters
                
                 $name_tmp_ukr=str_ireplace("Орех болонья тёмный", "Горіх болон'я темний",$name_tmp_ukr);
                 $name_tmp_ukr=str_ireplace("Дуб молочный", "Дуб молочний",$name_tmp_ukr);
+                */
                 //echo "<b>$name:</b>-$name_tmp-$name_tmp_ukr<br>";
                 //$this->setName($name_tmp,$name_tmp_ukr,$id);
                 //$this->setActive($id);

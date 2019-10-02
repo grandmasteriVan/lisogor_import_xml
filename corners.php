@@ -49,7 +49,7 @@ class Corners
         }
     }
 
-    public function getGoodsByFactory($f_id)
+    private function getGoodsByFactory($f_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="select goods_id from goodshasfeature WHERE feature_id=232 AND goodshasfeature_valueid=$f_id";
@@ -66,6 +66,29 @@ class Corners
 		}
 		mysqli_close($db_connect);
 		return $goods;
+    }
+
+    private function delComponents ($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$query="DELETE FROM component WHERE goods_id=$id";
+		echo "$query<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+    }
+
+    public function deledeteComp()
+    {
+        $goods=$this->getGoodsByFactory(186);
+        //var_dump($goods);
+        if (is_array($goods))
+        {
+            foreach ($goods as $good)
+            {
+                $id=$good['goods_id'];
+                $this->delComponents($id);
+            }
+        }
     }
 
     private function setComp ($good_id,$comp_id,$count)
@@ -87,7 +110,7 @@ class Corners
                 $id=$good['goods_id'];
                 $goods_name=$this->getName($id);
                 
-                if (strripos($goods_name,"с подъемником")==false)
+                if (strripos($goods_name,"с подъемником")!=false)
                 {
                     echo "<b>$goods_name</b><br>";
                     foreach ($goods as $good_inner) 
@@ -95,15 +118,16 @@ class Corners
                         $id_inner=$good_inner['goods_id'];
                         if ($id!=$id_inner)
                         {
-                            $goods_name_inner=" ".$this->getName($id_inner);
-                            if ((strripos($goods_name_inner,"с подъемником")!=false))
+                            $goods_name_inner=$this->getName($id_inner);
+                            /*if ((strripos($goods_name_inner,"с подъемником")!=false))
                             {
                                 $goods_name_inner=str_ireplace(" с подъемником","",$goods_name_inner)." с подъемником";
-                            }
-                            
-                            //echo "$goods_name-$goods_name_inner ".strripos($goods_name_inner,$goods_name)."<br>";
+                            }*/
+                            //$goodsNameTmp - имя позиции без приставки
+                            $goodsNameTmp=str_ireplace(" с подъемником","",$goods_name);
+                            //echo "$goods_name-$goods_name_inner-$goodsNameTmp ".strripos($goods_name_inner,$goodsNameTmp)."<br>";
                             //$goods_name=" ".$goods_name;
-                            if ((strripos($goods_name_inner,$goods_name)!=false)&&(strripos($goods_name_inner,"с подъемником")!=false))
+                            if ($goods_name_inner==$goodsNameTmp)
                             {
                                 
                                 echo "$goods_name_inner-$goods_name<br>";
@@ -174,6 +198,8 @@ class Corners
                 echo "$code1C-";
                 $code1C=str_ireplace(";","/",$code1C);
                 echo "$code1C<br>";
+                $code1C=str_ireplace("-1600","",$code1C);
+                $code1C=str_ireplace("-2000","",$code1C);
                 $this->setCode1C($id,$code1C);
             }
 
@@ -183,5 +209,7 @@ class Corners
 }
 
 $test=new Corners();
-//$test->setComponents();
+$test->deledeteComp();
+$test->setComponents();
 $test->Fix1C();
+//$test->deledeteComp();

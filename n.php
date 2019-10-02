@@ -3565,6 +3565,8 @@ if ($res=mysqli_query($db_connect,$query))
 		return $goods;
 	}
 
+	function getActiveCat($id)
+
 	function delGoodFromDisc($id,$discId)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -3615,6 +3617,8 @@ if ($res=mysqli_query($db_connect,$query))
 		return $prices;
 	}
 
+
+
 	function setPrice($id,$price)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -3635,6 +3639,7 @@ if ($res=mysqli_query($db_connect,$query))
 		mysqli_close($db_connect);
 	}
 
+	/*
 	$goods=getGoodsByFactory(110);
 	$percent=1.07;
 	/*foreach ($goods as $good)
@@ -3646,6 +3651,7 @@ if ($res=mysqli_query($db_connect,$query))
 		//echo $pricenew."<br>";
 		setPrice($id,$pricenew);
 	}*/
+	/*
 	foreach ($goods as $good)
 	{
 		$id=$good['goods_id'];
@@ -3681,6 +3687,7 @@ if ($res=mysqli_query($db_connect,$query))
 		//break;
 		
 	}
+	*/
 	
 	//select goods_id from goodshastissue WHERE goodshastissue_active=1 AND goods_id IN (SELECT goods_id from goodshasfeature WHERE feature_id=232 AND goodshasfeature_valueid=109)
 
