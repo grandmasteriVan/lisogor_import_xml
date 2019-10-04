@@ -3565,7 +3565,7 @@ if ($res=mysqli_query($db_connect,$query))
 		return $goods;
 	}
 
-	function getActiveCat($id)
+	//function getActiveCat($id)
 
 	function delGoodFromDisc($id,$discId)
 	{
@@ -3719,5 +3719,16 @@ if ($res=mysqli_query($db_connect,$query))
 		print_r($goods);
 		echo "</pre>";
 		*/
+
+	$goods=getGoodsByFactory(174);
+	$db_connect=mysqli_connect(host,user,pass,db);
+	foreach ($goods as $good)
+	{
+		$id=$good['goods_id'];
+		$query="UPDATE goodshaslang SET goodshaslang_name_manager='' WHERE goods_id=$id";
+		echo "$query<br>";
+		mysqli_query($db_connect,$query);
+	}
+	mysqli_close($db_connect);
 ?>
 
