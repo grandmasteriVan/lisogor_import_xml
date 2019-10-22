@@ -182,6 +182,28 @@ class ContentCopy
 			return null;
 		}
 	}
+
+	private function getName($id,$lang)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goodshaslang_name from goodshaslang WHERE goods_id=$id AND lang_id=$lang";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		mysqli_close($db_connect);
+		if (is_array($goods))
+		{
+			return $goods[0]['goodshaslang_name'];
+		}
+		else
+		{
+			return null;
+		}
+	}
     /**
      * копирует контент из образца всем товарам одной фабрике которые находятся в определенном разделе
      * @param $ref_id int - ид товара образца
@@ -204,6 +226,8 @@ class ContentCopy
 			{
 				$id=$good;
 				$article=$this->getArticle($id);
+				$name=$this->getName($id,$lang);
+				echo "$name<br>";
 				//var_dump($good);
 				//var_dump($id);
 				/*
@@ -213,10 +237,16 @@ class ContentCopy
 				}
 				*/
 				//крпирование по артикулу
-				if ($article==5728799||$article==5728816)
+				//if ($article==5728799||$article==5728816)
+				//{
+				//	$this->setCont($id,$ref_cont,$lang);
+				//}
+				if (strpos($name,"Квадр")!=false)
 				{
 					$this->setCont($id,$ref_cont,$lang);
 				}
+				
+				
 				
 				
 				
@@ -226,5 +256,5 @@ class ContentCopy
 	}
 }
 $test=new ContentCopy();
-$test->copyContent(28815,86,20,2);
-$test->copyContent(28815,86,20,1);
+$test->copyContent(28825,86,20,2);
+$test->copyContent(28825,86,20,1);

@@ -3545,7 +3545,7 @@ if ($res=mysqli_query($db_connect,$query))
 		
 	mysqli_close($db_connect);
 */
-
+/*
 	function getGoodsByFactory($f_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -3625,7 +3625,7 @@ if ($res=mysqli_query($db_connect,$query))
 		$priceukr=ceil($price/10)*10;
 		$query="UPDATE goods SET goods_price=$price, goods_priceord=$priceukr WHERE goods_id=$id";
 		echo "$query<br>";
-		mysqli_query($db_connect,$query);
+		//mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
 
@@ -3635,22 +3635,33 @@ if ($res=mysqli_query($db_connect,$query))
 		$priceukr=ceil($price/10)*10;
 		$query="UPDATE goodshastissue SET goodshastissue_price=$price, goodshastissue_pricecur=$priceCur WHERE goodshastissue_id=$id";
 		echo "$query<br>";
-		mysqli_query($db_connect,$query);
+		//mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
 
+	
+	$goods=getGoodsByFactory(142);
+	$percent=1.133;
+	*/
 	/*
-	$goods=getGoodsByFactory(110);
-	$percent=1.07;
-	/*foreach ($goods as $good)
+	foreach ($goods as $good)
 	{
 		$id=$good['goods_id'];
 		$price=getPrice($id);
 		echo "$price ";
-		$pricenew=round($price*1.25);
+		if ($price<3000)
+		{
+			$pricenew=round($price*1.14);
+		}
+		else
+		{
+			$pricenew=round($price*1.08);
+		}
+		
 		//echo $pricenew."<br>";
 		setPrice($id,$pricenew);
-	}*/
+	}
+	*/
 	/*
 	foreach ($goods as $good)
 	{
@@ -3687,8 +3698,8 @@ if ($res=mysqli_query($db_connect,$query))
 		//break;
 		
 	}
-	*/
 	
+	*/
 	//select goods_id from goodshastissue WHERE goodshastissue_active=1 AND goods_id IN (SELECT goods_id from goodshasfeature WHERE feature_id=232 AND goodshasfeature_valueid=109)
 
 	/*
@@ -3719,7 +3730,7 @@ if ($res=mysqli_query($db_connect,$query))
 		print_r($goods);
 		echo "</pre>";
 		*/
-
+/*
 	$goods=getGoodsByFactory(174);
 	$db_connect=mysqli_connect(host,user,pass,db);
 	foreach ($goods as $good)
@@ -3730,5 +3741,67 @@ if ($res=mysqli_query($db_connect,$query))
 		mysqli_query($db_connect,$query);
 	}
 	mysqli_close($db_connect);
+	*/
+
+	$db_connect=mysqli_connect(host,user,pass,db);
+	//выбрали все товары со старой ценой не фабрики Распродажа
+	$query="SELECT goods_id from goods WHERE goods_oldprice<>0 AND goods_id IN (SELECT goods_id FROM goodshasfeature WHERE feature_id=232 AND goodshasfeature_valueid<>101)";
+	if ($res=mysqli_query($db_connect,$query))
+	{				
+		while ($row = mysqli_fetch_assoc($res))
+			{
+				$goods[] = $row;
+			}
+	}
+	else
+	{
+		echo "Error in SQL: $query<br>";		
+	}
+	//устанавливаем акцию всем товара у которых есть старая цена но фабрика не Распродажа
+	foreach ($goods as $good)
+	{
+		$id=$good['goods_id'];
+		//оказывается, есть товары вообще не имеющие фильтр Акция, чтоб его поставить надо сначала его создать 
+		if (featureExist($id,228))
+		{
+			$query="UPDATE goodshasfeature SET goodshasfeature_valueid=1 where goods_id=$id AND feature_id=228";
+		}		
+		else
+		{
+			$query="INSERT goodshasfeature (feature_id,goodshasfeature_valueid,goods_id) VALUES (228,1,$id)";
+		}
+		mysqli_query($db_connect,$query);
+		echo "$query<br>";
+	}
+	mysqli_close($db_connect);
+
+	function featureExist($id,$featureId)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		//выбрали все товары со старой ценой не фабрики Распродажа
+		$query="SELECT * FROM goodshasfeature WHERE feature_id=$featureId AND goods_id=$id";
+		if ($res=mysqli_query($db_connect,$query))
+		{				
+			while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		if ($goods!=null)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+
 ?>
 

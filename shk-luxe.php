@@ -8,18 +8,18 @@ define ("host","localhost");
 /**
  * database username
  */
-//define ("user", "root");
-define ("user", "newfm");
+define ("user", "root");
+//define ("user", "newfm");
 /**
  * database password
  */
-//define ("pass", "");
-define ("pass", "N0r7F8g6");
+define ("pass", "");
+//define ("pass", "N0r7F8g6");
 /**
  * database name
  */
-//define ("db", "new_fm");
-define ("db", "newfm");
+define ("db", "new_fm");
+//define ("db", "newfm");
 
 class LuxeStudio
 {
@@ -340,7 +340,7 @@ class LuxeStudio
 
                 $this->delFeature($id,315);
                 $this->insFilter($id,315,3298);
-                $this->insFilter($id,315,3330);
+                $this->insFilter($id,315,3300);
                 $this->insFilter($id,315,3303);
                 $this->insFilter($id,315,3315);
                 $this->insFilter($id,315,3302);
@@ -348,7 +348,7 @@ class LuxeStudio
                 $this->insFilter($id,315,3308);
 
                 $this->delFeature($id,292);
-                $this->insFilter($id,315,3518);
+                $this->insFilter($id,292,3518);
 
                 $this->delFeature($id,293);
                 if (strripos($name,"Зеркал")!=false||strripos($name,"зеркал")!=false)
@@ -3418,11 +3418,12 @@ class ComponentsMatroluxe
             
             if (($numComp!=3&&$width<2100)||($numComp!=4&&$width>=2100))
             {
-                echo "$id имеет слишком мало компонентов ($numComp при ширине $width)<br>";
+                $name=$this->getName($id);
+                echo "$id $name имеет слишком мало компонентов ($numComp при ширине $width)<br>";
             }
             else
             {
-                $this->setActive($id);
+                //$this->setActive($id);
 
             }
             
@@ -3489,5 +3490,5 @@ class ComponentsMatroluxe
 set_time_limit(40000);
 $test=new ComponentsMatroluxe();
 //$test->setComponents();
-//$test->notEnoughtComp();
-$test->translate();
+$test->notEnoughtComp();
+//$test->translate();
