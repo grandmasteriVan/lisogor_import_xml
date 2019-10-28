@@ -3743,6 +3743,7 @@ if ($res=mysqli_query($db_connect,$query))
 	mysqli_close($db_connect);
 	*/
 
+	/*
 	$db_connect=mysqli_connect(host,user,pass,db);
 	//выбрали все товары со старой ценой не фабрики Распродажа
 	$query="SELECT goods_id from goods WHERE goods_oldprice<>0 AND goods_id IN (SELECT goods_id FROM goodshasfeature WHERE feature_id=232 AND goodshasfeature_valueid<>101)";
@@ -3778,7 +3779,6 @@ if ($res=mysqli_query($db_connect,$query))
 	function featureExist($id,$featureId)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
-		//выбрали все товары со старой ценой не фабрики Распродажа
 		$query="SELECT * FROM goodshasfeature WHERE feature_id=$featureId AND goods_id=$id";
 		if ($res=mysqli_query($db_connect,$query))
 		{				
@@ -3800,7 +3800,80 @@ if ($res=mysqli_query($db_connect,$query))
 		{
 			return false;
 		}
+	}*/
+
+	function getGoodsByFactory($f_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_id FROM goodshasfeature WHERE feature_id=232 AND goodshasfeature_valueid=$f_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		if (is_array($goods))
+		{
+			return $goods;
+		}
+		else
+		{
+			return null;
+		}
 	}
+	function getName($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT goodshaslang_name from goodshaslang WHERE goods_id=$id AND lang_id=1";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    $names[] = $row;
+                }
+        }
+        else
+        {
+             echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        if (is_array($names))
+        {
+            return $names[0]['goodshaslang_name'];
+        }
+        else
+        {
+            return null;
+        }
+	}
+
+	function goodsOutProd($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goods SET goods_productionout=1 WHERE goods_id=$id";
+		echo "$query<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+	
+	$goods=getGoodsByFactory(46);
+	foreach ($goods as $good)
+	{
+		$id=$good['goods_id'];
+		$name=getName($id);
+		if (strripos($name,"Оскар")!=false)
+		{
+			goodsOutProd($id);
+		}
+		
+
+	}
+
 
 
 ?>
