@@ -480,6 +480,147 @@ class MakeDiscount
         }
     }
 
+    public function delOldPrice($catId,$fId)
+    {
+        $goods=$this->getGoodsByCatAndFactory($catId,$fId);
+        foreach ($goods as $good)
+        {
+            $db_connect=mysqli_connect(host,user,pass,db);
+            $query="update goods SET goods_discount=0, goods_oldprice=0 where goods_id=$good";
+            echo "$query<br>";
+            mysqli_query($db_connect,$query);
+            mysqli_close($db_connect);
+        }
+    }
+
+    public function setDiscountByCatAndNoFactory($catId, $f_id, $discId)
+    {
+        $goods=$this->getGoodsByCatAndNoFactory($catId,$f_id);
+        foreach ($goods as $good)
+        {
+            $id=$good;
+            $this->addDiscount($discId,$id);
+        }
+    }
+
+    private function getGoodsFromDisc($discId)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_id from discounthasgoods WHERE  discount_id=$discId";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        return $goods_all;
+    }
+
+    private function getRasprodaja($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_id from goodshasfeature WHERE feature_id=229 AND goodshasfeature_valueid=1 AND goods_id=$id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        return $goods_all[0]['goods_id'];
+    }
+
+    private function getAcij($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_id from goodshasfeature WHERE feature_id=228 AND goodshasfeature_valueid=1 AND goods_id=$id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        return $goods_all[0]['goods_id'];
+    }
+
+    private function delGoodFromDisc($goodsId, $discId)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="DELETE FROM discounthasgoods WHERE  discount_id=$discId AND goods_id=$goodsId";
+        echo "$query<br>";
+        mysqli_query($db_connect,$query);
+        mysqli_close($db_connect);
+    }
+
+    //удаляем лишние товары из акции (товары, которые есть в других акциях и не имеют галочек распродажа или акция)
+    public function cleanDiscount($discId)
+    {
+        $goods=$this->getGoodsFromDisc($discId);
+        foreach ($goods as $good)
+        {
+            $id=$good['goods_id'];
+            $goodsInOther=false;
+            $activeActinos=array(26, 22, 23, 21, 10);
+
+            //проверяем активные акции
+            foreach ($activeActinos as $activeActinon)
+            {
+                $other_goods=$this->getGoodsFromDisc($activeActinon);
+                foreach ($other_goods as $other_good)
+                {
+                    $other_id=$other_good['goods_id'];
+                    if ($id==$other_id)
+                    {
+                        $goodsInOther=true;
+                        echo "$id уже есть в другой акции<br>";
+                    }
+                }
+            }
+
+            //проверяем признаки товара
+            /*if ($id==35989)
+            {
+                echo "35989!!!<br>";
+                echo $this->getAcij($id)."<br>";
+            }*/
+            if ($id==$this->getRasprodaja($id))
+            {
+                $goodsInOther=true;
+                echo "$id стоит признак распродажа<br>";
+            }
+            if ($id==$this->getAcij($id))
+            {
+                $goodsInOther=true;
+                echo "$id стоит признак акция<br>";
+            }
+
+            if ($goodsInOther)
+            {
+                $this->delGoodFromDisc($id,$discId);
+            }
+            
+
+        }
+
+    }
+
 }
 
 $test=new MakeDiscount();
@@ -514,6 +655,14 @@ $test->setDiscountByCat(150);
 $test->setDiscountByCat(151);
 $test->setDiscountByCat(138);
 $test->setDiscountByCat(127);*/
-$test->setDiscByCatAndFactory(9,93,16);
-$test->setDiscByCatAndFactory(9,101,16);
+//$test->setDiscByCatAndFactory(20,86,27);
+//$test->setDiscByCatAndFactory(9,101,16);
 //$test->setDiscountByCat(9,16);
+//$test->setDiscByCatAndFactory(9,93,28);
+//$test->setDiscByCatAndFactory(9,101,29);
+//$test->delOldPrice(9,101);
+//$test->setDiscountByCatAndNoFactory(1,101,31);
+//$test->setDiscountByCatAndNoFactory(39,101,31);
+//$test->setDiscountByCatAndNoFactory(17,101,31);
+//$test->cleanDiscount(31);
+$test->setDiscountByCatAndNoFactory(13,101,32);
