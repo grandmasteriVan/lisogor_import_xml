@@ -569,6 +569,51 @@ class MakeDiscount
         mysqli_close($db_connect);
     }
 
+    private function isActive($id)
+    {
+        $active=true;
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goodshaslang_active from goodshaslang WHERE goods_id=$id AND lang_id=1";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_active[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        if ($goods_active[0]['goodshaslang_active']==1)
+        {
+            $query="SELECT goods_productionout, goods_noactual from goods WHERE goods_id=$id";
+            if ($res=mysqli_query($db_connect,$query))
+            {
+                    while ($row = mysqli_fetch_assoc($res))
+                    {
+                        $goods_actual[] = $row;
+                    }
+            }
+            else
+            {
+                echo "Error in SQL: $query<br>";		
+            }
+            if ($goods_actual[0]['goods_productionout']==1||$goods_actual[0]['goods_noactual']==1)
+            {
+                $active=false;
+            }
+        }
+        else
+        {
+            $active=false;
+        }
+        
+        
+        mysqli_close($db_connect);
+        return $active;
+    }
+
     //удаляем лишние товары из акции (товары, которые есть в других акциях и не имеют галочек распродажа или акция)
     public function cleanDiscount($discId)
     {
@@ -577,9 +622,10 @@ class MakeDiscount
         {
             $id=$good['goods_id'];
             $goodsInOther=false;
-            $activeActinos=array(26, 22, 23, 21, 10);
+            $activeActinos=array(23, 29, 28);
 
             //проверяем активные акции
+            
             foreach ($activeActinos as $activeActinon)
             {
                 $other_goods=$this->getGoodsFromDisc($activeActinon);
@@ -589,10 +635,11 @@ class MakeDiscount
                     if ($id==$other_id)
                     {
                         $goodsInOther=true;
-                        echo "$id уже есть в другой акции<br>";
+                        //echo "$id уже есть в другой акции<br>";
                     }
                 }
             }
+            
 
             //проверяем признаки товара
             /*if ($id==35989)
@@ -600,15 +647,23 @@ class MakeDiscount
                 echo "35989!!!<br>";
                 echo $this->getAcij($id)."<br>";
             }*/
+            
             if ($id==$this->getRasprodaja($id))
             {
                 $goodsInOther=true;
-                echo "$id стоит признак распродажа<br>";
+                //echo "$id стоит признак распродажа<br>";
             }
             if ($id==$this->getAcij($id))
             {
                 $goodsInOther=true;
-                echo "$id стоит признак акция<br>";
+                //echo "$id стоит признак акция<br>";
+            }
+
+            //находим неактивные товары
+            if ($this->isActive($id)==false)
+            {
+                $goodsInOther=true;
+                //echo "$id не активна<br>";
             }
 
             if ($goodsInOther)
@@ -619,6 +674,16 @@ class MakeDiscount
 
         }
 
+    }
+
+    public function removeCatFromDisc($catId, $discId)
+    {
+        $goods=$this->getGoodsByCat($catId);
+        foreach ($goods as $good)
+        {
+            $id=$good['goods_id'];
+            $this->delGoodFromDisc($id,$discId);
+        }
     }
 
 }
@@ -642,7 +707,7 @@ $test=new MakeDiscount();
 //$test->setDiscount(9);
 //$test->makeDiscountByFactory(136);
 //$test->ggg(136);
-//$test->delDiscount(16);
+//$test->delDiscount(32);
 /*$test->setDiscountByCat(16);
 $test->setDiscountByCat(34);
 $test->setDiscountByCat(33);
@@ -665,4 +730,10 @@ $test->setDiscountByCat(127);*/
 //$test->setDiscountByCatAndNoFactory(39,101,31);
 //$test->setDiscountByCatAndNoFactory(17,101,31);
 //$test->cleanDiscount(31);
-$test->setDiscountByCatAndNoFactory(13,101,32);
+//$test->setDiscountByCatAndNoFactory(11,101,32);
+//$test->setDiscountByCatAndNoFactory(7,101,32);
+//$test->setDiscountByCatAndNoFactory(59,101,32);
+//$test->setDiscountByCatAndNoFactory(75,101,32);
+//$test->setDiscountByCatAndNoFactory(98,101,32);
+//$test->cleanDiscount(32);
+$test->removeCatFromDisc(9,32);

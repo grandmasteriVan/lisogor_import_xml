@@ -3802,6 +3802,7 @@ if ($res=mysqli_query($db_connect,$query))
 		}
 	}*/
 
+	/*
 	function getGoodsByFactory($f_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -3873,8 +3874,101 @@ if ($res=mysqli_query($db_connect,$query))
 		
 
 	}
+	*/
+
+/*
+	$db_connect=mysqli_connect(host,user,pass,db);
+        $query="SELECT discount_id from discounthasgoods WHERE goods_id=18532";
+        if ($res=mysqli_query($db_connect,$query))
+        {
+                while ($row = mysqli_fetch_assoc($res))
+                {
+                    $names[] = $row;
+                }
+        }
+        else
+        {
+             echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+       
+       var_dump ($names)
+*/
 
 
+	//достать все товары из акции и поставить им признак акция (фильтр)
+
+	function featureExist($id,$featureId)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT * FROM goodshasfeature WHERE feature_id=$featureId AND goods_id=$id";
+		if ($res=mysqli_query($db_connect,$query))
+		{				
+			while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		if ($goods!=null)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	function getGoodsFromDisc($discId)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_id from discounthasgoods WHERE  discount_id=$discId";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        return $goods_all;
+	}
+
+	function setAkcij ($goods)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		foreach ($goods as $good)
+		{
+			$id=$good['goods_id'];
+			//оказывается, есть товары вообще не имеющие фильтр Акция, чтоб его поставить надо сначала его создать 
+			if (featureExist($id,228))
+			{
+				$query="UPDATE goodshasfeature SET goodshasfeature_valueid=1 where goods_id=$id AND feature_id=228";
+			}		
+			else
+			{
+				$query="INSERT goodshasfeature (feature_id,goodshasfeature_valueid,goods_id) VALUES (228,1,$id)";
+			}
+			mysqli_query($db_connect,$query);
+			echo "$query<br>";
+		}
+		mysqli_close($db_connect);
+	}
+
+	$goods=getGoodsFromDisc(29);
+	setAkcij($goods);
+
+	
+	
 
 ?>
 
