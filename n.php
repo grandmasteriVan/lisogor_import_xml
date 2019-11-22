@@ -3895,7 +3895,7 @@ if ($res=mysqli_query($db_connect,$query))
        var_dump ($names)
 */
 
-
+	/*
 	//достать все товары из акции и поставить им признак акция (фильтр)
 
 	function featureExist($id,$featureId)
@@ -3966,7 +3966,56 @@ if ($res=mysqli_query($db_connect,$query))
 
 	$goods=getGoodsFromDisc(29);
 	setAkcij($goods);
+	*/
 
+
+	function delAllFromGall($galId)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="DELETE FROM galleryfile WHERE gallery_id=$galId";
+		echo "$query<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+
+	function delFile($galleryfile_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="DELETE FROM galleryfilehaslang WHERE galleryfile_id=$galleryfile_id";
+		echo "$query<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+
+	function getFilesId($galId)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT galleryfile_id from galleryfile WHERE  gallery_id=$galId";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$files_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        return $files_all;
+	}
+
+	$files=getFilesId(51);
+	foreach ($files as $file)
+	{
+		$fileId=$file['galleryfile_id'];
+		delFile($fileId);
+	}
+	delAllFromGall(51);
+
+
+	
 	
 	
 

@@ -614,6 +614,47 @@ class MakeDiscount
         return $active;
     }
 
+    private function getPopul($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_popular from goods WHERE goods_id=$id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_pop[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        return $goods_pop[0]['goods_popular'];
+    }
+
+    private function setPopul($id,$pop)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="UPDATE goods SET goods_popular=$pop WHERE goods_id=$id";
+        echo "$query<br>";
+        mysqli_query($db_connect,$query);
+        mysqli_close($db_connect);
+    }
+
+    public function setPopToDisc($discId)
+    {
+        $goods=$this->getGoodsFromDisc($discId);
+        foreach ($goods as $good)
+        {
+            $id=$good['goods_id'];
+            $oldPop=$this->getPopul($id);
+            $newPop=random_int(1400,1515);
+            $file="$id;$oldPop".PHP_EOL;
+            file_put_contents("oplpop.txt",$file,FILE_APPEND);
+            $this->setPopul($id,$newPop);
+        }
+    }
+
     //удаляем лишние товары из акции (товары, которые есть в других акциях и не имеют галочек распродажа или акция)
     public function cleanDiscount($discId)
     {
@@ -736,4 +777,5 @@ $test->setDiscountByCat(127);*/
 //$test->setDiscountByCatAndNoFactory(75,101,32);
 //$test->setDiscountByCatAndNoFactory(98,101,32);
 //$test->cleanDiscount(32);
-$test->removeCatFromDisc(9,32);
+//$test->removeCatFromDisc(9,32);
+$test->setPopToDisc(29);
