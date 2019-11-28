@@ -727,6 +727,93 @@ class MakeDiscount
         }
     }
 
+    private function delGoodFromOtherDisc($goodsId, $discId)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="DELETE FROM discounthasgoods WHERE  discount_id<>$discId AND goods_id=$goodsId";
+        echo "$query<br>";
+        mysqli_query($db_connect,$query);
+        mysqli_close($db_connect);
+    }
+
+    public function removeGoodsFromOtherDisc($discId)
+    {
+        $goods=$this->getGoodsFromDisc($discId);
+        //var_dump ($goods);
+        foreach ($goods as $good)
+        {
+            $id=$good['goods_id'];
+            $this->delGoodFromOtherDisc($id,$discId);
+
+        }
+
+    }
+
+    private function getGoodsByCatAndInStore($cat_id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goods_id from goodshascategory WHERE category_id=$cat_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		if (is_array ($goods_all))
+		{
+			//var_dump($goods_all);
+			foreach ($goods_all as $good)
+			{
+				$id=$good['goods_id'];
+				$features=$this->getFeatures($id);
+				if (is_array($features))
+				{
+					foreach ($features as $feature)
+					{
+						$feature_id=$feature['feature_id'];
+						$val_id=$feature['goodshasfeature_valueid'];
+						if ($feature_id==231&&$val_id==1)
+						{
+							$goods_by_factoty[]=$id;
+							break;
+						}
+					}
+				}
+				
+				//break;
+			}
+		}
+		else
+		{
+			echo "no goods by category $cat_id<br>";
+		}
+		
+		mysqli_close($db_connect);
+		if (is_array($goods_by_factoty))
+		{
+			return $goods_by_factoty;
+		}
+		else
+		{
+			return null;
+		}
+    }
+
+    public function setDiscByCatAndInStore($catId,$discId)
+    {
+        $goods=$this->getGoodsByCatAndInStore($catId);
+        foreach ($goods as $good)
+        {
+            $id=$good;
+            $this->addDiscount($discId,$id);
+        }
+    }
+
 }
 
 $test=new MakeDiscount();
@@ -778,4 +865,12 @@ $test->setDiscountByCat(127);*/
 //$test->setDiscountByCatAndNoFactory(98,101,32);
 //$test->cleanDiscount(32);
 //$test->removeCatFromDisc(9,32);
-$test->setPopToDisc(29);
+//$test->setPopToDisc(29);
+//$test->setDiscByCatAndInStore(1,33);
+//$test->setDiscByCatAndInStore(38,33);
+//$test->setDiscByCatAndInStore(17,33);
+//$test->setDiscByCatAndInStore(2,33);
+//$test->setDiscByCatAndInStore(14,34);
+//$test->setDiscByCatAndInStore(150,34);
+//$test->cleanDiscount(33);
+$test->removeGoodsFromOtherDisc(34);
