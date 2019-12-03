@@ -283,27 +283,6 @@ class addComponents
 						}
 					}
 				}
-				if (stripos($name,"Витон")!=false)
-				{
-					echo "$id=$name<br>";
-					foreach ($goods_comp as $good_comp)
-					{
-						$comp_id=$good_comp;
-						$text=$this->getArticle1CName($comp_id);
-						if (stripos(" ".$text,"Витон")!=false)
-						{
-							echo "$comp_id= $text<br>";
-							if ($this->isPart($id,$comp_id))
-							{
-								echo "$comp_id уже есть частью $id<br>";		
-							}
-							else
-							{
-								$this->insComponent($comp_id,$id);
-							}
-						}
-					}
-				}
 				if (stripos($name,"Контур")!=false)
 				{
 					echo "$id=$name<br>";
