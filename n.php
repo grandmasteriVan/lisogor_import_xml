@@ -3968,7 +3968,7 @@ if ($res=mysqli_query($db_connect,$query))
 	setAkcij($goods);
 	*/
 
-
+/*
 	function delAllFromGall($galId)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -4013,6 +4013,53 @@ if ($res=mysqli_query($db_connect,$query))
 		delFile($fileId);
 	}
 	delAllFromGall(51);
+*/
+/*
+echo "IMG_CROP_WHITE\n";
+$im = imagecreatefromjpeg ("IMG.jpg");
+$im_crop = imagecropauto($im, IMG_CROP_WHITE);
+imagejpeg($im_crop, "crop_orig.jpg");
+var_dump(imagesx($im_crop));
+var_dump(imagesy($im_crop));*/
+//@unlink("crop_orig.jpg");
+/*
+$image_src = imagecreatefrompng("orig.png");
+
+$croppedImage = imagecropauto($image_src,IMG_CROP_WHITE);
+
+//header( 'Content-Type: image/png');
+
+imagepng($croppedImage);*/
+
+
+$path="picture_12512.png";
+$ext=end(explode(".", $path));
+echo "$ext<br>";
+//echo strnatcasecmp($ext,"png");
+if (strnatcasecmp($ext,"png")==0)
+{
+	$im = imagecreatefrompng ($path);
+	echo "!png!<br>";
+}
+else
+{
+	$im = imagecreatefromjpeg ($path);
+}
+//var_dump($im);
+//$im_crop = imagecropauto($im, IMG_CROP_WHITE);
+//var_dump($im_crop);
+$im_crop = imagecropauto($im, IMG_CROP_THRESHOLD, 1, 16777215);
+$path_new=str_replace(".$ext","",$path)."_tmp.".$ext;
+echo "$path_new<br>";
+if (strnatcasecmp($ext,"png")==0)
+{
+	imagepng($im_crop, $path_new);;
+	echo "!png!<br>";
+}
+else
+{
+	imagejpeg($im_crop, $path_new);;
+}
 
 
 	
