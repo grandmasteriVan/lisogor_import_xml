@@ -23,6 +23,14 @@ define ("db", "new_fm");
 
 class LuxeStudio
 {
+    /**
+     * getFeaturesVal
+     * получаем список всех фич (фильтров) и их щеачений для конекретного товара 
+     * 
+     * @param  mixed $good_id
+     *
+     * @return void
+     */
     private function getFeaturesVal($good_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -49,6 +57,15 @@ class LuxeStudio
         }
     }
 
+    /**
+     * hasFilter
+     * узнаем имеет и конкретный товар определенный фильтр
+     *
+     * @param  mixed $id
+     * @param  mixed $feature_id
+     *
+     * @return void
+     */
     private function hasFilter($id,$feature_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -75,6 +92,15 @@ class LuxeStudio
         }
     }
 
+    /**
+     * getGoodsByCatAndFactory
+     * выбираем товары одной фабрики которые находятся в одной категории
+     *
+     * @param  mixed $cat_id
+     * @param  mixed $f_id
+     *
+     * @return void
+     */
     private function getGoodsByCatAndFactory($cat_id, $f_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -131,6 +157,14 @@ class LuxeStudio
 		}
     }
 
+    /**
+     * getSize
+     * получаем размеры определеного товара (из данных, записаных в БД)
+     *
+     * @param  mixed $id
+     *
+     * @return void
+     */
     private function getSize($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -157,6 +191,14 @@ class LuxeStudio
         }
     }
 
+    /**
+     * getName
+     * получаем имя товара (русское)
+     *
+     * @param  mixed $id
+     *
+     * @return void
+     */
     private function getName($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -183,6 +225,15 @@ class LuxeStudio
         }
     }
 
+    /**
+     * delFeature
+     * полностью удаляем фильтр из товара
+     *
+     * @param  mixed $goods_id
+     * @param  mixed $feature_id
+     *
+     * @return void
+     */
     private function delFeature($goods_id, $feature_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -192,6 +243,16 @@ class LuxeStudio
         mysqli_close($db_connect);
     }
 
+    /**
+     * insFilter
+     * добавляем новый фильт и его значение в товар
+     *
+     * @param  mixed $goods_id
+     * @param  mixed $feature_id
+     * @param  mixed $value_id
+     *
+     * @return void
+     */
     private function insFilter($goods_id, $feature_id, $value_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -394,6 +455,14 @@ class LuxeStudio
 
 class ModMatroluxe
 {
+    /**
+     * getFeaturesVal
+     * получаем список фильтров и их значений для конкретного тоавара
+     *
+     * @param  mixed $good_id
+     *
+     * @return void
+     */
     private function getFeaturesVal($good_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -420,6 +489,14 @@ class ModMatroluxe
         }
     }
 
+    /**
+     * getSize
+     * получаем размеры определенного 
+     *
+     * @param  mixed $id
+     *
+     * @return void
+     */
     private function getSize($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -446,6 +523,14 @@ class ModMatroluxe
         }
     }
 
+    /**
+     * getName
+     * получаем имя товара (русский язык)
+     *
+     * @param  mixed $id
+     *
+     * @return void
+     */
     private function getName($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -472,6 +557,15 @@ class ModMatroluxe
         }
     }
 
+    /**
+     * getGoodsByCatAndFactory
+     * получаем список товаров одной фабрики, которые находятся в конкретном разделе
+     *
+     * @param  mixed $cat_id
+     * @param  mixed $f_id
+     *
+     * @return void
+     */
     private function getGoodsByCatAndFactory($cat_id, $f_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -529,6 +623,15 @@ class ModMatroluxe
         }
     }
 
+    /**
+     * setMod
+     * добавляем модификацию товара
+     * 
+     * @param  mixed $id
+     * @param  mixed $base_id
+     *
+     * @return void
+     */
     private function setMod ($id,$base_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -539,6 +642,11 @@ class ModMatroluxe
     }
         
 
+    /**
+     * setModSHK
+     *
+     * @return void
+     */
     public function setModSHK()
     {
         $goods=$this->getGoodsByCatAndFactory(9,3894);
@@ -2722,6 +2830,14 @@ class ModMatroluxe
 
 class ComponentsMatroluxe
 {
+    /**
+     * getFeaturesVal
+     * получаем список фильтров и их значений для конкретного товара
+     *
+     * @param  mixed $good_id
+     *
+     * @return void
+     */
     private function getFeaturesVal($good_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -2748,6 +2864,14 @@ class ComponentsMatroluxe
         }
     }
 
+    /**
+     * getName
+     * получаем имя товара (на русском языке)
+     *
+     * @param  mixed $id
+     *
+     * @return void
+     */
     private function getName($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -2774,6 +2898,15 @@ class ComponentsMatroluxe
         }
     }
 
+    /**
+     * getGoodsByCatAndFactory
+     * выбираем товары одной фабрики которые находятся в одной категории
+     *
+     * @param  mixed $cat_id
+     * @param  mixed $f_id
+     *
+     * @return void
+     */
     private function getGoodsByCatAndFactory($cat_id, $f_id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -2830,6 +2963,14 @@ class ComponentsMatroluxe
 		}
     }
 
+    /**
+     * getSize
+     * получаем размеры конкретного товара
+     *
+     * @param  mixed $id
+     *
+     * @return void
+     */
     private function getSize($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -2856,6 +2997,16 @@ class ComponentsMatroluxe
         }
     }
 
+    /**
+     * setComp
+     * добавляем составную часть в товар
+     *
+     * @param  mixed $good_id
+     * @param  mixed $comp_id
+     * @param  mixed $count
+     *
+     * @return void
+     */
     private function setComp ($good_id,$comp_id,$count)
    	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -2865,6 +3016,11 @@ class ComponentsMatroluxe
 		mysqli_close($db_connect);
 	}
 
+    /**
+     * setComponents
+     *
+     * @return void
+     */
     public function setComponents()
     {
         $goods=$this->getGoodsByCatAndFactory(9,3894);
@@ -3241,6 +3397,14 @@ class ComponentsMatroluxe
 
     }
 
+    /**
+     * delComponent
+     * удаляем составную часть из товара
+     *
+     * @param  mixed $compId
+     *
+     * @return void
+     */
     private function delComponent($compId)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -3251,6 +3415,14 @@ class ComponentsMatroluxe
     
     }
     
+    /**
+     * getNumConsistant
+     * получаем количество составных частей для определенного тоавра
+     *
+     * @param  mixed $id
+     *
+     * @return void
+     */
     private function getNumConsistant($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -3277,6 +3449,14 @@ class ComponentsMatroluxe
         }
     }
 
+    /**
+     * getComp
+     * получаем список составных частей для конкретного товара
+     * 
+     * @param  mixed $id
+     *
+     * @return void
+     */
     private function getComp($id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -3303,6 +3483,13 @@ class ComponentsMatroluxe
         }
     }
 
+    /**
+     * delDublicates
+     *
+     * @param  mixed $id
+     *
+     * @return void
+     */
     public function delDublicates($id)
     {
         $comp=$this->getComp($id);
@@ -3431,6 +3618,14 @@ class ComponentsMatroluxe
         }
     }
 
+    /**
+     * setActive
+     * делает позицию активной
+     *
+     * @param  mixed $id
+     *
+     * @return void
+     */
     private function setActive($id)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -3440,6 +3635,15 @@ class ComponentsMatroluxe
 		mysqli_close($db_connect);
 	}
 
+    /**
+     * fixComp
+     * выставляем количество для определенной составной части
+     *
+     * @param  mixed $id
+     * @param  mixed $quantity
+     *
+     * @return void
+     */
     private function fixComp($id,$quantity)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -3450,6 +3654,15 @@ class ComponentsMatroluxe
     }
 
     
+    /**
+     * setUkrName
+     * записываем украинское название товара
+     *
+     * @param  mixed $id
+     * @param  mixed $name
+     *
+     * @return void
+     */
     private function setUkrName($id,$name)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
@@ -3459,6 +3672,12 @@ class ComponentsMatroluxe
 		mysqli_close($db_connect);
     }
 
+    /**
+     * translate
+     * получаем украинское имя товара из русского и записываем его в БД
+     *
+     * @return void
+     */
     public function translate()
     {
         $goods=$this->getGoodsByCatAndFactory(9,3894);
