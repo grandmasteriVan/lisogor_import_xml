@@ -38,22 +38,33 @@ function createPreviews($item)
     }
 
     //var_dump ($path);
+    //узнаем разрешение файла
     $ext=end(explode(".", $path));
     //echo "$ext<br>";
-    if ($ext=="png")
-    {
-        $im = imagecreatefrompng ($path);
-    }
-    else
-    {
-        $im = imagecreatefromjpeg ($path);
-    }
+    //в зависемости от разрешения открываем файл    //if (strnatcasecmp($ext,"png")==0)
+    //{
+    //    $im = imagecreatefrompng ($path);
+    //}
+    //else
+    //{
+       $im = imagecreatefromjpeg ($path);
+    //}
     
     //$im_crop = imagecropauto($im, IMG_CROP_WHITE);
-    $im_crop = imagecropauto($im, IMG_CROP_THRESHOLD, 2, 16777215);
+    //обрезаем белый с 1 процентом погрешности (есть фото с не совсем белым фотном)
+    $im_crop = imagecropauto($im, IMG_CROP_THRESHOLD, 1, 16777215);
     $path_new=str_replace(".$ext","",$path)."_tmp.".$ext;
     //echo "$path_new<br>";
-    imagejpeg($im_crop, $path_new);
+    //сохраняем временный обрезанный файл
+    //if (strnatcasecmp($ext,"png")==0)
+    //{
+    //    imagepng($im_crop, $path_new);;
+        //echo "!png!<br>";
+    //}
+    //else
+    //{
+        imagejpeg($im_crop, $path_new);;
+    //}
     
     
     Foto::img_resize($path_new, $item->getRealPathUploadPreview('list','desc-sm'), 265, 120);
@@ -63,6 +74,7 @@ function createPreviews($item)
 
     Foto::img_resize($path_new, $item->getRealPathUploadPreview('page','desc-big'), 800, 500);
     Foto::img_resize($path_new, $item->getRealPathUploadPreview('page','prev-sm'), 125, 80);
+    //удаляем временный файл
     unlink($path_new);
     
 }
@@ -70,7 +82,7 @@ function createPreviews($item)
 function getGoodsByFactory ($f_id)
     {
         $db_connect=mysqli_connect(host,user,pass,db);
-        $query="SELECT goods_id FROM goodshasfeature WHERE feature_id=14 AND goodshasfeature_valueid=$f_id";
+        $query="SELECT goods_id FROM goodshasfeature WHERE feature_id=232 AND goodshasfeature_valueid=$f_id";
         if ($res=mysqli_query($db_connect,$query))
         {
                 while ($row = mysqli_fetch_assoc($res))
@@ -120,13 +132,21 @@ function getGoodsByFactory ($f_id)
         }
         
     }
-
-if (!isset($_REQUEST['id'])) 
+/*
+if (!isset($_REQUEST['id_s'])) 
 {
-    echo 'not found ID';
+    echo 'not found start ID';
     die();
 }
-$fid = $_REQUEST['id'];
+if (!isset($_REQUEST['id_f'])) 
+{
+    echo 'not found finish ID';
+    die();
+}
+//$fid = $_REQUEST['id'];
+$id_start=$_REQUEST['id_s'];
+$id_end=$_REQUEST['id_f'];
+*/
 //$goods=getGoodsByFactory($fid);
 $goods=getGoods();
 //var_dump ($goods);
@@ -134,7 +154,7 @@ $goods=getGoods();
 foreach ($goods as $good)
 {
     $id=$good['goods_id'];
-    if ($id>=2281&&$id<2282)
+    if ($id>=1326&&$id<1327)
     {
         $item = new Goods($id);
         $files = $item->getFiles();
@@ -148,10 +168,10 @@ foreach ($goods as $good)
         }
         //break;
     }
-    else
-    {
+    //else
+    //{
         //break;
-    }
+    //}
     //break;
 }
 
