@@ -2422,7 +2422,7 @@ if ($res=mysqli_query($db_connect,$query))
 	*/
 	/*
 	$db_connect=mysqli_connect(host_ddn,user_ddn,pass_ddn,db_ddn);
-	$query="UPDATE  goodshastissue SET  goodshastissue_active=0 WHERE tissue_id=150 OR  tissue_id=151 OR tissue_id=152";
+	$query="UPDATE  goodshastissue SET  goodshastissue_active=1 WHERE tissue_id=1133";
 	echo "$query<br>";
 	mysqli_query($db_connect,$query);
 	mysqli_close($db_connect);
@@ -3968,7 +3968,8 @@ if ($res=mysqli_query($db_connect,$query))
 	setAkcij($goods);
 	*/
 
-/*
+	/*
+	//галерея
 	function delAllFromGall($galId)
 	{
 		$db_connect=mysqli_connect(host,user,pass,db);
@@ -4006,13 +4007,13 @@ if ($res=mysqli_query($db_connect,$query))
         return $files_all;
 	}
 
-	$files=getFilesId(51);
+	$files=getFilesId(48);
 	foreach ($files as $file)
 	{
 		$fileId=$file['galleryfile_id'];
 		delFile($fileId);
 	}
-	delAllFromGall(51);
+	delAllFromGall(48);
 */
 /*
 echo "IMG_CROP_WHITE\n";
@@ -4031,7 +4032,7 @@ $croppedImage = imagecropauto($image_src,IMG_CROP_WHITE);
 
 imagepng($croppedImage);*/
 
-
+/*
 $path="picture_12512.png";
 $ext=end(explode(".", $path));
 echo "$ext<br>";
@@ -4060,11 +4061,71 @@ else
 {
 	imagejpeg($im_crop, $path_new);;
 }
+*/
+/*
+$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_id from discounthasgoods WHERE  discount_id=$discId";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        return $goods_all;	
+*/
+/*
+$db_connect=mysqli_connect(host,user,pass,db);
+$query="UPDATE goodshaslang SET goodshaslang_content=REPLACE(goodshaslang_content,'<p>&nbsp;</p>','')";
+echo "$query<br>";
+mysqli_query($db_connect,$query);
+mysqli_close($db_connect);
+*/
+/*
+function getPopul($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_popular from goods WHERE goods_id=$id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_pop[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        return $goods_pop[0]['goods_popular'];
+	}
+	
+	function getGoodsByCat($cat_id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_id from goodshascategory WHERE category_id=$cat_id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        return $goods_all;
+	}
+	*/
 
 
-	
-	
-	
 
 ?>
 

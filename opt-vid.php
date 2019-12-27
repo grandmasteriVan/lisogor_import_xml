@@ -68,8 +68,8 @@ class InsVid
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="UPDATE goodshaslang SET goodshaslang_content='$cont' WHERE goods_id=$id AND lang_id=$lang";
-        echo "$query<br>";
-        //mysqli_query($db_connect,$query);
+        //echo "$query<br>";
+        mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
 
@@ -92,4 +92,7 @@ class InsVid
 }
 
 $test=new InsVid();
-$test->insertVidInFactory("Je0jClGqVO8",8);
+//$test->insertVidInFactory("Je0jClGqVO8",8);
+$test->insertVidInFactory("Je0jClGqVO8",9);
+$test->insertVidInFactory("Je0jClGqVO8",10);
+echo "Done!";
