@@ -169,11 +169,11 @@ class Cloth
             //$i++;
 
         }
-        var_dump($fi);
-        echo "<br>".min($fi)."<br>";
+        //var_dump($fi);
+        //echo "<br>".min($fi)."<br>";
         //echo min($fi).'<br>';
         $num1=array_search(min($fi),$fi);
-        echo $num1."<br>";
+        //echo $num1."<br>";
         $color=$colors[$num1];
         print_r ($color);
         echo "<br>";
@@ -182,11 +182,11 @@ class Cloth
         //echo "</p><br>";
         
         unset($fi[$num1]);
-        var_dump($fi);
-        echo "<br>".min($fi)."<br>";
+        //var_dump($fi);
+        //echo "<br>".min($fi)."<br>";
         //echo min($fi).'<br>';
         $num2=array_search(min($fi),$fi);
-        echo $num2."<br>";
+        //echo $num2."<br>";
         $color=$colors[$num2];
         print_r ($color);
         //echo "<p style='color:#'".dechex($color[0]).dechex($color[1]).dechex($color[2]).">";
@@ -298,117 +298,248 @@ class Cloth
         return $color;
         */
 
-        /*
-        switch ($num)
+        
+        switch ($num1)
         {
             case 0:
-                return 1;
+                $return[1]=1;
             break;
             case 1:
-                return 3;
+                $return[1]= 3;
             break;
             case 2:
-                return 4;
+                $return[1]= 4;
             break;
             case 3:
-                return 5;
+                $return[1]= 5;
             break;
             case 4:
-                return 6;
+                $return[1]= 6;
             break;
             case 5:
-                return 7;
+                $return[1]= 7;
             break;
             case 6:
-                return 8;
+                $return[1]= 8;
             break;
             case 7:
-                return 13;
+                $return[1]= 13;
             break;
             case 8:
-                return 14;
+                $return[1]= 14;
             break;
             case 9:
-                return 15;
+                $return[1]= 15;
             break;
             case 10:
-                return 17;
+                $return[1]= 17;
             break;
             case 11:
-                return 18;
+                $return[1]= 18;
             break;
             case 12:
-                return 19;
+                $return[1]= 19;
             break;
             case 13:
-                return 23;
+                $return[1]= 23;
             break;
             case 14:
-                return 24;
+                $return[1]= 24;
             break;
             case 15:
-                return 25;
+                $return[1]= 25;
             break;
             case 16:
-                return 27;
+                $return[1]= 27;
             break;
             case 17:
-                return 29;
+                $return[1]= 29;
             break;
             case 18:
-                return 32;
+                $return[1]= 32;
             break;
             case 19:
-                return 33;
+                $return[1]= 33;
             break;
             case 20:
-                return 34;
+                $return[1]= 34;
             break;
             case 21:
-                return 35;
+                $return[1]= 35;
             break;
             case 22:
-                return 36;
+                $return[1]= 36;
             break;
             case 23:
-                return 37;
+                $return[1]= 37;
             break;
             case 24:
-                return 38;
+                $return[1]= 38;
             break;
             case 25:
-                return 42;
+                $return[1]= 42;
             break;
             case 26:
-                return 43;
+                $return[1]= 43;
             break;
             case 27:
-                return 46;
+                $return[1]= 46;
             break;
             case 28:
-                return 47;
+                $return[1]= 47;
             break;
             case 29:
-                return 48;
+                $return[1]= 48;
             break;
             case 30:
-                return 51;
+                $return[1]= 51;
             break;
             case 31:
-                return 52;
+                $return[1]= 52;
             break;
             case 32:
-                return 53;
+                $return[1]= 53;
             break;
             case 33:
-                return 54;
+                $return[1]= 54;
             break;
         }
-        */
+        switch ($num2)
+        {
+            case 0:
+                $return[2]=1;
+            break;
+            case 1:
+                $return[2]= 3;
+            break;
+            case 2:
+                $return[2]= 4;
+            break;
+            case 3:
+                $return[2]= 5;
+            break;
+            case 4:
+                $return[2]= 6;
+            break;
+            case 5:
+                $return[2]= 7;
+            break;
+            case 6:
+                $return[2]= 8;
+            break;
+            case 7:
+                $return[2]= 13;
+            break;
+            case 8:
+                $return[2]= 14;
+            break;
+            case 9:
+                $return[2]= 15;
+            break;
+            case 10:
+                $return[2]= 17;
+            break;
+            case 11:
+                $return[2]= 18;
+            break;
+            case 12:
+                $return[2]= 19;
+            break;
+            case 13:
+                $return[2]= 23;
+            break;
+            case 14:
+                $return[2]= 24;
+            break;
+            case 15:
+                $return[2]= 25;
+            break;
+            case 16:
+                $return[2]= 27;
+            break;
+            case 17:
+                $return[2]= 29;
+            break;
+            case 18:
+                $return[2]= 32;
+            break;
+            case 19:
+                $return[2]= 33;
+            break;
+            case 20:
+                $return[2]= 34;
+            break;
+            case 21:
+                $return[2]= 35;
+            break;
+            case 22:
+                $return[2]= 36;
+            break;
+            case 23:
+                $return[2]= 37;
+            break;
+            case 24:
+                $return[2]= 38;
+            break;
+            case 25:
+                $return[2]= 42;
+            break;
+            case 26:
+                $return[2]= 43;
+            break;
+            case 27:
+                $return[2]= 46;
+            break;
+            case 28:
+                $return[2]= 47;
+            break;
+            case 29:
+                $return[2]= 48;
+            break;
+            case 30:
+                $return[2]= 51;
+            break;
+            case 31:
+                $return[2]= 52;
+            break;
+            case 32:
+                $return[2]= 53;
+            break;
+            case 33:
+                $return[2]= 54;
+            break;
+        }
+
+        return $return;
+        
     }
 
-    public function getColor($clothId)
+    private function writeColors($fileId,$colors)
     {
+        //сначала удаляем все старые записи
+        $db_connect=mysqli_connect(host,user,pass,db);
+        $query="DELETE FROM clothfilehasclothcolor WHERE clothfile_id=$fileId";
+        echo "$query<br>";
+        //mysqli_query($db_connect,$query);
+        //потом записываем новые
+        foreach ($colors as $color)
+        {
+            $query="INSERT INTO clothfilehasclothcolor (clothfile_id,clothcolor_id) VALUES ($fileId,$color)";
+            echo "$query<br>";
+            //mysqli_query($db_connect,$query);
+        }
+        mysqli_close($db_connect);
+      
+    }
+
+    public function getColor()
+    {
+        if (!isset($_REQUEST['id'])) 
+        {
+            echo 'not found start ID';
+            die();
+        }
+        $clothId=$_REQUEST['id'];
         $files=$this->getFiles($clothId);
         //var_dump ($files);
         //echo "<pre>";
@@ -421,11 +552,12 @@ class Cloth
             $name="https://ddn.ua/foto/cloth/".$clothId."/".$file['clothfile_filename']."_".$file['clothfile_id'].".".$file['clothfile_ext'];
             //$color=$this->getMainColor($name);
             $color=$this->getMainColor($name);
-            echo "clothcolor_id=$color<br>";
+            //echo "clothcolor_id=$color<br>";
             echo '<div><img style="margin-bottom:10px;" src="'.$namePrev.'"></div>';
             //echo '<div><img style="margin-bottom:10px;" src="'.$name.'"></div>';
             //echo '<div><img style="margin-bottom:10px;" src="'.$file->getRealPathSeoPreview('list','desc-sm').'"></div>';
-            break;
+            $this->writeColors($file['clothfile_id'],$color);
+            //break;
         }
     }
 
@@ -469,4 +601,4 @@ class Cloth
 
 $test = new Cloth();
 //$test->test();
-$test->getColor(150);
+$test->getColor();

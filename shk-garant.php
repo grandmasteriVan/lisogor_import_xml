@@ -488,7 +488,7 @@ class Garant
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="INSERT INTO component (goods_id, component_child, component_in_complect) VALUES ($good_id,$comp_id,$count)";
 		echo "$query<br><br>";
-		//mysqli_query($db_connect,$query);
+		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
 	}
 
@@ -599,7 +599,7 @@ class Garant
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="UPDATE goods SET goods_parent=$base_id, goods_modtype=1, goods_modshow=0, goods_modfoto=0, goods_modreview=0 WHERE goods_id=$id";
         echo "$query<br>";
-        //mysqli_query($db_connect,$query);
+        mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
 
@@ -1238,5 +1238,6 @@ $test=new Garant();
 //$test->setSizes(93,9);
 //
 //$test->setFilters(93,9);
-//$test->setComponents();
-$test->setModSHK();
+$test->setComponents();
+//$test->setModSHK();
+echo "Done";
