@@ -520,13 +520,13 @@ class Cloth
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="DELETE FROM clothfilehasclothcolor WHERE clothfile_id=$fileId";
         echo "$query<br>";
-        //mysqli_query($db_connect,$query);
+        mysqli_query($db_connect,$query);
         //потом записываем новые
         foreach ($colors as $color)
         {
             $query="INSERT INTO clothfilehasclothcolor (clothfile_id,clothcolor_id) VALUES ($fileId,$color)";
             echo "$query<br>";
-            //mysqli_query($db_connect,$query);
+            mysqli_query($db_connect,$query);
         }
         mysqli_close($db_connect);
       

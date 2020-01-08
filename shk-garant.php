@@ -1232,12 +1232,81 @@ class Garant
             
         }
     }
+
+    public function rename()
+    {
+        $goods=$this->getNotActiveGoodsByCatAndFactory(9,93);
+        foreach ($goods as $good)
+        {
+            $id=$good;
+            if ($id>50000)
+            {
+                $name=$this->getName($id);
+                $sizes=explode(" ",$name);
+                $numDoors=$sizes[1];
+                $material=$sizes[2];
+                $sizes=$sizes[0];
+                $sizes=str_ireplace("*","х",$sizes);
+                $materialName="";
+                //echo "$name: sizes-$sizes material-$material numDoors-$numDoors<br>";
+                /*if ($material,"Зеркало/Зеркало/Зеркало"==0)
+                {
+                    $material="3 зеркала";
+                }*/
+                $countDSP=substr_count($material,"ДСП");
+                if ($countDSP>1)
+                {
+                    $materialName.="$countDSP ДСП";
+                }
+                if ($countDSP==1)
+                {
+                    $materialName.=" ДСП ";
+                }
+                $MIRRcount=substr_count($material,"Зеркало");
+                if ($MIRRcount>1)
+                {
+                    $materialName.="$MIRRcount Зеркала";
+                }
+                if ($MIRRcount==1)
+                {
+                    $materialName.=" Зеркало";
+                }
+                
+                if (strcasecmp($material,"Фотопечать")==0)
+                {
+                    $materialName="Фотопечать";
+                }
+                if (strcasecmp($material,"Пескоструй")==0)
+                {
+                    $materialName="Пескоструй";
+                }
+                
+                if (strcasecmp($numDoors,"2дв")==0)
+                {
+                    $numDoors="двухдверный";
+                }
+                if (strcasecmp($numDoors,"3дв")==0)
+                {
+                    $numDoors="трехдверный";
+                }
+                if (strcasecmp($numDoors,"4дв")==0)
+                {
+                    $numDoors="четырехдверный";
+                }
+                $materialName=str_ireplace("ДСП2","ДСП 2",$materialName);
+                echo "<b>$name</b>: Шкаф-купе $numDoors $sizes $materialName<br>";
+                //break;
+
+            }
+        }
+    }
 }
 
 $test=new Garant();
 //$test->setSizes(93,9);
 //
 //$test->setFilters(93,9);
-$test->setComponents();
+//$test->setComponents();
 //$test->setModSHK();
+$test->rename();
 echo "Done";
