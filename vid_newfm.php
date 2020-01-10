@@ -252,6 +252,8 @@ define ("db", "newfm");
 	
 	//VidsFromContToGal();
 	//writeVidInGal('HM6nrxefkCw',86);
+	writeVidInGal('EmzW8ECVk1A',93);
+	writeVidInGal('oMtKQTp4xEI',93);
 	writeVidInGal('HM6nrxefkCw',93);
 	echo "Done!";
 	

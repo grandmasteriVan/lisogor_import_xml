@@ -4125,6 +4125,21 @@ function getPopul($id)
 	}
 	*/
 
+	$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT * from goods WHERE goods_id=43710";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+        echo "<pre>"; print_r ($goods_all); echo "</pre>";
 
 
 ?>

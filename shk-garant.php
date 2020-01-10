@@ -1288,18 +1288,135 @@ class Garant
                 if (strcasecmp($numDoors,"3дв")==0)
                 {
                     $numDoors="трехдверный";
+                    $contRu=$this->getCont($id,1);
+                    $contUa=$this->getCont($id,2);
+                    $contRu=str_ireplace("двухдверный","трехдверный",$contRu);
+                    $contUa=str_ireplace("двома дверима","трьома дверима",$contUa);
+                    $this->setCont($id,$contRu,1);
+                    $this->setCont($id,$contUa,2);
+
                 }
                 if (strcasecmp($numDoors,"4дв")==0)
                 {
                     $numDoors="четырехдверный";
+                    $contRu=$this->getCont($id,1);
+                    $contUa=$this->getCont($id,2);
+                    $contRu=str_ireplace("двухдверный","четырехдверный",$contRu);
+                    $contUa=str_ireplace("двома дверима","чотирьма дверима",$contUa);
+                    $this->setCont($id,$contRu,1);
+                    $this->setCont($id,$contUa,2);
                 }
                 $materialName=str_ireplace("ДСП2","ДСП 2",$materialName);
-                echo "<b>$name</b>: Шкаф-купе $numDoors $sizes $materialName<br>";
+                $nameRu="Шкаф-купе $numDoors $sizes $materialName";
+                $nameUa=str_ireplace("Шкаф","Шафа",$nameRu);
+                $nameUa=str_ireplace("Зеркал","Дзеркал",$nameUa);
+                $nameUa=str_ireplace("Пескоструй","Піскоструй",$nameUa);
+                $nameUa=str_ireplace("двухдверный","дводверна",$nameUa);
+                $nameUa=str_ireplace("трехдверный","трьохдверна",$nameUa);
+                $nameUa=str_ireplace("четырехдверный","чотиридверна",$nameUa);
+                $nameUa=str_ireplace("Фотопечать","Фотодрук",$nameUa);
+                //echo "<b>$name</b>: Шкаф-купе $numDoors $sizes $materialName<br>";
+                echo "<b>$name</b>: $nameRu - $nameUa<br>";
+                //$this->setName($id,$nameRu,1);
+                //$this->setName($id,$nameUa,2);
+                $this->setActive($id);
                 //break;
 
             }
         }
     }
+
+    public function patch()
+    {
+        $goods=$this->getNotActiveGoodsByCatAndFactory(9,93);
+        foreach ($goods as $good)
+        {
+            $id=$good;
+            if ($id>50000)
+            {
+                $name=$this->getName($id);
+                
+                if (strripos($name,"трехдверный")>0)
+                {
+                    //$numDoors="трехдверный";
+                    //$contRu=$this->getCont($id,1);
+                    $contUa=$this->getCont($id,2);
+                    //$contRu=str_ireplace("двухдверный","трехдверный",$contRu);
+                    $contUa=str_ireplace("двома дверима","трьома дверима",$contUa);
+                    //$this->setCont($id,$contRu,1);
+                    $this->setCont($id,$contUa,2);
+
+                }
+                if ((strripos($name,"четырехдверный")>0))
+                {
+                    //$numDoors="четырехдверный";
+                    //$contRu=$this->getCont($id,1);
+                    $contUa=$this->getCont($id,2);
+                    //$contRu=str_ireplace("двухдверный","четырехдверный",$contRu);
+                    $contUa=str_ireplace("двома дверима","чотирьма дверима",$contUa);
+                    //$this->setCont($id,$contRu,1);
+                    $this->setCont($id,$contUa,2);
+                }
+                
+
+            }
+        }
+    }
+    
+    
+    private function setName($id,$name,$lang)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goodshaslang SET goodshaslang_name='$name' WHERE goods_id=$id AND lang_id=$lang";
+		echo "$query<br>";
+		//mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+    }
+    private function setActive($id)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goodshaslang SET goodshaslang_active=1 WHERE goods_id=$id";
+		echo "$query<br>";
+		//mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+    }
+
+    private function getCont ($id, $lang)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goodshaslang_content from goodshaslang WHERE goods_id=$id AND lang_id=$lang";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$cont[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		if (is_array($cont))
+		{
+			return $cont[0]['goodshaslang_content'];
+		}
+		else
+		{
+			return null;
+		}
+    }
+    
+    private function setCont($id, $cont, $lang)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goodshaslang SET goodshaslang_content='$cont' WHERE goods_id=$id AND lang_id=$lang";
+		//echo "$query<br><br>";
+		echo "$id content rewrited!<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+    
 }
 
 $test=new Garant();
@@ -1309,4 +1426,5 @@ $test=new Garant();
 //$test->setComponents();
 //$test->setModSHK();
 $test->rename();
+//$test->patch();
 echo "Done";
