@@ -757,7 +757,7 @@ class Garant
                 if (($doorCount==2)&&((int)$sizes['goods_depth']==600)&&((int)$sizes['goods_height']==2200)&&strripos($name,"Пескоструй")!=false)
                 {
                     //echo "Yay!<br>";
-                    if ($id!=58848)
+                    if ($id!=58857)
                     {
                         $this->setMod($id,58857);
                     }
@@ -1292,8 +1292,8 @@ class Garant
                     $contUa=$this->getCont($id,2);
                     $contRu=str_ireplace("двухдверный","трехдверный",$contRu);
                     $contUa=str_ireplace("двома дверима","трьома дверима",$contUa);
-                    $this->setCont($id,$contRu,1);
-                    $this->setCont($id,$contUa,2);
+                    //$this->setCont($id,$contRu,1);
+                    //$this->setCont($id,$contUa,2);
 
                 }
                 if (strcasecmp($numDoors,"4дв")==0)
@@ -1303,8 +1303,8 @@ class Garant
                     $contUa=$this->getCont($id,2);
                     $contRu=str_ireplace("двухдверный","четырехдверный",$contRu);
                     $contUa=str_ireplace("двома дверима","чотирьма дверима",$contUa);
-                    $this->setCont($id,$contRu,1);
-                    $this->setCont($id,$contUa,2);
+                    //$this->setCont($id,$contRu,1);
+                    //$this->setCont($id,$contUa,2);
                 }
                 $materialName=str_ireplace("ДСП2","ДСП 2",$materialName);
                 $nameRu="Шкаф-купе $numDoors $sizes $materialName";
@@ -1377,7 +1377,7 @@ class Garant
 		$db_connect=mysqli_connect(host,user,pass,db);
 		$query="UPDATE goodshaslang SET goodshaslang_active=1 WHERE goods_id=$id";
 		echo "$query<br>";
-		//mysqli_query($db_connect,$query);
+		mysqli_query($db_connect,$query);
 		mysqli_close($db_connect);
     }
 

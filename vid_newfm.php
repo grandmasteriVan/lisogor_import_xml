@@ -153,29 +153,30 @@ define ("db", "newfm");
 	{
 		$goods=getGoodsByFactory($fid);
 		//var_dump ($goods);
+		
 		foreach($goods as $good)
 		{
 			$id=$good['goods_id'];
 			//delVideo($vid,$id);
 
-			if ($id==15299)
-			{
-				insVideofile($vid,$id);
-				$goodsfile_id=getGoodsfileId($id,$vid);
-				insVidLang($goodsfile_id);
-			}
+			//if ($id==15299)
+			//{
+			insVideofile($vid,$id);
+			$goodsfile_id=getGoodsfileId($id,$vid);
+			insVidLang($goodsfile_id);
+			//}
 			
 			
 			//echo "goodsfile_id=$goodsfile_id<br>";
 			
 			
-			/*setActive($goodsfile_id);
-			if ($id==15299)
-			{
-				echo $goodsfile_id;
-			}*/
+			//setActive($goodsfile_id);
+			//if ($id==15299)
+			//{
+			//	echo $goodsfile_id;
+			//}
 			
-			break;
+			//break;
 
 		}
 	}
@@ -241,6 +242,7 @@ define ("db", "newfm");
 				echo "<pre>";
 				print_r($vids);
 				echo "</pre>";
+			break;
 				
 			}
 		}

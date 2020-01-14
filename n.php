@@ -4124,7 +4124,7 @@ function getPopul($id)
         return $goods_all;
 	}
 	*/
-
+	/*
 	$db_connect=mysqli_connect(host,user,pass,db);
 		$query="SELECT * from goods WHERE goods_id=43710";
 		if ($res=mysqli_query($db_connect,$query))
@@ -4139,7 +4139,11 @@ function getPopul($id)
 			 echo "Error in SQL: $query<br>";		
         }
         mysqli_close($db_connect);
-        echo "<pre>"; print_r ($goods_all); echo "</pre>";
+		echo "<pre>"; print_r ($goods_all); echo "</pre>";
+		*/
+
+	
+	
 
 
 ?>
