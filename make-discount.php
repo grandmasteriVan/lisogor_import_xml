@@ -1526,7 +1526,7 @@ private function delGoodFromAllDisc($goodsId)
 
         echo "$query<br>";
 
-        //mysqli_query($db_connect,$query);
+        mysqli_query($db_connect,$query);
 
         mysqli_close($db_connect);
 
@@ -1558,9 +1558,10 @@ private function delGoodFromAllDisc($goodsId)
 	public function removeFactoryFromAllDisc($fId)
 	{
 		$goods=$this->getGoodsByFactory($fId);
+		var_dump ($goods);
 		foreach ($goods as $good)
 		{
-			$id=$good[‘goods_id’];
+			$id=$good['goods_id'];
 			$this->delGoodFromAllDisc($id);
 		}
 	}
