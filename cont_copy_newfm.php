@@ -258,5 +258,5 @@ class ContentCopy
 	}
 }
 $test=new ContentCopy();
-$test->copyContent(15410,93,9,2);
-$test->copyContent(15410,93,9,1);
+$test->copyContent(46618,3894,9,2);
+$test->copyContent(46618,3894,9,1);

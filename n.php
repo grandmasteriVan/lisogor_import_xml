@@ -4141,9 +4141,462 @@ function getPopul($id)
         mysqli_close($db_connect);
 		echo "<pre>"; print_r ($goods_all); echo "</pre>";
 		*/
+/*
+		$db_connect=mysqli_connect("es835db.mirohost.net","u_fayni","ZID1c0eud3Dc","ZID1c0eud3Dc");
+		$query="SELECT goods_id from goods WHERE goods_bestitem=1 AND goods_lidermain=1";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+		echo "<pre>"; print_r ($goods_all); echo "</pre>";
+	*/
+
+	//популярность для фабрики
+	/*
+	function setPop($id,$pop)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goods SET goods_popular=-400 WHERE goods_id=$id";
+		//echo "$query<br>";
+		mysqli_query($db_connect,$query);
+		//var_dump ($res);
+		mysqli_close($db_connect);
+	}
+
+	function getGoodsByFactory($fId)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_id FROM goodshasfeature WHERE feature_id=232 AND goodshasfeature_valueid=$fId";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		return $goods;
+	}
+
+	function setPopToFactory ($fId)
+	{
+		$goods=getGoodsByFactory($fId);
+		foreach ($goods as $good)
+		{
+			$id=$good['goods_id'];
+			setPop($id,-400);
+			//echo getPopul($id);
+			//echo "<br>";
+		//break;
+
+		}
+		echo "$fId Done<br>";
+	}
+
+	function getPopul($id)
+    {
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_popular from goods WHERE goods_id=$id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_pop[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        return $goods_pop[0]['goods_popular'];
+	}
+
+	setPopToFactory(127);
+	setPopToFactory(3894);
 
 	
+	*/
+
+	//все активние родительские товары по фабрике
+	/*
+	function getGoodsByFactory($fId)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_id FROM goodshasfeature WHERE feature_id=232 AND goodshasfeature_valueid=$fId";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		return $goods;
+	}
+
+	function getParrentGoods($goods)
+	{
+		if (is_array($goods))
+		{
+			$db_connect=mysqli_connect(host,user,pass,db);
+			foreach ($goods as $good)
+			{
+				$id=$good['goods_id'];
+				//var_dump($id);
+				$query="select goods_id from goods WHERE goods_parent=$id AND goods_id=$id";
+				if ($res=mysqli_query($db_connect,$query))
+				{
+					unset ($tmp);
+					while ($row = mysqli_fetch_assoc($res))
+					{
+						$tmp[] = $row;
+					}
+					if (is_array($tmp))
+					{
+						$parrents[]=$tmp[0]['goods_id'];
+					}
+				}
+				else
+				{
+					 echo "Error in SQL: $query<br>";		
+				}
+				
+				
+			}
+			mysqli_close($db_connect);
+			return $parrents;
+			
+		}
+	}
+	function isActive($id)
+    {
+        $active=true;
+        $db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goodshaslang_active from goodshaslang WHERE goods_id=$id AND lang_id=1";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_active[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        if ($goods_active[0]['goodshaslang_active']==1)
+        {
+            $query="SELECT goods_productionout, goods_noactual from goods WHERE goods_id=$id";
+            if ($res=mysqli_query($db_connect,$query))
+            {
+                    while ($row = mysqli_fetch_assoc($res))
+                    {
+                        $goods_actual[] = $row;
+                    }
+            }
+            else
+            {
+                echo "Error in SQL: $query<br>";		
+            }
+            if ($goods_actual[0]['goods_productionout']==1||$goods_actual[0]['goods_noactual']==1)
+            {
+                $active=false;
+            }
+        }
+        else
+        {
+            $active=false;
+        }
+        
+        
+        mysqli_close($db_connect);
+        return $active;
+    }
+
+	$goods=getGoodsByFactory(37);
+	$counts=getParrentGoods($goods);
+	$countActive=null;
+	foreach ($counts as $count)
+	{
+		$id=$count;
+		if (isActive($id))
+		{
+			$countActive[]=$id;
+		}
+	}
+	//var_dump($counts);
+	echo "Come-for - ".count($counts)." из них активных - ".count($countActive)."<br>";
+	$goods=getGoodsByFactory(45);
+	$counts=getParrentGoods($goods);
+	$countActive=null;
+	foreach ($counts as $count)
+	{
+		$id=$count;
+		if (isActive($id))
+		{
+			$countActive[]=$id;
+		}
+	}
+	//var_dump($count);
+	echo "Matroluxe - ".count($counts)." из них активных - ".count($countActive)."<br>";
+*/
+
+	/*
+function isActive($id)
+{
+	$active=true;
+	$db_connect=mysqli_connect(host,user,pass,db);
+	$query="SELECT goodshaslang_active from goodshaslang WHERE goods_id=$id AND lang_id=1";
+	if ($res=mysqli_query($db_connect,$query))
+	{
+			while ($row = mysqli_fetch_assoc($res))
+			{
+				$goods_active[] = $row;
+			}
+	}
+	else
+	{
+		 echo "Error in SQL: $query<br>";		
+	}
+	if ($goods_active[0]['goodshaslang_active']==1)
+	{
+		$query="SELECT goods_productionout, goods_noactual from goods WHERE goods_id=$id";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_actual[] = $row;
+				}
+		}
+		else
+		{
+			echo "Error in SQL: $query<br>";		
+		}
+		if ($goods_actual[0]['goods_productionout']==1||$goods_actual[0]['goods_noactual']==1)
+		{
+			$active=false;
+		}
+	}
+	else
+	{
+		$active=false;
+	}
 	
+	
+	mysqli_close($db_connect);
+	return $active;
+}
+
+	function getCont ($id, $lang)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="select goodshaslang_content from goodshaslang WHERE goods_id=$id AND lang_id=$lang";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$cont[] = $row;
+				}
+		}
+		else
+		{
+			echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		if (is_array($cont))
+		{
+			return $cont[0]['goodshaslang_content'];
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	function setCont($id, $cont, $lang)
+	{
+		$db_connect=mysqli_connect(host,user,pass,db);
+		$query="UPDATE goodshaslang SET goodshaslang_content='$cont' WHERE goods_id=$id AND lang_id=$lang";
+		//echo "$query<br><br>";
+		echo "$id rewrited!<br>";
+		mysqli_query($db_connect,$query);
+		mysqli_close($db_connect);
+	}
+
+		$db_connect=mysqli_connect(host,user,pass,db);
+		//$query="SELECT distinct goods_id FROM goodshaslang WHERE goodshaslang_content LIKE '%href=\"//%' AND goodshaslang_content NOT LIKE '%youtu%'";
+		$query="SELECT distinct goods_id FROM goodshaslang WHERE goodshaslang_content LIKE '%href=\"//%'";
+		//$query="SELECT distinct goods_id FROM goodshaslang WHERE goodshaslang_content LIKE '%flash-nika-mebel.ua%'";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+		}
+		mysqli_close($db_connect);
+		var_dump ($goods);
+
+		/*foreach ($goods as $good)
+		{
+			$id=$good['goods_id'];
+			if (!isActive($id))
+			{
+				$contRu= getCont($id,1);
+				$contUa= getCont($id,2);
+				//echo $contRu;
+				$contRu = preg_replace('#<a.*>.*</a>#USi', '', $contRu);
+				$contUa = preg_replace('#<a.*>.*</a>#USi', '', $contUa);
+				//echo $contRu;
+				setCont($id,$contRu,1);
+				setCont($id,$contUa,2);
+			}
+			
+			//break;
+		}*/
+		/*
+		function getGoodsByCategory($cat_id)
+		{
+			$db_connect=mysqli_connect(host,user,pass,db);
+			$query="SELECT goods_id from goodshascategory WHERE category_id=$cat_id";
+			if ($res=mysqli_query($db_connect,$query))
+			{
+					while ($row = mysqli_fetch_assoc($res))
+					{
+						$goods_all[] = $row;
+					}
+			}
+			else
+			{
+				 echo "Error in SQL: $query<br>";		
+			}
+			return $goods_all;
+		}
+		function insFilter($goods_id, $feature_id, $value_id)
+		{
+			$db_connect=mysqli_connect(host,user,pass,db);
+			$query="INSERT INTO goodshasfeature (goods_id, feature_id, goodshasfeature_valueid) VALUES ($goods_id, $feature_id, $value_id)";
+			//echo "$query<br><br>";
+			mysqli_query($db_connect,$query);
+			mysqli_close($db_connect);
+		}
+
+		$goods=getGoodsByCategory(14);
+		foreach($goods as $good)
+		{
+			$id=$good['goods_id'];
+			insFilter($id,284,4001);
+		}
+		echo "Done";
+		*/
+		//потрібно прибрати галочку акція у всіх розпродажних шаф
+		/*function getGoodsFromDisc($discId)
+		{
+			$db_connect=mysqli_connect(host,user,pass,db);
+			$query="SELECT goods_id from discounthasgoods WHERE  discount_id=$discId";
+			if ($res=mysqli_query($db_connect,$query))
+			{
+					while ($row = mysqli_fetch_assoc($res))
+					{
+						$goods_all[] = $row;
+					}
+			}
+			else
+			{
+				echo "Error in SQL: $query<br>";		
+			}
+			mysqli_close($db_connect);
+			return $goods_all;
+		}
+		function setNoAction($goods_id)
+		{
+			$db_connect=mysqli_connect(host,user,pass,db);
+			$query="UPDATE goodshasfeature SET goodshasfeature_valueid=0 where goods_id=$goods_id AND feature_id=228";
+			mysqli_query($db_connect,$query);
+			//echo "$query<br>";
+			mysqli_close($db_connect);
+		}
+		
+		mysqli_connect(host,user,pass,db);
+		$goods=getGoodsFromDisc(29);
+		//var_dump ($goods);
+		foreach ($goods as $good)
+		{
+			$id=$good['goods_id'];
+			setNoAction($id);
+			//break;
+
+		}*/
+		//у модульгих кухонь і комплектів гарант проставити галочку "АКЦІЯ"
+		function setAction($goods_id)
+		{
+			$db_connect=mysqli_connect(host,user,pass,db);
+			$query="UPDATE goodshasfeature SET goodshasfeature_valueid=1 where goods_id=$goods_id AND feature_id=228";
+			mysqli_query($db_connect,$query);
+			echo "$query<br>";
+			mysqli_close($db_connect);
+		}
+		function getGoodsByFactory($fId)
+		{
+			$db_connect=mysqli_connect(host,user,pass,db);
+			$query="SELECT goods_id FROM goodshasfeature WHERE feature_id=232 AND goodshasfeature_valueid=$fId";
+			if ($res=mysqli_query($db_connect,$query))
+			{
+					while ($row = mysqli_fetch_assoc($res))
+					{
+						$goods[] = $row;
+					}
+			}
+			else
+			{
+				echo "Error in SQL: $query<br>";		
+			}
+			mysqli_close($db_connect);
+			return $goods;
+		}
+
+		function reset1C($id)
+		{
+			$db_connect=mysqli_connect(host,user,pass,db);
+			$query="UPDATE goods SET goods_article_1c='' where goods_id=$id";
+			mysqli_query($db_connect,$query);
+			echo "$query<br>";
+			mysqli_close($db_connect);
+		}
+/*
+		$goods=getGoodsByFactory(86);
+		foreach ($goods as $good)
+		{
+			$id=$good['goods_id'];
+			setAction($id);
+		}
+		*/
+		$goods=getGoodsByFactory(188);
+		foreach ($goods as $good)
+		{
+			$id=$good['goods_id'];
+			reset1C($id);
+		}
 
 
 ?>

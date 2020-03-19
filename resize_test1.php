@@ -150,12 +150,13 @@ $id_end=$_REQUEST['id_f'];
 //$goods=getGoodsByFactory($fid);
 $goods=getGoods();
 //var_dump ($goods);
-
+//echo count ($goods);
 foreach ($goods as $good)
 {
     $id=$good['goods_id'];
-    if ($id>=1326&&$id<1327)
+    if ($id>=3955&&$id<3957)
     {
+        //echo $id."<br>";
         $item = new Goods($id);
         $files = $item->getFiles();
         //var_dump ($files);
@@ -174,5 +175,21 @@ foreach ($goods as $good)
     //}
     //break;
 }
-
+/*
+$db_connect=mysqli_connect(host,user,pass,db);
+		$query="SELECT goods_id FROM goods WHERE goods_bestitem=1 AND goods_lidermain=1";
+		if ($res=mysqli_query($db_connect,$query))
+		{
+				while ($row = mysqli_fetch_assoc($res))
+				{
+					$goods_all[] = $row;
+				}
+		}
+		else
+		{
+			 echo "Error in SQL: $query<br>";		
+        }
+        mysqli_close($db_connect);
+		echo "<pre>"; print_r ($goods_all); echo "</pre>";
+*/
 echo 'DONE!';
