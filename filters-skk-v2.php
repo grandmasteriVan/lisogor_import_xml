@@ -175,9 +175,9 @@ class TestShk
         mysqli_close($db_connect);
     }
 
-    public function test()
+    public function test($f_id)
     {
-        $goods=$this->getGoodsByCatAndFactory(9,101);
+        $goods=$this->getGoodsByCatAndFactory(9,$f_id);
         echo count ($goods)."<br>";
         if (is_array($goods))
         {
@@ -376,13 +376,29 @@ class TestShk
                 //материалы
 
                 $this->delFeature($id,290);
-                if (strripos($name,"ДСП")!=false)
+                if (strripos($name,"ДСП/Зеркало")!=false)
                 {
-                    $this->insFilter($id,290,3507);
+                    $this->insFilter($id,290,4090);
                 }
-                if (strripos($name,"Зеркало")!=false)
+                if (strripos($name,"Пескоструй")!=false)
                 {
-                    $this->insFilter($id,290,3509);
+                    $this->insFilter($id,290,4088);
+                }
+                if (strripos($name,"Фотопечать")!=false)
+                {
+                    $this->insFilter($id,290,4087);
+                }
+                if (strripos($name,"Зеркало/Пескоструй")!=false)
+                {
+                    $this->insFilter($id,290,4094);
+                }
+                if (strripos($name,"ДСП/Пескоструй")!=false)
+                {
+                    $this->insFilter($id,290,4092);
+                }
+                if ((strripos($name,"зеркало")!=false)||(strripos($name,"стекло")!=false))
+                {
+                    $this->insFilter($id,290,3512);
                 }
 
                 
@@ -394,4 +410,6 @@ class TestShk
 }
 
 $test=new TestShk();
-$test->test();
+$test->test(93);
+$test->test(101);
+$test->test(3894);
