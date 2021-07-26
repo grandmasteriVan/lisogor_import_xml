@@ -161,8 +161,8 @@ class TestShk
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="DELETE FROM goodshasfeature WHERE goods_id=$goods_id AND feature_id=$feature_id";
-        //echo "$query<br>";
-        mysqli_query($db_connect,$query);
+        echo "$query<br>";
+        //mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
 
@@ -170,8 +170,8 @@ class TestShk
     {
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="INSERT INTO goodshasfeature (goods_id, feature_id, goodshasfeature_valueid) VALUES ($goods_id, $feature_id, $value_id)";
-        //echo "$query<br><br>";
-        mysqli_query($db_connect,$query);
+        echo "$query<br><br>";
+        //mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
 
@@ -295,11 +295,6 @@ class TestShk
                     $this->delFeature($id,286);
                     $this->insFilter($id,286,4071);
                 }
-                if ($sizes['goods_width']==2900)
-                {
-                    $this->delFeature($id,286);
-                    $this->insFilter($id,286,4071);
-                }
                 if ($sizes['goods_width']==3000)
                 {
                     $this->delFeature($id,286);
@@ -375,21 +370,26 @@ class TestShk
 
                 //материалы
 
-                $this->delFeature($id,290);
+                //$this->delFeature($id,290);
                 if (strripos($name,"ДСП/Зеркало")!=false)
                 {
                     $this->insFilter($id,290,4090);
                 }
                 if (strripos($name,"Пескоструй")!=false)
                 {
+                    $this->delFeature($id,290);
                     $this->insFilter($id,290,4088);
                 }
                 if (strripos($name,"Фотопечать")!=false)
                 {
+                    $this->delFeature($id,290);
                     $this->insFilter($id,290,4087);
                 }
                 if (strripos($name,"Зеркало/Пескоструй")!=false)
                 {
+                    $this->delFeature($id,290);
+                    $this->insFilter($id,290,4094);
+                    $this->insFilter($id,290,4088);
                     $this->insFilter($id,290,4094);
                 }
                 if (strripos($name,"ДСП/Пескоструй")!=false)
@@ -410,6 +410,6 @@ class TestShk
 }
 
 $test=new TestShk();
-$test->test(93);
+//$test->test(93);
 $test->test(101);
-$test->test(3894);
+//$test->test(3894);
