@@ -162,7 +162,7 @@ class TestShk
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="DELETE FROM goodshasfeature WHERE goods_id=$goods_id AND feature_id=$feature_id";
         echo "$query<br>";
-        //mysqli_query($db_connect,$query);
+        mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
 
@@ -171,7 +171,7 @@ class TestShk
         $db_connect=mysqli_connect(host,user,pass,db);
         $query="INSERT INTO goodshasfeature (goods_id, feature_id, goodshasfeature_valueid) VALUES ($goods_id, $feature_id, $value_id)";
         echo "$query<br><br>";
-        //mysqli_query($db_connect,$query);
+        mysqli_query($db_connect,$query);
         mysqli_close($db_connect);
     }
 
@@ -394,10 +394,14 @@ class TestShk
                 }
                 if (strripos($name,"ДСП/Пескоструй")!=false)
                 {
+                    $this->delFeature($id,290);
                     $this->insFilter($id,290,4092);
+                    $this->insFilter($id,290,4088);
+                    $this->insFilter($id,290,3507);
                 }
-                if ((strripos($name,"зеркало")!=false)||(strripos($name,"стекло")!=false))
+                if ((strripos($name,"комби/зеркало")!=false)||(strripos($name,"комби/стекло")!=false))
                 {
+                    //$this->delFeature($id,290);
                     $this->insFilter($id,290,3512);
                 }
 
@@ -411,5 +415,6 @@ class TestShk
 
 $test=new TestShk();
 //$test->test(93);
-$test->test(101);
+//$test->test(101);
 //$test->test(3894);
+//$test->test(46);
