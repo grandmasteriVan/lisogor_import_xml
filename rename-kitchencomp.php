@@ -67,9 +67,9 @@ class ReName
         if (!empty($name))
         {
             $db_connect=mysqli_connect(host,user,pass,db);
-            $query="UPDATE goodshaslang SET goodshaslang_name=$name WHERE goods_id=$id AND lang_id=$lang";
+            $query="UPDATE goodshaslang SET goodshaslang_name='$name' WHERE goods_id=$id AND lang_id=$lang";
             echo "$query<br>";
-            mysqli_query($db_connect,$query);
+            //mysqli_query($db_connect,$query);
             mysqli_close($db_connect);
         }
         
